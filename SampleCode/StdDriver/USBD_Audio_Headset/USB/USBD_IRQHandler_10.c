@@ -178,7 +178,7 @@ void USBD_IRQHandler_10(S_AUDIO_LIB* psAudioLib)
        To avoid USB Buffer Arbitration issue (Can't read USB Buffer when Host read ISO IN buffer)		
 		    - Write data to EPA Buffer when EPA IN Token Interrupt occurs.
         - Read EPB Buffer after EPA Buffer is empty or EPA Data Transmitted 
-		      (UAC 1.0 Host issus IN Token to read data ervery 1 ms, Hosr will not read ISO IN buffer during 1ms).			
+		      (UAC 1.0 Host issues IN Token to read data ervery 1 ms, Host will not read ISO IN buffer in 1ms).			
 		*/		
 		
     /* EPA (Isochronous IN Endpoint) */

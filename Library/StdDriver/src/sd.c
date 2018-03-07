@@ -361,6 +361,7 @@ int SD_Init(SD_INFO_T *pSD)
     u32CmdTimeOut = 0xFFFFF;
 
     i = SD_SDCmdAndRsp(pSD, 8, 0x00000155, u32CmdTimeOut);
+    _sd_uR7_CMD = 0;
     if (i == Successful) {
         // SD 2.0
         SD_SDCmdAndRsp(pSD, 55, 0x00, u32CmdTimeOut);

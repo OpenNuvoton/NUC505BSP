@@ -1,12 +1,12 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V2.0
- * $Revision: 11 $
- * $Date: 15/03/04 9:47a $
+ * @version  V2.1
+ * $Revision: 12 $
+ * $Date: 18/02/12 04:31p $
  * @brief    Access the SPI Flash through a SPI interface.
  *
  * @note
- * Copyright (C) 2015 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>
@@ -182,9 +182,9 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint8_t *u8DataBuffer)
 
     // write data
     while(1) {
+        if(i >= TEST_LENGTH) break;
         if(!SPI_GET_TX_FIFO_FULL_FLAG(SPI_FLASH_PORT)) {
             SPI_WRITE_TX(SPI_FLASH_PORT, u8DataBuffer[i++]);
-            if(i >= 255) break;
         }
     }
 
@@ -217,7 +217,7 @@ void SpiFlash_NormalRead(uint32_t StartAddress, uint8_t *u8DataBuffer)
     SPI_ClearRxFIFO(SPI_FLASH_PORT);
 
     // read data
-    for(i=0; i<256; i++) {
+    for(i=0; i<TEST_LENGTH; i++) {
         SPI_WRITE_TX(SPI_FLASH_PORT, 0x00);
         while(SPI_IS_BUSY(SPI_FLASH_PORT));
         u8DataBuffer[i] = SPI_READ_RX(SPI_FLASH_PORT);
@@ -263,9 +263,9 @@ int main(void)
 ///    if((u16ID = SpiFlash_ReadMidDid()) != 0x1C14) {
 		if((u16ID = SpiFlash_ReadMidDid()) != 0xEF14) {
         printf("Wrong ID, 0x%x\n", u16ID);
-        return -1;
+        while ( 1 );
     } else
-        printf("Flash found: Winbond 25Q16OVSEG ...\n");
+        printf("Flash found.\n");
 
     printf("Erase chip ...");
 
@@ -382,6 +382,6 @@ void SPI0_Init(void)
 	
 }
 
-/*** (C) COPYRIGHT 2015 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2018 Nuvoton Technology Corp. ***/
 
 

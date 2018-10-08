@@ -49,11 +49,13 @@ uint8_t volatile _sd_SDDataReady = FALSE;
 uint8_t *_sd_pSDHCBuffer;
 uint32_t _sd_ReferenceClock;
 
-#if defined (__CC_ARM)
-__align(4096) uint8_t _sd_ucSDHCBuffer[512];
-#elif defined ( __ICCARM__ ) /*!< IAR Compiler */
-#pragma data_alignment = 4096
-uint8_t _sd_ucSDHCBuffer[512];
+#if defined ( __CC_ARM )        /*!< Keil Compiler */
+    __align(4096) uint8_t _sd_ucSDHCBuffer[512];
+#elif defined ( __ICCARM__ )    /*!< IAR Compiler */
+    #pragma data_alignment = 4096
+    uint8_t _sd_ucSDHCBuffer[512];
+#elif defined ( __GNUC__ )      /*!< GCC Compiler */
+    uint8_t _sd_ucSDHCBuffer[512];
 #endif
 
 int sd0_ok = 0;
@@ -434,7 +436,7 @@ int SD_Init(SD_INFO_T *pSD)
 
     // CMD2, CMD3
     if (pSD->CardType != SD_TYPE_UNKNOWN) {
-        SD_SDCmdAndRsp2(pSD, 2, 0x00, CIDBuffer);
+        SD_SDCmdAndRsp2(pSD, 2, 0x00, (uint32_t *)CIDBuffer);
         if ((pSD->CardType == SD_TYPE_MMC) || (pSD->CardType == SD_TYPE_MMC_SECTOR_MODE)) {
             // Increase RCA for next MMC card.
             // The RCA value 0 is reserved to set all cards with CMD7.
@@ -614,7 +616,7 @@ void SD_Get_SD_CID(uint32_t u32CardNum, unsigned int *Buffer)
         pSD = &SD0;
     else
         pSD = &SD0;     // use SD port 0 by default
-    SD_SDCmdAndRsp2(pSD, 10, pSD->RCA, Buffer);
+    SD_SDCmdAndRsp2(pSD, 10, pSD->RCA, (uint32_t *)Buffer);
     DBG_PRINTF("SD card CID is %08X-%08X-%08X-%08X\n", Buffer[0], Buffer[1], Buffer[2], Buffer[3]);
 }
 
@@ -625,7 +627,7 @@ void SD_Get_SD_info(SD_INFO_T *pSD, DISK_DATA_T *_info)
     unsigned int Buffer[4];
     int volatile status;
 
-    SD_SDCmdAndRsp2(pSD, 9, pSD->RCA, Buffer);
+    SD_SDCmdAndRsp2(pSD, 9, pSD->RCA, (uint32_t *)Buffer);
 
     DBG_PRINTF("CSD = 0x%08X 0x%08X 0x%08X 0x%08X\n", Buffer[0], Buffer[1], Buffer[2], Buffer[3]);
 
@@ -699,7 +701,7 @@ void SD_Get_SD_info(SD_INFO_T *pSD, DISK_DATA_T *_info)
     }
     _info->sectorSize = 512;
 
-    SD_SDCmdAndRsp2(pSD, 10, pSD->RCA, Buffer);
+    SD_SDCmdAndRsp2(pSD, 10, pSD->RCA, (uint32_t *)Buffer);
 
     _info->vendor[0] = (Buffer[0] & 0xff000000) >> 24;
 

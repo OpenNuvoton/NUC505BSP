@@ -533,6 +533,7 @@ int32_t main(void)
 
         case 'q' :  /* Exit program */
             while(1);
+            break;
 
         case 'd' :
             switch (*ptr++) {

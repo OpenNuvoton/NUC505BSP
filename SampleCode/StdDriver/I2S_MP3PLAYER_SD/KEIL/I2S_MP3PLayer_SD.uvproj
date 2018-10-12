@@ -346,7 +346,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--diag_suppress=188,68,1293</MiscControls>
               <Define>__WINS__ OPT_SPEED</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Library\CMSIS\Include;..\..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\..\ThirdParty\libmad\inc;..\..\..\..\Library\StdDriver\inc;..\..\..\..\ThirdParty\FATFS\src</IncludePath>

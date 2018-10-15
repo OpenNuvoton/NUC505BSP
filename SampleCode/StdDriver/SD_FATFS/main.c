@@ -212,6 +212,9 @@ void get_line (char *buff, int len)
         if (c == '\r') break;
         if ((c == '\b') && idx) idx--;
         if ((c >= ' ') && (idx < len - 1)) buff[idx++] = c;
+#if defined ( __GNUC__ )	/* For Eclipse/GCC Compiler */
+        fflush(stdout);
+#endif
     }
     buff[idx] = 0;
 
@@ -443,7 +446,7 @@ void SYS_Init(void)
     //--- Set system clock to PLL and set PLL to 96MHz
     CLK_SetCoreClock(96000000);   // don't support clock that > 100MHz
     SystemCoreClockUpdate();
-    
+
     //--- set APB clock as half of HCLK
     CLK_SetModuleClock(PCLK_MODULE, 0, 1);
 
@@ -527,13 +530,21 @@ int32_t main(void)
 
     for (;;) {
         printf(_T(">"));
+#if defined ( __GNUC__ )	/* For Eclipse/GCC Compiler */
+        /* The default I/O buffer mode is "Line Buffer" on Eclipse/GCC. */
+        /* Flush data in buffer and print them out immediately.         */
+        fflush(stdout);
+#endif
+
         ptr = Line;
         get_line(ptr, sizeof(Line));
         switch (*ptr++) {
 
         case 'q' :  /* Exit program */
             while(1);
+#if defined ( __GNUC__ )	/* For Eclipse/GCC Compiler */
             break;
+#endif
 
         case 'd' :
             switch (*ptr++) {

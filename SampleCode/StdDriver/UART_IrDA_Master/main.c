@@ -16,8 +16,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void IrDA_FunctionTxTest(void);
 
 
@@ -78,11 +76,13 @@ void IrDA_FunctionTxTest()
     UART_SelectIrDAMode(UART1, 57600, UART_IRDA_TXEN);
 
     /* Wait Terminal input to send data to UART1 TX pin */
-    do {
-        u8OutChar = GetChar();
+    do
+    {
+        u8OutChar = getchar();
         printf("   Input: %c , Send %c out\n", u8OutChar, u8OutChar);
         UART_WRITE(UART1, u8OutChar);
-    } while(u8OutChar != '0');
+    }
+    while(u8OutChar != '0');
 
     printf("\nIrDA Sample Code End.\n");
 
@@ -100,7 +100,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();

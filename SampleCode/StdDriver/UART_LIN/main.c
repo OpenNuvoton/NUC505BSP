@@ -28,7 +28,6 @@ uint8_t g_u8SendData[12] ;
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
 void LIN_FunctionTest(void);
 void LIN_FunctionTestUsingLinCtlReg(void);
 void LIN_MasterTest(uint32_t u32id, uint32_t u32ModeSel);
@@ -100,11 +99,13 @@ void LIN_FunctionTest()
         Measurement the UART1 Tx pin to check it.
     */
 
-    do {
+    do
+    {
         LIN_TestItem();
         u32Item = getchar();
         printf("%c\n", u32Item);
-        switch(u32Item) {
+        switch(u32Item)
+        {
         case '1':
             LIN_SendHeader(0x30);
             break;
@@ -117,7 +118,8 @@ void LIN_FunctionTest()
         default:
             break;
         }
-    } while(u32Item != 27);
+    }
+    while(u32Item != 27);
 
     UART_Close(UART1);
 
@@ -152,11 +154,13 @@ void LIN_FunctionTestUsingLinCtlReg(void)
         Measurement the UART1 Tx pin to check it.
     */
 
-    do {
+    do
+    {
         LIN_TestItem();
         u32Item = getchar();
         printf("%c\n", u32Item);
-        switch(u32Item) {
+        switch(u32Item)
+        {
         case '1':
             LIN_SendHeaderUsingLinCtlReg(0x30, UART_LINCTL_HSEL_BREAK_SYNC_ID);
             break;
@@ -169,7 +173,8 @@ void LIN_FunctionTestUsingLinCtlReg(void)
         default:
             break;
         }
-    } while(u32Item != 27);
+    }
+    while(u32Item != 27);
 
     /* Clear header select setting */
     UART1->LINCTL &= ~UART_LINCTL_HSEL_Msk;
@@ -199,13 +204,16 @@ void LIN_MasterTestUsingLinCtlReg(uint32_t u32id, uint32_t u32ModeSel)
     uint8_t au8TestPattern[9] = {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x0}; // 8 data byte + 1 byte checksum
     uint32_t i;
 
-    if(u32ModeSel == MODE_CLASSIC) {
+    if(u32ModeSel == MODE_CLASSIC)
+    {
         /* Send break+sync+ID */
         LIN_SendHeaderUsingLinCtlReg(u32id, UART_LINCTL_HSEL_BREAK_SYNC_ID);
         /* Compute checksum without ID and fill checksum value to  au8TestPattern[8] */
         au8TestPattern[8] = ComputeChksumValue(&au8TestPattern[0], 8);
         UART_Write(UART1, &au8TestPattern[0], 9);
-    } else if(u32ModeSel == MODE_ENHANCED) {
+    }
+    else if(u32ModeSel == MODE_ENHANCED)
+    {
         /* Send break+sync+ID and fill ID value to g_u8SendData[0]*/
         LIN_SendHeaderUsingLinCtlReg(u32id, UART_LINCTL_HSEL_BREAK_SYNC);
         /* Fill test pattern to g_u8SendData[1]~ g_u8SendData[8] */
@@ -241,7 +249,8 @@ uint32_t GetCheckSumValue(uint8_t *pu8Buf, uint32_t u32ModeSel)
 {
     uint32_t i, CheckSum = 0;
 
-    for(i = u32ModeSel; i <= 9; i++) {
+    for(i = u32ModeSel; i <= 9; i++)
+    {
         CheckSum += pu8Buf[i];
         if(CheckSum >= 256)
             CheckSum -= 255;
@@ -256,7 +265,8 @@ uint8_t ComputeChksumValue(uint8_t *pu8Buf, uint32_t u32ByteCnt)
 {
     uint32_t i, CheckSum = 0;
 
-    for(i = 0 ; i < u32ByteCnt; i++) {
+    for(i = 0 ; i < u32ByteCnt; i++)
+    {
         CheckSum += pu8Buf[i];
         if(CheckSum >= 256)
             CheckSum -= 255;
@@ -296,7 +306,8 @@ void LIN_SendHeaderUsingLinCtlReg(uint32_t u32id, uint32_t u32HeaderSel)
                4. Break Field Length as 12 bit time [UART_LINCTL_BRKFL(12)]
                5. ID Parity Enable. Hardware will calculate and fill P0/P1 automatically  [UART_LINCTL_IDPEN_Msk]
     */
-    if(u32HeaderSel == UART_LINCTL_HSEL_BREAK_SYNC_ID) {
+    if(u32HeaderSel == UART_LINCTL_HSEL_BREAK_SYNC_ID)
+    {
         UART1->LINCTL = UART_LINCTL_PID(u32id) | UART_LINCTL_HSEL_BREAK_SYNC_ID |
                         UART_LINCTL_BSL(1) | UART_LINCTL_BRKFL(12) | UART_LINCTL_IDPEN_Msk;
         /* LIN TX Send Header Enable */
@@ -309,7 +320,8 @@ void LIN_SendHeaderUsingLinCtlReg(uint32_t u32id, uint32_t u32HeaderSel)
                2. Break/Sync Delimiter Length as 1 bit time [UART_LINCTL_BSL(1)]
                3. Break Field Length as 12 bit time [UART_LINCTL_BRKFL(12)]
     */
-    else if(u32HeaderSel == UART_LINCTL_HSEL_BREAK_SYNC) {
+    else if(u32HeaderSel == UART_LINCTL_HSEL_BREAK_SYNC)
+    {
         UART1->LINCTL = UART_LINCTL_HSEL_BREAK_SYNC | UART_LINCTL_BSL(1) | UART_LINCTL_BRKFL(12);
         /* LIN TX Send Header Enable */
         UART1->LINCTL |= UART_LINCTL_SENDH_Msk;
@@ -325,7 +337,8 @@ void LIN_SendHeaderUsingLinCtlReg(uint32_t u32id, uint32_t u32HeaderSel)
                2. Break/Sync Delimiter Length as 1 bit time [UART_LINCTL_BSL(1)]
                3. Break Field Length as 12 bit time [UART_LINCTL_BRKFL(12)]
     */
-    else if(u32HeaderSel == UART_LINCTL_HSEL_BREAK) {
+    else if(u32HeaderSel == UART_LINCTL_HSEL_BREAK)
+    {
         UART1->LINCTL = UART_LINCTL_HSEL_BREAK | UART_LINCTL_BSL(1) | UART_LINCTL_BRKFL(12);
         /* LIN TX Send Header Enable */
         UART1->LINCTL |= UART_LINCTL_SENDH_Msk;
@@ -387,7 +400,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -463,11 +476,13 @@ int main(void)
     printf("\nUART Sample Program\n");
 
     /* UART sample LIN function */
-    do {
+    do
+    {
         TestItem();
         u32Item = getchar();
         printf("%c\n", u32Item);
-        switch(u32Item) {
+        switch(u32Item)
+        {
         case '1':
             LIN_FunctionTest();
             break;
@@ -477,7 +492,8 @@ int main(void)
         default:
             break;
         }
-    } while(u32Item != 27);
+    }
+    while(u32Item != 27);
 
     while(1);
 

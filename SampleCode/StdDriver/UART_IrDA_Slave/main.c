@@ -16,8 +16,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void IrDA_FunctionRxTest(void);
 
 
@@ -82,12 +80,15 @@ void IrDA_FunctionRxTest()
     printf("Waiting...\n");
 
     /* Use polling method to wait master data */
-    do {
-        if(UART_IS_RX_READY(UART1)) {
+    do
+    {
+        if(UART_IS_RX_READY(UART1))
+        {
             u8InChar = UART_READ(UART1);
             printf("   Input: %c \n", u8InChar);
         }
-    } while(u8InChar != '0');
+    }
+    while(u8InChar != '0');
 
 }
 
@@ -103,7 +104,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();

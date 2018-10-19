@@ -23,8 +23,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void RS485_SendAddressByte(uint8_t u8data);
 void RS485_SendDataByte(uint8_t *pu8TxBuf, uint32_t u32WriteBytes);
 void RS485_9bitModeMaster(void);
@@ -72,7 +70,7 @@ void RS485_9bitModeMaster()
     printf("| another board and wait its ready to receive.              |\n");
     printf("| Press any key to start...                                 |\n");
     printf("+-----------------------------------------------------------+\n\n");
-    GetChar();
+    getchar();
 
     /* Set RS485-Master as AUD mode */
     /* Enable AUD mode to HW control RTS pin automatically */
@@ -87,7 +85,8 @@ void RS485_9bitModeMaster()
     UART1->TOUT = 0x2000;
 
     /* Prepare Data to transmit*/
-    for(i32 = 0; i32 < 10; i32++) {
+    for(i32 = 0; i32 < 10; i32++)
+    {
         g_u8SendDataGroup1[i32] = i32;
         g_u8SendDataGroup2[i32] = i32 + 10;
         g_u8SendDataGroup3[i32] = i32 + 20;
@@ -174,7 +173,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();

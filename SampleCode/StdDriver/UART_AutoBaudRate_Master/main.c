@@ -18,8 +18,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void AutoBaudRate_TestItem(void);
 void AutoBaudRate_TxTest(void);
 
@@ -36,7 +34,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -166,13 +164,15 @@ void AutoBaudRate_TxTest()
     printf("|    calculates correct baud rate.                          |\n");
     printf("+-----------------------------------------------------------+\n");
 
-    do {
+    do
+    {
         AutoBaudRate_TestItem();
         u32Item = getchar();
         printf("%c\n", u32Item);
 
         /* Set different baud rate */
-        switch(u32Item) {
+        switch(u32Item)
+        {
         case '1':
             UART1->BAUD = UART_BAUD_MODE2 | UART_BAUD_MODE2_DIVIDER(__HXT, 38400);
             break;
@@ -187,6 +187,7 @@ void AutoBaudRate_TxTest()
         /* Send input pattern 0x1 for auto baud rate detection bit length is 1-bit */
         UART_WRITE(UART1, 0x1);
 
-    } while(u32Item != 27);
+    }
+    while(u32Item != 27);
 
 }

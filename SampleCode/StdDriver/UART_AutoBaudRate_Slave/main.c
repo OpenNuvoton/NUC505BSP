@@ -16,8 +16,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 uint32_t GetUartBaudrate(UART_T* uart);
 void AutoBaudRate_RxTest(void);
 
@@ -34,7 +32,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -186,16 +184,19 @@ void AutoBaudRate_RxTest()
     /* Enable auto baud rate detect function */
     UART1->ALTCTL |= UART_ALTCTL_ABRDEN_Msk;
 
-    printf("\receiving input pattern... ");
+    printf("receiving input pattern...\n");
 
     /* Wait until auto baud rate detect finished or time-out */
     while((UART1->ALTCTL & UART_ALTCTL_ABRIF_Msk) == 0);
 
-    if(UART1->FIFOSTS & UART_FIFOSTS_ABRDIF_Msk) {
+    if(UART1->FIFOSTS & UART_FIFOSTS_ABRDIF_Msk)
+    {
         /* Clear auto baud rate detect finished flag */
         UART1->FIFOSTS |= UART_FIFOSTS_ABRDIF_Msk;
         printf("Baud rate is %dbps.\n", GetUartBaudrate(UART1));
-    } else if(UART1->FIFOSTS & UART_FIFOSTS_ABRDTOIF_Msk) {
+    }
+    else if(UART1->FIFOSTS & UART_FIFOSTS_ABRDTOIF_Msk)
+    {
         /* Clear auto baud rate detect time-out flag */
         UART1->FIFOSTS |= UART_FIFOSTS_ABRDTOIF_Msk;
         printf("Time-out!\n");

@@ -18,8 +18,6 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void AutoFlow_FunctionTxTest(void);
 
 
@@ -35,7 +33,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -149,13 +147,14 @@ void AutoFlow_FunctionTxTest()
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");
-    GetChar();
+    getchar();
 
     /* Enable RTS and CTS autoflow control */
     UART_EnableFlowCtrl(UART1);
 
     /* Send 1k bytes data */
-    for(u32i = 0; u32i < RXBUFSIZE; u32i++) {
+    for(u32i = 0; u32i < RXBUFSIZE; u32i++)
+    {
         /* Send 1 byte data */
         UART_WRITE(UART1, u32i & 0xFF);
 

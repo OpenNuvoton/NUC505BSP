@@ -25,8 +25,6 @@ volatile int32_t g_i32pointer = 0;
 /*---------------------------------------------------------------------------------------------------------*/
 /* Define functions prototype                                                                              */
 /*---------------------------------------------------------------------------------------------------------*/
-extern char GetChar(void);
-int32_t main(void);
 void AutoFlow_FunctionRxTest(void);
 
 
@@ -42,7 +40,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -134,7 +132,8 @@ void UART1_IRQHandler(void)
     volatile uint32_t u32IntSts = UART1->INTSTS;;
 
     /* Rx Ready or Time-out INT */
-    if(UART_GET_INT_FLAG(UART1, UART_INTSTS_RDAINT_Msk) ||  UART_GET_INT_FLAG(UART1, UART_INTSTS_RXTOINT_Msk)) {
+    if(UART_GET_INT_FLAG(UART1, UART_INTSTS_RDAINT_Msk) ||  UART_GET_INT_FLAG(UART1, UART_INTSTS_RXTOINT_Msk))
+    {
         /* Handle received data */
         g_u8RecData[g_i32pointer] = UART_READ(UART1);
         g_i32pointer++;
@@ -170,7 +169,7 @@ void AutoFlow_FunctionRxTest()
     printf("|    after getting 1k bytes data.                           |\n");
     printf("|    Press any key to start...                              |\n");
     printf("+-----------------------------------------------------------+\n");
-    GetChar();
+    getchar();
 
     /* Enable RTS and CTS autoflow control */
     UART_EnableFlowCtrl(UART1);
@@ -195,8 +194,10 @@ void AutoFlow_FunctionRxTest()
     while(g_i32pointer < RXBUFSIZE);
 
     /* Compare Data */
-    for(u32i = 0; u32i < RXBUFSIZE; u32i++) {
-        if(g_u8RecData[u32i] != (u32i & 0xFF)) {
+    for(u32i = 0; u32i < RXBUFSIZE; u32i++)
+    {
+        if(g_u8RecData[u32i] != (u32i & 0xFF))
+        {
             printf("Compare Data Failed\n");
             while(1);
         }

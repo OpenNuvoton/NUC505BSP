@@ -23,18 +23,26 @@ void TMR0_IRQHandler(void)
 
     TIMER_ClearCaptureIntFlag(TIMER0);
 
-    if(cnt == 0) {
+    if(cnt == 0)
+    {
         t0 = TIMER_GetCaptureData(TIMER0);
         cnt++;
-    } else if(cnt == 1) {
+    }
+    else if(cnt == 1)
+    {
         t1 = TIMER_GetCaptureData(TIMER0);
         cnt++;
-        if(t0 > t1) {
+        if(t0 > t1)
+        {
             // over run, drop this data and do nothing
-        } else {
+        }
+        else
+        {
             printf("Input freq. is %dHz\n", 1000000 / (t1 - t0));
         }
-    } else {
+    }
+    else
+    {
         cnt = 0;
     }
 
@@ -56,7 +64,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();

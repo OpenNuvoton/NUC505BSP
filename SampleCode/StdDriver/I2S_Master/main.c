@@ -1,12 +1,12 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V1.0
- * $Revision: 7 $
- * $Date: 14/07/31 2:52p $
+ * @version  V1.1
+ * $Revision: 8 $
+ * $Date: 18/03/12 06:00p $
  * @brief    Demonstrate how I2S works in Master mode. This sample code needs to work with I2S_Slave.
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>
@@ -31,11 +31,11 @@ int32_t main(void)
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
 
-		/* Init UART0 to 115200-8n1 for print message */
+    /* Init UART0 to 115200-8n1 for print message */
     UART0_Init();
 
-		/* Init I2S, IP clock and multi-function I/O */
-		I2S_Init();
+    /* Init I2S, IP clock and multi-function I/O */
+    I2S_Init();
 
     printf("+-----------------------------------------------------------+\n");
     printf("|            I2S Driver Sample Code (master mode)           |\n");
@@ -55,8 +55,8 @@ int32_t main(void)
 
     /* Master mode, 16-bit word width, stereo mode, I2S format. Set TX and RX FIFO threshold to middle value. */
     I2S_Open(I2S, I2S_MODE_MASTER, 16000, I2S_DATABIT_16, I2S_STEREO, I2S_FORMAT_I2S, 0);
-		I2S_ENABLE_TX(I2S);
-		I2S_ENABLE_RX(I2S);
+    I2S_ENABLE_TX(I2S);
+    I2S_ENABLE_RX(I2S);
 
     /* Initiate data counter */
     g_u32DataCount = 0;
@@ -96,63 +96,63 @@ int32_t main(void)
 void SYS_Init(void)
 {
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
-    //SYS_UnlockReg();
-     
+    // SYS_UnlockReg();
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(FREQ_96MHZ);
-    
-		/* PCLK divider */
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-		
+
+    /* PCLK divider */
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Lock protected registers */
-    //SYS_LockReg();
-        
+    // SYS_LockReg();
+
 }
 
 void UART0_Init(void)
 {
-		/* Enable UART0 Module clock */
+    /* Enable UART0 Module clock */
     CLK_EnableModuleClock(UART0_MODULE);
-		/* UART0 module clock from EXT */
-		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
+    /* UART0 module clock from EXT */
+    CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     /* Reset IP */
-    SYS_ResetModule(UART0_RST);    
+    SYS_ResetModule(UART0_RST);
     /* Configure UART0 and set UART0 Baud-rate */
-		UART_Open(UART0, 115200);
-		/*---------------------------------------------------------------------------------------------------------*/
+    UART_Open(UART0, 115200);
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for UART0 RXD and TXD */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;	
-	
+    SYS->GPB_MFPL = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
+    SYS->GPB_MFPL = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
+
 }
 
 void I2S_Init(void)
 {
-		/* Enable I2S Module clock */
+    /* Enable I2S Module clock */
     CLK_EnableModuleClock(I2S_MODULE);
-		/* I2S module clock from APLL */
-		CLK_SET_APLL(CLK_APLL_49152031);
-		CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 3);
+    /* I2S module clock from APLL */
+    CLK_SET_APLL(CLK_APLL_49152031);
+    CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 3);
     /* Reset IP */
-    SYS_ResetModule(I2S_RST);    
+    SYS_ResetModule(I2S_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for I2S */
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;	
-	
+    SYS->GPC_MFPH = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) )  | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;
+    SYS->GPC_MFPH = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) )  | SYS_GPC_MFPH_PC9MFP_I2S_DIN;
+    SYS->GPC_MFPH = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;
+    SYS->GPC_MFPH = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;
+    SYS->GPC_MFPH = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;
+
 }
 
 void I2S_IRQHandler()
@@ -163,4 +163,4 @@ void I2S_IRQHandler()
     g_u32DataCount += 2;
 }
 
-/*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/
+/*** (C) COPYRIGHT 2018 Nuvoton Technology Corp. ***/

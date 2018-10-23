@@ -13,20 +13,20 @@
 #include <stdio.h>
 #include "NUC505Series.h"
 
-uint32_t slave_buff_addr;
-uint8_t g_u8SlvData[256];
-uint8_t g_au8RxData[3];
+volatile uint32_t slave_buff_addr;
+volatile uint8_t g_u8SlvData[256];
+volatile uint8_t g_au8RxData[3];
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
-uint8_t g_u8DeviceAddr;
-uint8_t g_au8TxData[3];
-uint8_t g_u8RxData;
-uint8_t g_u8DataLen;
+volatile uint8_t g_u8DeviceAddr;
+volatile uint8_t g_au8TxData[3];
+volatile uint8_t g_u8RxData;
+volatile uint8_t g_u8DataLen;
 
 typedef void (*I2C_FUNC)(uint32_t u32Status);
 
-static I2C_FUNC s_I2C0HandlerFn = NULL;
+volatile static I2C_FUNC s_I2C0HandlerFn = NULL;
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*  I2C0 IRQ Handler                                                                                       */
@@ -37,10 +37,13 @@ void I2C0_IRQHandler(void)
 
     u32Status = I2C_GET_STATUS(I2C0);
 
-    if (I2C_GET_TIMEOUT_FLAG(I2C0)) {
+    if (I2C_GET_TIMEOUT_FLAG(I2C0))
+    {
         /* Clear I2C0 Timeout Flag */
         I2C_ClearTimeoutFlag(I2C0);
-    } else {
+    }
+    else
+    {
         if (s_I2C0HandlerFn != NULL)
             s_I2C0HandlerFn(u32Status);
     }
@@ -54,43 +57,56 @@ void I2C0_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
-    if (u32Status == 0x60) {                    /* Own SLA+W has been receive; ACK has been return */
+    uint8_t temp;
+
+    if (u32Status == 0x60)                      /* Own SLA+W has been receive; ACK has been return */
+    {
         g_u8DataLen = 0;
         I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else if (u32Status == 0x80)                 /* Previously address with own SLA address
-                                                   Data has been received; ACK has been returned*/
+    }
+    else if (u32Status == 0x80)                 /* Previously address with own SLA address Data has been received; ACK has been returned*/
     {
-        g_au8RxData[g_u8DataLen] = I2C_GET_DATA(I2C0);;
+        temp = I2C_GET_DATA(I2C0);
+        g_au8RxData[g_u8DataLen] = temp;
         g_u8DataLen++;
 
-        if (g_u8DataLen == 2) {
-            slave_buff_addr = (g_au8RxData[0] << 8) + g_au8RxData[1];
+        if (g_u8DataLen == 2)
+        {
+            temp = (g_au8RxData[0] << 8);
+            temp += g_au8RxData[1];
+            slave_buff_addr = temp;
         }
-        if (g_u8DataLen == 3) {
-            g_u8SlvData[slave_buff_addr] = g_au8RxData[2];
+        if (g_u8DataLen == 3)
+        {
+            temp = g_au8RxData[2];
+            g_u8SlvData[slave_buff_addr] = temp;
             g_u8DataLen = 0;
         }
         I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else if(u32Status == 0xA8) {              /* Own SLA+R has been receive; ACK has been return */
+    }
+    else if(u32Status == 0xA8)                  /* Own SLA+R has been receive; ACK has been return */
+    {
 
         I2C_SET_DATA(I2C0, g_u8SlvData[slave_buff_addr]);
         slave_buff_addr++;
         I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else if (u32Status == 0xC0)                 /* Data byte or last data in I2CDAT has been transmitted
-                                                   Not ACK has been received */
+    }
+    else if (u32Status == 0xC0)                 /* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
     {
         I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else if (u32Status == 0x88)                 /* Previously addressed with own SLA address; NOT ACK has
-                                                   been returned */
-    {
-        g_u8DataLen = 0;
-        I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else if (u32Status == 0xA0)                 /* A STOP or repeated START has been received while still
-                                                   addressed as Slave/Receiver*/
+    }
+    else if (u32Status == 0x88)                 /* Previously addressed with own SLA address; NOT ACK has been returned */
     {
         g_u8DataLen = 0;
         I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
-    } else {
+    }
+    else if (u32Status == 0xA0)                 /* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
+    {
+        g_u8DataLen = 0;
+        I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
+    }
+    else
+    {
         /* TO DO */
         printf("Status 0x%x is NOT processed\n", u32Status);
     }
@@ -108,7 +124,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -186,7 +202,8 @@ int32_t main (void)
     /* I2C enter no address SLV mode */
     I2C_SET_CONTROL_REG(I2C0, I2C_SI | I2C_AA);
 
-    for (i = 0; i < 0x100; i++) {
+    for (i = 0; i < 0x100; i++)
+    {
         g_u8SlvData[i] = 0;
     }
 

@@ -35,7 +35,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -93,7 +93,8 @@ int main(void)
     NVIC_EnableIRQ(TMR0_IRQn);
 
 
-    for(i = 0; i < 1000; i++) {
+    for(i = 0; i < 1000; i++)
+    {
         PA->DOUT &= ~(1 << GPIO_DOUT_DOUT13_Pos); // low
         PA->DOUT |= (1 << GPIO_DOUT_DOUT13_Pos);  // high
     }

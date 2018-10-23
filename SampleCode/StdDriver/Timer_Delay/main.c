@@ -25,7 +25,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -56,7 +56,8 @@ int main(void)
     UART_Open(UART0, 115200);
 
     printf("\nThis sample code use timer to create a small delay \n");
-    while(1) {
+    while(1)
+    {
         printf("Delay 1 second\n");
         TIMER_Delay(TIMER0, 1000000);
     }

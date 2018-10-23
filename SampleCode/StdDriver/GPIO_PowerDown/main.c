@@ -50,7 +50,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -108,7 +108,8 @@ int main (void)
     NVIC_EnableIRQ(EINT0_IRQn);
 
     /* Waiting for PB.10 falling-edge interrupt event */
-    while(1) {
+    while(1)
+    {
         printf("Enter to Power-Down ......\n");
 
         /* Enter to Power-down mode */

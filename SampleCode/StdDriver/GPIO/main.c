@@ -40,7 +40,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -96,18 +96,23 @@ int main (void)
 
     /* Use Pin Data Input/Output Control to pull specified I/O or get I/O pin status */
     PB10_DOUT = 0;
-    if (PB11_PIN != 0) {
+    if (PB11_PIN != 0)
+    {
         i32Err = 1;
     }
 
     PB10_DOUT = 1;
-    if (PB11_PIN != 1) {
+    if (PB11_PIN != 1)
+    {
         i32Err = 1;
     }
 
-    if ( i32Err ) {
+    if ( i32Err )
+    {
         printf("  [FAIL] --- Please make sure PB.10 and PB.11 are connected. \n");
-    } else {
+    }
+    else
+    {
         printf("  [OK] \n");
     }
 

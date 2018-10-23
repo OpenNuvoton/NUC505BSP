@@ -19,7 +19,8 @@ void WDT_IRQHandler(void)
     WDT_CLEAR_TIMEOUT_INT_FLAG();
 
     // Check WDT wake up flag
-    if(WDT_GET_TIMEOUT_WAKEUP_FLAG()) {
+    if(WDT_GET_TIMEOUT_WAKEUP_FLAG())
+    {
         printf("Wake up by WDT\n");
         // Clear WDT wake up flag
         WDT_CLEAR_TIMEOUT_WAKEUP_FLAG();
@@ -43,7 +44,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -85,7 +86,8 @@ int32_t main (void)
     WDT_EnableInt();
     NVIC_EnableIRQ(WDT_IRQn);
 
-    while(1) {
+    while(1)
+    {
         // Wait 'til UART FIFO empty to get a cleaner console out
         while(!UART_IS_TX_EMPTY(UART0));
         CLK_PowerDown();

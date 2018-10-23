@@ -47,7 +47,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -98,7 +98,7 @@ void UART1_Init()
     SYS_ResetModule(UART1_RST);
 
     /* Configure UART1 and set UART1 baud rate */
-    UART_Open(UART1, 110);
+    UART_Open(UART1, 1200);
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -140,13 +140,16 @@ void UART1_IRQHandler(void)
 {
     uint32_t u32IntSts = UART1->INTSTS;
 
-    if(u32IntSts & UART_INTSTS_WKIF_Msk) {              /* UART wake-up interrupt flag */
-        if(u32IntSts & UART_INTSTS_DATWKIF_Msk) {       /* UART data wake-up interrupt flag */
+    if(u32IntSts & UART_INTSTS_WKIF_Msk)                /* UART wake-up interrupt flag */
+    {
+        if(u32IntSts & UART_INTSTS_DATWKIF_Msk)         /* UART data wake-up interrupt flag */
+        {
             printf("UART data wake-up interrupt happen.\n");
             UART1->INTSTS |= UART_INTSTS_DATWKIF_Msk;   /* Clear UART data wake-up interrupt flag */
         }
 
-        if(u32IntSts & UART_INTSTS_CTSWKIF_Msk) {       /* UART CTS wake-up interrupt flag */
+        if(u32IntSts & UART_INTSTS_CTSWKIF_Msk)         /* UART CTS wake-up interrupt flag */
+        {
             printf("UART nCTS wake-up interrupt happen.\n");
             UART1->INTSTS |= UART_INTSTS_DATWKIF_Msk;   /* Clear UART CTS wake-up interrupt flag */
         }
@@ -166,7 +169,7 @@ void UART_DataWakeUp(void)
     UART_EnableInt(UART1, UART_INTEN_WKDATIEN_Msk);
 
     printf("System enter to Power-down mode.\n");
-    printf("Send data with baud rate 110bps to UART1 to wake-up system.\n");
+    printf("Send data with baud rate 1200bps to UART1 to wake-up system.\n");
 
     /* Enter to Power-down mode */
     PowerDownFunction();
@@ -234,7 +237,8 @@ void UART_PowerDownWakeUpTest(void)
     UART_PowerDown_TestItem();
     u32Item = getchar();
     printf("%c\n\n", u32Item);
-    switch(u32Item) {
+    switch(u32Item)
+    {
     case '1':
         UART_DataWakeUp();
         break;

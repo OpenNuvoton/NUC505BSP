@@ -44,7 +44,7 @@ uint32_t ReadMemCore(uint32_t address)
     return val;
 }
 #pragma O2
-#elif defined (__ICCARM__)//IAR environment	
+#elif defined (__ICCARM__) || defined(__GNUC__) //IAR && GNU environment	
 uint32_t ReadMemCore(uint32_t address)
 {
     __IO uint32_t val = 0;
@@ -81,8 +81,8 @@ void SYS_Init(void)
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
-		// Set APB clock as 1/2 HCLK
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+	// Set APB clock as 1/2 HCLK
+	CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 	
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);

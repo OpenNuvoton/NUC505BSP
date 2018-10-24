@@ -14,6 +14,11 @@
 //#include <time.h>
 #include "NUC505Series.h"
 
+#if defined (__GNUC__)
+#define VECTOR_SIZE		48
+uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(128)));
+#endif
+
 /* My clock tick functions */
 #define MYCLOCKS_PER_SEC    100
 static volatile uint32_t u32TickCount = 0;
@@ -85,7 +90,11 @@ void SYS_Init(void)
             }   \
         }   \
     } while (0)
-    
+
+#if defined ( __GNUC__ )
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+#endif
 int Fibonacci1(int n)
 {
     int fn;
@@ -93,12 +102,19 @@ int Fibonacci1(int n)
     _Fibonacci(n, fn);
     return fn;
 }
+#if defined ( __GNUC__ )
+#pragma GCC pop_options
+#endif
 
 #if defined ( __CC_ARM )
 #pragma arm section code="fastcode"
 int Fibonacci2(int n)
 #elif defined ( __ICCARM__ )
 int Fibonacci2(int n)   @ "fastcode"
+#elif defined ( __GNUC__ )	
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+__attribute__ ((used, long_call, section(".fastcode"))) int Fibonacci2(int n)
 #else
 int Fibonacci2(int n)
 #endif
@@ -111,6 +127,8 @@ int Fibonacci2(int n)
 
 #if defined ( __CC_ARM )
 #pragma arm section
+#elif defined ( __GNUC__ )
+#pragma GCC pop_options
 #endif
 
 int main(void)
@@ -145,6 +163,11 @@ int main(void)
         printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
         memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
+#elif defined (__GNUC__)
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];
+        memcpy(VectorTable, (uint32_t*)0x0, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t)VectorTable;
 #endif
     }
     
@@ -164,6 +187,8 @@ int main(void)
         
         printf("Load Fibonacci2() in SRAM (0x%08X) for fast execution.\n", Fibonacci2);
         memcpy((void *) __section_begin("fastcode"), __section_begin("fastcode_init"), (unsigned long) __section_size("fastcode"));
+
+#elif defined (__GNUC__)	
 
 #endif        
     }

@@ -47,7 +47,7 @@
 		<link>
 			<name>CMSIS/CMSIS</name>
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/Library/Device/Nuvoton/NUC505Series/Source</locationURI>
 		</link>
 		<link>
 			<name>DSP_Lib/arm_cortexM4lf_math.lib</name>
@@ -75,47 +75,57 @@
 			<locationURI>PARENT-1-PROJECT_LOC/main.c</locationURI>
 		</link>
 		<link>
-			<name>CMSIS/CMSIS/GCC</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>CMSIS/CMSIS/system_NUC505Series.c</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/system_NUC505Series.c</location>
-		</link>
-		<link>
 			<name>Library/Include/Include</name>
 			<type>2</type>
 			<locationURI>PARENT-4-PROJECT_LOC/Library/CMSIS/Lib/GCC</locationURI>
 		</link>
-		<link>
-			<name>CMSIS/CMSIS/GCC/_syscalls.c</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/GCC/_syscalls.c</location>
-		</link>
-		<link>
-			<name>CMSIS/CMSIS/GCC/gcc_arm.ld</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/GCC/gcc_arm.ld</location>
-		</link>
-		<link>
-			<name>CMSIS/CMSIS/GCC/gcc_arm_SRAM.ld</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/GCC/gcc_arm_SRAM.ld</location>
-		</link>
-		<link>
-			<name>CMSIS/CMSIS/GCC/semihosting.h</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/GCC/semihosting.h</location>
-		</link>
-		<link>
-			<name>CMSIS/CMSIS/GCC/startup_NUC505Series.S</name>
-			<type>1</type>
-			<location>F:/ARM_Project/NUC505_Backup/NUC505/FTP/BSP/Library/Device/Nuvoton/NUC505Series/Source/GCC/startup_NUC505Series.S</location>
-		</link>
 	</linkedResources>
 	<filteredResources>
+		<filter>
+			<id>1540286389842</id>
+			<name></name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-true-false-ARM</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1540297783446</id>
+			<name>CMSIS</name>
+			<type>9</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-GCC</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1540297783461</id>
+			<name>CMSIS</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-ARM</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1540297783524</id>
+			<name>CMSIS</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-IAR</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1540297865438</id>
+			<name>CMSIS/CMSIS</name>
+			<type>9</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-GCC</arguments>
+			</matcher>
+		</filter>
 		<filter>
 			<id>1505201578305</id>
 			<name>Library/Library</name>
@@ -153,7 +163,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1532050274983</id>
+			<id>1505201672589</id>
 			<name>Library/Include/Include</name>
 			<type>5</type>
 			<matcher>

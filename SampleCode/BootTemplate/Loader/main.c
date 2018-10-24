@@ -25,6 +25,11 @@ static const uint8_t g_au8RamImg[] = {
 #   include "FullOnSRAM.dat"
 };
 
+#elif defined (__GNUC__)
+static const  __attribute__((section("ramimg"))) uint8_t g_au8RamImg[];
+static const uint8_t g_au8RamImg[] = {
+#include "FullOnSRAM.dat"
+};
 #endif
 
 void SYS_Init(void)
@@ -95,6 +100,7 @@ int main(void)
         printf("Load image(0x%08x, %d bytes) to 0x%08x.\n", __section_begin("ramimg_init"), __section_size("ramimg"), __section_begin("ramimg"));
         memcpy((void *) __section_begin("ramimg"), __section_begin("ramimg_init"), (unsigned long) __section_size("ramimg"));
 
+#elif defined (__GNUC__)
 #endif
         
         printf("Remap SRAM(0x%08X, %d KB) to 0x00000000 via VECMAP.\n", g_au8RamImg, 128);

@@ -37,7 +37,11 @@ static __align(4096) uint8_t g_au8TstBuf2[TSTBUF_SIZE];
 static __no_init uint8_t g_au8TstBuf[TSTBUF_SIZE];
 #pragma data_alignment=4096
 static __no_init uint8_t g_au8TstBuf2[TSTBUF_SIZE];
+#elif defined (__GNUC__)
+static uint8_t g_au8TstBuf[TSTBUF_SIZE] __attribute__ ((aligned(4096)));
+static uint8_t g_au8TstBuf2[TSTBUF_SIZE]__attribute__ ((aligned(4096)));;
 #endif
+
 
 static const uint32_t s_au32Patterns[] = {
     0x00000000, 0xFFFFFFFF, 0x55aa55aa, 0xaa55aa55, 0x33cc33cc, 0xcc33cc33

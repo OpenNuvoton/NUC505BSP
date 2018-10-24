@@ -117,8 +117,8 @@ void SYS_Init(void)
 
     CLK_SetCoreClock(FREQ_96MHZ);
     
-		/* PCLK divider */
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+	/* PCLK divider */
+	CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 		
     /* Lock protected registers */
     //SYS_LockReg();
@@ -166,7 +166,7 @@ void SPI1_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure SPI1 as a slave, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */
     /* Configure SPI1 as a low level active device. SPI peripheral clock rate = f_PCLK0 */
-    SPI_Open(SPI1, SPI_SLAVE, SPI_MODE_0, 32, NULL);
+    SPI_Open(SPI1, SPI_SLAVE, SPI_MODE_0, 32,(uint32_t) NULL);
 }
 
 /*** (C) COPYRIGHT 2015 Nuvoton Technology Corp. ***/

@@ -276,8 +276,8 @@ void SYS_Init(void)
 
     CLK_SetCoreClock(FREQ_96MHZ);
     
-		/* PCLK divider */
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+	/* PCLK divider */
+	CLK_SetModuleClock(PCLK_MODULE,(uint32_t) NULL, 1);
 		
     /* Lock protected registers */
     //SYS_LockReg();

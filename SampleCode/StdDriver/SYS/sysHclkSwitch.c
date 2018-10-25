@@ -35,7 +35,7 @@ void demo_SysHclkSwitch(void)
 
     /* Set PCLK divider to 1 (/2) */
     CLK_SetModuleClock(PCLK_MODULE,
-                       NULL, 	/* PCLK source is always from HCLK */
+                       (uint32_t)NULL, 	/* PCLK source is always from HCLK */
                        1);			/* PCLK divider */
     for(j=0; j<t; j=j+1)
     {

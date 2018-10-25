@@ -15,6 +15,10 @@
 #include <string.h>
 #include "NUC505Series.h"
 
+#if defined (__GNUC__)
+#define VECTOR_SIZE		32							
+uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(256)));
+#endif
 
 void SYS_Init(void)
 {
@@ -86,8 +90,15 @@ int main(void)
         printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
         memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
-        
-#endif
+
+#elif defined (__GNUC__)
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];
+        memcpy(VectorTable, (uint32_t*)0x0, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t)VectorTable;
+		
+#endif		
+
     }
     
     printf("Main code is now running on SRAM from SPI Flash for fast execution.\n");

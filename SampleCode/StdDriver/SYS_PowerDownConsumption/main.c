@@ -14,7 +14,12 @@
 #include "NUC505Series.h"
 #include "gpio.h"
 
-#if defined ( __CC_ARM )
+#if defined (__GNUC__)
+#define VECTOR_SIZE		48
+uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(128)));
+#endif
+
+#if defined ( __CC_ARM ) || defined ( __GNUC__ )
 void EINT0_IRQHandler(void)
 {
     int32_t i;
@@ -106,7 +111,11 @@ int main (void)
         /* IAR compiler doesn't following initial configuration file to relocate EINT0_IRQHandler() */
         pu32Dst = (uint32_t*) ((uint32_t)__section_begin("VECTOR2")+0x50);
         *pu32Dst = (uint32_t)pu32Src;
-
+#elif defined (__GNUC__)
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];
+        memcpy(VectorTable, (uint32_t*)0x0, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t)VectorTable;
 #endif
     }
     /* Configure PB10 as Input mode pull up enable and enable interrupt by falling edge trigger */

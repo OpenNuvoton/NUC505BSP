@@ -21,7 +21,7 @@ volatile int32_t   g_bAlarm  = FALSE;
 
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* RTC Alarm Handle                                                                             */
+/* RTC Alarm Handle                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
 void RTC_AlarmHandle(void)
 {
@@ -38,7 +38,7 @@ void RTC_IRQHandler(void)
 {
     if ( (RTC->INTEN & RTC_INTEN_ALMIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_ALMIF_Msk) ) {      /* alarm interrupt occurred */
         RTC->INTSTS = 0x1;
-				RTC_SyncReg();
+        RTC_SyncReg();
         RTC_AlarmHandle();
     }
 }
@@ -53,10 +53,10 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(96000000);
-	
+
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);	
-	
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -72,7 +72,6 @@ void SYS_Init(void)
     /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-
 }
 
 void UART0_Init()
@@ -91,7 +90,7 @@ int32_t main(void)
 {
     S_RTC_TIME_DATA_T sInitTime;
     S_RTC_TIME_DATA_T sCurTime;
-	
+
     SYS_Init();
     UART0_Init();
 
@@ -144,8 +143,6 @@ int32_t main(void)
     while(1);
 
 }
-
-
 
 /*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
 

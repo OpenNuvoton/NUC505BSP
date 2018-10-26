@@ -44,10 +44,8 @@ void RTC_IRQHandler(void)
 
     if ( (RTC->INTEN & RTC_INTEN_TICKIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_TICKIF_Msk) ) {      /* tick interrupt occurred */
         RTC->INTSTS = 0x2;
-
         RTC_TickHandle();
     }
-
 }
 
 void Delay(uint32_t ucnt)
@@ -68,10 +66,10 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(96000000);
-	
+
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -87,7 +85,6 @@ void SYS_Init(void)
     /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-
 }
 
 void UART0_Init()
@@ -109,7 +106,7 @@ void UART0_Init()
 int32_t main(void)
 {
     S_RTC_TIME_DATA_T sInitTime;
-	
+
     SYS_Init();
     UART0_Init();
 
@@ -131,8 +128,8 @@ int32_t main(void)
     RTC_SetTickPeriod(RTC_TICK_1_SEC);
 
     /* Enable RTC Tick Interrupt */
-		RTC_EnableInt(RTC_INTEN_TICKIEN_Msk);
-		NVIC_EnableIRQ(RTC_IRQn);		
+    RTC_EnableInt(RTC_INTEN_TICKIEN_Msk);
+    NVIC_EnableIRQ(RTC_IRQn);
 
     g_u32TICK = 0;
     while(g_u32TICK < 5);
@@ -146,11 +143,6 @@ int32_t main(void)
     while(1);
 
 }
-
-
-
-
-
 
 /*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
 

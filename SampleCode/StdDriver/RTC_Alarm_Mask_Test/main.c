@@ -21,7 +21,7 @@ volatile int32_t   g_bAlarm  = FALSE;
 
 
 /*---------------------------------------------------------------------------------------------------------*/
-/* RTC Alarm Handle                                                                             */
+/* RTC Alarm Handle                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
 void RTC_AlarmHandle(void)
 {
@@ -38,7 +38,7 @@ void RTC_IRQHandler(void)
 {
     if ( (RTC->INTEN & RTC_INTEN_ALMIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_ALMIF_Msk) ) {      /* alarm interrupt occurred */
         RTC->INTSTS = 0x1;
-				RTC_SyncReg();
+        RTC_SyncReg();
         RTC_AlarmHandle();
     }
 }
@@ -53,10 +53,10 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(96000000);
-	
+
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -72,7 +72,6 @@ void SYS_Init(void)
     /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-
 }
 
 void UART0_Init()
@@ -91,7 +90,7 @@ int32_t main(void)
 {
     S_RTC_TIME_DATA_T sInitTime;
     S_RTC_TIME_DATA_T sCurTime;
-	
+
     SYS_Init();
     UART0_Init();
 
@@ -114,14 +113,14 @@ int32_t main(void)
 
     /* Get the current time */
     RTC_GetDateAndTime(&sCurTime);
-		
-		printf("   Mask Minute alarm setting and Get alarm after 10 seconds\n");
-		
+
+    printf("   Mask Minute alarm setting and Get alarm after 10 seconds\n");
+
     printf("     Current Time:%d/%02d/%02d %02d:%02d:%02d\n",sCurTime.u32Year,sCurTime.u32Month,
            sCurTime.u32Day,sCurTime.u32Hour,sCurTime.u32Minute,sCurTime.u32Second);
-    	
-		/* The Mask alarm time setting for Minute */
-		sCurTime.u32Minute = RTC_ALARM_MASK;
+
+    /* The Mask alarm time setting for Minute */
+    sCurTime.u32Minute = RTC_ALARM_MASK;
 
     /* The alarm time setting */
     sCurTime.u32Second = 10;
@@ -141,18 +140,17 @@ int32_t main(void)
     printf("     Current Time:%d/%02d/%02d %02d:%02d:%02d\n",sCurTime.u32Year,sCurTime.u32Month,
            sCurTime.u32Day,sCurTime.u32Hour,sCurTime.u32Minute,sCurTime.u32Second);
 
-		g_bAlarm = FALSE;
-		
-    sCurTime.u32Minute     = 34;	
+    g_bAlarm = FALSE;
+
+    sCurTime.u32Minute     = 34;
     sCurTime.u32Second     = 55;
-		
-		
-		printf("\n\n   Change Current Time and Get alarm after 15 seconds\n");	
-		
+
+    printf("\n\n   Change Current Time and Get alarm after 15 seconds\n");
+
     printf("     Current Time:%d/%02d/%02d %02d:%02d:%02d\n",sCurTime.u32Year,sCurTime.u32Month,
-           sCurTime.u32Day,sCurTime.u32Hour,sCurTime.u32Minute,sCurTime.u32Second);		
-		RTC_SetDateAndTime(&sCurTime);
-		
+           sCurTime.u32Day,sCurTime.u32Hour,sCurTime.u32Minute,sCurTime.u32Second);
+    RTC_SetDateAndTime(&sCurTime);
+
     while(!g_bAlarm);
 
    /* Get the current time */
@@ -168,10 +166,7 @@ int32_t main(void)
     printf("\n RTC Alarm Mask Test End !!\n");
 
     while(1);
-
 }
-
-
 
 /*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/
 

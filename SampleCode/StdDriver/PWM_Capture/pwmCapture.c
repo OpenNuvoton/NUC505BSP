@@ -25,7 +25,8 @@ void PWM_Capture(void)
     uint32_t u32CapIntFlag;
     uint8_t u8Count = cap_index;
 
-    if(u8Count >= SAMPLE_CNT) {
+    if(u8Count >= SAMPLE_CNT)
+    {
         // Disable PWM channel 2 rising and falling edge capture interrupt
         PWM_DisableCaptureInt(PWM,2,PWM_RISING_FALLING_LATCH_INT_ENABLE);
         return;
@@ -35,13 +36,15 @@ void PWM_Capture(void)
     u32CapIntFlag = PWM_GetCaptureIntFlag(PWM, 2);
 
     // Rising latch condition happened
-    if ((u32CapIntFlag & PWM_RISING_LATCH_INT_FLAG) && token == 0) {
+    if ((u32CapIntFlag & PWM_RISING_LATCH_INT_FLAG) && token == 0)
+    {
         cap_val[u8Count >> 1][0] = PWM_GET_CAPTURE_RISING_DATA(PWM, 2);
         cap_index++;
         token = 1;
     }
     // Falling latch condition happened
-    if ((u32CapIntFlag & PWM_FALLING_LATCH_INT_FLAG) && token == 1) {
+    if ((u32CapIntFlag & PWM_FALLING_LATCH_INT_FLAG) && token == 1)
+    {
         cap_val[u8Count >> 1][1] = PWM_GET_CAPTURE_FALLING_DATA(PWM, 2);
         cap_index++;
         token = 0;
@@ -52,6 +55,11 @@ void PWM_Capture(void)
 
     /* To avoid the synchronization issue between system and APB clock domain */
     u32CapIntFlag = PWM_GetCaptureIntFlag(PWM, 2);
+}
+
+void PWM2_IRQHandler(void)
+{
+    PWM_Capture();
 }
 
 /*** (C) COPYRIGHT 2013 Nuvoton Technology Corp. ***/

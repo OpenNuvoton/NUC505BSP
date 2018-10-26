@@ -22,7 +22,7 @@ define block CSTACK             with alignment = 8, size = __ICFEDIT_size_cstack
 define block HEAP               with alignment = 8, size = __ICFEDIT_size_heap__    { };
 define block VECTOR2            with alignment = 8, size = 0x400                    { };
 
-initialize by copy      { readwrite, readonly object clk.o, readonly object pwm.o };
+initialize by copy      { readwrite, readonly object clk.o, readonly object pwm.o, readonly object pwmCapture.o };
 initialize manually     { section fastcode };
 //initialize by copy with packing = none { section __DLIB_PERTHREAD }; // Required in a multi-threaded application
 do not initialize       { section .noinit };

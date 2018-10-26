@@ -95,7 +95,7 @@ void ADC_Init(void)
     /* Reset IP */
     SYS_ResetModule(ADC_RST);
     /* Configure UART0 and set UART0 Baudrate */
-    ADC_Open(ADC, NULL, NULL, ADC_CH_0_MASK);
+    ADC_Open(ADC, (uint32_t)NULL, (uint32_t)NULL, ADC_CH_0_MASK);
 
     // Enable ADC ADC_IF interrupt
     ADC_EnableInt(ADC, ADC_ADF_INT);

@@ -76,9 +76,7 @@ extern "C"
   * @return     None
   * \hideinitializer
   */
-#define ADC_CLR_INT_FLAG(adc, u32Mask) (adc->INTCTL = (adc->INTCTL & ~(ADC_INTCTL_ADCIF_Msk |\
-                                                                       ADC_INTCTL_KEYIF_Msk)|\
-                                                                       (u32Mask) ))
+#define ADC_CLR_INT_FLAG(adc, u32Mask) (adc->INTCTL = ((adc->INTCTL & ~(ADC_INTCTL_ADCIF_Msk | ADC_INTCTL_KEYIF_Msk)) | u32Mask))
 
 /**
   * @brief                      Get the busy state of ADC

@@ -554,7 +554,7 @@ int  USBH_MassInit(void)
   * @retval   0   No disk found
   * @retval   Otherwise  Number of disk
   */
-int32_t  USBH_MassGetDiskList(mass_disk_t * dlist[], int max)
+int  USBH_MassGetDiskList(mass_disk_t * dlist[], int max)
 {
     int  i, idx;
 

@@ -58,10 +58,10 @@ extern DRESULT usbh_umas_write(uint8_t *buff, uint32_t sector_no, int number_of_
   @{
 */
 
-extern int32_t  USBH_MassInit(void);
-extern int32_t  USBH_MassGetDiskList(mass_disk_t * dlist[], int max);
-extern int32_t  USBH_MassRawRead(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff);
-extern int32_t  USBH_MassRawWrite(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff);
+extern int  USBH_MassInit(void);
+extern int  USBH_MassGetDiskList(mass_disk_t * dlist[], int max);
+extern int  USBH_MassRawRead(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff);
+extern int  USBH_MassRawWrite(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff);
 
 /*@}*/ /* end of group NUC505_USBH_MASS_EXPORTED_FUNCTIONS */
 

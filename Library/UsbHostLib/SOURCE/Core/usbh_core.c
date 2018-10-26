@@ -1302,7 +1302,7 @@ int USBH_Open(void)
   * @retval   0   Success
   * @retval   Otherwise   Failed
   */
-int32_t USBH_Close(void)
+int USBH_Close(void)
 {
     DISABLE_USB_INT();
 
@@ -1319,7 +1319,7 @@ int32_t USBH_Close(void)
   * @retval   0  Success
   * @retval   Otherwise   Failed
   */
-int32_t USBH_Suspend(void)
+int USBH_Suspend(void)
 {
     int         i;
     USB_DEV_T   *dev;
@@ -1359,7 +1359,7 @@ int32_t USBH_Suspend(void)
   * @retval   0   Success
   * @retval   Otherwise   Failed
   */
-int32_t USBH_Resume(void)
+int USBH_Resume(void)
 {
     USBH->HcControl = (USBH->HcControl & ~USBH_HcControl_HCFS_Msk) | (1 << USBH_HcControl_HCFS_Pos);
     USBH->HcControl = (USBH->HcControl & ~USBH_HcControl_HCFS_Msk) | (2 << USBH_HcControl_HCFS_Pos);

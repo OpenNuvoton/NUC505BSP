@@ -476,7 +476,7 @@ void  UMAS_Qic157Command(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
 void  UMAS_AtapiCommand(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
 {
     int   old_cmnd = 0;
-
+    uint8_t u8Tmp;
     /*
      *  Fix some commands -- this is a form of mode translation
      *  ATAPI devices only accept 12 byte long commands
@@ -509,8 +509,10 @@ void  UMAS_AtapiCommand(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
         srb->cmnd[5] = 0;
         srb->cmnd[4] = 0;
         srb->cmnd[3] = 0;
-        srb->cmnd[2] = srb->cmnd[2];
-        srb->cmnd[1] = srb->cmnd[1];
+        u8Tmp = srb->cmnd[2];
+        srb->cmnd[2] = u8Tmp;
+        u8Tmp = srb->cmnd[1];
+        srb->cmnd[1] = u8Tmp;
         srb->cmnd[0] = srb->cmnd[0] | 0x40;
         break;
 
@@ -553,7 +555,7 @@ void  UMAS_AtapiCommand(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
 void  UMAS_UfiCommand(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
 {
     int old_cmnd = 0;
-
+    uint8_t u8Tmp;
     /*
      *  fix some commands -- this is a form of mode translation
      *  UFI devices only accept 12 byte long commands
@@ -596,8 +598,10 @@ void  UMAS_UfiCommand(SCSI_CMD_T *srb, UMAS_DATA_T *umas)
         srb->cmnd[5] = 0;
         srb->cmnd[4] = 0;
         srb->cmnd[3] = 0;
-        srb->cmnd[2] = srb->cmnd[2];
-        srb->cmnd[1] = srb->cmnd[1];
+        u8Tmp = srb->cmnd[2];
+        srb->cmnd[2] = u8Tmp;
+        u8Tmp = srb->cmnd[1];
+        srb->cmnd[1] = u8Tmp;
         srb->cmnd[0] = srb->cmnd[0] | 0x40;
         break;
 

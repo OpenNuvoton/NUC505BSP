@@ -110,7 +110,7 @@ int32_t  HID_HidGetReportDescriptor(HID_DEV_T *hdev, uint8_t *desc_buf, int buf_
         return HID_RET_IO_ERR;
     }
 
-    HID_DBGMSG("successfully initialised HID descriptor %d bytes.\n", len);
+    HID_DBGMSG("successfully initialized HID descriptor %d bytes.\n", len);
 
     return len;
 }

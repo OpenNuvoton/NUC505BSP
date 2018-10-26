@@ -427,7 +427,7 @@ void UMAS_ScanDeviceLun(UMAS_DATA_T *umas)
   * @retval   0   Success
   * @retval   -1   Failed
   */
-int32_t  USBH_MassRawRead(mass_disk_t * disk, uint32_t sectorN, int32_t scnt, uint8_t *buff)
+int  USBH_MassRawRead(mass_disk_t * disk, uint32_t sectorN, int32_t scnt, uint8_t *buff)
 {
     UMAS_DATA_T  *backup_umas;
     int          ret;
@@ -457,7 +457,7 @@ int32_t  USBH_MassRawRead(mass_disk_t * disk, uint32_t sectorN, int32_t scnt, ui
   * @retval   0    Success
   * @retval   -1   Failed
   */
-int32_t  USBH_MassRawWrite(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff)
+int  USBH_MassRawWrite(mass_disk_t *disk, uint32_t sectorN, int32_t scnt, uint8_t *buff)
 {
     UMAS_DATA_T  *backup_umas;
     int          ret;

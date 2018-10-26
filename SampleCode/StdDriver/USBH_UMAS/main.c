@@ -32,10 +32,8 @@ char Lfname[512];
 #ifdef __ICCARM__
 #pragma data_alignment=32
 BYTE Buff[1024] ;       /* Working buffer */
-#endif
-
-#ifdef __ARMCC_VERSION
-__align(32) BYTE Buff[1024] ;       /* Working buffer */
+#else
+BYTE Buff[1024] __attribute__((aligned(32)));       /* Working buffer */
 #endif
 
 void Delay(uint32_t delayCnt)
@@ -292,12 +290,12 @@ void SYS_Init(void)
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
-		/* USB Host Clock Source MUST be multiple of 48MHz */
+    /* USB Host Clock Source MUST be multiple of 48MHz */
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);	
-	
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -307,12 +305,12 @@ void SYS_Init(void)
     /* Select IP clock source */
     CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
 
-	  /* Enable USB Host IP clock */
+    /* Enable USB Host IP clock */
     CLK_EnableModuleClock(USBH_MODULE);
 
     /* Select IP clock source */
-    CLK_SetModuleClock(USBH_MODULE, CLK_USBH_SRC_PLL, CLK_GetPLLClockFreq() / 48000000 - 1);	
-		
+    CLK_SetModuleClock(USBH_MODULE, CLK_USBH_SRC_PLL, CLK_GetPLLClockFreq() / 48000000 - 1);
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -347,14 +345,14 @@ int32_t main(void)
     BYTE *buf;
     FATFS *fs;              /* Pointer to file system object */
     FRESULT res;
-		char Item;
-		uint32_t u32UsbhPort1 = HOST_LIKE_PORT1_DISABLE;
+    char Item;
+    uint32_t u32UsbhPort1 = HOST_LIKE_PORT1_DISABLE;
     DIR dir;                /* Directory object */
     UINT s1, s2, cnt;
     static const BYTE ft[] = {0, 12, 16, 32};
     DWORD ofs = 0, sect = 0;
 
-		NVIC_DisableIRQ((IRQn_Type)1);
+    NVIC_DisableIRQ((IRQn_Type)1);
 
     /* Init System, IP clock and multi-function I/O */
     SYS_Init(); //In the end of SYS_Init() will issue SYS_LockReg() to lock protected register. If user want to write protected register, please issue SYS_UnlockReg() to unlock protected register.
@@ -368,57 +366,55 @@ int32_t main(void)
     printf("|     USB Host Mass Storage sample program      |\n");
     printf("|                                               |\n");
     printf("+-----------------------------------------------+\n");
-	
-	
-		do
-		{
-				printf("============================================================================================\n");
-				printf("Please select the USB host port 1 through GPIO\n");
-				printf("[A] GPB12 and GPB13\n");
-				printf("[B] GPB14 and GPB15\n");
-				printf("[C] Disable\n");
-				printf("============================================================================================\n");
 
-				scanf("%c",&Item);
-				switch(Item)
-				{
-						case 'A': 	
-                                                case 'a': 
-											u32UsbhPort1 = HOST_LIKE_PORT1_0;	
-											goto next;
-						case 'B': 		
-                                                case 'b': 
-											u32UsbhPort1 = HOST_LIKE_PORT1_1;	
-											goto next;
-						case 'C': 
-                                                case 'c': 
-											goto next;	    		
-    				
-				}
-		}while(1);	
+    do
+    {
+        printf("============================================================================================\n");
+        printf("Please select the USB host port 1 through GPIO\n");
+        printf("[A] GPB12 and GPB13\n");
+        printf("[B] GPB14 and GPB15\n");
+        printf("[C] Disable\n");
+        printf("============================================================================================\n");
+
+        scanf("%c",&Item);
+        switch(Item)
+        {
+            case 'A':
+            case 'a': 
+                u32UsbhPort1 = HOST_LIKE_PORT1_0;	
+                goto next;
+            case 'B':
+            case 'b': 
+                u32UsbhPort1 = HOST_LIKE_PORT1_1;	
+                goto next;
+            case 'C': 
+            case 'c': 
+                goto next;
+        }
+    }while(1);
 next:
-		do
-		{
-				printf("============================================================================================\n");
-				printf("Please select the USB host port 2 through GPIO\n");
-				printf("[A] GPC13 and GPC14\n");
-				printf("[B] Disable\n");
-				printf("============================================================================================\n");
-				scanf("%c",&Item);
-				switch(Item)
-				{
-						case 'A': 	
-                                                case 'a': 	
-										USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_0);							
-										goto start;
-						case 'B': 		
-                                                case 'b':   
-										USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_DISABLE);	
-										goto start;		
-				}
-		}while(1);			
-				
-start:	
+    do
+    {
+        printf("============================================================================================\n");
+        printf("Please select the USB host port 2 through GPIO\n");
+        printf("[A] GPC13 and GPC14\n");
+        printf("[B] Disable\n");
+        printf("============================================================================================\n");
+        scanf("%c",&Item);
+        switch(Item)
+        {
+            case 'A':
+            case 'a':
+                USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_0);
+                goto start;
+            case 'B':
+            case 'b':   
+                USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_DISABLE);
+                goto start;
+        }
+    }while(1);
+
+start:
 
     USBH_Open();
 
@@ -432,15 +428,14 @@ start:
     //f_mount(0, &FatFs[0]);  // for FATFS v0.09
     //Register work area to the default drive
     f_mount(&FatFs[0], "", 0);  // for FATFS v0.11
-		
+
     for (;;) {
-    	
         if (USBH_ProcessHubEvents())
         {
-					//put_rc(f_mount(0, &FatFs[0]));  // for FATFS v0.09
-          put_rc(f_mount(&FatFs[0], "", 0));  // for FATFS v0.11
-				}
-    	
+            //put_rc(f_mount(0, &FatFs[0]));  // for FATFS v0.09
+            put_rc(f_mount(&FatFs[0], "", 0));  // for FATFS v0.11
+        }
+
         printf(_T(">"));
         ptr = Line;
         get_line(ptr, sizeof(Line));
@@ -551,7 +546,7 @@ start:
             switch (*ptr++) {
             case 'i' :  /* fi - Force initialized the logical drive */
                 //put_rc(f_mount(0, &FatFs[0]));  // for FATFS v0.09
-                put_rc(f_mount(&FatFs[0], "", 0));  // for FATFS v0.11						
+                put_rc(f_mount(&FatFs[0], "", 0));  // for FATFS v0.11
                 break;
 
             case 's' :  /* fs - Show logical drive status */

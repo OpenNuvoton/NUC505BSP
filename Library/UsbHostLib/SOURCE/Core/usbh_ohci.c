@@ -64,7 +64,7 @@
 static uint8_t  g_ohci_hcca[256];
 #pragma data_alignment=4
 #else
-static __align(256) uint8_t  g_ohci_hcca[256];
+static uint8_t  g_ohci_hcca[256]  __attribute__((aligned(256)));
 #endif
 
 
@@ -1856,6 +1856,7 @@ static int  rh_submit_urb(URB_T *urb)
                 data_buf = data;
                 RH_OK(min (leni, len));
             }
+            break;
         // else fallthrough
         default:
             status = TD_CC_STALL;

@@ -73,7 +73,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 	
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 	
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -565,7 +565,7 @@ start:
 		else
 		{
 				printf("\nUSBH_HidStartIntReadPipe...\n");
-				if (USBH_HidStartIntReadPipe(hdev, int_read_callback) == HID_RET_OK) 
+				if (USBH_HidStartIntReadPipe(hdev, int_read_callback) == HID_RET_OK)
 				{
 						printf("Interrupt in transfer started...\n");
 				}

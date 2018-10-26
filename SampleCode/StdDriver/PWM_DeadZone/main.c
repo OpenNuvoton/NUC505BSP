@@ -20,7 +20,8 @@ void PWM0_IRQHandler(void)
     static uint32_t out;
 
     // Channel 0 frequency is 100Hz, every 1 second enter this IRQ handler 100 times.
-    if(++cnt == 100) {
+    if(++cnt == 100)
+    {
         if(out)
             PWM_EnableOutput(PWM, 0xF);
         else
@@ -47,7 +48,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();

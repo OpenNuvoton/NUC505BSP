@@ -61,7 +61,7 @@
         <option>
           <name>FPU</name>
           <version>2</version>
-          <state>0</state>
+          <state>5</state>
         </option>
         <option>
           <name>OGCoreOrChip</name>
@@ -143,7 +143,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>20</version>
-          <state>40</state>
+          <state>39</state>
         </option>
         <option>
           <name>OGUseCmsis</name>

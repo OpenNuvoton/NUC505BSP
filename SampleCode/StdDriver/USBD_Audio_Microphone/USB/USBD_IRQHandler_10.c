@@ -180,16 +180,16 @@ void USBD_IRQHandler_10(S_AUDIO_LIB* psAudioLib)
         {
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_INTKIF_Msk);
           
-            /* Write Audio data to EPA for ISO IN (Record) */					
-		        EPA_Handler(psAudioLib);
-					
+            /* Write Audio data to EPA for ISO IN (Record) */
+            EPA_Handler(psAudioLib);
+          
         }
     }
     if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPA].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
         
-    }		
+    }    
     if (IrqStL & USBD_GINTSTS_EPCIF_Msk) {
         IrqSt = USBD->EP[EPC].EPINTSTS & USBD->EP[EPC].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPC, IrqSt);

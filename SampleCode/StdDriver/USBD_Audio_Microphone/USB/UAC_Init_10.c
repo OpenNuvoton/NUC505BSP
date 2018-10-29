@@ -39,15 +39,15 @@ void UAC_Init_10(S_AUDIO_LIB* psAudioLib)
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, (psAudioLib->m_u16RecMaxPayload1_+24));
     USBD_ConfigEp(EPA, ISO_IN_EP_NUM, USB_EP_CFG_TYPE_ISO, USB_EP_CFG_DIR_IN);
-		/* EPA Interrupt for Audio Record (Read data from EPB) when Host sends Set Interface for Audio Record */
+    /* EPA Interrupt for Audio Record (Read data from EPB) when Host sends Set Interface for Audio Record */
     
-    #ifdef __HID__		
+    #ifdef __HID__
     /****************************************************************/
     /* EPC ==> Interrupt IN endpoint, address 0x03 (HID_INT_EP_NUM) */
     USBD_SetEpBufAddr(EPC, EPC_BUF_BASE, EPC_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPC, EPC_MAX_PKT_SIZE);
     USBD_ConfigEp(EPC, HID_INT_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_IN);
-    /* Enable EPC IN Token Interrupt for HID (Write HID data to EPC) */			
+    /* Enable EPC IN Token Interrupt for HID (Write HID data to EPC) */      
     USBD_ENABLE_EP_INT(EPC, USBD_EPINTEN_INTKIEN_Msk);
     #endif
 }

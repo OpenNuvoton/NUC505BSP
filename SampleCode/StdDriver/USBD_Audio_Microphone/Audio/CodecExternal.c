@@ -7,15 +7,15 @@
 #if CONFIG_AUDIO_REC
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile int16_t s_i16RecVolumeL;
+static volatile int16_t s_i16RecVolumeL;
 #pragma data_alignment=4
-           static volatile int16_t s_i16RecVolumeR;
+static volatile int16_t s_i16RecVolumeR;
 #pragma data_alignment=4
-           static volatile uint8_t s_u8RecMute;
+static volatile uint8_t s_u8RecMute;
 #else   // __CC_ARM
-__align(4) static volatile int16_t s_i16RecVolumeL;
-__align(4) static volatile int16_t s_i16RecVolumeR;
-__align(4) static volatile uint8_t s_u8RecMute;
+static volatile int16_t s_i16RecVolumeL __attribute__((aligned(4)));
+static volatile int16_t s_i16RecVolumeR __attribute__((aligned(4)));
+static volatile uint8_t s_u8RecMute __attribute__((aligned(4)));
 #endif
 #endif  // CONFIG_AUDIO_REC
 

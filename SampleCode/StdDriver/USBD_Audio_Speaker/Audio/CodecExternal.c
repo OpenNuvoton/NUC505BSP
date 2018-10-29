@@ -7,15 +7,15 @@
 #if CONFIG_AUDIO_PLAY
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile int16_t s_i16PlayVolumeL;
+static volatile int16_t s_i16PlayVolumeL;
 #pragma data_alignment=4
-           static volatile int16_t s_i16PlayVolumeR;
+static volatile int16_t s_i16PlayVolumeR;
 #pragma data_alignment=4
-           static volatile uint8_t s_u8PlayMute;
+static volatile uint8_t s_u8PlayMute;
 #else   // __CC_ARM
-__align(4) static volatile int16_t s_i16PlayVolumeL;
-__align(4) static volatile int16_t s_i16PlayVolumeR;
-__align(4) static volatile uint8_t s_u8PlayMute;
+static volatile int16_t s_i16PlayVolumeL __attribute__((aligned(4)));
+static volatile int16_t s_i16PlayVolumeR __attribute__((aligned(4)));
+static volatile uint8_t s_u8PlayMute __attribute__((aligned(4)));
 #endif
 #endif  // CONFIG_AUDIO_PLAY
 

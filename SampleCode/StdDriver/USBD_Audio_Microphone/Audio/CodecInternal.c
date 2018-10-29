@@ -6,20 +6,20 @@
 #if CONFIG_AUDIO_REC
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile int16_t s_i16RecVolumeL;
+static volatile int16_t s_i16RecVolumeL;
 #pragma data_alignment=4
-           static volatile uint8_t s_u8RecMute;
+static volatile uint8_t s_u8RecMute;
 #else   // __CC_ARM
-__align(4) static volatile int16_t s_i16RecVolumeL;
-__align(4) static volatile uint8_t s_u8RecMute;
+static volatile int16_t s_i16RecVolumeL __attribute__((aligned(4)));
+static volatile uint8_t s_u8RecMute __attribute__((aligned(4)));
 #endif
 
 // from 0 dB, 1.6 dB, 3.2 dB, ... , 22.4 dB step 1.6 dB
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static int8_t s_ai8RecVolTbl[] = {
+static int8_t s_ai8RecVolTbl[] = {
 #else   // __CC_ARM
-__align(4) static int8_t s_ai8RecVolTbl[] = {
+static int8_t s_ai8RecVolTbl[] __attribute__((aligned(4))) = {
 #endif
     0, 1, 3, 4, 6, 8, 9, 11, 12, 14, 16, 17, 19, 20, 22, 24
 };

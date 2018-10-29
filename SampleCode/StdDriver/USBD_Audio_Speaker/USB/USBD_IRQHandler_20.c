@@ -184,13 +184,13 @@ void USBD_IRQHandler_20(S_AUDIO_LIB* psAudioLib)
     if (IrqStL & USBD_GINTSTS_EPBIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
         if(IrqSt & USBD_EPINTSTS_RXPKIF_Msk)          /* EPB Data Received (Host send data) */
-        {					
-            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);	
-					
-            /* Read Audio data from EPB for ISO OUT (Play) */									
+        {          
+            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);  
+          
+            /* Read Audio data from EPB for ISO OUT (Play) */                  
             EPB_Handler(psAudioLib);
        
-        }		
+        }    
     }
     if (IrqStL & USBD_GINTSTS_EPCIF_Msk) {
         IrqSt = USBD->EP[EPC].EPINTSTS & USBD->EP[EPC].EPINTEN;

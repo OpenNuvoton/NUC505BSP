@@ -123,7 +123,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {							
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -142,8 +142,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);		
+                if (g_usbd_CtrlZero == 1)
+                   USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);		
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -205,22 +205,22 @@ void USBD_IRQHandler(void)
 
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
         gu32RxSize = USBD->EP[EPB].EPDATCNT & 0xffff;
-			
-			 /* Set DMA transfer length and trigger DMA transfer */		
-				USBD_SET_DMA_WRITE(BULK_OUT_EP_NUM);				
-				USBD_SET_DMA_ADDR((uint32_t)gUsbRxBuf);
-				USBD_SET_DMA_LEN(gu32RxSize);
-			
-				USBD_ENABLE_DMA();
-				while(1) 
-				{
-						if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
-								break;
-						else
-						 if (!USBD_IS_ATTACHED())
-								break;
-				}
-				
+
+        /* Set DMA transfer length and trigger DMA transfer */
+        USBD_SET_DMA_WRITE(BULK_OUT_EP_NUM);
+        USBD_SET_DMA_ADDR((uint32_t)gUsbRxBuf);
+        USBD_SET_DMA_LEN(gu32RxSize);
+
+        USBD_ENABLE_DMA();
+        while(1) 
+        {
+            if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
+                break;
+            else
+                if (!USBD_IS_ATTACHED())
+                    break;
+        }
+
         /* Set a flag to indicate builk out ready */
         gi8BulkOutReady = 1;
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
@@ -345,56 +345,65 @@ void VCOM_Init(void)
 
 void VCOM_ClassRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
-        switch (gUsbCmd.bRequest) {
-        case GET_LINE_CODE: {
-            if ((gUsbCmd.wIndex & 0xff) == 0)  /* VCOM-1 */
-                USBD_PrepareCtrlIn((uint8_t *)&gLineCoding, 7);
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-            break;
-        }
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
-        }
-    } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        case SET_CONTROL_LINE_STATE: {
-            if ((gUsbCmd.wIndex & 0xff) == 0) { /* VCOM-1 */
-                gCtrlSignal = gUsbCmd.wValue;
-                //printf("RTS=%d  DTR=%d\n", (gCtrlSignal0 >> 1) & 1, gCtrlSignal0 & 1);
+    if (gUsbCmd.bmRequestType & 0x80) 
+    { /* request data transfer direction */
+        /* Device to host */
+        switch (gUsbCmd.bRequest) 
+        {
+            case GET_LINE_CODE:
+            {
+                if ((gUsbCmd.wIndex & 0xff) == 0)  /* VCOM-1 */
+                    USBD_PrepareCtrlIn((uint8_t *)&gLineCoding, 7);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                break;
             }
-            // DATA IN for end of setup
-            /* Status stage */
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-            USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-            break;
+            default: {
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+               break;
+            }
         }
-        case SET_LINE_CODE: {
-            if ((gUsbCmd.wIndex & 0xff) == 0) /* VCOM-1 */
-                USBD_CtrlOut((uint8_t *)&gLineCoding, 7);
+    }
+    else
+    {
+        /* Host to device */
+        switch (gUsbCmd.bRequest) 
+        {
+            case SET_CONTROL_LINE_STATE: 
+            {
+                if ((gUsbCmd.wIndex & 0xff) == 0) 
+                { /* VCOM-1 */
+                    gCtrlSignal = gUsbCmd.wValue;
+//                     printf("RTS=%d  DTR=%d\n", (gCtrlSignal0 >> 1) & 1, gCtrlSignal0 & 1);
+                }
+                // DATA IN for end of setup
+                /* Status stage */
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                break;
+            }
+            case SET_LINE_CODE:
+            {
+                if ((gUsbCmd.wIndex & 0xff) == 0) /* VCOM-1 */
+                    USBD_CtrlOut((uint8_t *)&gLineCoding, 7);
 
-            /* Status stage */
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-            USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                /* Status stage */
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
 
-            /* UART setting */
-            if ((gUsbCmd.wIndex & 0xff) == 0) /* VCOM-1 */
-                VCOM_LineCoding(0);
-            break;
-        }
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
+                /* UART setting */
+                if ((gUsbCmd.wIndex & 0xff) == 0) /* VCOM-1 */
+                    VCOM_LineCoding(0);
+                break;
+            }
+            default: {
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
     }
 }
@@ -405,9 +414,10 @@ void VCOM_LineCoding(uint8_t port)
     uint32_t u32Reg;
     uint32_t u32Baud_Div;
 
-    if (port == 0) {
+    if (port == 0) 
+    {
         NVIC_DisableIRQ(UART0_IRQn);
-        // Reset software fifo
+        /* Reset software fifo */
         comRbytes = 0;
         comRhead = 0;
         comRtail = 0;
@@ -416,10 +426,10 @@ void VCOM_LineCoding(uint8_t port)
         comThead = 0;
         comTtail = 0;
 
-        // Reset hardware fifo
+        /* Reset hardware fifo */
         UART0->FIFO = 0x3;
 
-        // Set baudrate
+        /* Set baudrate */
         u32Baud_Div = UART_BAUD_MODE2_DIVIDER(__HXT, gLineCoding.u32DTERate);
 
         if(u32Baud_Div > 0xFFFF)
@@ -427,41 +437,42 @@ void VCOM_LineCoding(uint8_t port)
         else
             UART0->BAUD = (UART_BAUD_MODE2 | u32Baud_Div);
 
-        // Set parity
+        /* Set parity */
         if(gLineCoding.u8ParityType == 0)
-            u32Reg = 0; // none parity
+            u32Reg = 0;     /* none parity */
         else if(gLineCoding.u8ParityType == 1)
-            u32Reg = 0x08; // odd parity
+            u32Reg = 0x08;  /* odd parity */
         else if(gLineCoding.u8ParityType == 2)
-            u32Reg = 0x18; // even parity
+            u32Reg = 0x18;  /* even parity */
         else
             u32Reg = 0;
 
-        // bit width
-        switch(gLineCoding.u8DataBits) {
-        case 5:
-            u32Reg |= 0;
-            break;
-        case 6:
-            u32Reg |= 1;
-            break;
-        case 7:
-            u32Reg |= 2;
-            break;
-        case 8:
-            u32Reg |= 3;
-            break;
-        default:
-            break;
+        /* bit width */
+        switch(gLineCoding.u8DataBits) 
+        {
+            case 5:
+                u32Reg |= 0;
+                break;
+            case 6:
+                u32Reg |= 1;
+                break;
+            case 7:
+                u32Reg |= 2;
+                break;
+            case 8:
+                u32Reg |= 3;
+                break;
+            default:
+                break;
         }
 
-        // stop bit
+        /* stop bit */
         if(gLineCoding.u8CharFormat > 0)
-            u32Reg |= 0x4; // 2 or 1.5 bits
+            u32Reg |= 0x4;    /* 2 or 1.5 bits */
 
         UART0->LINE = u32Reg;
 
-        // Re-enable UART interrupt
+        /* Re-enable UART interrupt */
         NVIC_EnableIRQ(UART0_IRQn);
     }
 }

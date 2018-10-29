@@ -65,6 +65,8 @@ void _UAC_MicSendTo16to16_2(S_AUDIO_LIB* psAudioLib)
         if ( psAudioLib->m_u8RecChannels == 1 )
 #ifdef __ICCARM__
             pi16RecPcmTmpBuf[j++] = __SSAT( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
+#elif defined __GNUC__
+        pi16RecPcmTmpBuf[j++] = __SSAT( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
 #else   // __CC_ARM
             pi16RecPcmTmpBuf[j++] = __ssat( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
 #endif

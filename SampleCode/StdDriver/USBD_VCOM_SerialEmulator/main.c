@@ -41,10 +41,10 @@ volatile uint8_t comTbuf[TXBUFSIZE];
 uint8_t gRxBuf[64] = {0};
 uint8_t gUsbRxBuf[64] = {0};
 #else
-__align(4) volatile uint8_t comRbuf[RXBUFSIZE];
-__align(4) volatile uint8_t comTbuf[TXBUFSIZE];
-__align(4) uint8_t gRxBuf[64] = {0};
-__align(4) uint8_t gUsbRxBuf[64] = {0};
+volatile uint8_t comRbuf[RXBUFSIZE] __attribute__((aligned(4)));
+volatile uint8_t comTbuf[TXBUFSIZE] __attribute__((aligned(4)));
+uint8_t gRxBuf[64] __attribute__((aligned(4))) = {0};
+uint8_t gUsbRxBuf[64] __attribute__((aligned(4))) = {0};
 #endif
 
 
@@ -74,7 +74,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -239,30 +239,28 @@ int32_t main (void)
 {
     SYS_Init();
  
-		UART0_Init();
-	
+    UART0_Init();
+
 #if defined (__ICCARM__)
-        #pragma section = "VECTOR2"              
+    #pragma section = "VECTOR2"              
         
-				extern uint32_t __Vectors[];
-				extern uint32_t __Vectors_Size[];	
-				uint32_t* pu32Src;    
-				uint32_t* pu32Dst;
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];	
+        uint32_t* pu32Src;    
+        uint32_t* pu32Dst;
         
-				pu32Src = (uint32_t *)&USBD_IRQHandler_SRAM;        
-				//printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
-				memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
-				SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
-					
-				/* Change USBD vector to interrupt handler in SRAM */
-				/* IAR compiler doesn't following initial configuration file to relocate USBD IRQHandler() */
-				pu32Dst = (uint32_t*) ((uint32_t)__section_begin("VECTOR2")+0x64);
-				*pu32Dst = (uint32_t)pu32Src;
-        
-#endif    
-	
-  
-		/* Enable Interrupt and install the call back function */
+        pu32Src = (uint32_t *)&USBD_IRQHandler_SRAM;        
+//         printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
+        memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
+
+        /* Change USBD vector to interrupt handler in SRAM */
+        /* IAR compiler doesn't following initial configuration file to relocate USBD IRQHandler() */
+        pu32Dst = (uint32_t*) ((uint32_t)__section_begin("VECTOR2")+0x64);
+        *pu32Dst = (uint32_t)pu32Src;
+#endif
+
+    /* Enable Interrupt and install the call back function */
     UART_ENABLE_INT(UART0, (UART_INTEN_RDAIEN_Msk | UART_INTEN_THREIEN_Msk | UART_INTEN_RXTOIEN_Msk));
 
     printf("NuMicro USB CDC VCOM\n");

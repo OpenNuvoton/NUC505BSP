@@ -38,15 +38,15 @@ struct CBW g_sCBW;
 struct CSW g_sCSW;
 
 typedef struct {
-	uint32_t    ADDRESS; 
-	uint32_t    COUNT; 
+    uint32_t    ADDRESS; 
+    uint32_t    COUNT; 
 } SCATTER_GATHER;
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
 uint8_t SCATTER_DATA_BUFFER[16*1024];
 #else
-__align(4) uint8_t SCATTER_DATA_BUFFER[16*1024];
+ uint8_t SCATTER_DATA_BUFFER[16*1024] __attribute__((aligned(4)));
 #endif
 
 SCATTER_GATHER scater_gather_array[8];
@@ -69,7 +69,7 @@ uint8_t g_au8InquiryID[36] = {
     '1', '.', '0', '0'
 };
 
-// code = 5Ah, Mode Sense
+/* code = 5Ah, Mode Sense */
 static uint8_t g_au8ModePage_01[12] = {
     0x01, 0x0A, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00,
     0x03, 0x00, 0x00, 0x00
@@ -92,9 +92,9 @@ static uint8_t g_au8ModePage_1C[8] = {
 };
 
 static uint8_t g_au8ModePage[24] = {
-	0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x02, 0x00, 0x1C, 0x0A, 0x80, 0x03,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
+    0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x02, 0x00, 0x1C, 0x0A, 0x80, 0x03,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
 };
 
 #if defined (__ICCARM__)
@@ -157,7 +157,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -204,7 +204,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {		               
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -223,8 +223,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);		
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -342,7 +342,6 @@ void USBD_IRQHandler(void)
 
 void MSC_InitForHighSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_MAX_PKT_SIZE);
@@ -359,7 +358,6 @@ void MSC_InitForHighSpeed(void)
 
 void MSC_InitForFullSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_HS_OTHER_MAX_PKT_SIZE);
@@ -397,19 +395,19 @@ void MSC_Init(void)
     g_u32MassBase = 0x20007000;
     g_u32StorageBase = 0x20008000;
 
-	for(i=0; i<8; i++)
-		scater_gather_array[7 - i].ADDRESS = (uint32_t)SCATTER_DATA_BUFFER + i * 2048;
+    for(i=0; i<8; i++)
+        scater_gather_array[7 - i].ADDRESS = (uint32_t)SCATTER_DATA_BUFFER + i * 2048;
 }
 
 void MSC_ClassRequest(void)
 {
     if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
+        /* Device to host */
         switch (gUsbCmd.bRequest) {
         case GET_MAX_LUN: {
             /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
             if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
-            // Return current configuration setting
+            /* Return current configuration setting */
             USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
@@ -426,36 +424,36 @@ void MSC_ClassRequest(void)
         }
         }
     } else {
-        // Host to device
+        /* Host to device */
         switch (gUsbCmd.bRequest) {
-        case BULK_ONLY_MASS_STORAGE_RESET: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
-                g_u8Prevent = 1;
-                /* Status stage */
-                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
-                g_u32EpStallLock = 0;
+            case BULK_ONLY_MASS_STORAGE_RESET: {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
+                    g_u8Prevent = 1;
+                    /* Status stage */
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                    g_u32EpStallLock = 0;
 
-                USBD_ResetDMA();
-                USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                g_u8BulkState = BULK_CBW;
-                g_u8MscOutPacket = 0;
+                    USBD_ResetDMA();
+                    USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    g_u8BulkState = BULK_CBW;
+                    g_u8MscOutPacket = 0;
+                }
+                else {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
-        }
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
         }
     }
 }
@@ -599,7 +597,7 @@ void MSC_ModeSense6(void)
 {
     uint8_t i;
 
-	for (i = 0; i<4; i++)
+    for (i = 0; i<4; i++)
         *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage[i];
 
     MSC_BulkIn(g_u32MassBase, g_sCBW.dCBWDataTransferLength);
@@ -773,7 +771,7 @@ void MSC_ProcessCmd(void)
         switch (g_sCBW.u8OPCode) {
             case UFI_READ_12:
             case UFI_READ_10: {
-								uint32_t length, scater_length, total_length = g_sCBW.dCBWDataTransferLength;
+                uint32_t length, scater_length, total_length = g_sCBW.dCBWDataTransferLength;
                 Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
                 if (g_sCBW.bmCBWFlags == 0x80) {    /* IN */
                     if (Hcount == Dcount) { /* Hi == Di (Case 6)*/
@@ -806,45 +804,44 @@ void MSC_ProcessCmd(void)
                     return;
                 }
                 
-								/* Get LBA address */
-								g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE + g_u32StorageBase;
-								while(total_length > 0)
-								{
-										if(total_length > 16384)
-												length = scater_length = 16384;
-										else
-												length = scater_length = total_length;
-										
-										i = 0;
-										while(scater_length > 0)
-										{
-												if(scater_length > 2048)
-												{
-														scater_gather_array[i].COUNT = 0x40000800;
-														memcpy((uint8_t *)scater_gather_array[i].ADDRESS, (uint8_t *)g_u32LbaAddress + i * 0x800, 0x800);
-														scater_length = scater_length - 0x800;
-												}
-												else
-												{
-														scater_gather_array[i].COUNT = 0xC0000000 | scater_length;
-														memcpy((uint8_t *)scater_gather_array[i].ADDRESS, (uint8_t *)g_u32LbaAddress + i * 0x800, scater_length);
-														scater_length = 0;
-												}
-												i++;
-										}
+                /* Get LBA address */
+                g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE + g_u32StorageBase;
+                while(total_length > 0)
+                {
+                    if(total_length > 16384)
+                        length = scater_length = 16384;
+                    else
+                        length = scater_length = total_length;
 
-										MSC_BulkInSG((uint32_t)&scater_gather_array);								
-						
-										g_u32LbaAddress += length; 
-										total_length -= length;
-								}
-								g_sCSW.dCSWDataResidue = 0;
+                    i = 0;
+                    while(scater_length > 0)
+                    {
+                        if(scater_length > 2048)
+                        {
+                            scater_gather_array[i].COUNT = 0x40000800;
+                            memcpy((uint8_t *)scater_gather_array[i].ADDRESS, (uint8_t *)g_u32LbaAddress + i * 0x800, 0x800);
+                            scater_length = scater_length - 0x800;
+                        }
+                        else
+                        {
+                            scater_gather_array[i].COUNT = 0xC0000000 | scater_length;
+                            memcpy((uint8_t *)scater_gather_array[i].ADDRESS, (uint8_t *)g_u32LbaAddress + i * 0x800, scater_length);
+                            scater_length = 0;
+                        }
+                        i++;
+                    }
+
+                    MSC_BulkInSG((uint32_t)&scater_gather_array);
+                    g_u32LbaAddress += length; 
+                    total_length -= length;
+                }
+                g_sCSW.dCSWDataResidue = 0;
                 break;
             }
             case UFI_WRITE_12:
             case UFI_WRITE_10: {
-								uint32_t length, scater_length, total_length = g_sCBW.dCBWDataTransferLength;
-								Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
+                uint32_t length, scater_length, total_length = g_sCBW.dCBWDataTransferLength;
+                Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
                 if (g_sCBW.bmCBWFlags == 0x00) {    /* OUT */
                     if (Hcount == Dcount) { /* Ho == Do (Case 12)*/
                         g_sCSW.bCSWStatus = 0;
@@ -861,54 +858,51 @@ void MSC_ProcessCmd(void)
                     else if (Hcount > Dcount) { /* Ho > Do (Case 11) */
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x1;
-                    }								
-										g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE + g_u32StorageBase;
-										
-										while(total_length > 0)
-										{
-												if(total_length > 16384)
-														length = scater_length = 16384;
-												else
-														length = scater_length = total_length;
-												
-												i = 0;
-												while(scater_length > 0)
-												{
-														if(scater_length > 2048)
-														{
-																scater_gather_array[i].COUNT = 0x00000800;
-																scater_length = scater_length - 0x800;
-														}
-														else
-														{
-																scater_gather_array[i].COUNT = 0x80000000 | scater_length;
-																scater_length = 0;
-														}
-														i++;
-												}
+                    }
+                    g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE + g_u32StorageBase;
 
-												MSC_BulkOutSG((uint32_t)&scater_gather_array);
-												
-												scater_length = length;
-												
-												i = 0;
-												while(scater_length > 0)
-												{
-														if(scater_length > 2048)
-														{	
-																memcpy((uint8_t *)g_u32LbaAddress + i * 0x800, (uint8_t *)scater_gather_array[i].ADDRESS, 0x800);
-																scater_length = scater_length - 0x800;
-														}
-														else
-														{
-																memcpy((uint8_t *)g_u32LbaAddress + i * 0x800, (uint8_t *)scater_gather_array[i].ADDRESS, scater_length);
-																scater_length = 0;
-														}
-														i++;
-												}	
-												g_u32LbaAddress += length; 
-												total_length -= length;
-										}
+                    while(total_length > 0)
+                    {
+                        if(total_length > 16384)
+                            length = scater_length = 16384;
+                        else
+                            length = scater_length = total_length;
+
+                        i = 0;
+                        while(scater_length > 0)
+                        {
+                            if(scater_length > 2048)
+                            {
+                                scater_gather_array[i].COUNT = 0x00000800;
+                                scater_length = scater_length - 0x800;
+                            }
+                            else
+                            {
+                                scater_gather_array[i].COUNT = 0x80000000 | scater_length;
+                                scater_length = 0;
+                            }
+                            i++;
+                        }
+                        MSC_BulkOutSG((uint32_t)&scater_gather_array);
+                        scater_length = length;
+                        i = 0;
+                        while(scater_length > 0)
+                        {
+                            if(scater_length > 2048)
+                            {
+                                memcpy((uint8_t *)g_u32LbaAddress + i * 0x800, (uint8_t *)scater_gather_array[i].ADDRESS, 0x800);
+                                scater_length = scater_length - 0x800;
+                            }
+                            else
+                            {
+                                memcpy((uint8_t *)g_u32LbaAddress + i * 0x800, (uint8_t *)scater_gather_array[i].ADDRESS, scater_length);
+                                scater_length = 0;
+                            }
+                            i++;
+                        }
+                        g_u32LbaAddress += length; 
+                        total_length -= length;
+                    }
                     g_sCSW.dCSWDataResidue = 0;
                 }
                 else {  /* Hi <> Do (Case 8) */
@@ -923,7 +917,7 @@ void MSC_ProcessCmd(void)
         }
         case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
             if (g_sCBW.au8Data[2] & 0x01) {
-                g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
+                g_au8SenseKey[0] = 0x05;  /* INVALID COMMAND */
                 g_au8SenseKey[1] = 0x24;
                 g_au8SenseKey[2] = 0;
                 g_u8Prevent = 1;
@@ -1031,14 +1025,14 @@ void MSC_ProcessCmd(void)
                 }
                 break;
             }
-						case UFI_READ_16:
-						{
-										USBD_SetEpStall(EPA);
-                    g_u8Prevent = 1;
-									g_sCSW.bCSWStatus = 0x01;
+            case UFI_READ_16:
+            {
+                USBD_SetEpStall(EPA);
+                g_u8Prevent = 1;
+                g_sCSW.bCSWStatus = 0x01;
                 g_sCSW.dCSWDataResidue = 0;
-								break;
-						}
+                break;
+            }
             default: {
                 /* Unsupported command */
                 g_au8SenseKey[0] = 0x05;

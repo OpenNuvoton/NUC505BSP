@@ -144,7 +144,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -191,7 +191,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {		  			               
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -210,8 +210,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -328,7 +328,6 @@ void USBD_IRQHandler(void)
 
 void MSC_InitForHighSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_MAX_PKT_SIZE);
@@ -345,7 +344,6 @@ void MSC_InitForHighSpeed(void)
 
 void MSC_InitForFullSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_HS_OTHER_MAX_PKT_SIZE);
@@ -385,59 +383,68 @@ void MSC_Init(void)
 
 void MSC_ClassRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
-        switch (gUsbCmd.bRequest) {
-        case GET_MAX_LUN: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
-            // Return current configuration setting
-            USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+    if (gUsbCmd.bmRequestType & 0x80)
+    { /* request data transfer direction */
+        /* Device to host */
+        switch (gUsbCmd.bRequest)
+        {
+            case GET_MAX_LUN:
+            {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
+                /* Return current configuration setting */
+                USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                }
+                else {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: {
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
         }
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
-        }
-    } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        case BULK_ONLY_MASS_STORAGE_RESET: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
-                g_u8Prevent = 1;
-                /* Status stage */
-                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
-                g_u32EpStallLock = 0;
+    }
+    else
+    {
+        /* Host to device */
+        switch (gUsbCmd.bRequest)
+        {
+            case BULK_ONLY_MASS_STORAGE_RESET:
+            {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) 
+                {
+                    g_u8Prevent = 1;
+                    /* Status stage */
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                    g_u32EpStallLock = 0;
 
-                USBD_ResetDMA();
-                USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                g_u8BulkState = BULK_CBW;             
-g_u8MscOutShortPacket = 1;
+                    USBD_ResetDMA();
+                    USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    g_u8BulkState = BULK_CBW;             
+                    g_u8MscOutShortPacket = 1;
+                }
+                else {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: 
+            {
+                /* Stall */
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
-        }
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
         }
     }
 }
@@ -509,70 +516,71 @@ void MSC_ModeSense10(void)
     *((uint32_t *)g_u32MassBase  ) = 0;
     *((uint32_t *)g_u32MassBase + 1) = 0;
 
-    switch (g_sCBW.au8Data[0]) {
-    case 0x01:
-        *((uint8_t *)g_u32MassBase) = 19;
-        i = 8;
-        for (j = 0; j<12; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_01[j];
-        break;
+    switch (g_sCBW.au8Data[0]) 
+    {
+        case 0x01:
+            *((uint8_t *)g_u32MassBase) = 19;
+            i = 8;
+            for (j = 0; j<12; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_01[j];
+            break;
 
-    case 0x05:
-        *((uint8_t *)g_u32MassBase) = 39;
-        i = 8;
-        for (j = 0; j<32; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_05[j];
+        case 0x05:
+            *((uint8_t *)g_u32MassBase) = 39;
+            i = 8;
+            for (j = 0; j<32; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_05[j];
 
-        NumHead = 2;
-        NumSector = 64;
-        NumCyl = g_TotalSectors / 128;
+            NumHead = 2;
+            NumSector = 64;
+            NumCyl = g_TotalSectors / 128;
 
-        *((uint8_t *)(g_u32MassBase+12)) = NumHead;
-        *((uint8_t *)(g_u32MassBase+13)) = NumSector;
-        *((uint8_t *)(g_u32MassBase+16)) = (uint8_t)(NumCyl >> 8);
-        *((uint8_t *)(g_u32MassBase+17)) = (uint8_t)(NumCyl & 0x00ff);
-        break;
+            *((uint8_t *)(g_u32MassBase+12)) = NumHead;
+            *((uint8_t *)(g_u32MassBase+13)) = NumSector;
+            *((uint8_t *)(g_u32MassBase+16)) = (uint8_t)(NumCyl >> 8);
+            *((uint8_t *)(g_u32MassBase+17)) = (uint8_t)(NumCyl & 0x00ff);
+            break;
 
-    case 0x1B:
-        *((uint8_t *)g_u32MassBase) = 19;
-        i = 8;
-        for (j = 0; j<12; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1B[j];
-        break;
+        case 0x1B:
+            *((uint8_t *)g_u32MassBase) = 19;
+            i = 8;
+            for (j = 0; j<12; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1B[j];
+            break;
 
-    case 0x1C:
-        *((uint8_t *)g_u32MassBase) = 15;
-        i = 8;
-        for (j = 0; j<8; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1C[j];
-        break;
+        case 0x1C:
+            *((uint8_t *)g_u32MassBase) = 15;
+            i = 8;
+            for (j = 0; j<8; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1C[j];
+            break;
 
-    case 0x3F:
-        *((uint8_t *)g_u32MassBase) = 0x47;
-        i = 8;
-        for (j = 0; j<12; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_01[j];
-        for (j = 0; j<32; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_05[j];
-        for (j = 0; j<12; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1B[j];
-        for (j = 0; j<8; j++, i++)
-            *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1C[j];
+        case 0x3F:
+            *((uint8_t *)g_u32MassBase) = 0x47;
+            i = 8;
+            for (j = 0; j<12; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_01[j];
+            for (j = 0; j<32; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_05[j];
+            for (j = 0; j<12; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1B[j];
+            for (j = 0; j<8; j++, i++)
+                *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage_1C[j];
 
-        NumHead = 2;
-        NumSector = 64;
-        NumCyl = g_TotalSectors / 128;
+            NumHead = 2;
+            NumSector = 64;
+            NumCyl = g_TotalSectors / 128;
 
-        *((uint8_t *)(g_u32MassBase+24)) = NumHead;
-        *((uint8_t *)(g_u32MassBase+25)) = NumSector;
-        *((uint8_t *)(g_u32MassBase+28)) = (uint8_t)(NumCyl >> 8);
-        *((uint8_t *)(g_u32MassBase+29)) = (uint8_t)(NumCyl & 0x00ff);
-        break;
+            *((uint8_t *)(g_u32MassBase+24)) = NumHead;
+            *((uint8_t *)(g_u32MassBase+25)) = NumSector;
+            *((uint8_t *)(g_u32MassBase+28)) = (uint8_t)(NumCyl >> 8);
+            *((uint8_t *)(g_u32MassBase+29)) = (uint8_t)(NumCyl & 0x00ff);
+            break;
 
-    default:
-        g_au8SenseKey[0] = 0x05;
-        g_au8SenseKey[1] = 0x24;
-        g_au8SenseKey[2] = 0x00;
+        default:
+            g_au8SenseKey[0] = 0x05;
+            g_au8SenseKey[1] = 0x24;
+            g_au8SenseKey[2] = 0x00;
     }
     MSC_BulkIn(g_u32MassBase, g_sCBW.dCBWDataTransferLength);
 }
@@ -684,19 +692,19 @@ uint32_t MSC_ReceiveCBW(uint32_t u32Buf)
             break;
     }
 
-		/* get data from FIFO */
-		receive_len = USBD->EP[EPB].EPDATCNT & 0xffff;
+    /* get data from FIFO */
+    receive_len = USBD->EP[EPB].EPDATCNT & 0xffff;
 
 
-		for (i=0; i<receive_len; i++)
-				*(ptr+i) = USBD->EP[EPB].EPDAT_BYTE;
+    for (i=0; i<receive_len; i++)
+        *(ptr+i) = USBD->EP[EPB].EPDAT_BYTE;
 
-		// reset DMA
-		USBD->DMACTL = 0x80;
-		USBD->DMACTL = 0x00;
+    /* reset DMA */
+    USBD->DMACTL = 0x80;
+    USBD->DMACTL = 0x00;
 
     USBD->EP[EPB].EPRSPCTL = 0;
-		return receive_len;
+    return receive_len;
 }
 
 void MSC_ProcessCmd(void)
@@ -704,8 +712,8 @@ void MSC_ProcessCmd(void)
     uint32_t i;
     uint32_t Hcount, Dcount;
 
-		g_u32CbwSize = MSC_ReceiveCBW(g_u32MassBase);
-	
+    g_u32CbwSize = MSC_ReceiveCBW(g_u32MassBase);
+
     if (g_u32CbwSize) {
 
             /* Check Signature & length of CBW */
@@ -761,9 +769,9 @@ void MSC_ProcessCmd(void)
                     MSC_AckCmd();
                     return;
                 }
-								/* Get LBA address */
-								g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE;
-								MSC_BulkIn(g_u32StorageBase+g_u32LbaAddress, g_sCBW.dCBWDataTransferLength);
+                /* Get LBA address */
+                g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE;
+                MSC_BulkIn(g_u32StorageBase+g_u32LbaAddress, g_sCBW.dCBWDataTransferLength);
                 g_sCSW.dCSWDataResidue = 0;
                 break;
             }
@@ -787,9 +795,9 @@ void MSC_ProcessCmd(void)
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x1;
                     }
-										
-										g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE;
-										MSC_BulkOut(g_u32StorageBase+g_u32LbaAddress, g_sCBW.dCBWDataTransferLength);
+
+                    g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE;
+                    MSC_BulkOut(g_u32StorageBase+g_u32LbaAddress, g_sCBW.dCBWDataTransferLength);
                     g_sCSW.dCSWDataResidue = 0;
                 }
                 else {  /* Hi <> Do (Case 8) */
@@ -804,7 +812,7 @@ void MSC_ProcessCmd(void)
         }
         case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
             if (g_sCBW.au8Data[2] & 0x01) {
-                g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
+                g_au8SenseKey[0] = 0x05;  /* INVALID COMMAND */
                 g_au8SenseKey[1] = 0x24;
                 g_au8SenseKey[2] = 0;
                 g_u8Prevent = 1;
@@ -912,14 +920,14 @@ void MSC_ProcessCmd(void)
                 }
                 break;
             }
-						case UFI_READ_16:
-						{
-										USBD_SetEpStall(EPA);
-                    g_u8Prevent = 1;
-									g_sCSW.bCSWStatus = 0x01;
+            case UFI_READ_16:
+            {
+                USBD_SetEpStall(EPA);
+                g_u8Prevent = 1;
+                g_sCSW.bCSWStatus = 0x01;
                 g_sCSW.dCSWDataResidue = 0;
-								break;
-						}
+                break;
+            }
             default: {
                 /* Unsupported command */
                 g_au8SenseKey[0] = 0x05;
@@ -934,7 +942,7 @@ void MSC_ProcessCmd(void)
                 g_sCSW.bCSWStatus = g_u8Prevent;
             }
         }
-						MSC_AckCmd();
+        MSC_AckCmd();
     }
     /* For MSC compliance test, if received an invalid command should stall it */
     while(1) {

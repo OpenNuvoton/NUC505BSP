@@ -9,15 +9,15 @@ S_AUDIO_LIB g_sAudioLib;
 #if CONFIG_AUDIO_REC
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ];
+static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ];
 #pragma data_alignment=4
-           static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ];
+static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ];
 #pragma data_alignment=4
-           static uint8_t s_au8RecPcmTmpBuf[768];
+static uint8_t s_au8RecPcmTmpBuf[768];
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8RecPcmTmpBuf[768];
+static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8RecPcmTmpBuf[768] __attribute__((aligned(4)));
 #endif
 #endif  // CONFIG_AUDIO_REC
 

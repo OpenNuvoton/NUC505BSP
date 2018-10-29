@@ -175,34 +175,34 @@ void USBD_IRQHandler_20(S_AUDIO_LIB* psAudioLib)
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_BUFEMPTYIF_Msk);
         }
     }
-						
+            
     /* EPA (Isochronous IN Endpoint) */
     if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
         IrqSt = USBD->EP[EPA].EPINTSTS & USBD->EP[EPA].EPINTEN;
-			
+      
         if(IrqSt & USBD_EPINTSTS_INTKIF_Msk)          /* EPA IN Toekn (Host request data) */
-        {            					
+        {                      
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_INTKIF_Msk);
           
-            /* Write Audio data to EPA for ISO IN (Record) - First Packet */					
-		        EPA_Handler(psAudioLib);			
+            /* Write Audio data to EPA for ISO IN (Record) - First Packet */          
+            EPA_Handler(psAudioLib);      
 
-            /* Disable IN Token Interrupt and Enable Data Transmitted Interrupt */ 					
+            /* Disable IN Token Interrupt and Enable Data Transmitted Interrupt */           
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_TXPKIEN_Msk);
         }
         else if(IrqSt & USBD_EPINTSTS_TXPKIF_Msk)          /* EPA IN Toekn (Host request data) */
-        {            					
+        {                      
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_TXPKIF_Msk);
           
-            /* Write Audio data to EPA for ISO IN (Record) */					
-		        EPA_Handler(psAudioLib);											
-        }				
+            /* Write Audio data to EPA for ISO IN (Record) */          
+            EPA_Handler(psAudioLib);                      
+        }        
     }
     if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPA].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
         
-    }				
+    }        
     if (IrqStL & USBD_GINTSTS_EPCIF_Msk) {
         IrqSt = USBD->EP[EPC].EPINTSTS & USBD->EP[EPC].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPC, IrqSt);

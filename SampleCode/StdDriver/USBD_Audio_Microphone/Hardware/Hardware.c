@@ -8,9 +8,9 @@
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           volatile uint8_t g_timeout = TIMER_OUT;
+volatile uint8_t g_timeout = TIMER_OUT;
 #else   // __CC_ARM
-__align(4) volatile uint8_t g_timeout = TIMER_OUT;
+volatile uint8_t g_timeout __attribute__((aligned(4))) = TIMER_OUT;
 #endif
 
 extern uint32_t g_u32count;
@@ -318,9 +318,9 @@ void _I2C_ReadData(uint16_t addr)
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           volatile uint32_t g_u32TimerCnt;
+volatile uint32_t g_u32TimerCnt;
 #else   // __CC_ARM
-__align(4) volatile uint32_t g_u32TimerCnt;
+volatile uint32_t g_u32TimerCnt __attribute__((aligned(4)));
 #endif
 
 void TMR0_IRQHandler(void)

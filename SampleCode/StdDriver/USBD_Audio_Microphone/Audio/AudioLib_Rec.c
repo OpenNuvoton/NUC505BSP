@@ -111,9 +111,9 @@ static void _UAC_MicSpeed(S_AUDIO_LIB* psAudioLib)
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence1_0[] = {
+static uint8_t s_au8RecPacketSequence1_0[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence1_0[] = {
+static uint8_t s_au8RecPacketSequence1_0[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ1_00
 };
@@ -122,9 +122,9 @@ __align(4) static uint8_t s_au8RecPacketSequence1_0[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence1_1[] = {
+static uint8_t s_au8RecPacketSequence1_1[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence1_1[] = {
+static uint8_t s_au8RecPacketSequence1_1[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ1_10
 };
@@ -134,9 +134,9 @@ __align(4) static uint8_t s_au8RecPacketSequence1_1[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence1_2[] = {
+static uint8_t s_au8RecPacketSequence1_2[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence1_2[] = {
+static uint8_t s_au8RecPacketSequence1_2[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ1_20,
     REC_PKT_SEQ1_21
@@ -149,9 +149,9 @@ __align(4) static uint8_t s_au8RecPacketSequence1_2[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence1_3[] = {
+static uint8_t s_au8RecPacketSequence1_3[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence1_3[] = {
+static uint8_t s_au8RecPacketSequence1_3[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ1_30,
     REC_PKT_SEQ1_31,
@@ -244,9 +244,9 @@ static void _UAC_MicConfigMaxPayload10(S_AUDIO_LIB* psAudioLib)
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence2_0[] = {
+static uint8_t s_au8RecPacketSequence2_0[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence2_0[] = {
+static uint8_t s_au8RecPacketSequence2_0[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ2_00
 };
@@ -257,9 +257,9 @@ __align(4) static uint8_t s_au8RecPacketSequence2_0[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence2_1[] = {
+static uint8_t s_au8RecPacketSequence2_1[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence2_1[] = {
+static uint8_t s_au8RecPacketSequence2_1[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ2_10,
     REC_PKT_SEQ2_10,
@@ -281,9 +281,9 @@ __align(4) static uint8_t s_au8RecPacketSequence2_1[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence2_2[] = {
+static uint8_t s_au8RecPacketSequence2_2[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence2_2[] = {
+static uint8_t s_au8RecPacketSequence2_2[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ2_20,
     REC_PKT_SEQ2_20,
@@ -319,9 +319,9 @@ __align(4) static uint8_t s_au8RecPacketSequence2_2[] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t s_au8RecPacketSequence2_3[] = {
+static uint8_t s_au8RecPacketSequence2_3[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8RecPacketSequence2_3[] = {
+static uint8_t s_au8RecPacketSequence2_3[] __attribute__((aligned(4))) = {
 #endif
     REC_PKT_SEQ2_30,
     REC_PKT_SEQ2_30,

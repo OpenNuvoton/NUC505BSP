@@ -66,6 +66,8 @@ void _UAC_MicSendTo16to24(S_AUDIO_LIB* psAudioLib)
         {
 #ifdef __ICCARM__
             i16Smpl1 = __SSAT( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
+#elif defined __GNUC__
+            i16Smpl1 = __SSAT( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
 #else   // __CC_ARM
             i16Smpl1 = __ssat( (int32_t)(i16Smpl1 + i16Smpl2), 16 );
 #endif

@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\USBD_VCOM_And_HID_Keyboard.ewp</path>
+    <path>$WS_DIR$\USBD_VCOM_And_HID.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

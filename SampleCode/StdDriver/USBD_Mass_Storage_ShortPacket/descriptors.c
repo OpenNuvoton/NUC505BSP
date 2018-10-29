@@ -291,7 +291,7 @@ uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) =
 /*!<USB Product String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ProductStringDesc[] = {
+uint8_t gu8ProductStringDesc[] = 
 #else
 uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) = 
 #endif

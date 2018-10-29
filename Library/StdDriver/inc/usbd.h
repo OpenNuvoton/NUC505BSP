@@ -182,7 +182,7 @@ typedef struct s_usbd_info {
 
 /// @cond HIDDEN_SYMBOLS
 extern uint32_t g_u32EpStallLock;
-extern uint8_t g_usbd_Configured;
+extern uint8_t volatile g_usbd_Configured;
 extern uint8_t g_usbd_ShortPacket;
 extern uint8_t g_usbd_CtrlZero;
 extern uint8_t g_usbd_UsbAddr;

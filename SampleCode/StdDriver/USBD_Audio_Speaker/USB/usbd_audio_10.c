@@ -33,15 +33,15 @@ void EPB_Handler(S_AUDIO_LIB* psAudioLib)
             return;
         if (!USBD_IS_ATTACHED())
             break;
-        if(u32timeout == 0)				
+        if(u32timeout == 0)
         {
             printf("EPA\t%x\n", USBD->EP[EPA].EPDATCNT);
             printf("EPB\t%x\n", USBD->EP[EPB].EPDATCNT);
             printf("EPC\t%x\n", USBD->EP[EPC].EPDATCNT);
-            printf("DMACTL\t%X\n", USBD->DMACTL);	
-            printf("DMACNT\t%X\n", USBD->DMACNT);	
+            printf("DMACTL\t%X\n", USBD->DMACTL);
+            printf("DMACNT\t%X\n", USBD->DMACNT);
             u32timeout = 0x100000;
-        }					
+        }          
         else
             u32timeout--;
     }
@@ -74,12 +74,12 @@ extern uint8_t g_u8EPCReady;
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile uint8_t buf[8];
+static volatile uint8_t buf[8];
 #pragma data_alignment=4
-           volatile uint32_t g_hid_count = 0;
+volatile uint32_t g_hid_count = 0;
 #else   // __CC_ARM
-__align(4) static volatile uint8_t buf[8];
-__align(4) volatile uint32_t g_hid_count = 0;
+static volatile uint8_t buf[8] __attribute__((aligned(4)));
+volatile uint32_t g_hid_count __attribute__((aligned(4))) = 0;
 #endif
 
 void HID_UpdateKbData(void)

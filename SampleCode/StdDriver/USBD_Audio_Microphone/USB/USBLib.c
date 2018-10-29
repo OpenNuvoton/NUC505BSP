@@ -60,7 +60,7 @@ void USBLib_Init(S_AUDIO_LIB* psAudioLib)
     #endif
     
     #if defined __HID20__ || defined __HID__
-    /* Init GPIO for HID */		
+    /* Init GPIO for HID */    
     GPIO_SetPullMode(PC, BIT4, GPIO_PULL_UP_EN);
     GPIO_SetPullMode(PC, BIT3, GPIO_PULL_UP_EN);
     GPIO_SetPullMode(PC, BIT2, GPIO_PULL_UP_EN);
@@ -165,7 +165,7 @@ void USBLib_Process(void)
         g_uac_20_mode_flag = 0;
         g_uac_10_flag = 2;        /* Run UAC 1.0 mode */ 
         g_uac_20_flag = 0;
-        while(g_u32count < g_timeout + 10);	 /* Delay 1 second */		
+        while(g_u32count < g_timeout + 10);   /* Delay 1 second */    
         USBLib_Start();                      /* Change mode */
     }
     if(g_uac_20_mode_flag && g_uac_20_flag == 1)   /* UAC 2.0 Bus Enumeration Pass */

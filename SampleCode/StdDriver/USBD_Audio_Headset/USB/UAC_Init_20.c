@@ -43,14 +43,14 @@ void UAC_Init_20(S_AUDIO_LIB* psAudioLib)
     USBD_ConfigEp(EPB, ISO_OUT_EP_NUM, USB_EP_CFG_TYPE_ISO, USB_EP_CFG_DIR_OUT);
     /* Enable EPB Data Received Interrupt for Audio Play (Read data from EPB Buffer) */
     USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
-		
-    #ifdef __HID20__		
+    
+    #ifdef __HID20__    
     /****************************************************************/
     /* EPC ==> Interrupt IN endpoint, address 0x03 (HID_INT_EP_NUM) */
     USBD_SetEpBufAddr(EPC, EPC_BUF_BASE, EPC_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPC, EPC_MAX_PKT_SIZE);
     USBD_ConfigEp(EPC, HID_INT_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_IN);
-    /* Enable EPC IN Token Interrupt for HID (Write HID data to EPC) */		
+    /* Enable EPC IN Token Interrupt for HID (Write HID data to EPC) */    
     USBD_ENABLE_EP_INT(EPC, USBD_EPINTEN_INTKIEN_Msk);
     #endif
     
@@ -59,5 +59,5 @@ void UAC_Init_20(S_AUDIO_LIB* psAudioLib)
     USBD_SetEpBufAddr(EPE, EPE_BUF_BASE, EPE_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPE, EPE_MAX_PKT_SIZE);
     USBD_ConfigEp(EPE, ISO_FEEDBACK_ENDPOINT, USB_EP_CFG_TYPE_ISO, USB_EP_CFG_DIR_IN);
-    USBD_ENABLE_EP_INT(EPE,USBD_EPINTEN_TXPKIEN_Msk );		
+    USBD_ENABLE_EP_INT(EPE,USBD_EPINTEN_TXPKIEN_Msk );    
 }

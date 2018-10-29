@@ -37,8 +37,7 @@ uint32_t g_u32CbwSize = 0;
 /* CBW/CSW variables */
 struct CBW g_sCBW;
 struct CSW g_sCSW;
-
-
+ 
 /*--------------------------------------------------------------------------*/
 uint8_t g_au8InquiryID[36] = {
     0x00,                   /* Peripheral Device Type */
@@ -145,7 +144,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -192,7 +191,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {			               
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -211,8 +210,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -274,7 +273,7 @@ void USBD_IRQHandler(void)
             g_u8MscOutPacket = 1;
         }
 
-        //USBD_ENABLE_EP_INT(EPB, 0);
+//         USBD_ENABLE_EP_INT(EPB, 0);
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
     }
 
@@ -331,7 +330,6 @@ void USBD_IRQHandler(void)
 
 void MSC_InitForHighSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_MAX_PKT_SIZE);
@@ -342,13 +340,12 @@ void MSC_InitForHighSpeed(void)
     USBD_SET_MAX_PAYLOAD(EPB, EPB_MAX_PKT_SIZE);
     USBD_ConfigEp(EPB, BULK_OUT_EP_NUM, USB_EP_CFG_TYPE_BULK, USB_EP_CFG_DIR_OUT);
     USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
-
+	
     g_u32EpMaxPacketSize = EPA_MAX_PKT_SIZE;
 }
 
 void MSC_InitForFullSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_HS_OTHER_MAX_PKT_SIZE);
@@ -388,59 +385,69 @@ void MSC_Init(void)
 
 void MSC_ClassRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
-        switch (gUsbCmd.bRequest) {
-        case GET_MAX_LUN: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
-            // Return current configuration setting
-            USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+    if (gUsbCmd.bmRequestType & 0x80)
+    {   /* request data transfer direction */
+        /* Device to host */
+        switch (gUsbCmd.bRequest) 
+        {
+            case GET_MAX_LUN: 
+            {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) 
+                {
+                    /* Return current configuration setting */
+                    USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                }
+                else 
+                {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: {
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
         }
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
-        }
-    } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        case BULK_ONLY_MASS_STORAGE_RESET: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
-                g_u8Prevent = 1;
-                /* Status stage */
-                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
-                g_u32EpStallLock = 0;
+    } 
+    else
+    {
+        /* Host to device */
+        switch (gUsbCmd.bRequest) 
+        {
+            case BULK_ONLY_MASS_STORAGE_RESET: 
+            {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0))
+                {
+                    g_u8Prevent = 1;
+                    /* Status stage */
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                    g_u32EpStallLock = 0;
 
-                USBD_ResetDMA();
-                USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                g_u8BulkState = BULK_CBW;
-                g_u8MscOutPacket = 0;
+                    USBD_ResetDMA();
+                    USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    g_u8BulkState = BULK_CBW;
+                    g_u8MscOutPacket = 0;
+                }
+                else {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
-        }
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
         }
     }
 }
@@ -692,7 +699,6 @@ void MSC_ProcessCmd(void)
 
     if (g_u8MscOutPacket) {
         g_u8MscOutPacket = 0;
-
         if (g_u8BulkState == BULK_CBW) {
 
             /* Check CBW */
@@ -718,141 +724,142 @@ void MSC_ProcessCmd(void)
             Hcount = g_sCBW.dCBWDataTransferLength;
 
             /* Parse Op-Code of CBW */
-        switch (g_sCBW.u8OPCode) {
-            case UFI_READ_12:
-            case UFI_READ_10: {
-                Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
-                if (g_sCBW.bmCBWFlags == 0x80) {    /* IN */
-                    if (Hcount == Dcount) { /* Hi == Di (Case 6)*/
-                        g_sCSW.bCSWStatus = 0;
-                    }
-                    else if (Hcount < Dcount) {  /* Hn < Di (Case 2) || Hi < Di (Case 7) */
-                        if (Hcount) {   /* Hi < Di (Case 7) */
+            switch (g_sCBW.u8OPCode) {
+                case UFI_READ_12:
+                case UFI_READ_10: {
+                    Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
+                    if (g_sCBW.bmCBWFlags == 0x80) {    /* IN */
+                        if (Hcount == Dcount) { /* Hi == Di (Case 6)*/
+                            g_sCSW.bCSWStatus = 0;
+                        }
+                        else if (Hcount < Dcount) {  /* Hn < Di (Case 2) || Hi < Di (Case 7) */
+                            if (Hcount) {   /* Hi < Di (Case 7) */
+                                g_u8Prevent = 1;
+                                g_sCSW.bCSWStatus = 0x01;
+                            }
+                            else {  /* Hn < Di (Case 2) */
+                                g_u8Prevent = 1;
+                                g_sCSW.bCSWStatus = 0x01;
+                                g_sCSW.dCSWDataResidue = 0;
+                                MSC_AckCmd();
+                                return;
+                            }
+                        }
+                        else if (Hcount > Dcount) { /* Hi > Dn (Case 4) || Hi > Di (Case 5) */
                             g_u8Prevent = 1;
                             g_sCSW.bCSWStatus = 0x01;
                         }
-                        else {  /* Hn < Di (Case 2) */
-                            g_u8Prevent = 1;
-                            g_sCSW.bCSWStatus = 0x01;
-                            g_sCSW.dCSWDataResidue = 0;
-                            MSC_AckCmd();
-                            return;
-                        }
                     }
-                    else if (Hcount > Dcount) { /* Hi > Dn (Case 4) || Hi > Di (Case 5) */
+                    else {  /* Ho <> Di (Case 10) */
                         g_u8Prevent = 1;
+                        USBD_SetEpStall(EPB);
                         g_sCSW.bCSWStatus = 0x01;
+                        g_sCSW.dCSWDataResidue = Hcount;
+                        MSC_AckCmd();
+                        return;
                     }
-                }
-                else {  /* Ho <> Di (Case 10) */
-                    g_u8Prevent = 1;
-                    USBD_SetEpStall(EPB);
-                    g_sCSW.bCSWStatus = 0x01;
-                    g_sCSW.dCSWDataResidue = Hcount;
-                    MSC_AckCmd();
-                    return;
-                }
-            /* Get LBA address */
-            g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]);     // unit is sector
-            g_u32DataTransferSector = g_sCBW.dCBWDataTransferLength / USBD_SECTOR_SIZE;
+                    /* Get LBA address */
+                    g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]);     /* unit is sector */
+                    g_u32DataTransferSector = g_sCBW.dCBWDataTransferLength / USBD_SECTOR_SIZE;
 
-            //--- The memory buffer between USBD and SD card must be limited since the NUC505 just has 128KB SRAM.
-            //--- We split one big packet to multiple small packets here to meet the buffer size USBD_MAX_SD_LEN.
-            if (g_sCBW.dCBWDataTransferLength >= USBD_MAX_SD_LEN)
-            {
-                count = g_sCBW.dCBWDataTransferLength / USBD_MAX_SD_LEN;
-                for (i=0; i<count; i++)
-                {
-                    MSC_ReadMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
-                    MSC_BulkIn(g_u32StorageBase, USBD_MAX_SD_LEN);
-                }
+                    /*--- The memory buffer between USBD and SD card must be limited since the NUC505 just has 128KB SRAM. */
+                    /*--- We split one big packet to multiple small packets here to meet the buffer size USBD_MAX_SD_LEN. */
+                    if (g_sCBW.dCBWDataTransferLength >= USBD_MAX_SD_LEN)
+                    {
+                        count = g_sCBW.dCBWDataTransferLength / USBD_MAX_SD_LEN;
+                        for (i=0; i<count; i++)
+                        {
+                            MSC_ReadMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
+                            MSC_BulkIn(g_u32StorageBase, USBD_MAX_SD_LEN);
+                        }
         
-                if ((g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN) != 0)
-                {
-                    MSC_ReadMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, g_u32DataTransferSector % USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
-                    MSC_BulkIn(g_u32StorageBase, g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN);
+                        if ((g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN) != 0)
+                        {
+                            MSC_ReadMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, g_u32DataTransferSector % USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
+                            MSC_BulkIn(g_u32StorageBase, g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN);
+                        }
+                    }
+                    else
+                    {
+                        /*--- read data from SD card address g_u32LbaAddress to buffer in SRAM (g_u32StorageBase). */
+                        MSC_ReadMedia(g_u32LbaAddress, g_u32DataTransferSector, (uint8_t *)g_u32StorageBase);
+                        MSC_BulkIn(g_u32StorageBase, g_sCBW.dCBWDataTransferLength);
+                    }
+                    g_sCSW.dCSWDataResidue = 0;
+                    break;
                 }
-            }
-            else
-            {
-                //--- read data from SD card address g_u32LbaAddress to buffer in SRAM (g_u32StorageBase).
-                MSC_ReadMedia(g_u32LbaAddress, g_u32DataTransferSector, (uint8_t *)g_u32StorageBase);
-                MSC_BulkIn(g_u32StorageBase, g_sCBW.dCBWDataTransferLength);
-            }
-                g_sCSW.dCSWDataResidue = 0;
+                case UFI_WRITE_12:
+                case UFI_WRITE_10:
+                {
+                    Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
+                    if (g_sCBW.bmCBWFlags == 0x00) {    /* OUT */
+                        if (Hcount == Dcount) { /* Ho == Do (Case 12)*/
+                            g_sCSW.bCSWStatus = 0;
+                        }
+                        else if (Hcount < Dcount) { /* Hn < Do (Case 3) || Ho < Do (Case 13) */
+                            g_u8Prevent = 1;
+                            g_sCSW.bCSWStatus = 0x1;
+                            if (Hcount == 0) {  /* Hn < Do (Case 3) */
+                                g_sCSW.dCSWDataResidue = 0;
+                                MSC_AckCmd();
+                                return;
+                            }
+                        }
+                        else if (Hcount > Dcount) { /* Ho > Do (Case 11) */
+                            g_u8Prevent = 1;
+                            g_sCSW.bCSWStatus = 0x1;
+                        }
+                        g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]);     /* unit is sector */
+                        g_u32DataTransferSector = g_sCBW.dCBWDataTransferLength / USBD_SECTOR_SIZE;
+
+                        /*--- The memory buffer between USBD and SD card must be limited since the NUC505 just has 128KB SRAM. */
+                        /*--- We split one big packet to multiple small packets here to meet the buffer size USBD_MAX_SD_LEN. */
+                        if (g_sCBW.dCBWDataTransferLength >= USBD_MAX_SD_LEN)
+                        {
+                            count = g_sCBW.dCBWDataTransferLength / USBD_MAX_SD_LEN;
+                            for (i=0; i<count; i++)
+                            {
+                                MSC_BulkOut(g_u32StorageBase, USBD_MAX_SD_LEN);
+                                MSC_WriteMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
+                            }
+        
+                            if ((g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN) != 0)
+                            {
+                                MSC_BulkOut(g_u32StorageBase, g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN);
+                                MSC_WriteMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, g_u32DataTransferSector % USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
+                            }
+                        }
+                        else
+                        {
+                            MSC_BulkOut(g_u32StorageBase, g_sCBW.dCBWDataTransferLength);
+                            /*--- write data from buffer in SRAM (g_u32StorageBase) to SD card address g_u32LbaAddress. */
+                            MSC_WriteMedia(g_u32LbaAddress, g_u32DataTransferSector, (uint8_t *)g_u32StorageBase);
+                        }
+
+                        g_sCSW.dCSWDataResidue = 0;
+                    }
+                    else {  /* Hi <> Do (Case 8) */
+                        g_u8Prevent = 1;
+                        g_sCSW.bCSWStatus = 0x1;
+                        USBD_SetEpStall(EPA);
+                        g_sCSW.dCSWDataResidue = Hcount;
+                        MSC_AckCmd();
+                        return;
+                    }
+                    break;
+                }
+                case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
+                    if (g_sCBW.au8Data[2] & 0x01) {
+                    g_au8SenseKey[0] = 0x05;  /* INVALID COMMAND */
+                    g_au8SenseKey[1] = 0x24;
+                    g_au8SenseKey[2] = 0;
+                    g_u8Prevent = 1;
+                } else
+                    g_u8Prevent = 0;
+                    g_sCSW.dCSWDataResidue = 0;
+                    g_sCSW.bCSWStatus = g_u8Prevent;
                 break;
             }
-            case UFI_WRITE_12:
-            case UFI_WRITE_10: {
-                Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
-                if (g_sCBW.bmCBWFlags == 0x00) {    /* OUT */
-                    if (Hcount == Dcount) { /* Ho == Do (Case 12)*/
-                        g_sCSW.bCSWStatus = 0;
-                    }
-                    else if (Hcount < Dcount) { /* Hn < Do (Case 3) || Ho < Do (Case 13) */
-                        g_u8Prevent = 1;
-                        g_sCSW.bCSWStatus = 0x1;
-                        if (Hcount == 0) {  /* Hn < Do (Case 3) */
-                            g_sCSW.dCSWDataResidue = 0;
-                            MSC_AckCmd();
-                            return;
-                        }
-                    }
-                    else if (Hcount > Dcount) { /* Ho > Do (Case 11) */
-                        g_u8Prevent = 1;
-                        g_sCSW.bCSWStatus = 0x1;
-                    }
-            g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]);     // unit is sector
-            g_u32DataTransferSector = g_sCBW.dCBWDataTransferLength / USBD_SECTOR_SIZE;
-
-            //--- The memory buffer between USBD and SD card must be limited since the NUC505 just has 128KB SRAM.
-            //--- We split one big packet to multiple small packets here to meet the buffer size USBD_MAX_SD_LEN.
-            if (g_sCBW.dCBWDataTransferLength >= USBD_MAX_SD_LEN)
-            {
-                count = g_sCBW.dCBWDataTransferLength / USBD_MAX_SD_LEN;
-                for (i=0; i<count; i++)
-                {
-                    MSC_BulkOut(g_u32StorageBase, USBD_MAX_SD_LEN);
-                    MSC_WriteMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
-                }
-        
-                if ((g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN) != 0)
-                {
-                    MSC_BulkOut(g_u32StorageBase, g_sCBW.dCBWDataTransferLength % USBD_MAX_SD_LEN);
-                    MSC_WriteMedia(g_u32LbaAddress+i*USBD_MAX_SD_SECTOR, g_u32DataTransferSector % USBD_MAX_SD_SECTOR, (uint8_t *)g_u32StorageBase);
-                }
-            }
-            else
-            {
-                MSC_BulkOut(g_u32StorageBase, g_sCBW.dCBWDataTransferLength);
-                //--- write data from buffer in SRAM (g_u32StorageBase) to SD card address g_u32LbaAddress.
-                MSC_WriteMedia(g_u32LbaAddress, g_u32DataTransferSector, (uint8_t *)g_u32StorageBase);
-            }
-
-                    g_sCSW.dCSWDataResidue = 0;
-                }
-                else {  /* Hi <> Do (Case 8) */
-                    g_u8Prevent = 1;
-                    g_sCSW.bCSWStatus = 0x1;
-                    USBD_SetEpStall(EPA);
-                    g_sCSW.dCSWDataResidue = Hcount;
-                    MSC_AckCmd();
-                    return;
-                }
-            break;
-        }
-        case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
-            if (g_sCBW.au8Data[2] & 0x01) {
-                g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
-                g_au8SenseKey[1] = 0x24;
-                g_au8SenseKey[2] = 0;
-                g_u8Prevent = 1;
-            } else
-                g_u8Prevent = 0;
-                g_sCSW.dCSWDataResidue = 0;
-                g_sCSW.bCSWStatus = g_u8Prevent;
-            break;
-        }
             case UFI_TEST_UNIT_READY: {
                 if (Hcount != 0) {
                     if (g_sCBW.bmCBWFlags == 0) {   /* Ho > Dn (Case 9) */
@@ -951,14 +958,14 @@ void MSC_ProcessCmd(void)
                 }
                 break;
             }
-						case UFI_READ_16:
-						{
-										USBD_SetEpStall(EPA);
-                    g_u8Prevent = 1;
-									g_sCSW.bCSWStatus = 0x01;
+            case UFI_READ_16:
+            {
+                USBD_SetEpStall(EPA);
+                g_u8Prevent = 1;
+                g_sCSW.bCSWStatus = 0x01;
                 g_sCSW.dCSWDataResidue = 0;
-								break;
-						}
+                break;
+            }
             default: {
                 /* Unsupported command */
                 g_au8SenseKey[0] = 0x05;
@@ -1019,13 +1026,13 @@ void MSC_AckCmd(void)
     g_u8MscOutPacket = 0;
 }
 
-//--- the unit of parameter addr and size is Sector.
+/*--- the unit of parameter addr and size is Sector.*/
 void MSC_ReadMedia(uint32_t addr, uint32_t size, uint8_t *buffer)
 {
     SD_Read(SD_PORT0, buffer, addr, size);
 }
 
-//--- the unit of parameter addr and size is Sector.
+/*--- the unit of parameter addr and size is Sector. */
 void MSC_WriteMedia(uint32_t addr, uint32_t size, uint8_t *buffer)
 {
     SD_Write(SD_PORT0, buffer, addr, size);

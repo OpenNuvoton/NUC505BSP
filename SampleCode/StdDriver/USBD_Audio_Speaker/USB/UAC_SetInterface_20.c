@@ -21,7 +21,7 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
     if ((gUsbCmd.wIndex & 0xff) == 1)        /* Interface 1 */
     { 
         /* Audio Iso OUT interface */
-        if (u32AltInterface == 2)            /* Interface 1, Alternate 2 */ 	
+        if (u32AltInterface == 2)            /* Interface 1, Alternate 2 */
         {
             psAudioLib->m_u8PlayBitRate  = 24;
             psAudioLib->m_u8PlayChannels =  2;
@@ -29,7 +29,7 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
             USBD_SET_MAX_PAYLOAD(EPB, psAudioLib->m_u16PlayMaxPayload2_);
             printf("dP++s\n");
         }
-        else if (u32AltInterface == 1)       /* Interface 1, Alternate 1 */ 	
+        else if (u32AltInterface == 1)       /* Interface 1, Alternate 1 */
         {
             psAudioLib->m_u8PlayBitRate  = 16;
             psAudioLib->m_u8PlayChannels =  2;
@@ -42,7 +42,7 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
             psAudioLib->m_pfnPlayStop( psAudioLib );
             USBD->EP[EPB].EPRSPCTL |= USBD_EPRSPCTL_FLUSH_Msk;
             printf("dp-\n");
-        }			
-				
+        }
+        
     }
 }

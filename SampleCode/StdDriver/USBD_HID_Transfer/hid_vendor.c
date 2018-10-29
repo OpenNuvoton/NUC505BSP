@@ -27,7 +27,7 @@ void MSC_BulkOut(uint32_t u32Addr, uint32_t u32Len);
 #pragma data_alignment=4
 uint8_t u8BufferOUT[HID_MAX_PACKET_SIZE_INT_OUT];
 #else
-__align(4) uint8_t u8BufferOUT[HID_MAX_PACKET_SIZE_INT_OUT];
+uint8_t u8BufferOUT[HID_MAX_PACKET_SIZE_INT_OUT] __attribute__((aligned(4)));
 #endif
 
 
@@ -72,7 +72,6 @@ void USBD_IRQHandler(void)
             USBD_ENABLE_BUS_INT(USBD_BUSINTEN_RSTIEN_Msk|USBD_BUSINTEN_RESUMEIEN_Msk|USBD_BUSINTEN_SUSPENDIEN_Msk);
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_RSTIF_Msk);
             USBD_CLR_CEP_INT_FLAG(0x1ffc);
-						
         }
 
         if (IrqSt & USBD_BUSINTSTS_RESUMEIF_Msk) {
@@ -96,7 +95,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -143,7 +142,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {									
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -162,8 +161,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);		
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -221,7 +220,7 @@ void USBD_IRQHandler(void)
     /* interrupt out */
     if (IrqStL & USBD_GINTSTS_EPBIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
-			
+
         EPB_Handler();
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
     }
@@ -289,16 +288,16 @@ void HID_InitForHighSpeed(void)
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_MAX_PKT_SIZE);
     USBD_ConfigEp(EPA, HID_IN_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_IN);
-	
-	  /* EPB ==> Interrupt OUT endpoint, address 1 */
+
+    /* EPB ==> Interrupt OUT endpoint, address 1 */
     USBD_SetEpBufAddr(EPB, EPB_BUF_BASE, EPB_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPB, EPB_MAX_PKT_SIZE);
     USBD_ConfigEp(EPB, HID_OUT_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_OUT);
-	
-		USBD->EP[EPA].EPRSPCTL = (USB_EP_RSPCTL_FLUSH|USB_EP_RSPCTL_MODE_AUTO);
-	
-		USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
-	
+
+    USBD->EP[EPA].EPRSPCTL = (USB_EP_RSPCTL_FLUSH|USB_EP_RSPCTL_MODE_AUTO);
+
+    USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
+
     g_u32EpMaxPacketSize = EPA_MAX_PKT_SIZE;	
 }
 
@@ -308,16 +307,16 @@ void HID_InitForFullSpeed(void)
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_FULL_MAX_PKT_SIZE);
     USBD_ConfigEp(EPA, HID_IN_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_IN);
-	
-	  /* EPB ==> Interrupt OUT endpoint, address 1 */
+
+    /* EPB ==> Interrupt OUT endpoint, address 1 */
     USBD_SetEpBufAddr(EPB, EPB_BUF_BASE, EPB_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPB, EPB_FULL_MAX_PKT_SIZE);
     USBD_ConfigEp(EPB, HID_OUT_EP_NUM, USB_EP_CFG_TYPE_INT, USB_EP_CFG_DIR_OUT);
-		
-		USBD->EP[EPA].EPRSPCTL = (USB_EP_RSPCTL_FLUSH|USB_EP_RSPCTL_MODE_AUTO);
-	
-		USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
-	
+
+    USBD->EP[EPA].EPRSPCTL = (USB_EP_RSPCTL_FLUSH|USB_EP_RSPCTL_MODE_AUTO);
+
+    USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);
+
     g_u32EpMaxPacketSize = EPA_FULL_MAX_PKT_SIZE;
 }
 
@@ -343,78 +342,80 @@ void HID_Init(void)
 void HID_ClassRequest(void)
 {
     if (gUsbCmd.bmRequestType & 0x80)
-		{ /* request data transfer direction */
-        // Device to host
+    { /* request data transfer direction */
+        /* Device to host */
         switch (gUsbCmd.bRequest) 
-				{   
-						case GET_IDLE:
-						{
-								USBD_PrepareCtrlIn((uint8_t *)&g_hid_idle, 1);				
-								USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-								USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-								break;
-						}		
-						case GET_PROTOCOL:
-						{
-								USBD_PrepareCtrlIn((uint8_t *)&g_hid_protocol, 1);				
-								USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-								USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-								break;
-						}			
-						case GET_REPORT:
-//						{
-//                 break;
-//						}
-						default: 
-						{
-								/* Setup error, stall the device */
-								USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-								break;
-						}
+        {   
+            case GET_IDLE:
+            {
+                USBD_PrepareCtrlIn((uint8_t *)&g_hid_idle, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                break;
+            }
+            case GET_PROTOCOL:
+            {
+                USBD_PrepareCtrlIn((uint8_t *)&g_hid_protocol, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                break;
+            }
+            case GET_REPORT:
+//            {
+//                break;
+//            }
+            default: 
+            {
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
     } 
-		else 
-		{
-        // Host to device
+    else 
+    {
+        /* Host to device */
         switch (gUsbCmd.bRequest)
-				{
-						case SET_REPORT: {
-								if (((gUsbCmd.wValue >> 8) & 0xff) == 3) {
-										/* Request Type = Feature */
-										USBD_CtrlOut((uint8_t*)&g_hid_report, gUsbCmd.wLength);
-										USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-										USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-										USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);									
-							//	printf("SET_REPORT %d\n",g_hid_report);
-								}
-								break;
-						}
-						case SET_IDLE: 
-						{
-								g_hid_idle = (gUsbCmd.wValue >> 8) & 0xff;
-								/* Status stage */
-								USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-								USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-		//								printf("Set Idle\n");
-								break;
-						}
-						case SET_PROTOCOL:
-						{
-								g_hid_protocol = gUsbCmd.wValue;
-								/* Status stage */
-								USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-								USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-		//								printf("Set Protocol\n");
-								break;
-						}		
-						default: {
-								// Stall
-								/* Setup error, stall the device */
-								USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-								break;
-						}
+        {
+            case SET_REPORT: 
+            {
+                if (((gUsbCmd.wValue >> 8) & 0xff) == 3) 
+                {
+                    /* Request Type = Feature */
+                    USBD_CtrlOut((uint8_t*)&g_hid_report, gUsbCmd.wLength);
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+//                    printf("SET_REPORT %d\n",g_hid_report);
+                }
+                break;
+            }
+            case SET_IDLE: 
+            {
+                g_hid_idle = (gUsbCmd.wValue >> 8) & 0xff;
+                /* Status stage */
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+//                printf("Set Idle\n");
+                break;
+            }
+            case SET_PROTOCOL:
+            {
+                g_hid_protocol = gUsbCmd.wValue;
+                /* Status stage */
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+//                printf("Set Protocol\n");
+                break;
+            }
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
     }
 }
@@ -428,12 +429,12 @@ int HID_CmdEraseSectors(CMD_T *pCmd)
     u32StartSector = pCmd->u32Arg1;
     u32Sectors = pCmd->u32Arg2;
 
-		printf("Erase command - Sector: %d   Sector Cnt: %d\n", u32StartSector, u32Sectors);
-		Erase(u32StartSector, u32Sectors);
-		/* To note the command has been done */
-		pCmd->u8Cmd = HID_CMD_NONE;
-		
-		return 0;
+    printf("Erase command - Sector: %d   Sector Cnt: %d\n", u32StartSector, u32Sectors);
+    Erase(u32StartSector, u32Sectors);
+    /* To note the command has been done */
+    pCmd->u8Cmd = HID_CMD_NONE;
+
+    return 0;
 }
 
 int HID_CmdReadPages(CMD_T *pCmd)
@@ -441,40 +442,40 @@ int HID_CmdReadPages(CMD_T *pCmd)
     uint32_t u32StartPage;
     uint32_t u32Pages;
     uint32_t u32Address;
-		uint32_t u32Len;
-		uint32_t u32Loop;
-		uint32_t i;
+    uint32_t u32Len;
+    uint32_t u32Loop;
+    uint32_t i;
     u32StartPage = pCmd->u32Arg1;
     u32Pages     = pCmd->u32Arg2;
 
     if(u32Pages)
-    {			
-				printf("Read  command - Start page: %5d    Pages Numbers: %5d\n", u32StartPage, u32Pages);
-			
-				u32Len = u32Pages * PAGE_SIZE;
+    {
+        printf("Read  command - Start page: %5d    Pages Numbers: %5d\n", u32StartPage, u32Pages);
 
-				u32Loop = u32Len / BUFFER_SIZE;
-				for(i=0;i<u32Loop;i++)
-				{
-						/* Prepare Buffer & Data for Read */
-						PrepareReadData(&u32Address, u32StartPage, BUFFER_SIZE);
-					
-						/* Trigger HID IN */
-						MSC_BulkIn((uint32_t)u32Address, BUFFER_SIZE);
-				}
-				u32Loop = u32Len % BUFFER_SIZE;
-				
-				if(u32Loop)
-				{
-						/* Prepare Buffer & Data for Read */
-						PrepareReadData(&u32Address, u32StartPage, u32Loop);
-			
-						/* Trigger HID IN */
-						MSC_BulkIn((uint32_t)u32Address, u32Loop);				
-				}	
+        u32Len = u32Pages * PAGE_SIZE;
+
+        u32Loop = u32Len / BUFFER_SIZE;
+        for(i=0;i<u32Loop;i++)
+        {
+            /* Prepare Buffer & Data for Read */
+            PrepareReadData(&u32Address, u32StartPage, BUFFER_SIZE);
+
+            /* Trigger HID IN */
+            MSC_BulkIn((uint32_t)u32Address, BUFFER_SIZE);
+        }
+        u32Loop = u32Len % BUFFER_SIZE;
+
+        if(u32Loop)
+        {
+            /* Prepare Buffer & Data for Read */
+            PrepareReadData(&u32Address, u32StartPage, u32Loop);
+
+            /* Trigger HID IN */
+            MSC_BulkIn((uint32_t)u32Address, u32Loop);
+        }
     }
 
-		return 0;
+    return 0;
 }
 
 int HID_CmdWritePages(CMD_T *pCmd)
@@ -482,45 +483,45 @@ int HID_CmdWritePages(CMD_T *pCmd)
     uint32_t u32StartPage;
     uint32_t u32Pages;
     uint32_t u32Address;
-		uint32_t u32Len;
-		uint32_t u32Loop;
-		uint32_t i;
+    uint32_t u32Len;
+    uint32_t u32Loop;
+    uint32_t i;
     
     u32StartPage = pCmd->u32Arg1;
     u32Pages     = pCmd->u32Arg2;
-	
-		printf("Write command - Start page: %5d    Pages Numbers: %5d\n", u32StartPage, u32Pages);
-	
-		if(u32Pages)
-    {    
-				u32Len = u32Pages * PAGE_SIZE;
 
-				u32Loop = u32Len / BUFFER_SIZE;
-				for(i=0;i<u32Loop;i++)
-				{					
-						/* Prepare Buffer for Write */
-						PrepareWriteBuffer(&u32Address , u32StartPage + i * BUFFER_SIZE, BUFFER_SIZE / PAGE_SIZE);
-					
-						/* Trigger HID OUT */
-						MSC_BulkOut((uint32_t)u32Address, BUFFER_SIZE);
-					
-						/* Get Data from Buffer for Write - u32Address is the buffer address of (u32StartPage + i * BUFFER_SIZE) */
-						GetDatatForWrite(u32Address, u32StartPage + i * BUFFER_SIZE,  BUFFER_SIZE / PAGE_SIZE);					
-				}
-				
-				if(u32Len % BUFFER_SIZE)
-				{						
-						/* Prepare Buffer for Write */
-						PrepareWriteBuffer(&u32Address , u32StartPage + u32Loop * BUFFER_SIZE, (u32Len % BUFFER_SIZE) / PAGE_SIZE);								
-					
-						/* Trigger HID OUT */
-						MSC_BulkOut((uint32_t)u32Address, u32Len % BUFFER_SIZE);
-					
-						/* Get Data from Buffer for Write - u32Address is the buffer address of (u32StartPage + u32Loop * BUFFER_SIZE) */
-						GetDatatForWrite(u32Address, u32StartPage + u32Loop * BUFFER_SIZE, (u32Len % BUFFER_SIZE) / PAGE_SIZE);			
-				}
+    printf("Write command - Start page: %5d    Pages Numbers: %5d\n", u32StartPage, u32Pages);
+
+    if(u32Pages)
+    {
+        u32Len = u32Pages * PAGE_SIZE;
+
+        u32Loop = u32Len / BUFFER_SIZE;
+        for(i=0;i<u32Loop;i++)
+        {
+            /* Prepare Buffer for Write */
+            PrepareWriteBuffer(&u32Address , u32StartPage + i * BUFFER_SIZE, BUFFER_SIZE / PAGE_SIZE);
+
+            /* Trigger HID OUT */
+            MSC_BulkOut((uint32_t)u32Address, BUFFER_SIZE);
+
+            /* Get Data from Buffer for Write - u32Address is the buffer address of (u32StartPage + i * BUFFER_SIZE) */
+            GetDatatForWrite(u32Address, u32StartPage + i * BUFFER_SIZE,  BUFFER_SIZE / PAGE_SIZE);
+        }
+
+        if(u32Len % BUFFER_SIZE)
+        {
+            /* Prepare Buffer for Write */
+            PrepareWriteBuffer(&u32Address , u32StartPage + u32Loop * BUFFER_SIZE, (u32Len % BUFFER_SIZE) / PAGE_SIZE);
+
+            /* Trigger HID OUT */
+            MSC_BulkOut((uint32_t)u32Address, u32Len % BUFFER_SIZE);
+
+            /* Get Data from Buffer for Write - u32Address is the buffer address of (u32StartPage + u32Loop * BUFFER_SIZE) */
+            GetDatatForWrite(u32Address, u32StartPage + u32Loop * BUFFER_SIZE, (u32Len % BUFFER_SIZE) / PAGE_SIZE);
+        }
     }
-		return 0;
+    return 0;
 }
 
 int gi32CmdTestCnt = 0;
@@ -542,10 +543,10 @@ int HID_CmdTest(CMD_T *pCmd)
     
     printf("\n");    
     
-		/* To note the command has been done */
-		pCmd->u8Cmd = HID_CMD_NONE;
-	
-		return 0;
+    /* To note the command has been done */
+    pCmd->u8Cmd = HID_CMD_NONE;
+
+    return 0;
 }
 
 uint32_t CalCheckSum(uint8_t *buf, uint32_t size)
@@ -565,9 +566,9 @@ uint32_t CalCheckSum(uint8_t *buf, uint32_t size)
 
 int32_t ProcessCommand(uint8_t *pu8Buffer, uint32_t u32BufferLen)
 {
-		uint32_t u32sum;
+    uint32_t u32sum;
 
-		pgCmd = (CMD_T  *)( (uint32_t)pu8Buffer);
+    pgCmd = (CMD_T  *)( (uint32_t)pu8Buffer);
 
     /* Check size */
     if((pgCmd->u8Size > sizeof(gCmd)) || (pgCmd->u8Size > u32BufferLen))    
@@ -577,42 +578,42 @@ int32_t ProcessCommand(uint8_t *pu8Buffer, uint32_t u32BufferLen)
     if(pgCmd->u32Signature != HID_CMD_SIGNATURE)
         return -1;
         
-    /* Calculate checksum & check it*/        
+    /* Calculate checksum & check it*/
     u32sum = CalCheckSum((uint8_t *)pgCmd, pgCmd->u8Size);
     if(u32sum != pgCmd->u32Checksum)
         return -1;
 
-		/* It's Command and Copy command from Buffer to Command Parameter */        
+    /* It's Command and Copy command from Buffer to Command Parameter */
     memcpy((uint8_t *)&gCmd, (uint8_t *)pgCmd, sizeof(gCmd));
     
     /* Check Command */
-		switch(gCmd.u8Cmd)
-		{
-				case HID_CMD_ERASE:
-				{
-						HID_CmdEraseSectors(&gCmd);
-						break;
-				}		
-				case HID_CMD_READ:
-				{
-						HID_CmdReadPages(&gCmd);
-						break;
-				}		
-				case HID_CMD_WRITE:
-				{
-						HID_CmdWritePages(&gCmd);
-						break;		
-				}
-				case HID_CMD_TEST:
-				{
-						HID_CmdTest(&gCmd);
-						break;
-				}
-				default:
-						return -1;
-		}	
-		
-		return 0;
+    switch(gCmd.u8Cmd)
+    {
+        case HID_CMD_ERASE:
+        {
+            HID_CmdEraseSectors(&gCmd);
+            break;
+        }
+        case HID_CMD_READ:
+        {
+            HID_CmdReadPages(&gCmd);
+            break;
+        }
+        case HID_CMD_WRITE:
+        {
+            HID_CmdWritePages(&gCmd);
+            break;
+        }
+        case HID_CMD_TEST:
+        {
+            HID_CmdTest(&gCmd);
+            break;
+        }
+        default:
+            return -1;
+    }
+
+    return 0;
 }
 
 
@@ -628,16 +629,16 @@ void HID_SetOutReport(uint8_t *pu8EpBuf, uint32_t u32Size)
 /* USB Endpoint B Interrupt Callback function */
 void EPB_Handler(void)
 {
-		int size = 0;
-		/* Receive data from HOST (CMD/Data) */
-		if(USBD_GET_EP_INT_FLAG(EPB) & USBD_EPINTSTS_RXPKIF_Msk)
-		{
-				size = USBD->EP[EPB].EPDATCNT;
-				/* Trigger DMA to move data from USB Engine Buffer to DRAM buffer */
-				MSC_BulkOut((uint32_t)u8BufferOUT,  size);
-				/* Deal with the Data/Command */
-				HID_SetOutReport(u8BufferOUT, size);
-		}
+    int size = 0;
+    /* Receive data from HOST (CMD/Data) */
+    if(USBD_GET_EP_INT_FLAG(EPB) & USBD_EPINTSTS_RXPKIF_Msk)
+    {
+        size = USBD->EP[EPB].EPDATCNT;
+        /* Trigger DMA to move data from USB Engine Buffer to DRAM buffer */
+        MSC_BulkOut((uint32_t)u8BufferOUT,  size);
+        /* Deal with the Data/Command */
+        HID_SetOutReport(u8BufferOUT, size);
+    }
 }
 
 void MSC_ActiveDMA(uint32_t u32Addr, uint32_t u32Len)
@@ -646,15 +647,15 @@ void MSC_ActiveDMA(uint32_t u32Addr, uint32_t u32Len)
     USBD_SET_DMA_ADDR(u32Addr);
     USBD_SET_DMA_LEN(u32Len);
     g_usbd_DmaDone = 0;
-	
+
     USBD_ENABLE_DMA();
     while(1) 
-		{
+    {
         if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
             break;
-				else
-			   if (!USBD_IS_ATTACHED())
-            break;
+        else
+            if (!USBD_IS_ATTACHED())
+                break;
     }
 }
 

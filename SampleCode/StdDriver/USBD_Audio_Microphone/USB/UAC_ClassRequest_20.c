@@ -11,9 +11,9 @@ extern uint8_t     g_uac_20_mode_flag;
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static int16_t s_ai16MicVolRange[4] = {
+static int16_t s_ai16MicVolRange[4] = {
 #else   // __CC_ARM
-__align(4) static int16_t s_ai16MicVolRange[4] = {
+static int16_t s_ai16MicVolRange[4] __attribute__((aligned(4))) = {
 #endif
     1,
     REC_MIN_VOL,
@@ -23,9 +23,9 @@ __align(4) static int16_t s_ai16MicVolRange[4] = {
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static uint8_t Speedx[] = {
+static uint8_t Speedx[] = {
 #else   // __CC_ARM
-__align(4) static uint8_t Speedx[] = {
+static uint8_t Speedx[] __attribute__((aligned(4))) = {
 #endif
     0x06, 0x00,             //number of sample rate triplets
     
@@ -71,17 +71,17 @@ void UAC_ClassRequest_20(void)
             if (!USBD_IS_ATTACHED())
                 break;
 
-            if(u32timeout == 0)				
+            if(u32timeout == 0)        
             {
                 printf("EPA\t%x\n", USBD->EP[EPA].EPDATCNT);
                 printf("EPB\t%x\n", USBD->EP[EPB].EPDATCNT);
                 printf("EPC\t%x\n", USBD->EP[EPC].EPDATCNT);
-                printf("DMACTL\t%X\n", USBD->DMACTL);			
-                printf("DMACNT\t%X\n", USBD->DMACNT);			
+                printf("DMACTL\t%X\n", USBD->DMACTL);      
+                printf("DMACNT\t%X\n", USBD->DMACNT);      
                 u32timeout = 0x100000;
-            }					
+            }          
             else
-                u32timeout--;												
+                u32timeout--;                        
         }
         
         USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
@@ -113,7 +113,7 @@ void UAC_ClassRequest_20(void)
 
                             if(g_uac_20_mode_flag)
                                 if(g_uac_20_flag == 0)
-                                    g_uac_20_flag  = 1;												
+                                    g_uac_20_flag  = 1;
                             //printf("GET FREQ_CONTROL\n");
                             break;
                         }
@@ -191,7 +191,7 @@ void UAC_ClassRequest_20(void)
                         {
                             if (REC_FEATURE_UNITID == ((gUsbCmd.wIndex >> 8) & 0xff))
                             {
-                                USBD_PrepareCtrlIn((uint8_t *)s_ai16MicVolRange, gUsbCmd.wLength);															
+                                USBD_PrepareCtrlIn((uint8_t *)s_ai16MicVolRange, gUsbCmd.wLength);
                             }                           
                             
                             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);

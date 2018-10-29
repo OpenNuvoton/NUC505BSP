@@ -175,12 +175,12 @@ void USBD_IRQHandler_10(S_AUDIO_LIB* psAudioLib)
     }
     
     /*
-       To avoid USB Buffer Arbitration issue (Can't read USB Buffer when Host read ISO IN buffer)		
-		    - Write data to EPA Buffer when EPA IN Token Interrupt occurs.
+       To avoid USB Buffer Arbitration issue (Can't read USB Buffer when Host read ISO IN buffer)    
+        - Write data to EPA Buffer when EPA IN Token Interrupt occurs.
         - Read EPB Buffer after EPA Buffer is empty or EPA Data Transmitted 
-		      (UAC 1.0 Host issues IN Token to read data ervery 1 ms, Host will not read ISO IN buffer in 1ms).			
-		*/		
-		
+          (UAC 1.0 Host issues IN Token to read data ervery 1 ms, Host will not read ISO IN buffer in 1ms).      
+    */    
+    
     /* EPA (Isochronous IN Endpoint) */
     if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
         IrqSt = USBD->EP[EPA].EPINTSTS & USBD->EP[EPA].EPINTEN;
@@ -188,70 +188,70 @@ void USBD_IRQHandler_10(S_AUDIO_LIB* psAudioLib)
         {
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_INTKIF_Msk);
           
-            /* Write Audio data to EPA for ISO IN (Record) */					
-		        EPA_Handler(psAudioLib);
-					
+            /* Write Audio data to EPA for ISO IN (Record) */          
+            EPA_Handler(psAudioLib);
+          
             /* 
                Enable EPA IN Token Interrupt for Audio Record (For Write data to EPA Buffer) &
                Enable Data Transmitted Interrupt for Audio Play (For Read data from EPB Buffer)
-            */					 
+            */           
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk|USBD_EPINTEN_TXPKIEN_Msk);       
         }
         else if(IrqSt & USBD_EPINTSTS_BUFEMPTYIF_Msk) /* EPA Buffer Empty */
         {
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_BUFEMPTYIF_Msk);
-										
+                    
             if(g_usbd_rx_flag)     /* EPB Received data */
             {
                 /*
-                   For Speaker Only 									
+                   For Speaker Only                   
                    Wait EPA Buffer Empty to avoid USB Buffer Arbitration issue
-                   (Can't read USB Buffer when Host read ISO IN buffer)                   					
-							  */ 							  
-                /* Read Audio data from EPB for ISO OUT (Play) */					
+                   (Can't read USB Buffer when Host read ISO IN buffer)                             
+                */                 
+                /* Read Audio data from EPB for ISO OUT (Play) */          
                 EPB_Handler(psAudioLib);
-							
+              
                 g_usbd_rx_flag = 0;
             }
             /*
                Enable EPA IN Token Interrupt for Audio Record (For Write data to EPA Buffer) & 
                Disable EPA Data Transmitted Interrupt for Audio Play (For Read data from EPB Buffer)
-            */		
+            */    
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
         }
         else if(IrqSt & USBD_EPINTSTS_TXPKIF_Msk)     /* EPA Data Transmitted */
         {
-            USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_TXPKIF_Msk);			
-					
+            USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_TXPKIF_Msk);      
+          
             if(g_usbd_rx_flag)     /* EPB Received data */
             {
-                /*            							
-                   UAC 1.0 Host issus IN Token to read data ervery 1 ms.                   														
-                   Wait EPA Data Transmitted (Host will read ISO IN buffer after 1 ms)							
+                /*                          
+                   UAC 1.0 Host issus IN Token to read data ervery 1 ms.                                               
+                   Wait EPA Data Transmitted (Host will read ISO IN buffer after 1 ms)              
                    to avoid USB Buffer Arbitration issue
                    (Can't read USB Buffer when Host read ISO IN buffer)
-                */ 							                  
-                /* Read Audio data from EPB for ISO OUT (Play) */	
+                */                                 
+                /* Read Audio data from EPB for ISO OUT (Play) */  
                 EPB_Handler(psAudioLib);
-							
+              
                 g_usbd_rx_flag = 0;
             }
             /*
                Enable EPA IN Token Interrupt for Audio Record (For Write data to EPA Buffer) & 
                Disable EPA Data Transmitted Interrupt for Audio Play (For Read data from EPB Buffer) 
-            */			
+            */      
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
-        }	
+        }  
     }
     /* EPB (Isochronous OUT Endpoint) */
     if (IrqStL & USBD_GINTSTS_EPBIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
         if(IrqSt & USBD_EPINTSTS_RXPKIF_Msk)          /* EPB Data Received (Host send data) */
         {
-            g_usbd_rx_flag++;	
-					
-            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);				
-					
+            g_usbd_rx_flag++;  
+          
+            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);        
+          
             /*
                Host doesn't issue IN Token (read data) during 4ms.
                Audio Record Interface may be closed. Flush EPA Buffer. 
@@ -263,9 +263,9 @@ void USBD_IRQHandler_10(S_AUDIO_LIB* psAudioLib)
             }
             /* 
                Enable EPA IN Token Interrupt for Audio Record (Write data to EPA Buffer) &
-               Enable EPA Data Transmitted Interrupts & EPA Empty Buffer for Audio Play (Read data from EPB Buffer)						
-            */							
-            USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk|USBD_EPINTEN_TXPKIEN_Msk);				            
+               Enable EPA Data Transmitted Interrupts & EPA Empty Buffer for Audio Play (Read data from EPB Buffer)            
+            */              
+            USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk|USBD_EPINTEN_TXPKIEN_Msk);                    
         }
     }
     

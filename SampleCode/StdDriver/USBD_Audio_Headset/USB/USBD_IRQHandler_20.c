@@ -177,78 +177,78 @@ void USBD_IRQHandler_20(S_AUDIO_LIB* psAudioLib)
     }
     
     /*
-       To avoid USB Buffer Arbitration issue (Can't read USB Buffer when Host read ISO IN buffer)		
-		    - Write data to EPA Buffer when EPB Buffer Empty.
+       To avoid USB Buffer Arbitration issue (Can't read USB Buffer when Host read ISO IN buffer)    
+        - Write data to EPA Buffer when EPB Buffer Empty.
         - Read EPB Buffer after EPA Buffer is empty or EPA Data Transmitted 
-		      (UAC 2.0 Host issues IN Token to read data ervery 128us, Host will not read ISO IN buffer in 128us).			
-		*/		
-						
+          (UAC 2.0 Host issues IN Token to read data ervery 128us, Host will not read ISO IN buffer in 128us).      
+    */    
+            
     /* EPA (Isochronous IN Endpoint) */
     if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
         IrqSt = USBD->EP[EPA].EPINTSTS & USBD->EP[EPA].EPINTEN;
-			
+      
         if(IrqSt & USBD_EPINTSTS_INTKIF_Msk)          /* EPA IN Toekn (Host request data) */
-        {            					
+        {                      
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_INTKIF_Msk);
-					
-            g_usbd_tx_flag++;		
+          
+            g_usbd_tx_flag++;    
             /* 
                Enable EPB Data Received Interrupt for Audio Play (For Read data from EPB Buffer) & 
                Enable EPB Buffer Empty Interrupt for Audio Record (For Write data to EPA Buffer)
-            */						
-            USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk);				
+            */            
+            USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk);        
         }
         else if(IrqSt & USBD_EPINTSTS_BUFEMPTYIF_Msk) /* EPA Buffer Empty */
         {
             USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_BUFEMPTYIF_Msk);
-					
+          
             if(g_usbd_rx_flag)     /* EPB Received data */
-            {							
+            {              
                 /*
-                   For Speaker Only 									
+                   For Speaker Only                   
                    Wait EPA Buffer Empty to avoid USB Buffer Arbitration issue
-                   (Can't read USB Buffer when Host read ISO IN buffer)                   					
-							  */ 							  
-                /* Read Audio data from EPB for ISO OUT (Play) */									
+                   (Can't read USB Buffer when Host read ISO IN buffer)                             
+                */                 
+                /* Read Audio data from EPB for ISO OUT (Play) */                  
                 EPB_Handler(psAudioLib);
                 g_usbd_rx_flag = 0;
             }
             /*
                Enable EPA IN Token Interrupt for Audio Record (For Write data to EPA Buffer) & 
-               Disable EPA Buffer Empty & Data Transmitted Interrupts (For Read data from EPB Buffer)		  
-            */								
+               Disable EPA Buffer Empty & Data Transmitted Interrupts (For Read data from EPB Buffer)      
+            */                
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
         }
         else if(IrqSt & USBD_EPINTSTS_TXPKIF_Msk)
         {
-            USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_TXPKIF_Msk);	
-					
+            USBD_CLR_EP_INT_FLAG(EPA, USBD_EPINTSTS_TXPKIF_Msk);  
+          
             if(g_usbd_rx_flag)
             {
                 /*
-                   For Speaker Only 									
+                   For Speaker Only                   
                    Wait EPA Buffer Empty to avoid USB Buffer Arbitration issue
-                   (Can't read USB Buffer when Host read ISO IN buffer)                   					
-							  */ 							  
-                /* Read Audio data from EPB for ISO OUT (Play) */									
+                   (Can't read USB Buffer when Host read ISO IN buffer)                             
+                */                 
+                /* Read Audio data from EPB for ISO OUT (Play) */                  
                 EPB_Handler(psAudioLib);
                 g_usbd_rx_flag = 0;
             }
             /*
                Enable EPA IN Token Interrupt for Audio Record (Write data to EPA Buffer) & 
-               Disable EPA Buffer Empty & Data Transmitted Interrupts (For Read data from EPB Buffer)	
-            */								
+               Disable EPA Buffer Empty & Data Transmitted Interrupts (For Read data from EPB Buffer)  
+            */                
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
-        }	
+        }  
     }
     /* EPB (Isochronous OUT Endpoint) */
     if (IrqStL & USBD_GINTSTS_EPBIF_Msk) {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
         if(IrqSt & USBD_EPINTSTS_RXPKIF_Msk)          /* EPB Data Received (Host send data) */
         {
-            g_usbd_rx_flag++;	
-					
-            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);				
+            g_usbd_rx_flag++;  
+          
+            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_RXPKIF_Msk);        
             /*
                Host doesn't issue IN Token (read data) during 512 us.
                Audio Record Interface may be closed. Flush EPA Buffer. 
@@ -260,26 +260,26 @@ void USBD_IRQHandler_20(S_AUDIO_LIB* psAudioLib)
             }
             /* 
                Enable EPA IN Token Interrupt for Audio Record (For Write data to EPA Buffer) &
-               EPA EPA Buffer Empty & Data Transmitted Interrupt for Audio Play (For Read data from EPB Buffer)						
-            */		
-            USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk|USBD_EPINTEN_TXPKIEN_Msk);				            
-        }				
-        else if(IrqSt & USBD_EPINTSTS_BUFEMPTYIF_Msk)	          /* EPB Buffer Empty */
+               EPA EPA Buffer Empty & Data Transmitted Interrupt for Audio Play (For Read data from EPB Buffer)            
+            */    
+            USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk|USBD_EPINTEN_BUFEMPTYIEN_Msk|USBD_EPINTEN_TXPKIEN_Msk);                    
+        }        
+        else if(IrqSt & USBD_EPINTSTS_BUFEMPTYIF_Msk)            /* EPB Buffer Empty */
         {
-            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_BUFEMPTYIF_Msk);		
-					
+            USBD_CLR_EP_INT_FLAG(EPB, USBD_EPINTSTS_BUFEMPTYIF_Msk);    
+          
             if(g_usbd_tx_flag)     /* Host request data */    
             {
-                /* Write Audio data to EPA for ISO IN (Record) */		
+                /* Write Audio data to EPA for ISO IN (Record) */    
                 EPA_Handler(psAudioLib);
-                g_usbd_tx_flag = 0;		
+                g_usbd_tx_flag = 0;    
             }
             /* 
                Enable EPB Data Received Interrupt for Audio Play (For Read data from EPB Buffer) & 
                Diable EPB Buffer Empty Interrupt for Audio Record (For Write data to EPA Buffer)
-            */								
-            USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);						
-        }		
+            */                
+            USBD_ENABLE_EP_INT(EPB, USBD_EPINTEN_RXPKIEN_Msk);            
+        }    
     }
     if (IrqStL & USBD_GINTSTS_EPCIF_Msk) {
         IrqSt = USBD->EP[EPC].EPINTSTS & USBD->EP[EPC].EPINTEN;

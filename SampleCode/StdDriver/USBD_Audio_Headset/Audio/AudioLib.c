@@ -15,9 +15,9 @@ S_AUDIO_LIB g_sAudioLib;
 #pragma data_alignment=4
            static uint8_t s_au8RecPcmTmpBuf[768];
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8RecPcmTmpBuf[768];
+static uint8_t s_au8I2sRecPcmBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8RecPcmWorkBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8RecPcmTmpBuf[768] __attribute__((aligned(4)));
 #endif
 #endif  // CONFIG_AUDIO_REC
 
@@ -30,9 +30,9 @@ __align(4) static uint8_t s_au8RecPcmTmpBuf[768];
 #pragma data_alignment=4
            static uint8_t s_au8PlayPcmTmpBuf[1280];
 #else   // __CC_ARM
-__align(4) static uint8_t s_au8I2sPlayPcmBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8PlayPcmWorkBuf[RING_BUF_SZ];
-__align(4) static uint8_t s_au8PlayPcmTmpBuf[1280];
+static uint8_t s_au8I2sPlayPcmBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8PlayPcmWorkBuf[RING_BUF_SZ] __attribute__((aligned(4)));
+static uint8_t s_au8PlayPcmTmpBuf[1280] __attribute__((aligned(4)));
 #endif
 #endif  // CONFIG_AUDIO_PLAY
 

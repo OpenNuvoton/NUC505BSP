@@ -1,0 +1,533 @@
+/******************************************************************************
+ * @file     descriptors.c
+ * @brief    NUC400 series USBD driver source file
+ * @version  2.0.0
+ * @date     22, Sep, 2014
+ *
+ * @note
+ * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
+/*!<Includes */
+#include "NUC505Series.h"
+#include "vcom_serial.h"
+
+/*!<USB HID Report Descriptor */
+#ifdef __VCOM_MOUSE__
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t HID_MouseReportDescriptor[] = 
+#else
+uint8_t HID_MouseReportDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    0x05, 0x01,         /* Usage Page(Generic Desktop Controls) */
+    0x09, 0x02,         /* Usage(Mouse) */
+    0xA1, 0x01,         /* Collection(Application) */
+    0x09, 0x01,         /* Usage(Pointer) */
+    0xA1, 0x00,         /* Collection(Physical) */
+    0x05, 0x09,         /* Usage Page(Button) */
+    0x19, 0x01,         /* Usage Minimum(0x1) */
+    0x29, 0x03,         /* Usage Maximum(0x3) */
+    0x15, 0x00,         /* Logical Minimum(0x0) */
+    0x25, 0x01,         /* Logical Maximum(0x1) */
+    0x75, 0x01,         /* Report Size(0x1) */
+    0x95, 0x03,         /* Report Count(0x3) */
+    0x81, 0x02,         /* Input(3 button bit) */
+    0x75, 0x05,         /* Report Size(0x5) */
+    0x95, 0x01,         /* Report Count(0x1) */
+    0x81, 0x01,         /* Input(5 bit padding) */
+    0x05, 0x01,         /* Usage Page(Generic Desktop Controls) */
+    0x09, 0x30,         /* Usage(X) */
+    0x09, 0x31,         /* Usage(Y) */
+    0x09, 0x38,         /* Usage(Wheel) */
+    0x15, 0x81,         /* Logical Minimum(0x81)(-127) */
+    0x25, 0x7F,         /* Logical Maximum(0x7F)(127) */
+    0x75, 0x08,         /* Report Size(0x8) */
+    0x95, 0x03,         /* Report Count(0x3) */
+    0x81, 0x06,         /* Input(1 byte wheel) */
+    0xC0,               /* End Collection */
+    0xC0,               /* End Collection */
+};
+#elif defined __VCOM_KEYBOARD__
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t HID_KeyboardReportDescriptor[] = 
+#else
+uint8_t HID_KeyboardReportDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    0x05, 0x01,         /* Usage Page(Generic Desktop Controls) */
+    0x09, 0x06,         /* Usage(Keyboard) */
+    0xA1, 0x01,         /* Collection(Application) */
+    0x05, 0x07,         /* Usage Page(Keyboard/Keypad) */
+    0x19, 0xE0,         /* Usage Minimum(0xE0) */
+    0x29, 0xE7,         /* Usage Maximum(0xE7) */
+    0x15, 0x00,         /* Logical Minimum(0x0) */
+    0x25, 0x01,         /* Logical Maximum(0x1) */
+    0x75, 0x01,         /* Report Size(0x1) */
+    0x95, 0x08,         /* Report Count(0x8) */
+    0x81, 0x02,         /* Input (Data) => Modifier byte */
+    0x95, 0x01,         /* Report Count(0x1) */
+    0x75, 0x08,         /* Report Size(0x8) */
+    0x81, 0x01,         /* Input (Constant) => Reserved byte */
+    0x95, 0x05,         /* Report Count(0x5) */
+    0x75, 0x01,         /* Report Size(0x1) */
+    0x05, 0x08,         /* Usage Page(LEDs) */
+    0x19, 0x01,         /* Usage Minimum(0x1) */
+    0x29, 0x05,         /* Usage Maximum(0x5) */
+    0x91, 0x02,         /* Output (Data) => LED report */
+    0x95, 0x01,         /* Report Count(0x1) */
+    0x75, 0x03,         /* Report Size(0x3) */
+    0x91, 0x01,         /* Output (Constant) => LED report padding */
+    0x95, 0x06,         /* Report Count(0x6) */
+    0x75, 0x08,         /* Report Size(0x8) */
+    0x15, 0x00,         /* Logical Minimum(0x0) */
+    0x25, 0x65,         /* Logical Maximum(0x65) */
+    0x05, 0x07,         /* Usage Page(Keyboard/Keypad) */
+    0x19, 0x00,         /* Usage Minimum(0x0) */
+    0x29, 0x65,         /* Usage Maximum(0x65) */
+    0x81, 0x00,         /* Input (Data) */
+    0xC0,               /* End Collection */
+};
+#endif
+/*----------------------------------------------------------------------------*/
+/*!<USB Device Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8DeviceDescriptor[] = 
+#else
+uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    LEN_DEVICE,         /* bLength */
+    DESC_DEVICE,        /* bDescriptorType */
+    0x00, 0x02,         /* bcdUSB */
+    0xEF,               /* bDeviceClass */
+    0x02,               /* bDeviceSubClass */
+    0x01,               /* bDeviceProtocol */
+    CEP_MAX_PKT_SIZE,   /* bMaxPacketSize0 */
+    /* idVendor */
+    USBD_VID & 0x00FF,
+    (USBD_VID & 0xFF00) >> 8,
+    /* idProduct */
+    USBD_PID & 0x00FF,
+    (USBD_PID & 0xFF00) >> 8,
+    0x00, 0x03,         /* bcdDevice */
+    0x01,               /* iManufacture */
+    0x02,               /* iProduct */
+    0x00,               /* iSerialNumber - no serial */
+    0x01                /* bNumConfigurations */
+};
+
+/*!<USB Qualifier Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8QualifierDescriptor[] = 
+#else
+uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    LEN_QUALIFIER,          /* bLength            */
+    DESC_QUALIFIER,         /* bDescriptorType    */
+    0x00, 0x02,             /* bcdUSB             */
+    0x00,                   /* bDeviceClass       */
+    0x00,                   /* bDeviceSubClass    */
+    0x00,                   /* bDeviceProtocol    */
+    CEP_OTHER_MAX_PKT_SIZE, /* bMaxPacketSize0    */
+    0x01,                   /* bNumConfigurations */
+    0x00
+};
+
+/*!<USB Configure Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8ConfigDescriptor[] = 
+#else
+uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    LEN_CONFIG,     /* bLength              */
+    DESC_CONFIG,    /* bDescriptorType      */
+    /* wTotalLength         */
+    VCOM_DESCRIPTOR_LEN & 0x00FF,
+    (VCOM_DESCRIPTOR_LEN & 0xFF00) >> 8,
+    0x03,           /* bNumInterfaces       */
+    0x01,           /* bConfigurationValue  */
+    0x00,           /* iConfiguration       */
+    0xC0,           /* bmAttributes         */
+    0x32,           /* MaxPower             */
+
+    /* IAD Descriptor */
+    0x08,           /* bLength: Interface Descriptor size */
+    0x0B,           /* bDescriptorType: IAD */
+    0x00,           /* bFirstInterface      */
+    0x02,           /* bInterfaceCount      */
+    0x02,           /* bFunctionClass: CDC  */
+    0x02,           /* bFunctionSubClass    */
+    0x01,           /* bFunctionProtocol    */
+    0x02,           /* iFunction            */
+
+    /* VCOM */
+    /* INTERFACE descriptor */
+    LEN_INTERFACE,  /* bLength              */
+    DESC_INTERFACE, /* bDescriptorType      */
+    0x00,           /* bInterfaceNumber     */
+    0x00,           /* bAlternateSetting    */
+    0x01,           /* bNumEndpoints        */
+    0x02,           /* bInterfaceClass      */
+    0x02,           /* bInterfaceSubClass   */
+    0x01,           /* bInterfaceProtocol   */
+    0x00,           /* iInterface           */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x00,           /* Header functional descriptor subtype */
+    0x10, 0x01,     /* Communication device compliant to the communication spec. ver. 1.10 */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x01,           /* Call management functional descriptor */
+    0x00,           /* BIT0: Whether device handle call management itself. */
+    /* BIT1: Whether device can send/receive call management information over a Data Class Interface 0 */
+    0x01,           /* Interface number of data class interface optionally used for call management */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x04,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x02,           /* Abstract control management funcational descriptor subtype */
+    0x00,           /* bmCapabilities       */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* bLength              */
+    0x24,           /* bDescriptorType: CS_INTERFACE descriptor type */
+    0x06,           /* bDescriptorSubType   */
+    0x00,           /* bMasterInterface     */
+    0x01,           /* bSlaveInterface0     */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_INPUT | INT_IN_EP_NUM),     /* bEndpointAddress */
+    EP_INT,                         /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPC_MAX_PKT_SIZE & 0x00FF,
+    (EPC_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x01,                           /* bInterval        */
+
+    /* INTERFACE descriptor */
+    LEN_INTERFACE,  /* bLength              */
+    DESC_INTERFACE, /* bDescriptorType      */
+    0x01,           /* bInterfaceNumber     */
+    0x00,           /* bAlternateSetting    */
+    0x02,           /* bNumEndpoints        */
+    0x0A,           /* bInterfaceClass      */
+    0x00,           /* bInterfaceSubClass   */
+    0x00,           /* bInterfaceProtocol   */
+    0x00,           /* iInterface           */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_INPUT | BULK_IN_EP_NUM),    /* bEndpointAddress */
+    EP_BULK,                        /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPA_MAX_PKT_SIZE & 0x00FF,
+    (EPA_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x00,                           /* bInterval        */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_OUTPUT | BULK_OUT_EP_NUM),  /* bEndpointAddress */
+    EP_BULK,                        /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPB_MAX_PKT_SIZE & 0x00FF,
+    (EPB_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x00,                           /* bInterval        */
+    
+    /* HID class device */
+    /* I/F descr: HID keyboard*/
+    LEN_INTERFACE,  /* bLength */
+    DESC_INTERFACE, /* bDescriptorType */
+    0x02,           /* bInterfaceNumber */
+    0x00,           /* bAlternateSetting */
+    0x01,           /* bNumEndpoints */
+    0x03,           /* bInterfaceClass */
+    
+    /* Note: set report protocol(0),Set_Protocol / Get_protocol request is options. CV3.0 Test pass */
+    0x00,           /* bInterfaceSubClass */
+#ifdef __VCOM_MOUSE__
+    HID_MOUSE,      /* bInterfaceProtocol */
+#elif defined __VCOM_KEYBOARD__
+    HID_KEYBOARD,   /* bInterfaceProtocol */
+#endif
+    0x00,           /* iInterface */
+
+    /* HID Descriptor */
+    LEN_HID,        /* Size of this descriptor in UINT8s. */
+    DESC_HID,       /* HID descriptor type. */
+    0x10, 0x01,     /* HID Class Spec. release number. */
+    0x00,           /* H/W target country. */
+    0x01,           /* Number of HID class descriptors to follow. */
+    DESC_HID_RPT,   /* Descriptor type. */
+
+    /* Total length of report descriptor. */
+#ifdef __VCOM_MOUSE__
+    sizeof(HID_MouseReportDescriptor) & 0x00FF,
+    ((sizeof(HID_MouseReportDescriptor) & 0xFF00) >> 8),
+#elif defined __VCOM_KEYBOARD__
+    sizeof(HID_KeyboardReportDescriptor) & 0x00FF,
+    ((sizeof(HID_KeyboardReportDescriptor) & 0xFF00) >> 8),
+#endif
+    
+    /* EP Descriptor: interrupt in. */
+    LEN_ENDPOINT,   /* bLength */
+    DESC_ENDPOINT,  /* bDescriptorType */
+    (EP_INPUT | HID_IN_EP_NUM), /* bEndpointAddress */
+    EP_INT,         /* bmAttributes */
+    /* wMaxPacketSize */
+    EPD_MAX_PKT_SIZE & 0x00FF,
+    ((EPD_MAX_PKT_SIZE & 0xFF00) >> 8),
+    HID_DEFAULT_INT_IN_INTERVAL     /* bInterval */
+};
+
+/*!<USB Other Speed Configure Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8OtherConfigDescriptor[] = 
+#else
+uint8_t gu8OtherConfigDescriptor[] __attribute__((aligned(4))) = 
+#endif
+{
+    LEN_CONFIG,     /* bLength              */
+    DESC_CONFIG,    /* bDescriptorType      */
+    /* wTotalLength         */
+    VCOM_DESCRIPTOR_LEN & 0x00FF,
+    (VCOM_DESCRIPTOR_LEN & 0xFF00) >> 8,
+    0x03,           /* bNumInterfaces       */
+    0x01,           /* bConfigurationValue  */
+    0x00,           /* iConfiguration       */
+    0xC0,           /* bmAttributes         */
+    0x32,           /* MaxPower             */
+
+    /* IAD Descriptor */
+    0x08,           /* bLength: Interface Descriptor size */
+    0x0B,           /* bDescriptorType: IAD */
+    0x00,           /* bFirstInterface      */
+    0x02,           /* bInterfaceCount      */
+    0x02,           /* bFunctionClass: CDC  */
+    0x02,           /* bFunctionSubClass    */
+    0x01,           /* bFunctionProtocol    */
+    0x02,           /* iFunction            */
+
+    /* VCOM */
+    /* INTERFACE descriptor */
+    LEN_INTERFACE,  /* bLength              */
+    DESC_INTERFACE, /* bDescriptorType      */
+    0x00,           /* bInterfaceNumber     */
+    0x00,           /* bAlternateSetting    */
+    0x01,           /* bNumEndpoints        */
+    0x02,           /* bInterfaceClass      */
+    0x02,           /* bInterfaceSubClass   */
+    0x01,           /* bInterfaceProtocol   */
+    0x00,           /* iInterface           */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x00,           /* Header functional descriptor subtype */
+    0x10, 0x01,     /* Communication device compliant to the communication spec. ver. 1.10 */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x01,           /* Call management functional descriptor */
+    0x00,           /* BIT0: Whether device handle call management itself. */
+    /* BIT1: Whether device can send/receive call management information over a Data Class Interface 0 */
+    0x01,           /* Interface number of data class interface optionally used for call management */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x04,           /* Size of the descriptor, in bytes */
+    0x24,           /* CS_INTERFACE descriptor type */
+    0x02,           /* Abstract control management funcational descriptor subtype */
+    0x00,           /* bmCapabilities       */
+
+    /* Communication Class Specified INTERFACE descriptor */
+    0x05,           /* bLength              */
+    0x24,           /* bDescriptorType: CS_INTERFACE descriptor type */
+    0x06,           /* bDescriptorSubType   */
+    0x00,           /* bMasterInterface     */
+    0x01,           /* bSlaveInterface0     */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_INPUT | INT_IN_EP_NUM),     /* bEndpointAddress */
+    EP_INT,                         /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPC_OTHER_MAX_PKT_SIZE & 0x00FF,
+    (EPC_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x01,                           /* bInterval        */
+
+    /* INTERFACE descriptor */
+    LEN_INTERFACE,  /* bLength              */
+    DESC_INTERFACE, /* bDescriptorType      */
+    0x01,           /* bInterfaceNumber     */
+    0x00,           /* bAlternateSetting    */
+    0x02,           /* bNumEndpoints        */
+    0x0A,           /* bInterfaceClass      */
+    0x00,           /* bInterfaceSubClass   */
+    0x00,           /* bInterfaceProtocol   */
+    0x00,           /* iInterface           */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_INPUT | BULK_IN_EP_NUM),    /* bEndpointAddress */
+    EP_BULK,                        /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPA_OTHER_MAX_PKT_SIZE & 0x00FF,
+    (EPA_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x00,                           /* bInterval        */
+
+    /* ENDPOINT descriptor */
+    LEN_ENDPOINT,                   /* bLength          */
+    DESC_ENDPOINT,                  /* bDescriptorType  */
+    (EP_OUTPUT | BULK_OUT_EP_NUM),  /* bEndpointAddress */
+    EP_BULK,                        /* bmAttributes     */
+    /* wMaxPacketSize */
+    EPB_OTHER_MAX_PKT_SIZE & 0x00FF,
+    (EPB_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
+    0x00,                           /* bInterval        */
+
+    /* HID class device */
+    /* I/F descr: HID keyboard*/
+    LEN_INTERFACE,  /* bLength */
+    DESC_INTERFACE, /* bDescriptorType */
+    0x02,           /* bInterfaceNumber */
+    0x00,           /* bAlternateSetting */
+    0x01,           /* bNumEndpoints */
+    0x03,           /* bInterfaceClass */
+
+    /* Note: set report protocol(0),Set_Protocol / Get_protocol request is options. CV3.0 Test pass */
+    0x00,           /* bInterfaceSubClass */
+#ifdef __VCOM_MOUSE__
+    HID_MOUSE,      /* bInterfaceProtocol */
+#elif defined __VCOM_KEYBOARD__
+    HID_KEYBOARD,   /* bInterfaceProtocol */
+#endif
+    0x00,           /* iInterface */    
+    
+    /* HID Descriptor */
+    LEN_HID,        /* Size of this descriptor in UINT8s. */
+    DESC_HID,       /* HID descriptor type. */
+    0x10, 0x01,     /* HID Class Spec. release number. */
+    0x00,           /* H/W target country. */
+    0x01,           /* Number of HID class descriptors to follow. */
+    DESC_HID_RPT,   /* Descriptor type. */
+
+    /* Total length of report descriptor. */
+#ifdef __VCOM_MOUSE__
+    sizeof(HID_MouseReportDescriptor) & 0x00FF,
+    ((sizeof(HID_MouseReportDescriptor) & 0xFF00) >> 8),
+#elif defined __VCOM_KEYBOARD__
+    sizeof(HID_KeyboardReportDescriptor) & 0x00FF,
+    ((sizeof(HID_KeyboardReportDescriptor) & 0xFF00) >> 8),
+#endif
+
+    /* EP Descriptor: interrupt in. */
+    LEN_ENDPOINT,   /* bLength */
+    DESC_ENDPOINT,  /* bDescriptorType */
+    (EP_INPUT | HID_IN_EP_NUM), /* bEndpointAddress */
+    EP_INT,         /* bmAttributes */
+    /* wMaxPacketSize */
+    EPD_OTHER_MAX_PKT_SIZE & 0x00FF,
+    ((EPD_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8),
+    HID_DEFAULT_INT_IN_INTERVAL     /* bInterval */    
+    
+};
+
+
+/*!<USB Language String Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8StringLang[] = 
+#else
+uint8_t gu8StringLang[] __attribute__((aligned(4))) = 
+#endif
+{
+    4,              /* bLength */
+    DESC_STRING,    /* bDescriptorType */
+    0x09, 0x04
+};
+
+/*!<USB Vendor String Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8VendorStringDesc[] = 
+#else
+uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) = 
+#endif
+{
+    16,
+    DESC_STRING,
+    'N', 0, 'u', 0, 'v', 0, 'o', 0, 't', 0, 'o', 0, 'n', 0
+};
+
+/*!<USB Product String Descriptor */
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t gu8ProductStringDesc[] = 
+#else
+uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) = 
+#endif
+{
+    32,             /* bLength          */
+    DESC_STRING,    /* bDescriptorType  */
+    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'V', 0, 'i', 0, 'r', 0, 't', 0, 'u', 0, 'a', 0, 'l', 0, ' ', 0, 'C', 0, 'O', 0, 'M', 0
+};
+
+uint8_t *gpu8UsbString[4] = {
+    gu8StringLang,
+    gu8VendorStringDesc,
+    gu8ProductStringDesc,
+    NULL,
+};
+
+uint8_t *gu8UsbHidReport[3] =
+{
+    NULL,
+    NULL,
+#ifdef __VCOM_MOUSE__
+    HID_MouseReportDescriptor,
+#elif defined __VCOM_KEYBOARD__
+    HID_KeyboardReportDescriptor
+#endif
+};
+
+uint32_t gu32UsbHidReportLen[3] =
+{
+    0,
+    0,
+#ifdef __VCOM_MOUSE__
+    sizeof(HID_MouseReportDescriptor)
+#elif defined __VCOM_KEYBOARD__
+    sizeof(HID_KeyboardReportDescriptor)
+#endif
+};
+
+S_USBD_INFO_T gsInfo = {
+    gu8DeviceDescriptor,
+    gu8ConfigDescriptor,
+    gpu8UsbString,
+    gu8QualifierDescriptor,
+    gu8OtherConfigDescriptor,
+    gu8OtherConfigDescriptor,
+    gu8ConfigDescriptor,
+    NULL,
+    gu8UsbHidReport,
+    gu32UsbHidReportLen
+};
+

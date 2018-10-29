@@ -28,7 +28,7 @@
     Isochronous Audio Data Endpoint Descriptor) and modify the Total Length field of Configuration Descriptor.
     For example,
       Remove  Microphone Interface alternate 2 (24 bit resolution) from Speaker & Microphone descriptor with HID  
-		
+    
       1.Remove the following descriptors for Microphone - Interface alternate 2
          Microphone - Interface alternate 2
            Standard AC Interface Descriptor                             (0x09)
@@ -36,16 +36,16 @@
            Audio Format Type Descriptor                                 (0x06)
            Standard AS Isochronous Feedback Endpoint Descriptor         (0x07)
            Class-Specific AS Isochronous Audio Data Endpoint Descriptor (0x08)
-           *Interface alternate Summary                                 (0x2E) 														 
-					 
+           *Interface alternate Summary                                 (0x2E)                              
+           
       2.Modify the Total Length field of Configuration Descriptor to 0x14C.
          
-         0x17A(Original Total Length) - 0x2E(Total Length of descriptors for Microphone - Interface alternate 2) = 0x14C			 
-		
+         0x17A(Original Total Length) - 0x2E(Total Length of descriptors for Microphone - Interface alternate 2) = 0x14C       
+    
       3.Modify the change for interface alternate in UAC_SetInterface_20.c
-			
+      
   2.If you want to add / remove sampling rate, please modify sampling rate array (Speedx) in UAC_ClassRequest_20.c
-		
+    
   3.If you want to change the support function of audio control, please modify the bmaControls field of
     Audio Control Feature Unit Descriptor for Microphone or Speaker
       A bit set to 1 indicates that the mentioned Control is supported
@@ -63,8 +63,8 @@
          D25..24: Phase Inverter Control
          D27..26: Underflow Control
          D29..28: Overflow Control
-         D31..30: Reserved, should set to 0	
-				 
+         D31..30: Reserved, should set to 0  
+         
   4.If you want to change the polling interal of HID Endpoint, please modify the bInterval field of Endpoint Descriptor for HID.
 */
 
@@ -76,7 +76,7 @@
 #pragma data_alignment=4
 uint8_t gu8KeyboardReportDesc_20[] =
 #else
-__align(4) uint8_t gu8KeyboardReportDesc_20[] =
+uint8_t gu8KeyboardReportDesc_20[] __attribute__((aligned(4))) =
 #endif
 {
     0x05, 0x01,        /* Usage Page(Generic Desktop Controls) */
@@ -118,10 +118,10 @@ __align(4) uint8_t gu8KeyboardReportDesc_20[] =
 #pragma data_alignment=4
 uint8_t gu8KeyboardReportDesc_20[] =
 #else
-__align(4)  uint8_t gu8KeyboardReportDesc_20[] =
+uint8_t gu8KeyboardReportDesc_20[] __attribute__((aligned(4))) =
 #endif
 {
-    /* Media key */ 	
+    /* Media key */   
     0x05, 0x0C,        /* Usage Page (Consumer) */
     0x09, 0x01,        /* Usage(Consumer Control) */
     0xA1, 0x01,        /* Collection(Application) */
@@ -169,15 +169,15 @@ const uint32_t gu32KeyboardReportDescSize_20 = HID_KEYBOARD_REPORT_DESC_SIZE_20;
 #pragma data_alignment=4
 uint8_t gu8DeviceDescriptor[] = {
 #else
-__align(4) uint8_t gu8DeviceDescriptor[] = {
+uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) = {
 #endif
     LEN_DEVICE,         /* bLength */
     DESC_DEVICE,        /* bDescriptorType */
     0x00, 0x02,         /* bcdUSB */
     0x00,               /* bDeviceClass */
     0x00,               /* bDeviceSubClass */
-    0x00,          		 	/* bDeviceProtocol */
-    CEP_MAX_PKT_SIZE,  	/* bMaxPacketSize0 */
+    0x00,                 /* bDeviceProtocol */
+    CEP_MAX_PKT_SIZE,    /* bMaxPacketSize0 */
     /* idVendor */
     USBD_VID20 & 0x00FF,
     (USBD_VID20 & 0xFF00) >> 8,
@@ -196,7 +196,7 @@ __align(4) uint8_t gu8DeviceDescriptor[] = {
 #pragma data_alignment=4
 uint8_t gu8QualifierDescriptor[] = {
 #else
-__align(4) uint8_t gu8QualifierDescriptor[] = {
+uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) = {
 #endif
     LEN_QUALIFIER,      /* bLength */
     DESC_QUALIFIER,     /* bDescriptorType */
@@ -214,7 +214,7 @@ __align(4) uint8_t gu8QualifierDescriptor[] = {
 #pragma data_alignment=4
 uint8_t gu8ConfigDescriptor[] = {
 #else
-__align(4) uint8_t gu8ConfigDescriptor[] = {
+uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) = {
 #endif
     /* Configuration Descriptor */
     0x09,               /* Config Descriptor Length */
@@ -223,29 +223,29 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
 #ifdef __HID20__
     0x7A, 0x01,         /* wTotalLength
                            Descriptor without HID                     (0x161)
-                           HID Descriptor 												 	
+                           HID Descriptor                            
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
-                             Endpoint Descriptor                       (0x07)	
-	
+                             Endpoint Descriptor                       (0x07)  
+  
                            0x161 + 0x09 + 0x09 + 0x07 = 0x17A
                         */
     0x04,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker), Interface 2 (Microphone), Interface 3 (HID) */
 #else
     0x61, 0x01,         /* wTotalLength
-                           Configuration Descriptor                      (0x09)		
+                           Configuration Descriptor                      (0x09)    
                            Standard Interface Association Descriptor     (0x08) 
                            Standard AC Interface Descriptor              (0x09)  
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08)                          
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C) 
-                           Speaker - Audio Control    												
+                           Speaker - Audio Control                            
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
-                             Output Terminal Descriptor                  (0x0C)   														 
+                             Output Terminal Descriptor                  (0x0C)                                
                            Microphone - Interface alternate 0
                              Standard AS interface                       (0x09)
                            Microphone - Interface alternate 1~2
@@ -265,33 +265,33 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                              Class-Specific AS Isochronous Audio Data Endpoint Descriptor (0x08,0x08)
                              AS Isochronous Feedback Endpoint Descriptor                  (0x07,0x07)
                              *Each Interface alternate Summary                            (0x35,0x35) 
-														                            
+                                                        
                            0x09 + 0x08 + 0x9 + 0x09 + 0x08 + (0x11 + 0x12 + 0x0C) + (0x11 + 0x12 + 0x0C) + 
                            0x09 + 2 * 0x2E +
                            0x09 + 2 * 0x35 = 0x161
-                        */   													 
+                        */                              
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker), Interface 2 (Microphone) */
-#endif	
+#endif  
 #elif defined __MIC_ONLY20__
 #ifdef __HID20__
     0xD8, 0x00,         /* wTotalLength
                            Descriptor without HID                      (0xBF)
-                           HID Descriptor 												 	
+                           HID Descriptor                            
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
-                             Endpoint Descriptor                       (0x07)	
-	
+                             Endpoint Descriptor                       (0x07)  
+  
                            0xBF + 0x09 + 0x09 + 0x07 = 0xD8
-                        */		
+                        */    
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone), Interface 2 (HID) */
 #else
     0xBF, 0x00,         /* wTotalLength
-                           Configuration Descriptor                      (0x09)		
+                           Configuration Descriptor                      (0x09)    
                            Standard Interface Association Descriptor     (0x08) 
                            Standard AC Interface Descriptor              (0x09)  
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08) 
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)   
@@ -303,33 +303,33 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                              Audio Format Type Descriptor                                 (0x06,0x06)
                              Standard AS Isochronous Feedback Endpoint Descriptor         (0x07,0x07)
                              Class-Specific AS Isochronous Audio Data Endpoint Descriptor (0x08,0x08)
-                             *Each Interface alternate Summary                            (0x2E,0x2E) 														 
-														 
+                             *Each Interface alternate Summary                            (0x2E,0x2E)                              
+                             
                            0x09 + 0x08 + 0x9 + 0x09 + 0x08 + (0x11 + 0x12 + 0x0C) + 
                            0x09 + 2 * 0x2E = 0xBF
-                        */   														
+                        */                               
     0x02,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone) */
-#endif	
+#endif  
 #elif defined __SPEAKER_ONLY20__
 #ifdef __HID20__
     0xE6, 0x00,         /* wTotalLength
                            Descriptor without HID                      (0xCD)
-                           HID Descriptor 												 	
+                           HID Descriptor                            
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
-                             Endpoint Descriptor                       (0x07)	
-	
+                             Endpoint Descriptor                       (0x07)  
+  
                            0xCD + 0x09 + 0x09 + 0x07 = 0xE6
-                        */		
+                        */    
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker), Interface 2 (HID) */
 #else
     0xCD, 0x00,         /* TotalLength
-                           Configuration Descriptor                      (0x09)		
+                           Configuration Descriptor                      (0x09)    
                            Standard Interface Association Descriptor     (0x08) 
                            Standard AC Interface Descriptor              (0x09)  
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08) 
-                           Speaker - Audio Control    												
+                           Speaker - Audio Control                            
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)   
@@ -342,11 +342,11 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                              Standard AS Isochronous Feedback Endpoint Descriptor         (0x07,0x07)
                              Class-Specific AS Isochronous Audio Data Endpoint Descriptor (0x08,0x08)
                              AS Isochronous Feedback Endpoint Descriptor                  (0x07,0x07)
-                           *Each Interface alternate Summary                              (0x35,0x35) 																										 
-														 
+                           *Each Interface alternate Summary                              (0x35,0x35)                                                      
+                             
                            0x09 + 0x08 + 0x9 + 0x09 + 0x08 + + (0x11 + 0x12 + 0x0C) + 
                            0x09 + 2 * 0x35 = 0xCD
-                        */   							
+                        */                 
     0x02,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker), Interface 2 (HID) */
 #endif
 #endif
@@ -354,21 +354,21 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x00,               /* iConfiguration */
     0x80,               /* bmAttributes */ 
     0x32,               /* bMaxPower */
-		
+    
     /* Standard Interface Association Descriptor */
     0x08,               /* bLength(0x08) */
     0x0B,               /* bDescriptorType(0x0B) */
     0x00,               /* bFirstInterface(0x00) */
-#ifdef __BOTH20__		
+#ifdef __BOTH20__    
     0x03,               /* bInterfaceCount(0x03) */
-#elif defined __MIC_ONLY20__	|| defined __SPEAKER_ONLY20__
+#elif defined __MIC_ONLY20__  || defined __SPEAKER_ONLY20__
     0x02,               /* bInterfaceCount(0x02) */
-#endif		
+#endif    
     0x01,               /* bFunctionClass(0x01): AUDIO */
     0x00,               /* bFunctionSubClass(0x00) */
     0x20,               /* bFunctionProtocol(0x2000): 2.0 AF_VERSION_02_00 */
     0x00,               /* iFunction(0x00) */
-		
+    
     /* Standard AC Interface Descriptor */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
@@ -379,55 +379,55 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x01,               /* bInterfaceSubClass:AUDIOCONTROL */
     0x20,               /* bInterfaceProtocol */
     0x02,               /* iInterface */
-		
+    
     /* Class-Specific AC Interface Header Descriptor */
     0x09,               /* bLength */
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x01,               /* bDescriptorSubType:HEADER */
     0x00, 0x02,         /* bcdADC:2.0 */
-#ifdef __BOTH20__		
+#ifdef __BOTH20__    
     0x08,               /* UAC_FUNCTION_IO_BOX */
     0x6F, 0x00,         /* wTotalLength
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08) 
-                           Speaker - Audio Control    												
+                           Speaker - Audio Control                            
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)   
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)   
-														 
+                             
                            0x09 + 0x08 + (0x11 + 0x12 + 0x0C) + (0x11 + 0x12 + 0x0C) = 0x6F
-                        */													 
-#elif defined __MIC_ONLY20__	
+                        */                           
+#elif defined __MIC_ONLY20__  
     0x03,               /* MICROPHONE */
     0x40, 0x00,         /* wTotalLength
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08) 
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)   
-														 
+                             
                            0x09 + 0x08 + (0x11 + 0x12 + 0x0C) = 0x40
-                        */		
-#elif defined __SPEAKER_ONLY20__	
+                        */    
+#elif defined __SPEAKER_ONLY20__  
     0x0A,               /* PRO-AUDIO */
     0x40, 0x00,         /* wTotalLength
                            Class-Specific AC Interface Header Descriptor (0x09)
                            Clock Source Descriptor                       (0x08) 
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Input Terminal Descriptor                   (0x11)
                              Feature Unit Descriptor                     (0x12)
                              Output Terminal Descriptor                  (0x0C)  
-														 
+                             
                            0x09 + 0x08 + (0x11 + 0x12 + 0x0C) = 0x40
-                        */				
-#endif		
+                        */        
+#endif    
     0x00,               /* bmControls(0b00000000) - D1..0: Latency Control */
-		
+    
     /* Clock Source Descriptor (bClockID 0x10) */
     0x08,               /* bLength(0x08) */
     0x24,               /* bDescriptorType(0x24): CS_INTERFACE */
@@ -438,8 +438,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                            clock frequency control: 0b11 - host programmable; 
                            clock validity control: 0b01 - host read only */
     0x00,               /* bAssocTerminal(0x00) */
-    0x00,               /* iClockSource */   		
-		
+    0x00,               /* iClockSource */       
+    
 #if defined __BOTH20__ || defined __MIC_ONLY20__
     /* Input Terminal Descriptor (Terminal ID 0x04 - Source ID 0x10) */
     0x11,                                   /* bLength*/
@@ -448,9 +448,9 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x04,                                   /* bTerminalID*/
 #ifdef __BOTH20__
     0x02, 0x04,                             /* wTerminalType: HEADSET */
-#else		
+#else    
     0x01, 0x02,                             /* wTerminalType: 0x0201 microphone*/
-#endif		
+#endif    
     0x00,                                   /* bAssocTerminal*/
     0x10,                                   /* bSourceID*/
     REC_CHANNELS,                           /* bNrChannels*/
@@ -483,7 +483,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 25: Back Left of Center - BLC
                                                  Bit 26: Back Right of Center - BRC 
                                                  Bit 31: Raw Data - RD; Mutually exclusive with all other spatial locations
-                                            */   		
+                                            */       
     0x00,                                   /* iChannelNames */
     0x00, 0x00,                             /* bmcontrols
                                                  D1..0: Copy Protect Control
@@ -492,8 +492,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  D7..6: Cluster Control
                                                  D9..8: Underflow Control
                                                  D11..10: Overflow Control
-                                                 D15..12: Reserved, should set to 0		
-                                            */			
+                                                 D15..12: Reserved, should set to 0    
+                                            */      
     0x00,                                   /* iTerminal */
 
     /* Feature Unit Descriptor (Unit ID 0x05 - Source ID 0x4) */
@@ -519,8 +519,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D25..24: Phase Inverter Control
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
-                                                D31..30: Reserved, should set to 0		
-                                            */																								
+                                                D31..30: Reserved, should set to 0    
+                                            */                                                
     0x0F, 0x00, 0x00, 0x00,                 /* bmaControls(1)
                                                Left volume control
                                                 D1..0: Mute Control
@@ -538,8 +538,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D25..24: Phase Inverter Control
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
-                                                D31..30: Reserved, should set to 0	
-                                            */																								                                            
+                                                D31..30: Reserved, should set to 0  
+                                            */                                                                                            
     0x0F, 0x00, 0x00, 0x00,                 /* bmaControls(2)
                                                Right volume control 
                                                 D1..0: Mute Control
@@ -558,7 +558,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
                                                 D31..30: Reserved, should set to 0
-                                            */																								
+                                            */                                                
     0x00,                                   /* iFeature */
 
     /* Output Terminal Descriptor (Terminal ID 0x02 - Source ID 0x5 - Clock Source ID 0x10) */
@@ -577,12 +577,12 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                              D7..6: Cluster Control
                              D9..8: Underflow Control
                              D11..10: Overflow Control
-                             D15..12: Reserved, should set to 0		
-                        */ 														 
+                             D15..12: Reserved, should set to 0    
+                        */                              
     0x00,               /* iTerminal*/
 #endif
 
-#if defined __BOTH20__ || defined __SPEAKER_ONLY20__											
+#if defined __BOTH20__ || defined __SPEAKER_ONLY20__                      
     /* Input Terminal Descriptor (Terminal ID 1 - Source ID 0x10) */
     0x11,                                   /* bLength */
     0x24,                                   /* bDescriptorType:CS_INTERFACE */
@@ -630,8 +630,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  D7..6: Cluster Control
                                                  D9..8: Underflow Control
                                                  D11..10: Overflow Control
-                                                 D15..12: Reserved, should set to 0		
-                                            */		
+                                                 D15..12: Reserved, should set to 0    
+                                            */    
     0x00,                                   /* iTerminal */
 
     /* Feature Unit Descriptor (Unit ID 0x06 - Source ID 0x1) */
@@ -658,7 +658,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
                                                 D31..30: Reserved, should set to 0
-                                            */	                
+                                            */                  
     0x0C, 0x00, 0x00, 0x00,                 /* bmaControls(1)
                                                Left volume control
                                                 D1..0: Mute Control
@@ -677,7 +677,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
                                                 D31..30: Reserved, should set to 0
-                                            */	  		
+                                            */        
     0x0C, 0x00, 0x00, 0x00,                 /* bmaControls(2)
                                                Right volume control
                                                 D1..0: Mute Control
@@ -696,7 +696,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                 D27..26: Underflow Control
                                                 D29..28: Overflow Control
                                                 D31..30: Reserved, should set to 0
-                                            */	  		
+                                            */        
     0x00,                                   /* iFeature */
 
     /* Output Terminal Descriptor (Terminal ID 0x03 - Source ID 0x6 - Clock Source ID 0x10) */
@@ -706,9 +706,9 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x03,               /* bTerminalID */
 #ifdef __BOTH20__
     0x02,0x04,          /* wTerminalType: HEADSET */
-#else		
+#else    
     0x01,0x03,          /* wTerminalType: 0x0301 speaker */
-#endif		
+#endif    
     0x00,               /* bAssocTerminal */
     PLAY_FEATURE_UNITID,/* bSourceID */
     0x10,               /* bCSourceID */
@@ -719,8 +719,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                              D7..6: Cluster Control
                              D9..8: Underflow Control
                              D11..10: Overflow Control
-                             D15..12: Reserved, should set to 0		
-                        */					
+                             D15..12: Reserved, should set to 0    
+                        */          
     0x00,               /* iTerminal */
 #endif
 
@@ -729,25 +729,25 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     /* Standard AC Interface Descriptor - Interface 1, alternate 0 */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-    0x01,               /* bInterfaceNumber */	
+    0x01,               /* bInterfaceNumber */  
     0x00,               /* bAlternateSetting */
     0x00,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
     0x02,               /* bInterfaceSubClass:AUDIOSTREAMING */
     0x20,               /* bInterfaceProtocol */
     0x00,               /* iInterface */
-		
+    
     /* Standard AC Interface Descriptor - Interface 1, alternate 1 */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-    0x01,               /* bInterfaceNumber */	
+    0x01,               /* bInterfaceNumber */  
     0x01,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
     0x02,               /* bInterfaceSubClass:AUDIOSTREAMING */
     0x20,               /* bInterfaceProtocol */
     0x00,               /* iInterface */
-		
+    
     /* Class-Specific AS Interface Descriptor (this interface's endpoint connect to Terminal ID 0x02 - Microphone) */
     0x10,                                   /* bLength(16) */
     0x24,                                   /* bDescriptorType(0x024): CS_INTERFACE */
@@ -769,7 +769,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 10: IEC61937_ATRAC
                                                  Bit 11: IEC61937_ATRAC2/3
                                                  Bit 12: TYPE_III_WMA
-                                            */	
+                                            */  
     0x02,                                   /* bNrChannels(0x02): NB_CHANNELS */
     0x00, 0x00, 0x00, 0x00,                 /* bmChannelCOnfig(0x00000003)
                                                  Bit 0: Front Left - FL
@@ -800,7 +800,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 25: Back Left of Center - BLC
                                                  Bit 26: Back Right of Center - BRC 
                                                  Bit 31: Raw Data - RD; Mutually exclusive with all other spatial locations
-                                            */  		
+                                            */      
     0x00,                                   /* iChannelNames(0x00): None */
 
     /* Audio Format Type Descriptor */
@@ -831,7 +831,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     /* Standard AC Interface Descriptor - Interface 1, alternate 2 */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-    0x01,               /* bInterfaceNumber */	
+    0x01,               /* bInterfaceNumber */  
     0x02,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -860,7 +860,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 10: IEC61937_ATRAC
                                                  Bit 11: IEC61937_ATRAC2/3
                                                  Bit 12: TYPE_III_WMA
-                                            */	
+                                            */  
     0x02,                                   /* bNrChannels(0x02): NB_CHANNELS */
     0x00, 0x00, 0x00, 0x00,                 /* bmChannelCOnfig(0x00000003)
                                                  Bit 0: Front Left - FL
@@ -891,7 +891,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 25: Back Left of Center - BLC
                                                  Bit 26: Back Right of Center - BRC 
                                                  Bit 31: Raw Data - RD; Mutually exclusive with all other spatial locations
-                                            */   				
+                                            */           
     0x00,                                   /* iChannelNames(0x00): None */
 
     /* Audio Format Type Descriptor */
@@ -920,10 +920,10 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x00, 0x00,         /* wLockDelay */
 #endif
 
-#if defined __BOTH20__ || defined __SPEAKER_ONLY20__		
+#if defined __BOTH20__ || defined __SPEAKER_ONLY20__    
     /* Standard AC Interface Descriptor - Interface 1/2, alternate 0 
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
+        Interface 1 for Speaker Only      
     */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
@@ -937,8 +937,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x01,               /* bInterfaceClass:AUDIO */
     0x02,               /* bInterfaceSubClass:AUDIOSTREAMING */
     0x20,               /* bInterfaceProtocol */
-    0x00,               /* iInterface */		
-		
+    0x00,               /* iInterface */    
+    
     /* Standard AC Interface Descriptor - Interface 1/2, alternate 1 */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
@@ -953,7 +953,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x02,               /* bInterfaceSubClass:AUDIOSTREAMING */
     0x20,               /* bInterfaceProtocol */
     0x00,               /* iInterface */
-		
+    
     /* Class-Specific AS Interface Descriptor (this interface's endpoint connect to Terminal ID 0x01 - Speaker)*/
     0x10,                                   /* bLength(16) */
     0x24,                                   /* bDescriptorType(0x024): CS_INTERFACE */
@@ -975,7 +975,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 10: IEC61937_ATRAC
                                                  Bit 11: IEC61937_ATRAC2/3
                                                  Bit 12: TYPE_III_WMA
-                                            */	
+                                            */  
     0x02,                                   /* bNrChannels(0x02): NB_CHANNELS */
     0x03, 0x00, 0x00, 0x00,                 /* bmChannelCOnfig(0x00000003)
                                                  Bit 0: Front Left - FL
@@ -1006,7 +1006,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 25: Back Left of Center - BLC
                                                  Bit 26: Back Right of Center - BRC 
                                                  Bit 31: Raw Data - RD; Mutually exclusive with all other spatial locations
-                                            */   		
+                                            */       
     0x00,                                   /* iChannelNames(0x00): None */
  
     /* Audio Format Type Descriptor */
@@ -1044,8 +1044,8 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
  
     /* Standard AC Interface Descriptor - Interface 1/2, alternate 2 
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  	
-    */				
+        Interface 1 for Speaker Only    
+    */        
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
 #ifdef __SPEAKER_ONLY20__
@@ -1081,7 +1081,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 10: IEC61937_ATRAC
                                                  Bit 11: IEC61937_ATRAC2/3
                                                  Bit 12: TYPE_III_WMA
-                                            */	
+                                            */  
     0x02,                                   /* bNrChannels(0x02): NB_CHANNELS */
     0x03, 0x00, 0x00, 0x00,                 /* bmChannelCOnfig(0x00000003)
                                                  Bit 0: Front Left - FL
@@ -1112,7 +1112,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
                                                  Bit 25: Back Left of Center - BLC
                                                  Bit 26: Back Right of Center - BRC 
                                                  Bit 31: Raw Data - RD; Mutually exclusive with all other spatial locations
-                                            */  		
+                                            */      
     0x00,                                   /* iChannelNames(0x00): None */
 
     /* Audio Format Type Descriptor */
@@ -1189,7 +1189,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
 #pragma data_alignment=4
 uint8_t gu8StringLang[4] = {
 #else
-__align(4) uint8_t gu8StringLang[4] = {
+uint8_t gu8StringLang[4] __attribute__((aligned(4))) = {
 #endif
     4,              /* bLength */
     DESC_STRING,    /* bDescriptorType */
@@ -1201,7 +1201,7 @@ __align(4) uint8_t gu8StringLang[4] = {
 #pragma data_alignment=4
 uint8_t gu8VendorStringDesc[59] = {
 #else
-__align(4) uint8_t gu8VendorStringDesc[59] = {
+uint8_t gu8VendorStringDesc[59] __attribute__((aligned(4))) = {
 #endif
     16,
     DESC_STRING,
@@ -1213,14 +1213,14 @@ __align(4) uint8_t gu8VendorStringDesc[59] = {
 #pragma data_alignment=4
 uint8_t gu8ProductStringDesc[] = {
 #else
-__align(4) uint8_t gu8ProductStringDesc[] = {
-#endif	
+uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) = {
+#endif  
 #ifdef __BOTH20__
 #ifdef __HID20__
     80,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
-	  'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,			
+    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,      
     ' ', 0,  
     'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0, 
     ' ', 0, '&', 0, 
@@ -1229,59 +1229,59 @@ __align(4) uint8_t gu8ProductStringDesc[] = {
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif	
+#endif  
 #else
     50,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
-    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,			
+    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,      
     ' ', 0,  
-    'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0, 	
-#endif	
+    'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,   
+#endif  
 #elif defined __MIC_ONLY20__
 #ifdef __HID20__
     68,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
-    'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,	
+    'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,  
     ' ', 0, '&', 0, ' ', 0, 'H', 0, 'I', 0, 'D', 0,
 #ifdef __KEYBOARD20__
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif			
+#endif      
 #else
     38,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
     'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0
-#endif	
+#endif  
 #elif defined __SPEAKER_ONLY20__
 #ifdef __HID20__
     62,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
     'S', 0, 'p', 0, 'e', 0, 'a', 0, 'k', 0, 'e', 0, 'r', 0,
-    ' ', 0, '&', 0,	' ', 0, 'H', 0, 'I', 0, 'D', 0,		
+    ' ', 0, '&', 0,  ' ', 0, 'H', 0, 'I', 0, 'D', 0,    
 #ifdef __KEYBOARD20__
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif			
+#endif      
 #else
     32,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '2', 0, '.', 0, '0', 0, ' ', 0,
     'S', 0, 'p', 0, 'e', 0, 'a', 0, 'k', 0, 'e', 0, 'r', 0
-#endif	
-#endif	
+#endif  
+#endif  
 };
 /*!<USB Serial String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
 uint8_t gu8StringSerial[] =
 #else
-__align(4) uint8_t gu8StringSerial[] =
+uint8_t gu8StringSerial[] __attribute__((aligned(4))) =
 #endif
 {
     26,             // bLength
@@ -1312,7 +1312,7 @@ uint32_t gu32UsbHidReportLen[4] = {
 #ifdef __HID20__
     sizeof(gu8KeyboardReportDesc_20),
 #else
-		0
+    0
 #endif
 };
 

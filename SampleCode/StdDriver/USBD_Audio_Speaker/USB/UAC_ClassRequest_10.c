@@ -21,7 +21,7 @@ void UAC_ClassRequest_10(void)
             
             if (!USBD_IS_ATTACHED())
                 break;
-            if(u32timeout == 0)				
+            if(u32timeout == 0)        
             {
                 printf("EPA\t%x\n", USBD->EP[EPA].EPDATCNT);
                 printf("EPB\t%x\n", USBD->EP[EPB].EPDATCNT);
@@ -29,9 +29,9 @@ void UAC_ClassRequest_10(void)
                 printf("DMACTL\t%X\n", USBD->DMACTL);
                 printf("DMACNT\t%X\n", USBD->DMACNT);
                 u32timeout = 0x100000;
-            }					
+            }          
             else
-                u32timeout--;						
+                u32timeout--;
         }
         
         USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);

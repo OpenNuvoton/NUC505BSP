@@ -7,23 +7,23 @@
 #if CONFIG_AUDIO_PLAY
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile int16_t s_i16PlayVolumeL;
+static volatile int16_t s_i16PlayVolumeL;
 #pragma data_alignment=4
-           static volatile int16_t s_i16PlayVolumeR;
+static volatile int16_t s_i16PlayVolumeR;
 #pragma data_alignment=4
-           static volatile uint8_t s_u8PlayMute;
+static volatile uint8_t s_u8PlayMute;
 #else   // __CC_ARM
-__align(4) static volatile int16_t s_i16PlayVolumeL;
-__align(4) static volatile int16_t s_i16PlayVolumeR;
-__align(4) static volatile uint8_t s_u8PlayMute;
+static volatile int16_t s_i16PlayVolumeL __attribute__((aligned(4)));
+static volatile int16_t s_i16PlayVolumeR __attribute__((aligned(4)));
+static volatile uint8_t s_u8PlayMute __attribute__((aligned(4)));
 #endif
 
 // from 0 dB, -2 dB, -4 dB, ... , -60 dB, step -2 dB
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static int8_t s_ai8PlayVolTbl[] = {
+static int8_t s_ai8PlayVolTbl[] = {
 #else   // __CC_ARM
-__align(4) static int8_t s_ai8PlayVolTbl[] = {
+static int8_t s_ai8PlayVolTbl[] __attribute__((aligned(4))) = {
 #endif
     0,    -2,  -4,  -6,  -8, -10, -12, -14, -16, -18, -20, -22, -24, -26, -28, -30,
     -32, -34, -36, -38, -40, -42, -44, -46, -48, -50, -52, -54, -56, -58, -60

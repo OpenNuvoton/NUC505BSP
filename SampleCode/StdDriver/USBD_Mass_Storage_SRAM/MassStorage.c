@@ -37,7 +37,6 @@ uint32_t g_u32CbwSize = 0;
 struct CBW g_sCBW;
 struct CSW g_sCSW;
 
-
 /*--------------------------------------------------------------------------*/
 uint8_t g_au8InquiryID[36] = {
     0x00,                   /* Peripheral Device Type */
@@ -79,9 +78,9 @@ static uint8_t g_au8ModePage_1C[8] = {
 };
 
 static uint8_t g_au8ModePage[24] = {
-	0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x02, 0x00, 0x1C, 0x0A, 0x80, 0x03,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
+    0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x02, 0x00, 0x1C, 0x0A, 0x80, 0x03,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
 };
 
 #if defined (__ICCARM__)
@@ -91,7 +90,6 @@ void USBD_IRQHandler(void)
 #endif
 {
     __IO uint32_t IrqStL, IrqSt;
-
     IrqStL = USBD->GINTSTS & USBD->GINTEN;    /* get interrupt status */
 
     if (!IrqStL)    return;
@@ -144,7 +142,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -191,7 +189,7 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {			               							
+            } else {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -210,8 +208,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);	
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -329,7 +327,6 @@ void USBD_IRQHandler(void)
 
 void MSC_InitForHighSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_MAX_PKT_SIZE);
@@ -346,7 +343,6 @@ void MSC_InitForHighSpeed(void)
 
 void MSC_InitForFullSpeed(void)
 {
-    /*****************************************************/
     /* EPA ==> Bulk IN endpoint, address 1 */
     USBD_SetEpBufAddr(EPA, EPA_BUF_BASE, EPA_BUF_LEN);
     USBD_SET_MAX_PAYLOAD(EPA, EPA_HS_OTHER_MAX_PKT_SIZE);
@@ -387,12 +383,12 @@ void MSC_Init(void)
 void MSC_ClassRequest(void)
 {
     if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
+        /* Device to host */
         switch (gUsbCmd.bRequest) {
         case GET_MAX_LUN: {
             /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
             if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
-            // Return current configuration setting
+            /* Return current configuration setting */
             USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
@@ -409,36 +405,37 @@ void MSC_ClassRequest(void)
         }
         }
     } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        case BULK_ONLY_MASS_STORAGE_RESET: {
-            /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
-                g_u8Prevent = 1;
-                /* Status stage */
-                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
-                g_u32EpStallLock = 0;
+        /* Host to device */
+        switch (gUsbCmd.bRequest)
+        {
+            case BULK_ONLY_MASS_STORAGE_RESET: {
+                /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
+                if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
+                    g_u8Prevent = 1;
+                    /* Status stage */
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                    g_u32EpStallLock = 0;
 
-                USBD_ResetDMA();
-                USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
-                g_u8BulkState = BULK_CBW;
-                g_u8MscOutPacket = 0;
+                    USBD_ResetDMA();
+                    USBD->EP[EPA].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    USBD->EP[EPB].EPRSPCTL = USBD_EPRSPCTL_FLUSH_Msk;
+                    g_u8BulkState = BULK_CBW;
+                    g_u8MscOutPacket = 0;
+                }
+                else {/* Invalid Get MaxLun command */
+                    USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                }
+                break;
             }
-            else {/* Invalid Get MaxLun command */
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
             }
-            break;
-        }
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
         }
     }
 }
@@ -582,7 +579,7 @@ void MSC_ModeSense6(void)
 {
     uint8_t i;
 
-	for (i = 0; i<4; i++)
+    for (i = 0; i<4; i++)
         *((uint8_t *)(g_u32MassBase+i)) = g_au8ModePage[i];
 
     MSC_BulkIn(g_u32MassBase, g_sCBW.dCBWDataTransferLength);
@@ -752,7 +749,7 @@ void MSC_ProcessCmd(void)
             /* Get LBA address */
             g_u32LbaAddress = get_be32(&g_sCBW.au8Data[0]) * USBD_SECTOR_SIZE;
 
-            //MSC_ReadMedia(g_u32LbaAddress, g_sCBW.dCBWDataTransferLength, (uint8_t *)g_u32StorageBase);
+//             MSC_ReadMedia(g_u32LbaAddress, g_sCBW.dCBWDataTransferLength, (uint8_t *)g_u32StorageBase);
 
             MSC_BulkIn(g_u32StorageBase+g_u32LbaAddress, g_sCBW.dCBWDataTransferLength);
                 g_sCSW.dCSWDataResidue = 0;
@@ -794,7 +791,7 @@ void MSC_ProcessCmd(void)
         }
         case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
             if (g_sCBW.au8Data[2] & 0x01) {
-                g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
+                g_au8SenseKey[0] = 0x05;  /* INVALID COMMAND */
                 g_au8SenseKey[1] = 0x24;
                 g_au8SenseKey[2] = 0;
                 g_u8Prevent = 1;
@@ -835,6 +832,7 @@ void MSC_ProcessCmd(void)
                 if ((g_sCBW.au8Data[2] & 0x03) == 0x2) {
                     g_u8Remove = 1;
                 }
+                break;
             }
             case UFI_VERIFY_10: {
                 g_sCSW.dCSWDataResidue = 0;
@@ -902,14 +900,13 @@ void MSC_ProcessCmd(void)
                 }
                 break;
             }
-						case UFI_READ_16:
-						{
-										USBD_SetEpStall(EPA);
-                    g_u8Prevent = 1;
-									g_sCSW.bCSWStatus = 0x01;
+            case UFI_READ_16: {
+                USBD_SetEpStall(EPA);
+                g_u8Prevent = 1;
+                g_sCSW.bCSWStatus = 0x01;
                 g_sCSW.dCSWDataResidue = 0;
-								break;
-						}
+                break;
+            }
             default: {
                 /* Unsupported command */
                 g_au8SenseKey[0] = 0x05;

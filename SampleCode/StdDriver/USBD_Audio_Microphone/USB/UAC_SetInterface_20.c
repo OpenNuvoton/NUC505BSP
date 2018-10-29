@@ -20,26 +20,26 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
     
     if ((gUsbCmd.wIndex & 0xff) == 1)        /* Interface 1 for (Speaker & Microphone) / Microphone Only */ 
     {   
-        /* Audio Iso IN interface */			
-        if (u32AltInterface == 2)            /* Interface 1, Alternate 2 */ 	
+        /* Audio Iso IN interface */      
+        if (u32AltInterface == 2)            /* Interface 1, Alternate 2 */   
         {
             psAudioLib->m_u8RecBitRate  = 24;
             psAudioLib->m_u8RecChannels =  2;
             psAudioLib->m_pfnRecConfigMaxPayload20( psAudioLib );
-            /* Set the maximum transfer data size per packet for EPA (Must less than EP Maximum Packet in descriptor) */				
+            /* Set the maximum transfer data size per packet for EPA (Must less than EP Maximum Packet in descriptor) */        
             USBD_SET_MAX_PAYLOAD(EPA, (psAudioLib->m_u16RecMaxPayload1_+24));
-            /* Enable EPA IN Token Interrupt for Audio Record (Write data to EPA) */						
+            /* Enable EPA IN Token Interrupt for Audio Record (Write data to EPA) */
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
             printf("dR++s\n");
         }
-        else if (u32AltInterface == 1)       /* Interface 1, Alternate 1 */ 	
+        else if (u32AltInterface == 1)       /* Interface 1, Alternate 1 */
         {
             psAudioLib->m_u8RecBitRate  = 16;
             psAudioLib->m_u8RecChannels =  2;
             psAudioLib->m_pfnRecConfigMaxPayload20( psAudioLib );
-            /* Set the maximum transfer data size per packet for EPA (Must less than EP Maximum Packet in descriptor) */						
+            /* Set the maximum transfer data size per packet for EPA (Must less than EP Maximum Packet in descriptor) */            
             USBD_SET_MAX_PAYLOAD(EPA, (psAudioLib->m_u16RecMaxPayload1_+24));
-            /* Enable EPA IN Token Interrupt for Audio Record (Write data to EPA) */						
+            /* Enable EPA IN Token Interrupt for Audio Record (Write data to EPA) */
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);
             printf("dR+s\n");
         }
@@ -48,6 +48,6 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
             psAudioLib->m_pfnRecStop( psAudioLib );
             USBD->EP[EPA].EPRSPCTL |= USBD_EPRSPCTL_FLUSH_Msk;
             printf("dr-\n");
-        }		      
+        }          
     }
 }

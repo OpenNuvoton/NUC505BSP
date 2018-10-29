@@ -13,22 +13,22 @@
 /*!<Includes */
 #include "NUC505Series.h"
 #include "massstorage.h"
-
-
+ 
 /*----------------------------------------------------------------------------*/
 /*!<USB Device Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8DeviceDescriptor[] = {
+uint8_t gu8DeviceDescriptor[] = 
 #else
-__align(4) uint8_t gu8DeviceDescriptor[] = {
+uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) = 
 #endif
-    LEN_DEVICE,     /* bLength */
-    DESC_DEVICE,    /* bDescriptorType */
-    0x00, 0x02,     /* bcdUSB */
-    0x00,           /* bDeviceClass */
-    0x00,           /* bDeviceSubClass */
-    0x00,           /* bDeviceProtocol */
+{
+    LEN_DEVICE,         /* bLength */
+    DESC_DEVICE,        /* bDescriptorType */
+    0x00, 0x02,         /* bcdUSB */
+    0x00,               /* bDeviceClass */
+    0x00,               /* bDeviceSubClass */
+    0x00,               /* bDeviceProtocol */
     CEP_MAX_PKT_SIZE,   /* bMaxPacketSize0 */
     /* idVendor */
     USBD_VID & 0x00FF,
@@ -36,20 +36,21 @@ __align(4) uint8_t gu8DeviceDescriptor[] = {
     /* idProduct */
     USBD_PID & 0x00FF,
     (USBD_PID & 0xFF00) >> 8,
-    0x00, 0x00,     /* bcdDevice */
-    0x01,           /* iManufacture */
-    0x02,           /* iProduct */
-    0x03,           /* iSerialNumber -  is required for BOT device */
-    0x01            /* bNumConfigurations */
+    0x00, 0x00,         /* bcdDevice */
+    0x01,               /* iManufacture */
+    0x02,               /* iProduct */
+    0x03,               /* iSerialNumber -  is required for BOT device */
+    0x01                /* bNumConfigurations */
 };
 
 /*!<USB Qualifier Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8QualifierDescriptor[] = {
+uint8_t gu8QualifierDescriptor[] = 
 #else
-__align(4) uint8_t gu8QualifierDescriptor[] = {
+uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) = 
 #endif
+{
     LEN_QUALIFIER,  /* bLength */
     DESC_QUALIFIER, /* bDescriptorType */
     0x00, 0x02,     /* bcdUSB */
@@ -64,10 +65,11 @@ __align(4) uint8_t gu8QualifierDescriptor[] = {
 /*!<USB Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ConfigDescriptor[] = {
+uint8_t gu8ConfigDescriptor[] = 
 #else
-__align(4) uint8_t gu8ConfigDescriptor[] = {
+uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) = 
 #endif
+{
     LEN_CONFIG,     /* bLength */
     DESC_CONFIG,    /* bDescriptorType */
     /* wTotalLength */
@@ -76,7 +78,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x01,           /* bConfigurationValue */
     0x00,           /* iConfiguration */
     0x80 | (USBD_SELF_POWERED << 6) | (USBD_REMOTE_WAKEUP << 5),/* bmAttributes */
-    USBD_MAX_POWER,         /* MaxPower */
+    USBD_MAX_POWER, /* MaxPower */
 
     /* Interface */
     LEN_INTERFACE,  /* bLength */
@@ -86,7 +88,7 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     0x02,           /* bNumEndpoints */
     0x08,           /* bInterfaceClass */
     0x06,           /* bInterfaceSubClass */
-    0x50    ,       /* bInterfaceProtocol */
+    0x50,           /* bInterfaceProtocol */
     0x00,           /* iInterface */
 
     /* EP Descriptor: bulk in. */
@@ -107,16 +109,17 @@ __align(4) uint8_t gu8ConfigDescriptor[] = {
     /* wMaxPacketSize */
     EPB_MAX_PKT_SIZE & 0x00FF,
     (EPB_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00        /* bInterval */
+    0x00            /* bInterval */
 };
 
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8FullConfigDescriptor[] = {
+uint8_t gu8FullConfigDescriptor[] = 
 #else
-__align(4) uint8_t gu8FullConfigDescriptor[] = {
+uint8_t gu8FullConfigDescriptor[] __attribute__((aligned(4))) = 
 #endif
+{
     LEN_CONFIG,     /* bLength */
     DESC_CONFIG,/* bDescriptorType */
     /* wTotalLength */
@@ -142,30 +145,31 @@ __align(4) uint8_t gu8FullConfigDescriptor[] = {
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_IN_EP_NUM | EP_INPUT),    /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPA_FULL_MAX_PKT_SIZE & 0x00FF,
     (EPA_FULL_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 
     /* EP Descriptor: bulk out. */
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_OUT_EP_NUM | EP_OUTPUT),  /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPB_FULL_MAX_PKT_SIZE & 0x00FF,
     (EPB_FULL_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 };
 
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8HSOtherConfigDescriptor[] = {
+uint8_t gu8HSOtherConfigDescriptor[] = 
 #else
-__align(4) uint8_t gu8HSOtherConfigDescriptor[] = {
+uint8_t gu8HSOtherConfigDescriptor[] __attribute__((aligned(4))) = 
 #endif
+{
     LEN_CONFIG,     /* bLength */
     DESC_OTHERSPEED,/* bDescriptorType */
     /* wTotalLength */
@@ -191,30 +195,31 @@ __align(4) uint8_t gu8HSOtherConfigDescriptor[] = {
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_IN_EP_NUM | EP_INPUT),    /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPA_HS_OTHER_MAX_PKT_SIZE & 0x00FF,
     (EPA_HS_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 
     /* EP Descriptor: bulk out. */
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_OUT_EP_NUM | EP_OUTPUT),  /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPB_HS_OTHER_MAX_PKT_SIZE & 0x00FF,
     (EPB_HS_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 };
 
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8FSOtherConfigDescriptor[] = {
+uint8_t gu8FSOtherConfigDescriptor[] = 
 #else
-__align(4) uint8_t gu8FSOtherConfigDescriptor[] = {
+uint8_t gu8FSOtherConfigDescriptor[] __attribute__((aligned(4))) = 
 #endif
+{
     LEN_CONFIG,     /* bLength */
     DESC_OTHERSPEED,/* bDescriptorType */
     /* wTotalLength */
@@ -223,7 +228,7 @@ __align(4) uint8_t gu8FSOtherConfigDescriptor[] = {
     0x01,           /* bConfigurationValue */
     0x00,           /* iConfiguration */
     0x80 | (USBD_SELF_POWERED << 6) | (USBD_REMOTE_WAKEUP << 5),/* bmAttributes */
-    USBD_MAX_POWER,         /* MaxPower */
+    USBD_MAX_POWER, /* MaxPower */
 
     /* Interface */
     LEN_INTERFACE,  /* bLength */
@@ -240,31 +245,33 @@ __align(4) uint8_t gu8FSOtherConfigDescriptor[] = {
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_IN_EP_NUM | EP_INPUT),    /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPA_FS_OTHER_MAX_PKT_SIZE & 0x00FF,
     (EPA_FS_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 
     /* EP Descriptor: bulk out. */
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
     (BULK_OUT_EP_NUM | EP_OUTPUT),  /* bEndpointAddress */
-    EP_BULK,            /* bmAttributes */
+    EP_BULK,        /* bmAttributes */
     /* wMaxPacketSize */
     EPB_FS_OTHER_MAX_PKT_SIZE & 0x00FF,
     (EPB_FS_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8,
-    0x00,       /* bInterval */
+    0x00,           /* bInterval */
 };
 
 /*!<USB Language String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8StringLang[4] = {
+uint8_t gu8StringLang[4] = 
 #else
-__align(4) uint8_t gu8StringLang[4] = {
+uint8_t gu8StringLang[4] __attribute__((aligned(4))) = 
 #endif
-    4,              /* bLength */
+{
+    4,    
+          /* bLength */
     DESC_STRING,    /* bDescriptorType */
     0x09, 0x04
 };
@@ -272,10 +279,11 @@ __align(4) uint8_t gu8StringLang[4] = {
 /*!<USB Vendor String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8VendorStringDesc[] = {
+uint8_t gu8VendorStringDesc[] = 
 #else
-__align(4) uint8_t gu8VendorStringDesc[] = {
+uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) = 
 #endif
+{
     16,
     DESC_STRING,
     'N', 0, 'u', 0, 'v', 0, 'o', 0, 't', 0, 'o', 0, 'n', 0
@@ -284,10 +292,11 @@ __align(4) uint8_t gu8VendorStringDesc[] = {
 /*!<USB Product String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ProductStringDesc[] = {
+uint8_t gu8ProductStringDesc[] = 
 #else
-__align(4) uint8_t gu8ProductStringDesc[] = {
+uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) = 
 #endif
+{
     22,             /* bLength          */
     DESC_STRING,    /* bDescriptorType  */
     'U', 0, 'S', 0, 'B', 0, ' ', 0, 'D', 0, 'e', 0, 'v', 0, 'i', 0, 'c', 0, 'e', 0
@@ -297,7 +306,7 @@ __align(4) uint8_t gu8ProductStringDesc[] = {
 #pragma data_alignment=4
 uint8_t gu8StringSerial[] =
 #else
-__align(4) uint8_t gu8StringSerial[] =
+uint8_t gu8StringSerial[] __attribute__((aligned(4))) = 
 #endif
 {
     26,             // bLength
@@ -329,10 +338,10 @@ S_USBD_INFO_T gsInfo = {
     gu8ConfigDescriptor,
     gpu8UsbString,
     gu8QualifierDescriptor,
-		gu8FullConfigDescriptor,
+    gu8FullConfigDescriptor,
     gu8HSOtherConfigDescriptor,
     gu8FSOtherConfigDescriptor,	
-		NULL,
+    NULL,
     gu8UsbHidReport,
     gu32UsbHidReportLen,
 };

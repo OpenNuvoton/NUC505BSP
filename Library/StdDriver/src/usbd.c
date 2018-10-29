@@ -34,7 +34,7 @@ static uint8_t g_usbd_buf[12] __attribute__((aligned (4)));
 #endif
 
 
-uint8_t g_usbd_Configured = 0;
+uint8_t volatile g_usbd_Configured = 0;
 uint8_t g_usbd_CtrlZero = 0;
 uint8_t g_usbd_UsbAddr = 0;
 uint8_t g_usbd_ShortPacket = 0;
@@ -537,7 +537,7 @@ void USBD_CtrlOut(uint8_t *pu8Buf, uint32_t u32Size)
     uint32_t u32Value;
     while(1)
     {
-        if (USBD->CEPINTSTS & USBD_CEPINTSTS_RXPKIF_Msk || USBD->CEPDATCNT == u32Size)
+        if ((USBD->CEPINTSTS & USBD_CEPINTSTS_RXPKIF_Msk) || USBD->CEPDATCNT == u32Size)
         {
             for (i=0; i<u32Size; i++)
             {

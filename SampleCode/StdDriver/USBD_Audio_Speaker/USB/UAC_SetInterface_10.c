@@ -18,7 +18,7 @@ void UAC_SetInterface_10(uint32_t u32AltInterface)
 {
     S_AUDIO_LIB* psAudioLib = &g_sAudioLib;
     
-    if ((gUsbCmd.wIndex & 0xff) == 1)        /* Interface 1 */  
+    if ((gUsbCmd.wIndex & 0xff) == 1)        /* Interface 1 */
     {
         /* Audio Iso OUT interface */ 
         if (u32AltInterface == 2 || u32AltInterface == 4)       /* Interface 1, Alternate 2/4 */ 

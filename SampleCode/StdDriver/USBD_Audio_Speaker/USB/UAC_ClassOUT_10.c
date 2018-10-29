@@ -15,15 +15,15 @@ void UAC_ClassOUT_10(S_AUDIO_LIB* psAudioLib)
         if (!USBD_IS_ATTACHED())
             break;
 
-        if(u32timeout == 0)				
+        if(u32timeout == 0)
         {
             printf("EPA\t%x\n", USBD->EP[EPA].EPDATCNT);
             printf("EPB\t%x\n", USBD->EP[EPB].EPDATCNT);
-            printf("EPC\t%x\n", USBD->EP[EPC].EPDATCNT);					
-            printf("DMACTL\t%X\n", USBD->DMACTL);	
-            printf("DMACNT\t%X\n", USBD->DMACNT);						
+            printf("EPC\t%x\n", USBD->EP[EPC].EPDATCNT);
+            printf("DMACTL\t%X\n", USBD->DMACTL);
+            printf("DMACNT\t%X\n", USBD->DMACNT);
             u32timeout = 0x100000;
-        }					
+        }
         else
             u32timeout--;
     }

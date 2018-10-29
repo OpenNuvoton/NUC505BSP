@@ -41,7 +41,7 @@
   +-----------+------------+----------------+------------------+
   |     4     |      2     |     24 bits    |      96kHz       |
   +-----------+------------+----------------+------------------+
-	
+  
   Note:
   1.If you want to remove certain alternate for Microphone or Speaker interface, please remove the group of 
     the alternate descriptors (Standard AS interface, Audio Streaming Class Specific Interface Descriptor, 
@@ -49,62 +49,62 @@
     Endpoint Descriptor) and modify the Total Length field of Configuration Descriptor.
     For example,
       Remove  Microphone Interface alternate 6 (24 bit resolution) from Speaker & Microphone descriptor with HID  
-		
+    
       1.Remove the following descriptors for Microphone - Interface alternate 6
          Microphone - Interface alternate 6
-           Standard AS interface                                         (0x09)													 
-           Audio Streaming Class Specific Interface Descriptor           (0x07)	
+           Standard AS interface                                         (0x09)                           
+           Audio Streaming Class Specific Interface Descriptor           (0x07)  
            Audio Streaming Format Type Descriptor                        (0x0B) 
-           Endpoint Descriptor                                           (0x07)	
-           Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07)	
+           Endpoint Descriptor                                           (0x07)  
+           Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07)  
            *Interface alternate Summary                                  (0x29)                                                        
                          
       2.Modify the Total Length field of Configuration Descriptor to 0x20B
          
-         0x234(Original Total Length) - 0x29(Total Length of descriptors for Microphone - Interface alternate 6) = 0x20B			
-    				 
+         0x234(Original Total Length) - 0x29(Total Length of descriptors for Microphone - Interface alternate 6) = 0x20B      
+             
       3.Modify the change for interface alternate in UAC_SetInterface_10.c
-				
+        
   2.If you want to add / remove sampling rate to certain alternate for Microphone or Speaker interface,
     please modify Audio Streaming Format Type Descriptor (bLength, bSamFreqType, tSamFreq fields)
     and the Total Length field of Configuration Descriptor.
     For example,
-      Add 48kHz to Speaker Interface alternate 3 (16 bit resolution) from Speaker & Microphone descriptor with HID 	
-	
+      Add 48kHz to Speaker Interface alternate 3 (16 bit resolution) from Speaker & Microphone descriptor with HID   
+  
       1.Modify Audio Streaming Format Type Descriptor for Speaker Interface alternate 3
 
          Audio Streaming Format Type Descriptor
-         +--------------------+------------------+-------------------+	
-         | *bLength           |  Original Value  |   Modified Value  |			
-         +--------------------+------------------+-------------------+	
-         | bLength            |        0x0B      |   0x0E(+3 Bytes)  |			
-         +--------------------+------------------+-------------------+					 
-         | bDescriptorType    |        0x24      |        0x24       |   				
-         +--------------------+------------------+-------------------+	
-         | bDescriptorSubType |        0x02      |        0x02       |	
-         +--------------------+------------------+-------------------+	
-         | bFormatType        |        0x01      |        0x01       |		
-         +--------------------+------------------+-------------------+	
-         | bNrChannels        |        0x02      |        0x02       | 	
-         +--------------------+------------------+-------------------+	
-         | bSubFrameSize      |        0x02      |        0x02       |  			
-         +--------------------+------------------+-------------------+		
-         | bBitResolution     |        0x10      |        0x10       | 		
-         +--------------------+------------------+-------------------+	
-         | *bSamFreqType      |        0x01      | 0x02(+1 Frequency)| 			
-         +--------------------+------------------+-------------------+	
+         +--------------------+------------------+-------------------+  
+         | *bLength           |  Original Value  |   Modified Value  |      
+         +--------------------+------------------+-------------------+  
+         | bLength            |        0x0B      |   0x0E(+3 Bytes)  |      
+         +--------------------+------------------+-------------------+           
+         | bDescriptorType    |        0x24      |        0x24       |           
+         +--------------------+------------------+-------------------+  
+         | bDescriptorSubType |        0x02      |        0x02       |  
+         +--------------------+------------------+-------------------+  
+         | bFormatType        |        0x01      |        0x01       |    
+         +--------------------+------------------+-------------------+  
+         | bNrChannels        |        0x02      |        0x02       |   
+         +--------------------+------------------+-------------------+  
+         | bSubFrameSize      |        0x02      |        0x02       |        
+         +--------------------+------------------+-------------------+    
+         | bBitResolution     |        0x10      |        0x10       |     
+         +--------------------+------------------+-------------------+  
+         | *bSamFreqType      |        0x01      | 0x02(+1 Frequency)|       
+         +--------------------+------------------+-------------------+  
          | *tSamFreq          | PLAY_RATE_96K_LO |  PLAY_RATE_96K_LO |
          |                    | PLAY_RATE_96K_MD |  PLAY_RATE_96K_MD |
          |                    | PLAY_RATE_96K_HI |  PLAY_RATE_96K_HI |
          |                    |                  |  PLAY_RATE_48K_LO |
-         |                    |                  |  PLAY_RATE_48K_MD |									
+         |                    |                  |  PLAY_RATE_48K_MD |                  
          |                    |                  |  PLAY_RATE_48K_HI |
-         +--------------------+------------------+-------------------+	
+         +--------------------+------------------+-------------------+  
                          
       2.Modify the Total Length field of Configuration Descriptor to 0x237.
 
-         0x234(Original Total Length) + 0x03(The increase Length of Audio Streaming Format Type Descriptor) = 0x237	
-		
+         0x234(Original Total Length) + 0x03(The increase Length of Audio Streaming Format Type Descriptor) = 0x237  
+    
   4.If you want to change the support function of audio control, please modify the bmaControls field of
     Audio Control Feature Unit Descriptor for Microphone or Speaker
       A bit set to 1 indicates that the mentioned Control is supported
@@ -119,8 +119,8 @@
          D7: Delay
          D8: Bass Boost
          D9: Loudness
-         D10..(n*8-1): Reserved		
-	5.If you want to change the polling interal of HID Endpoint, please modify the bInterval field of Endpoint Descriptor for HID.
+         D10..(n*8-1): Reserved    
+  5.If you want to change the polling interal of HID Endpoint, please modify the bInterval field of Endpoint Descriptor for HID.
 */
 
 /*----------------------------------------------------------------------------*/
@@ -129,7 +129,7 @@
 #pragma data_alignment=4
 uint8_t gu8DeviceDescriptor_10[] = {
 #else
-__align(4) uint8_t gu8DeviceDescriptor_10[] = {
+uint8_t gu8DeviceDescriptor_10[] __attribute__((aligned(4))) = {
 #endif
     LEN_DEVICE,         /* bLength */
     DESC_DEVICE,        /* bDescriptorType */
@@ -157,7 +157,7 @@ __align(4) uint8_t gu8DeviceDescriptor_10[] = {
 #pragma data_alignment=4
 uint8_t gu8KeyboardReportDesc_10[] =
 #else
-__align(4) uint8_t gu8KeyboardReportDesc_10[] =
+uint8_t gu8KeyboardReportDesc_10[] __attribute__((aligned(4))) =
 #endif
 {
     0x05, 0x01,        /* Usage Page(Generic Desktop Controls) */
@@ -199,7 +199,7 @@ __align(4) uint8_t gu8KeyboardReportDesc_10[] =
 #pragma data_alignment=4
 uint8_t gu8KeyboardReportDesc_10[] =
 #else
-__align(4)  uint8_t gu8KeyboardReportDesc_10[] =
+uint8_t gu8KeyboardReportDesc_10[] __attribute__((aligned(4))) =
 #endif
 {
     0x05, 0x0C,        /* Usage Page (Consumer) */
@@ -251,99 +251,99 @@ const uint32_t gu32KeyboardReportDescSize_10 = HID_KEYBOARD_REPORT_DESC_SIZE_10;
 #pragma data_alignment=4
 uint8_t gu8ConfigDescriptor_10[] = {
 #else
-__align(4) uint8_t gu8ConfigDescriptor_10[] = {
+uint8_t gu8ConfigDescriptor_10[] __attribute__((aligned(4))) = {
 #endif
     /* Configuration Descriptor */
     LEN_CONFIG,         /* bLength */
     DESC_CONFIG,        /* bDescriptorType */
 #ifdef __BOTH__
 #ifdef __HID__
-    0x34, 0x02,	        /* wTotalLength
+    0x34, 0x02,          /* wTotalLength
                            Descriptor without HID                     (0x21B)
-                           HID Descriptor 												 	
+                           HID Descriptor                            
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
                              Endpoint Descriptor                       (0x07)
-	
-                           0x21B + 0x09 + 0x09 + 0x07 = 0x234	
+  
+                           0x21B + 0x09 + 0x09 + 0x07 = 0x234  
                         */
     0x04,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone), Interface 2 (Speaker), Interface 3 (HID) */
 #else
     0x1B, 0x02,         /* wTotalLength */
                         /* 
-                           Configuration Descriptor                    (0x09)	
+                           Configuration Descriptor                    (0x09)  
                            Interface Descriptor (Audio Class)          (0x09)
-                           Audio Control Interface Header Descriptor   (0x0A)		
-                           Microphone - Audio Control   	 											
+                           Audio Control Interface Header Descriptor   (0x0A)    
+                           Microphone - Audio Control                            
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x08)
                              Audio Control Output Terminal Descriptor  (0x09)
-                           Speaker - Audio Control   												
+                           Speaker - Audio Control                           
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x0A)
                              Audio Control Output Terminal Descriptor  (0x09)
                            Microphone - Interface alternate 0
                              Standard AS interface                     (0x09)
                            Microphone - Interface alternate 1~6
-                             Standard AS interface                                         (0x09,0x09,0x09,0x09,0x09,0x09)													 
-                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07,0x07,0x07)	
+                             Standard AS interface                                         (0x09,0x09,0x09,0x09,0x09,0x09)                           
+                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07,0x07,0x07)  
                              Audio Streaming Format Type Descriptor                        (0x0E,0x0B,0x0E,0x0E,0x0B,0x0B) 
-                             Endpoint Descriptor                                           (0x07,0x07,0x07,0x07,0x07,0x07)	
-                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07,0x07,0x07)	
+                             Endpoint Descriptor                                           (0x07,0x07,0x07,0x07,0x07,0x07)  
+                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07,0x07,0x07)  
                              *Each Interface alternate Summary                             (0x2C,0x29,0x2C,0x2C,0x29,0x29)                                                        
                            Speaker - Interface alternate 0
                              Standard AS interface                     (0x09)
                            Speaker - Interface alternate 1~4
-                             Standard AS interface                                         (0x09,0x09,0x09,0x09)													 
-                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07)	
+                             Standard AS interface                                         (0x09,0x09,0x09,0x09)                           
+                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07)  
                              Audio Streaming Format Type Descriptor                        (0x0E,0x0E,0x0B,0x0B) 
-                             Endpoint Descriptor                                           (0x09,0x09,0x09,0x09)	
-                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07)	
-                             *Each Interface alternate Summary                             (0x2E,0x2E,0x2B,0x2B) 														 
-													 										 
+                             Endpoint Descriptor                                           (0x09,0x09,0x09,0x09)  
+                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07)  
+                             *Each Interface alternate Summary                             (0x2E,0x2E,0x2B,0x2B)                              
+                                                
                            0x09 + 0x09 + 0x0A + (0x0C + 0x08 + 0x09) + (0x0C + 0x0A + 0x09) +
                            0x09 + 0x2C + 0x29 + 0x2C + 0x2C + 0x29 + 0x29 + 
                            0x09 + 0x2E + 0x2E + 0x2B + 0x2B = 0x21B
-                        */		
+                        */    
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone), Interface 2 (Speaker) */
-#endif	
+#endif  
 #elif defined __MIC_ONLY__
 #ifdef __HID__
     0x59, 0x01,         /* wTotalLength
                            Descriptor without HID                     (0x140)
-                           HID Descriptor 												 
+                           HID Descriptor                          
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
                              Endpoint Descriptor                       (0x07)
-														
-                           0x140 + 0x09 + 0x09 + 0x07 = 0x159	
-                        */		
+                            
+                           0x140 + 0x09 + 0x09 + 0x07 = 0x159  
+                        */    
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone), Interface 2 (HID) */
 #else
     0x40, 0x01,         /* wTotalLength */
                         /* 
-                           Configuration Descriptor                    (0x09)	
+                           Configuration Descriptor                    (0x09)  
                            Interface Descriptor (Audio Class)          (0x09)
-                           Audio Control Interface Header Descriptor   (0x09)		
-                           Microphone - Audio Control   	 											
+                           Audio Control Interface Header Descriptor   (0x09)    
+                           Microphone - Audio Control                            
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x08)
                              Audio Control Output Terminal Descriptor  (0x09)                          
                            Microphone - Interface alternate 0
                              Standard AS interface                     (0x09)
                            Microphone - Interface alternate 1~6
-                             Standard AS interface                                         (0x09,0x09,0x09,0x09,0x09,0x09)													 
-                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07,0x07,0x07)	
+                             Standard AS interface                                         (0x09,0x09,0x09,0x09,0x09,0x09)                           
+                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07,0x07,0x07)  
                              Audio Streaming Format Type Descriptor                        (0x0E,0x0B,0x0E,0x0E,0x0B,0x0B) 
-                             Endpoint Descriptor                                           (0x07,0x07,0x07,0x07,0x07,0x07)	
-                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07,0x07,0x07)		
-                             *Each Interface alternate Summary                             (0x2C,0x29,0x2C,0x2C,0x29,0x29)       											 
-													 										 
+                             Endpoint Descriptor                                           (0x07,0x07,0x07,0x07,0x07,0x07)  
+                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07,0x07,0x07)    
+                             *Each Interface alternate Summary                             (0x2C,0x29,0x2C,0x2C,0x29,0x29)                              
+                                                
                            0x09 + 0x09 + 0x9 + (0x0C + 0x08 + 0x09) +
                            0x09 + 0x2C + 0x29 + 0x2C + 0x2C + 0x29 + 0x29 = 0x140 
-                        */		
+                        */    
     0x02,               /* bNumInterfaces - Interface 0, Interface 1 (Microphone) */
-#endif	
+#endif  
 #elif defined __SPEAKER_ONLY__
 #ifdef __HID__
     0x0E, 0x01,         /* wTotalLength 
@@ -352,33 +352,33 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                              Interface Descriptor                      (0x09)
                              HID Descriptor                            (0x09)
                              Endpoint Descriptor                       (0x07)
-														
-                           0xF5 + 0x09 + 0x09 + 0x07 = 0x10E	
-                        */				
+                            
+                           0xF5 + 0x09 + 0x09 + 0x07 = 0x10E  
+                        */        
     0x03,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker), Interface 2 (HID) */
 #else
     0xF5, 0x00,         /* wTotalLength */
                         /* 
-                           Configuration Descriptor                    (0x09)	
+                           Configuration Descriptor                    (0x09)  
                            Interface Descriptor (Audio Class)          (0x09)
-                           Audio Control Interface Header Descriptor   (0x09)		
-                           Speaker - Audio Control   												
+                           Audio Control Interface Header Descriptor   (0x09)    
+                           Speaker - Audio Control                           
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x0A)
                              Audio Control Output Terminal Descriptor  (0x09)
                            Speaker - Interface alternate 0
                              Standard AS interface                     (0x09)
                            Speaker - Interface alternate 1~4
-                             Standard AS interface                                         (0x09,0x09,0x09,0x09)													 
-                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07)	
+                             Standard AS interface                                         (0x09,0x09,0x09,0x09)                           
+                             Audio Streaming Class Specific Interface Descriptor           (0x07,0x07,0x07,0x07)  
                              Audio Streaming Format Type Descriptor                        (0x0E,0x0E,0x0B,0x0B) 
-                             Endpoint Descriptor                                           (0x09,0x09,0x09,0x09)	
-                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07)	
-                             *Each Interface alternate Summary                             (0x2E,0x2E,0x2B,0x2B) 														 
-													 										 
+                             Endpoint Descriptor                                           (0x09,0x09,0x09,0x09)  
+                             Audio Streaming Class Specific Audio Data Endpoint Descriptor (0x07,0x07,0x07,0x07)  
+                             *Each Interface alternate Summary                             (0x2E,0x2E,0x2B,0x2B)                              
+                                                
                            0x09 + 0x09 + 0x09 + (0x0C + 0x0A + 0x09) +
                            0x09 + 0x2E + 0x2E + 0x2B + 0x2B = 0xF5
-                        */			
+                        */      
     0x02,               /* bNumInterfaces - Interface 0, Interface 1 (Speaker) */
 #endif
 #endif
@@ -397,58 +397,58 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x01,               /* bInterfaceSubClass:AUDIOCONTROL */
     0x00,               /* bInterfaceProtocol */
     0x00,               /* iInterface */
-		
+    
     /* Audio Control Interface Header Descriptor */
 #ifdef __BOTH__
     0x0A,               /* bLength */
-#elif defined __MIC_ONLY__	|| defined __SPEAKER_ONLY__	
-    0x09,               /* bLength */		
-#endif		
+#elif defined __MIC_ONLY__  || defined __SPEAKER_ONLY__  
+    0x09,               /* bLength */    
+#endif    
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x01,               /* bDescriptorSubType:HEADER */
     0x00, 0x01,         /* bcdADC:1.0 */
-#ifdef __BOTH__		
+#ifdef __BOTH__    
     0x46, 0x00,         /* wTotalLength        
                            Audio Control Interface Header Descriptor  (0x0A)
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Audio Control Input Terminal Descriptor  (0x0C)
                              Audio Control Feature Unit Descriptor    (0x08)
                              Audio Control Output Terminal Descriptor (0x09)
-                           Speaker - Audio Control    												
+                           Speaker - Audio Control                            
                              Audio Control Input Terminal Descriptor  (0x0C)
                              Audio Control Feature Unit Descriptor    (0x0A)
                              Audio Control Output Terminal Descriptor (0x09)                           
                            
-                             0x0A + (0x0C + 0x08 + 0x09) + (0x0C + 0x0A + 0x09) = 0x46												
-                        */												
+                             0x0A + (0x0C + 0x08 + 0x09) + (0x0C + 0x0A + 0x09) = 0x46                        
+                        */                        
     0x02,               /* bInCollection */
     0x01,               /* baInterfaceNr(1) - Microphone */
-    0x02,               /* baInterfaceNr(2) - Speaker */		
-#elif defined __MIC_ONLY__	|| defined __SPEAKER_ONLY__
+    0x02,               /* baInterfaceNr(2) - Speaker */    
+#elif defined __MIC_ONLY__  || defined __SPEAKER_ONLY__
 #ifdef __MIC_ONLY__
     0x26, 0x00,         /* wTotalLength 
                            Audio Control Interface Header Descriptor   (0x09)
-                           Microphone - Audio Control   												
+                           Microphone - Audio Control                           
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x08)
                              Audio Control Output Terminal Descriptor  (0x09)                       
                            
-                             0x09 + (0x0C + 0x08 + 0x09) = 0x26												
-                        */			
+                             0x09 + (0x0C + 0x08 + 0x09) = 0x26                        
+                        */      
 #elif defined __SPEAKER_ONLY__
     0x28, 0x00,         /* wTotalLength 
                            Audio Control Interface Header Descriptor   (0x09)
-                           Speaker - Audio Control    												
+                           Speaker - Audio Control                            
                              Audio Control Input Terminal Descriptor   (0x0C)
                              Audio Control Feature Unit Descriptor     (0x0A)
                              Audio Control Output Terminal Descriptor  (0x09)                           
                            
-                             0x09 + (0x0C + 0x0A + 0x09) = 0x28												
-                        */				
-#endif		
+                             0x09 + (0x0C + 0x0A + 0x09) = 0x28                        
+                        */        
+#endif    
     0x01,               /* bInCollection */
-    0x01,               /* baInterfaceNr(1) - Microphone / Speaker */	
-#endif		
+    0x01,               /* baInterfaceNr(1) - Microphone / Speaker */  
+#endif    
 
 #if defined __BOTH__ || defined __MIC_ONLY__
     /* Audio Control Input Terminal Descriptor - Microphone (Terminal ID 4) */
@@ -460,7 +460,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x02,0x04,          /* wTerminalType: Headset */
 #else
     0x01,0x02,          /* wTerminalType: 0x0201 microphone*/
-#endif		
+#endif    
     0x00,               /* bAssocTerminal*/
     0x02,               /* bNrChannels : a number that specifies how many logical audio channels are present in the cluster */
     0x03, 0x00,         /* wChannelConfig: a bit field that indicates which spatial locations are present in the cluster. 
@@ -477,8 +477,8 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                              D9: Side Left (SL)
                              D10: Side Right (SR)
                              D11: Top (T)
-                             D15..12: Reserved		
-                        */	
+                             D15..12: Reserved    
+                        */  
     0x00,               /* iChannelNames*/
     0x00,               /* iTerminal*/
 
@@ -504,9 +504,9 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                            D8: Bass Boost
                            D9: Loudness
                            D10..(n*8-1): Reserved
-                        */		
+                        */    
     0x00,               /* iFeature */
-		
+    
     /* Audio Control Output Terminal Descriptor - Microphone (Terminal ID 2 - Source ID 5) */
     0x09,               /* bLength */
     0x24,               /* bDescriptorType:CS_INTERFACE */
@@ -541,11 +541,11 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                              D9: Side Left (SL)
                              D10: Side Right (SR)
                              D11: Top (T)
-                             D15..12: Reserved		
-                        */	
+                             D15..12: Reserved    
+                        */  
     0x00,               /* iChannelNames */
     0x00,               /* iTerminal */
-		
+    
     /* Audio Control Feature Unit Descriptor - Speaker (UNIT ID 6 - Source ID 1) */
     0x0A,               /* bLength */
     0x24,               /* bDescriptorType */
@@ -568,7 +568,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                            D8: Bass Boost
                            D9: Loudness
                            D10..(n*8-1): Reserved
-                        */				
+                        */        
     0x02,               /* bmaControls(1) - Left */
                         /* A bit set to 1 indicates that the mentioned
                            Control is supported for master channel
@@ -584,7 +584,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                            D8: Bass Boost
                            D9: Loudness
                            D10..(n*8-1): Reserved
-                        */				
+                        */        
     0x02,               /* bmaControls(2) - Right */
                         /* A bit set to 1 indicates that the mentioned
                            Control is supported for master channel
@@ -600,7 +600,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
                            D8: Bass Boost
                            D9: Loudness
                            D10..(n*8-1): Reserved
-                        */				
+                        */        
     0x00,               /* iFeature */
 
     /* Audio Control Output Terminal Descriptor - Speaker (UNIT ID 3 - Source ID 5) */
@@ -610,9 +610,9 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x03,               /* bTerminalID*/
 #ifdef __BOTH__
     0x02,0x04,          /* wTerminalType: Headset */
-#else		
+#else    
     0x01,0x03,          /* wTerminalType: 0x0301 speaker*/
-#endif		
+#endif    
     0x00,               /* bAssocTerminal*/
     PLAY_FEATURE_UNITID,/* bSourceID*/
     0x00,               /* iTerminal*/
@@ -654,7 +654,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 1 */ 			
+                        /* Standard AS interface 1, alternate 1 */       
     0x01,               /* bNrChannels    :  1 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
     0x10,               /* bBitResolution : 16 bits  per sample */
@@ -664,8 +664,8 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     /* bSamFreqType */
     REC_RATE_441K_LO,
     REC_RATE_441K_MD,
-    REC_RATE_441K_HI,		
-		
+    REC_RATE_441K_HI,    
+    
     REC_RATE_48K_LO,
     REC_RATE_48K_MD,
     REC_RATE_48K_HI,
@@ -712,10 +712,10 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 2 */ 			
+                        /* Standard AS interface 1, alternate 2 */       
     0x01,               /* bNrChannels    :  1 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
-    0x10,               /* bBitResolution : 16 bits  per sample */				
+    0x10,               /* bBitResolution : 16 bits  per sample */        
     0x01,               /* bSamFreqType : 
                            0 Continuous sampling frequency
                            1 The number of discrete sampling frequencies */
@@ -766,18 +766,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 3 */ 					
+                        /* Standard AS interface 1, alternate 3 */           
     0x02,               /* bNrChannels    :  2 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
-    0x10,               /* bBitResolution : 16 bits  per sample */				
+    0x10,               /* bBitResolution : 16 bits  per sample */        
     0x02,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
     REC_RATE_441K_LO,
     REC_RATE_441K_MD,
     REC_RATE_441K_HI,
-		
+    
     REC_RATE_48K_LO,
     REC_RATE_48K_MD,
     REC_RATE_48K_HI,
@@ -799,7 +799,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x01,               /* bmAttributes, Bit 0: Sampling Frequency */
     0x00,               /* bLockDelayUnits */
     0x00, 0x00,         /* wLockDelay */
-		
+    
     /* Interface Descriptor - Interface 1, alternate 4 */
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
@@ -824,13 +824,13 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 4 */ 					
+                        /* Standard AS interface 1, alternate 4 */           
     0x02,               /* bNrChannels    :  2 Channels */
     0x03,               /* bSubFrameSize  :  3 bytes per sample */
-    0x18,               /* bBitResolution : 24 bits  per sample */					
+    0x18,               /* bBitResolution : 24 bits  per sample */          
     0x02,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
     REC_RATE_441K_LO,
     REC_RATE_441K_MD,
@@ -882,13 +882,13 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 5 */ 		
+                        /* Standard AS interface 1, alternate 5 */     
     0x02,               /* bNrChannels    :  2 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
-    0x10,               /* bBitResolution : 16 bits  per sample */	
+    0x10,               /* bBitResolution : 16 bits  per sample */  
     0x01,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
     REC_RATE_96K_LO,
     REC_RATE_96K_MD,
@@ -936,13 +936,13 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1, alternate 6 */ 			
+                        /* Standard AS interface 1, alternate 6 */       
     0x02,               /* bNrChannels    :  2 Channels */
     0x03,               /* bSubFrameSize  :  3 bytes per sample */
-    0x18,               /* bBitResolution : 24 bits  per sample */			
+    0x18,               /* bBitResolution : 24 bits  per sample */      
     0x01,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
     REC_RATE_96K_LO,
     REC_RATE_96K_MD,
@@ -966,19 +966,19 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x00,               /* bLockDelayUnits */
     0x00, 0x00,         /* wLockDelay */
 
-#endif				
+#endif        
 #if defined __BOTH__ || defined __SPEAKER_ONLY__
     /* Interface Descriptor - Interface 2, alternate 0
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
-    */		
+        Interface 1 for Speaker Only      
+    */    
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-#ifdef	__SPEAKER_ONLY__
+#ifdef  __SPEAKER_ONLY__
     0x01,               /* bInterfaceNumber */
 #else
     0x02,               /* bInterfaceNumber */
-#endif		
+#endif    
     0x00,               /* bAlternateSetting */
     0x00,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -988,15 +988,15 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
 
     /* Interface Descriptor - Interface 1/2, alternate 1
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
-    */		
+        Interface 1 for Speaker Only      
+    */    
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-#ifdef	__SPEAKER_ONLY__
+#ifdef  __SPEAKER_ONLY__
     0x01,               /* bInterfaceNumber */
 #else
     0x02,               /* bInterfaceNumber */
-#endif	
+#endif  
     0x01,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -1017,18 +1017,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1/2, alternate 1 */ 				
+                        /* Standard AS interface 1/2, alternate 1 */         
     0x02,               /* bNrChannels    :  2 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
-    0x10,               /* bBitResolution : 16 bits  per sample */			
+    0x10,               /* bBitResolution : 16 bits  per sample */      
     0x02,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
-    PLAY_RATE_441K_LO,		
-    PLAY_RATE_441K_MD,		
-    PLAY_RATE_441K_HI,	
-		
+    PLAY_RATE_441K_LO,    
+    PLAY_RATE_441K_MD,    
+    PLAY_RATE_441K_HI,  
+    
     PLAY_RATE_48K_LO,
     PLAY_RATE_48K_MD,
     PLAY_RATE_48K_HI,
@@ -1052,18 +1052,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x01,               /* bmAttributes, Bit 7: MaxPacketsOnly, Bit 0: Sampling Frequency */
     0x01,               /* bLockDelayUnits */
     0x01, 0x00,         /* wLockDelay */
-		
+    
     /* Interface Descriptor - Interface 1/2, alternate 2
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
-    */		
+        Interface 1 for Speaker Only      
+    */    
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-#ifdef	__SPEAKER_ONLY__
+#ifdef  __SPEAKER_ONLY__
     0x01,               /* bInterfaceNumber */
 #else
     0x02,               /* bInterfaceNumber */
-#endif	
+#endif  
     0x02,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -1084,22 +1084,22 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1/2, alternate 2 */ 		    		
+                        /* Standard AS interface 1/2, alternate 2 */             
     0x02,               /* bNrChannels    :  2 Channels */
     0x03,               /* bSubFrameSize  :  3 bytes per sample */
-    0x18,               /* bBitResolution : 24 bits  per sample */			
+    0x18,               /* bBitResolution : 24 bits  per sample */      
     0x02,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */
-    PLAY_RATE_441K_LO,		
-    PLAY_RATE_441K_MD,		
-    PLAY_RATE_441K_HI,		
-		
+    PLAY_RATE_441K_LO,    
+    PLAY_RATE_441K_MD,    
+    PLAY_RATE_441K_HI,    
+    
     PLAY_RATE_48K_LO,
     PLAY_RATE_48K_MD,
     PLAY_RATE_48K_HI,
-		
+    
     /* Endpoint Descriptor (ISO OUT Audio Data Endpoint - alternate 2) */
     0x09,                             /* bLength */
     0x05,                             /* bDescriptorType */
@@ -1119,18 +1119,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x01,               /* bmAttributes, Bit 7: MaxPacketsOnly, Bit 0: Sampling Frequency */
     0x01,               /* bLockDelayUnits */
     0x01, 0x00,         /* wLockDelay */
-		
+    
     /* Interface Descriptor - Interface 1/2, alternate 3
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
-    */		
+        Interface 1 for Speaker Only      
+    */    
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-#ifdef	__SPEAKER_ONLY__
+#ifdef  __SPEAKER_ONLY__
     0x01,               /* bInterfaceNumber */
 #else
     0x02,               /* bInterfaceNumber */
-#endif	
+#endif  
     0x03,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -1151,18 +1151,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1/2, alternate 3 */ 	
+                        /* Standard AS interface 1/2, alternate 3 */   
     0x02,               /* bNrChannels    :  2 Channels */
     0x02,               /* bSubFrameSize  :  2 bytes per sample */
-    0x10,               /* bBitResolution : 16 bits  per sample */					
+    0x10,               /* bBitResolution : 16 bits  per sample */          
     0x01,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */    
     PLAY_RATE_96K_LO,
     PLAY_RATE_96K_MD,
     PLAY_RATE_96K_HI,
-		
+    
     /* Endpoint Descriptor (ISO OUT Audio Data Endpoint - alternate 3) */
     0x09,                             /* bLength */
     0x05,                             /* bDescriptorType */
@@ -1173,27 +1173,27 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     (384 & 0xFF00) >> 8,
     0x01,                             /* bInterval */
     0x00,                             /* bRefresh */
-    0x00,                             /* bSynchAddress */		
-		
+    0x00,                             /* bSynchAddress */    
+    
     /* Audio Streaming Class Specific Audio Data Endpoint Descriptor */
     0x07,               /* bLength */
     0x25,               /* bDescriptorType:CS_ENDPOINT */
     0x01,               /* bDescriptorSubType:EP_GENERAL */
     0x01,               /* bmAttributes, Bit 7: MaxPacketsOnly, Bit 0: Sampling Frequency */
     0x01,               /* bLockDelayUnits */
-    0x01, 0x00,         /* wLockDelay */		
-		
+    0x01, 0x00,         /* wLockDelay */    
+    
     /* Interface Descriptor - Interface 1/2, alternate 4
         Interface 2 for Speaker & Microphone  
-        Interface 1 for Speaker Only  		
-    */		
+        Interface 1 for Speaker Only      
+    */    
     0x09,               /* bLength */
     0x04,               /* bDescriptorType */
-#ifdef	__SPEAKER_ONLY__
+#ifdef  __SPEAKER_ONLY__
     0x01,               /* bInterfaceNumber */
 #else
     0x02,               /* bInterfaceNumber */
-#endif	
+#endif  
     0x04,               /* bAlternateSetting */
     0x01,               /* bNumEndpoints */
     0x01,               /* bInterfaceClass:AUDIO */
@@ -1214,18 +1214,18 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     0x24,               /* bDescriptorType:CS_INTERFACE */
     0x02,               /* bDescriptorSubType:FORMAT_TYPE */
     0x01,               /* bFormatType:FORMAT_TYPE_I */
-                        /* Standard AS interface 1/2, alternate 4 */ 			
+                        /* Standard AS interface 1/2, alternate 4 */       
     0x02,               /* bNrChannels    :  2 Channels */
     0x03,               /* bSubFrameSize  :  3 bytes per sample */
-    0x18,               /* bBitResolution : 24 bits  per sample */	
+    0x18,               /* bBitResolution : 24 bits  per sample */  
     0x01,               /* bSamFreqType : 
                            0 Continuous sampling frequency
-                           1 The number of discrete sampling frequencies */		
+                           1 The number of discrete sampling frequencies */    
     /* bSamFreqType  */    
     PLAY_RATE_96K_LO,
     PLAY_RATE_96K_MD,
     PLAY_RATE_96K_HI,
-		
+    
     /* Endpoint Descriptor (ISO OUT Audio Data Endpoint - alternate 4) */
     0x09,                             /* bLength */
     0x05,                             /* bDescriptorType */
@@ -1275,7 +1275,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
     DESC_ENDPOINT,                    /* bDescriptorType */
     (HID_IN_EP_NUM | EP_INPUT),       /* bEndpointAddress */
     EP_INT,                           /* bmAttributes */   
-    /* wMaxPacketSize */ 		
+    /* wMaxPacketSize */     
     EPC_MAX_PKT_SIZE & 0x00FF,        
     (EPC_MAX_PKT_SIZE & 0xFF00) >> 8,
     10                                /* bInterval */
@@ -1288,7 +1288,7 @@ __align(4) uint8_t gu8ConfigDescriptor_10[] = {
 #pragma data_alignment=4
 uint8_t gu8QualifierDescriptor_10[] = {
 #else
-__align(4) uint8_t gu8QualifierDescriptor_10[] = {
+uint8_t gu8QualifierDescriptor_10[] __attribute__((aligned(4))) = {
 #endif
     LEN_QUALIFIER,    /* bLength */
     DESC_QUALIFIER,   /* bDescriptorType */
@@ -1306,7 +1306,7 @@ __align(4) uint8_t gu8QualifierDescriptor_10[] = {
 #pragma data_alignment=4
 uint8_t gu8StringLang_10[4] = {
 #else
-__align(4) uint8_t gu8StringLang_10[4] = {
+uint8_t gu8StringLang_10[4] __attribute__((aligned(4))) = {
 #endif
     4,              /* bLength */
     DESC_STRING,    /* bDescriptorType */
@@ -1318,7 +1318,7 @@ __align(4) uint8_t gu8StringLang_10[4] = {
 #pragma data_alignment=4
 uint8_t gu8VendorStringDesc_10[59] = {
 #else
-__align(4) uint8_t gu8VendorStringDesc_10[59] = {
+uint8_t gu8VendorStringDesc_10[59] __attribute__((aligned(4))) = {
 #endif
     16,
     DESC_STRING,
@@ -1330,14 +1330,14 @@ __align(4) uint8_t gu8VendorStringDesc_10[59] = {
 #pragma data_alignment=4
 uint8_t gu8ProductStringDesc_10[] = {
 #else
-__align(4) uint8_t gu8ProductStringDesc_10[] = {
-#endif	
+uint8_t gu8ProductStringDesc_10[] __attribute__((aligned(4))) = {
+#endif  
 #ifdef __BOTH__
 #ifdef __HID__
     80,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
-	  'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,			
+    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,      
     ' ', 0,  
     'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0, 
     ' ', 0, '&', 0, 
@@ -1346,59 +1346,59 @@ __align(4) uint8_t gu8ProductStringDesc_10[] = {
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif	
+#endif  
 #else
     50,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
-    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,			
+    'H', 0, 'e', 0, 'a', 0, 'd', 0, 's', 0, 'e', 0, 't', 0,      
     ' ', 0,  
-    'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0, 		
-#endif	
+    'E', 0, 'a', 0, 'r', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,     
+#endif  
 #elif defined __MIC_ONLY__
 #ifdef __HID__
     68,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
-    'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,	
+    'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0,  
     ' ', 0, '&', 0, ' ', 0, 'H', 0, 'I', 0, 'D', 0,
 #ifdef __KEYBOARD__
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif			
+#endif      
 #else
     38,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
     'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'p', 0, 'h', 0, 'o', 0, 'n', 0, 'e', 0
-#endif	
+#endif  
 #elif defined __SPEAKER_ONLY__
 #ifdef __HID__
     62,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
     'S', 0, 'p', 0, 'e', 0, 'a', 0, 'k', 0, 'e', 0, 'r', 0,
-    ' ', 0, '&', 0,	' ', 0, 'H', 0, 'I', 0, 'D', 0,		
+    ' ', 0, '&', 0,  ' ', 0, 'H', 0, 'I', 0, 'D', 0,    
 #ifdef __KEYBOARD__
     '-', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0,
 #else
     '-', 0, 'M', 0, 'e', 0, 'd', 0, 'i', 0, 'a', 0, 'k', 0, 'e', 0, 'y', 0,
-#endif			
+#endif      
 #else
     32,
     DESC_STRING,
     'U', 0, 'A', 0, 'C', 0, ' ', 0, '1', 0, '.', 0, '0', 0, ' ', 0,
     'S', 0, 'p', 0, 'e', 0, 'a', 0, 'k', 0, 'e', 0, 'r', 0
-#endif	
-#endif	
+#endif  
+#endif  
 };
 /*!<USB Serial String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
 uint8_t gu8StringSerial_10[] =
 #else
-__align(4) uint8_t gu8StringSerial_10[] =
+uint8_t gu8StringSerial_10[] __attribute__((aligned(4))) =
 #endif
 {
     26,             // bLength
@@ -1430,7 +1430,7 @@ uint32_t gu32UsbHidReportLen_10[4] = {
 #ifdef __HID__
     sizeof(gu8KeyboardReportDesc_10),
 #else
-		0
+    0
 #endif
 };
 

@@ -15,13 +15,20 @@
 
 signed char mouse_table[] = {-16, -16, -16, 0, 16, 16, 16, 0};
 uint8_t mouse_idx = 0;
-uint8_t move_len, mouse_mode=1;
+uint8_t move_len, mouse_mode = 1;
 
 uint8_t volatile g_u8EPAReady = 0;
 
 volatile uint8_t g_hid_report = 0;
 volatile uint8_t g_hid_protocol = 0;
 volatile uint8_t g_hid_idle = 0;
+
+#ifdef __ICCARM__
+#pragma data_alignment=32
+uint8_t buf[4] ;       /* Working buffer */
+#else
+uint8_t buf[4] __attribute__((aligned(32)));       /* Working buffer */
+#endif
 
 void USBD_IRQHandler(void)
 {
@@ -77,7 +84,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -143,8 +150,8 @@ void USBD_IRQHandler(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             } else {
-								if (g_usbd_CtrlZero == 1)
-										USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);		
+                if (g_usbd_CtrlZero == 1)
+                    USBD_SET_CEP_STATE(USB_CEPCTL_ZEROLEN);
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -309,111 +316,123 @@ void HID_Init(void)
 
 void HID_ClassRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
-        switch (gUsbCmd.bRequest) {
-     
-				case GET_IDLE:
-				{
-						USBD_PrepareCtrlIn((uint8_t *)&g_hid_idle, 1);				
-						USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-						USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-						break;
-				}		
-				case GET_PROTOCOL:
-				{
-						USBD_PrepareCtrlIn((uint8_t *)&g_hid_protocol, 1);				
-						USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-						USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-						break;
-				}			
-				case GET_REPORT:
-//						{
-//                 break;
-//						}
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
+    if (gUsbCmd.bmRequestType & 0x80) 
+    {   /* request data transfer direction */
+        /* Device to host */
+        switch (gUsbCmd.bRequest) 
+        {
+            case GET_IDLE:
+            {
+                USBD_PrepareCtrlIn((uint8_t *)&g_hid_idle, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                break;
+            }        
+            case GET_PROTOCOL:
+            {
+                USBD_PrepareCtrlIn((uint8_t *)&g_hid_protocol, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+                break;
+            }            
+            case GET_REPORT:
+//            {
+//                break;
+//            }
+            default: {
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
-        }
-    } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        case SET_REPORT: {
-            if (((gUsbCmd.wValue >> 8) & 0xff) == 3) {
-                /* Request Type = Feature */							
-                USBD_CtrlOut((uint8_t*)&g_hid_report, gUsbCmd.wLength);							
+    }
+    else 
+    {
+        /* Host to device */
+        switch (gUsbCmd.bRequest) 
+        {
+            case SET_REPORT:
+            {
+                if (((gUsbCmd.wValue >> 8) & 0xff) == 3)
+                {
+                    /* Request Type = Feature */
+                    USBD_CtrlOut((uint8_t*)&g_hid_report, gUsbCmd.wLength);
+                    USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                    USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                    USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+//                     printf("SET_REPORT %d\n",g_hid_report);
+                }
+                break;
+            }
+            case SET_IDLE: 
+            {
+                g_hid_idle = (gUsbCmd.wValue >> 8) & 0xff;
+                /* Status stage */
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-							//	printf("SET_REPORT %d\n",g_hid_report);
+//                printf("Set Idle\n");
+                break;
             }
-            break;
-        }
-				case SET_IDLE: 
-				{
-						g_hid_idle = (gUsbCmd.wValue >> 8) & 0xff;
-						/* Status stage */
-						USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-						USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-						USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-//								printf("Set Idle\n");
-						break;
-				}
-				case SET_PROTOCOL:
-				{
-						g_hid_protocol = gUsbCmd.wValue;
-						/* Status stage */
-						USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
-						USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-						USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-//								printf("Set Protocol\n");
-						break;
-				}		
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
+            case SET_PROTOCOL:
+            {
+                g_hid_protocol = gUsbCmd.wValue;
+                /* Status stage */
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
+                USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
+//                printf("Set Protocol\n");
+                break;
+            }        
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
     }
 }
 
 void HID_VendorRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
-        // Device to host
-        switch (gUsbCmd.bRequest) {
-        default: {
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
+    if (gUsbCmd.bmRequestType & 0x80) 
+    { /* request data transfer direction */
+        /* Device to host */
+        switch (gUsbCmd.bRequest) 
+        {
+            default: {
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
-        }
-    } else {
-        // Host to device
-        switch (gUsbCmd.bRequest) {
-        default: {
-            // Stall
-            /* Setup error, stall the device */
-            USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
-            break;
-        }
+    }
+    else 
+    {
+        /* Host to device */
+        switch (gUsbCmd.bRequest) 
+        {
+            default: {
+                /* Stall */
+                /* Setup error, stall the device */
+                USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
+                break;
+            }
         }
     }
 }
 
 void HID_UpdateMouseData(void)
 {
-    uint8_t  buf[4];
-
-    if (g_u8EPAReady) {
+    if (g_u8EPAReady) 
+    {
         mouse_mode ^= 1;
 
-        if (mouse_mode) {
-            if (move_len > 14) {
+        if (mouse_mode) 
+        {
+            if (move_len > 14)
+            {
                 /* Update new report data */
                 buf[0] = 0x00;
                 buf[1] = mouse_table[mouse_idx & 0x07];
@@ -422,27 +441,29 @@ void HID_UpdateMouseData(void)
                 mouse_idx++;
                 move_len = 0;
             }
-        } else {
+        } 
+        else 
+        {
             buf[0] = buf[1] = buf[2] = buf[3] = 0;
         }
         move_len++;
         g_u8EPAReady = 0;
-        /* Set DMA transfer length and trigger DMA transfer */		
-				USBD_SET_DMA_READ(INT_IN_EP_NUM);				
-				USBD_SET_DMA_ADDR((uint32_t)buf);
-				USBD_SET_DMA_LEN(4);
-				g_usbd_DmaDone = 0;
-			
-				USBD_ENABLE_DMA();
-				while(1) 
-				{
-						if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
-								break;
-						else
-						 if (!USBD_IS_ATTACHED())
-								break;
-				}
-				
+        /* Set DMA transfer length and trigger DMA transfer */
+        USBD_SET_DMA_READ(INT_IN_EP_NUM);
+        USBD_SET_DMA_ADDR((uint32_t)buf);
+        USBD_SET_DMA_LEN(4);
+        g_usbd_DmaDone = 0;
+
+        USBD_ENABLE_DMA();
+        while(1) 
+        {
+            if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
+                break;
+            else
+                if (!USBD_IS_ATTACHED())
+                    break;
+        }
+                
         /* Trigger Short Packet to transfer data */
         USBD->EP[EPA].EPRSPCTL = USB_EP_RSPCTL_SHORTTXEN;
         USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_INTKIEN_Msk);

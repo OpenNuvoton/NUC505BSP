@@ -70,12 +70,12 @@ extern uint8_t g_u8EPCReady;
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-           static volatile uint8_t buf[8];
+static volatile uint8_t buf[8];
 #pragma data_alignment=4
-           volatile uint32_t g_hid_count = 0;
+volatile uint32_t g_hid_count = 0;
 #else   // __CC_ARM
-__align(4) static volatile uint8_t buf[8];
-__align(4) volatile uint32_t g_hid_count = 0;
+static volatile uint8_t buf[8] __attribute__((aligned(4)));
+volatile uint32_t g_hid_count __attribute__((aligned(4))) = 0;
 #endif
 
 void HID_UpdateKbData(void)

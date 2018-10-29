@@ -37,13 +37,13 @@
 #define CEP_MAX_PKT_SIZE        64
 #define CEP_OTHER_MAX_PKT_SIZE  64
 
-#define EPA_MAX_PKT_SIZE        		512
-#define EPA_FULL_MAX_PKT_SIZE  			64
-//#define EPA_HS_OTHER_MAX_PKT_SIZE		64
-//#define EPA_FS_OTHER_MAX_PKT_SIZE  	512
+#define EPA_MAX_PKT_SIZE        512
+#define EPA_FULL_MAX_PKT_SIZE    64
+//#define EPA_HS_OTHER_MAX_PKT_SIZE   64
+//#define EPA_FS_OTHER_MAX_PKT_SIZE   512
 
-#define EPB_MAX_PKT_SIZE       		 512
-#define EPB_FULL_MAX_PKT_SIZE  			64
+#define EPB_MAX_PKT_SIZE             512
+#define EPB_FULL_MAX_PKT_SIZE        64
 //#define EPB_HS_OTHER_MAX_PKT_SIZE  64
 //#define EPB_FS_OTHER_MAX_PKT_SIZE  512
 
@@ -55,8 +55,8 @@
 #define EPB_BUF_LEN     EPB_MAX_PKT_SIZE
 
 /* Define the interrupt In EP number */
-#define HID_IN_EP_NUM			4
-#define HID_OUT_EP_NUM		5
+#define HID_IN_EP_NUM      4
+#define HID_OUT_EP_NUM     5
 
 #define HID_DEFAULT_INT_IN_INTERVAL	1
 #define HID_IS_SELF_POWERED         0
@@ -70,13 +70,13 @@
 
 /* Define EP maximum packet size */
 #define	HID_MAX_PACKET_SIZE_CTRL        64
-#define HID_MAX_PACKET_SIZE_INT_IN			512
+#define HID_MAX_PACKET_SIZE_INT_IN      512
 #define HID_MAX_PACKET_SIZE_INT_OUT     512
 
-#define HID_MAX_PACKET_SIZE_INT_IN_FS		64
+#define HID_MAX_PACKET_SIZE_INT_IN_FS   64
 #define HID_MAX_PACKET_SIZE_INT_OUT_FS  64
 
-#define LEN_CONFIG_AND_SUBORDINATE 			(LEN_CONFIG+LEN_INTERFACE+LEN_HID+LEN_ENDPOINT*2)
+#define LEN_CONFIG_AND_SUBORDINATE     (LEN_CONFIG+LEN_INTERFACE+LEN_HID+LEN_ENDPOINT*2)
 
 #define PAGE_SIZE		 256
 #define SECTOR_SIZE 4096
@@ -95,17 +95,32 @@ void Erase(uint32_t u32StartSector, uint32_t u32Sectors);
 #define HID_CMD_WRITE    0xC3
 #define HID_CMD_TEST     0xB4
 
-#define PAGE_SIZE		 256
-#define USB_WRITE_PAGE_UNIT	64
+#define PAGE_SIZE           256
+#define USB_WRITE_PAGE_UNIT  64
 
+
+#ifdef __ICCARM__
 typedef __packed struct {
-    uint8_t		u8Cmd;
-    uint8_t		u8Size;
-    uint32_t	u32Arg1;
-    uint32_t	u32Arg2;
-    uint32_t	u32Signature;
-    uint32_t	u32Checksum;
-}CMD_T;
+    uint8_t  u8Cmd;
+    uint8_t  u8Size;
+    uint32_t  u32Arg1;
+    uint32_t  u32Arg2;
+    uint32_t  u32Signature;
+    uint32_t  u32Checksum;
+}CMD_T; 
+#else
+typedef struct __attribute__((__packed__))
+{
+    uint8_t u8Cmd;
+    uint8_t u8Size;
+    uint32_t u32Arg1;
+    uint32_t u32Arg2;
+    uint32_t u32Signature;
+    uint32_t u32Checksum;
+}
+CMD_T;
+
+#endif
 
 /*-------------------------------------------------------------*/
 

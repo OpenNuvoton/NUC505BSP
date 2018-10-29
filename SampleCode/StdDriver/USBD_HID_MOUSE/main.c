@@ -21,10 +21,10 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(96000000);
-	
+
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -39,7 +39,7 @@ void SYS_Init(void)
 
     /* Select USB IP clock source */
     CLK_SetModuleClock(USBD_MODULE, CLK_USBD_SRC_EXT, 0);
-		
+
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -90,7 +90,7 @@ int32_t main (void)
     USBD_Start();
 
     while(1) {
-				HID_UpdateMouseData();
+        HID_UpdateMouseData();
     }
 }
 

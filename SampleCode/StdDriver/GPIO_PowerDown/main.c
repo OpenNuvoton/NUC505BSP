@@ -84,9 +84,9 @@ int main (void)
 
     printf("\n\nCPU @ %dHz\n", SystemCoreClock);
 
-    printf("+-------------------------------------+ \n");
+    printf("+--------------------------------------------------------+ \n");
     printf("|    GPIO Power-Down and Wake-up by PB.10 Sample Code    |\n");
-    printf("+-------------------------------------+ \n");
+    printf("+--------------------------------------------------------+ \n");
     printf("     Press any key to start test \n\n");
     getchar();
 

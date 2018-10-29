@@ -76,7 +76,7 @@ int main (void)
     printf("\n\nCPU @ %dHz\n", SystemCoreClock);
 
     printf("+-------------------------------------+ \n");
-    printf("|           GPIO Driver Sample Code   | \n");
+    printf("|       GPIO Driver Sample Code       | \n");
     printf("+-------------------------------------+ \n");
 
     /*-----------------------------------------------------------------------------------------------------*/

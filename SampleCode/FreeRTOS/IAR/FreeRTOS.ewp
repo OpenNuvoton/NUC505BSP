@@ -143,7 +143,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>19</version>
-          <state>39</state>
+          <state>40</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -153,7 +153,6 @@
           <name>OGUseCmsisDspLib</name>
           <state>0</state>
         </option>
-        
       </data>
     </settings>
     <settings>
@@ -394,7 +393,6 @@
           <name>IccFloatSemantics</name>
           <state>0</state>
         </option>
-        
       </data>
     </settings>
     <settings>
@@ -562,7 +560,6 @@
           <name>AExtraOptionsV2</name>
           <state></state>
         </option>
-        
       </data>
     </settings>
     <settings>
@@ -583,7 +580,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>freertos_demo.bin</state>
+          <state>FreeRTOS.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -637,7 +634,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>freertos_demo.out</state>
+          <state>FreeRTOS.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -882,7 +879,6 @@
           <name>IlinkOptForceVfe</name>
           <state>0</state>
         </option>
-        
       </data>
     </settings>
     <settings>

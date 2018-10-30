@@ -574,7 +574,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>dsp_fft.bin</state>
+          <state>DSP_FFT.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -628,7 +628,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>dsp_fft.out</state>
+          <state>DSP_FFT.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

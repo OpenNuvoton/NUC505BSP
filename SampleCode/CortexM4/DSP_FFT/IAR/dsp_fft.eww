@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\dsp_fft.ewp</path>
+    <path>$WS_DIR$\DSP_FFT.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

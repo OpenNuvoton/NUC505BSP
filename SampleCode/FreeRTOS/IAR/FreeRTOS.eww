@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\freertos_demo.ewp</path>
+    <path>$WS_DIR$\FreeRTOS.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

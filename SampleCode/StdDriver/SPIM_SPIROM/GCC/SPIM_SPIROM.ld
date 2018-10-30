@@ -3,6 +3,7 @@ MEMORY
 {
   FLASH (rx)    : ORIGIN = 0x00000000, LENGTH = 0x80000   /* 512k */
   RAM (rwx)     : ORIGIN = 0x20000000, LENGTH = 0x20000   /* 128k */
+  
 }
 
 /* Library configurations */
@@ -51,6 +52,9 @@ SECTIONS
 		__Vectors_Size = __Vectors_End - __Vectors;
 		__end__ = .;
 
+		. = 0x100;
+		KEEP(*(.mtpsig));
+		
         *(EXCLUDE_FILE(
         ./Library/Library/clk.o 
     	./User/spiflash_drv.o) .text*)
@@ -77,6 +81,7 @@ SECTIONS
 		KEEP(*(.eh_frame*))
 	} > FLASH
 
+    
 	.ARM.extab :
 	{
 		*(.ARM.extab* .gnu.linkonce.armextab.*)

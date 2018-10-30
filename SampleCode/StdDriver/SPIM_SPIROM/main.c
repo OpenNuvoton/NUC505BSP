@@ -74,7 +74,12 @@ void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk) @ "spimcode";
 uint32_t SPIMCode_GetBusClock(void) @ "spimcode";
 void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32RdCmdCode) @ "spimcode";
 #endif
-
+#ifdef __GNUC__
+__attribute__ ((used, long_call, section(".spimcode"))) void SPIMCode_DelayMicroSec(uint32_t u32Delay);
+__attribute__ ((used, long_call, section(".spimcode"))) void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk);
+__attribute__ ((used, long_call, section(".spimcode"))) uint32_t SPIMCode_GetBusClock(void);
+__attribute__ ((used, long_call, section(".spimcode"))) void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32RdCmdCode);
+#endif
 void SPIMCode_DelayMicroSec(uint32_t u32Delay)
 {
     /* CLK_SysTickDelay is located in SPIROM, so inline this function into SPIMCode_DelayMicroSec. */
@@ -190,6 +195,8 @@ void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32Rd
 const uint32_t MTPSIG __attribute__((section("mtpsig"), used));
 #elif defined (__ICCARM__)
 const uint32_t MTPSIG @ "mtpsig";
+#elif defined (__GNUC__)
+const uint32_t MTPSIG __attribute__ ((section(".mtpsig")));
 #endif
 
 int main(void)

@@ -573,7 +573,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>spi_mastermode.bin</state>
+          <state>SPI_MasterMode.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -627,7 +627,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>spi_mastermode.out</state>
+          <state>SPI_MasterMode.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

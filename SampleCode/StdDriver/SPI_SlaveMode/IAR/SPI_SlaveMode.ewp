@@ -573,7 +573,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>spi_slavemode.bin</state>
+          <state>SPI_SlaveMode.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -627,7 +627,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>spi_slavemode.out</state>
+          <state>SPI_SlaveMode.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>I2S_MP3Player_SD</TargetName>
+      <TargetName>I2S_NAU8822_MP3PLAYER_SD</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\obj\</OutputDirectory>
-          <OutputName>I2S_MP3PLayer_SD</OutputName>
+          <OutputName>I2S_NAU8822_MP3PLAYER_SD</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -436,9 +436,9 @@
               <FilePath>..\nuc505_isr.c</FilePath>
             </File>
             <File>
-              <FileName>InternalCODEC.c</FileName>
+              <FileName>ExternalCODEC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\InternalCODEC.c</FilePath>
+              <FilePath>..\ExternalCODEC.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -474,6 +474,11 @@
               <FileName>sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Library\StdDriver\src\sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Library\StdDriver\src\i2c.c</FilePath>
             </File>
           </Files>
         </Group>

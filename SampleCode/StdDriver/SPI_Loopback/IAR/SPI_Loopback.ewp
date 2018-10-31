@@ -573,7 +573,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>spi_loopback.bin</state>
+          <state>SPI_Loopback.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -627,7 +627,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>spi_loopback.out</state>
+          <state>SPI_Loopback.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

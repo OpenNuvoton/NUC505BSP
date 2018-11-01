@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>HardFault</name>
+	<name>Hard_Fault_Sample</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -42,22 +42,22 @@
 		<link>
 			<name>CMSIS/CMSIS</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Library/Device/Nuvoton/NUC505Series/Source</locationURI>
+			<locationURI>copy_PARENT/Library/Device/Nuvoton/NUC505Series/Source</locationURI>
 		</link>
 		<link>
 			<name>Library/Library</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Library/StdDriver/src</locationURI>
+			<locationURI>copy_PARENT/Library/StdDriver/src</locationURI>
 		</link>
 		<link>
 			<name>User/main.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/main.c</locationURI>
+			<locationURI>copy_PARENT1/main.c</locationURI>
 		</link>
 	</linkedResources>
 	<filteredResources>
 		<filter>
-			<id>1531882806707</id>
+			<id>0</id>
 			<name>CMSIS</name>
 			<type>5</type>
 			<matcher>
@@ -66,7 +66,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1531898107768</id>
+			<id>0</id>
 			<name>CMSIS/CMSIS</name>
 			<type>9</type>
 			<matcher>
@@ -75,7 +75,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1531898107783</id>
+			<id>0</id>
 			<name>CMSIS/CMSIS</name>
 			<type>5</type>
 			<matcher>
@@ -84,7 +84,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1504698006582</id>
+			<id>0</id>
 			<name>Library/Library</name>
 			<type>5</type>
 			<matcher>
@@ -93,7 +93,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1504698006588</id>
+			<id>0</id>
 			<name>Library/Library</name>
 			<type>5</type>
 			<matcher>
@@ -102,7 +102,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1504698006593</id>
+			<id>0</id>
 			<name>Library/Library</name>
 			<type>5</type>
 			<matcher>
@@ -111,7 +111,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1504698006600</id>
+			<id>0</id>
 			<name>Library/Library</name>
 			<type>5</type>
 			<matcher>
@@ -120,4 +120,14 @@
 			</matcher>
 		</filter>
 	</filteredResources>
+	<variableList>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>file:/F:/ARM_Project/NUC505/bsp</value>
+		</variable>
+		<variable>
+			<name>copy_PARENT1</name>
+			<value>$%7Bcopy_PARENT%7D/SampleCode/Hard_Fault_Sample</value>
+		</variable>
+	</variableList>
 </projectDescription>

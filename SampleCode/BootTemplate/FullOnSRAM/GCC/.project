@@ -52,7 +52,7 @@
 		<link>
 			<name>User/main.c</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/NUC505/bsp/SampleCode/BootTemplate/FullOnSRAM/main.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/main.c</locationURI>
 		</link>
 	</linkedResources>
 	<filteredResources>

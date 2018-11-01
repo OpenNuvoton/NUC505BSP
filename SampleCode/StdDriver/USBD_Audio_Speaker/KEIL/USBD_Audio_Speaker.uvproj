@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>USBD_Audios_Speaker</TargetName>
+      <TargetName>USBD_Audio_Speaker</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>

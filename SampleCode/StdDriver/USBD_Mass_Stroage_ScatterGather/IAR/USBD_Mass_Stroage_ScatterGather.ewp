@@ -640,7 +640,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>USBD_Mass_Storage_SRAM.out</state>
+          <state>USBD_Mass_Stroage_ScatterGather.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

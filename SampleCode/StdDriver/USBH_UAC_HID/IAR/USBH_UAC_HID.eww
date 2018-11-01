@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\usbh_uac.ewp</path>
+    <path>$WS_DIR$\USBH_UAC_HID.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

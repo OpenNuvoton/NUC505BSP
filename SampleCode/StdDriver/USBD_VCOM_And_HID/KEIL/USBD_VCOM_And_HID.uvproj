@@ -492,7 +492,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\obj\</OutputDirectory>
-          <OutputName>USBD_VCOM_And_HID_Keyboard</OutputName>
+          <OutputName>USBD_VCOM_And_HID_Mouse</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>USBD_Mass_Storage_Sram</TargetName>
+      <TargetName>USBD_Mass_Storage_SRAM</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -209,7 +209,7 @@
             <RvdsVP>2</RvdsVP>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
-            <StupSel>0</StupSel>
+            <StupSel>8</StupSel>
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>

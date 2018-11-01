@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Device_HID_Mouse</TargetName>
+      <TargetName>USBD_HID_MOUSE</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\obj\</OutputDirectory>
-          <OutputName>Device_HID_Mouse</OutputName>
+          <OutputName>USBD_HID_MOUSE</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -336,7 +336,7 @@
             <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+            <OneElfS>1</OneElfS>
             <Strict>0</Strict>
             <EnumInt>0</EnumInt>
             <PlainCh>0</PlainCh>

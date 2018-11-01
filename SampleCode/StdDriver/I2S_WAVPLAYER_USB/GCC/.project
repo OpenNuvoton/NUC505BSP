@@ -72,12 +72,12 @@
 		<link>
 			<name>USBH_Core_Lib/USBH_Core_Lib</name>
 			<type>2</type>
-			<location>C:/NUC505/FTP/BSP.obsolete/Library/UsbHostLib/SOURCE/Core</location>
+			<locationURI>PARENT-4-PROJECT_LOC/Library/UsbHostLib/SOURCE/Core</locationURI>
 		</link>
 		<link>
 			<name>USBH_MASS_Lib/USBH_MASS_Lib</name>
 			<type>2</type>
-			<location>C:/NUC505/FTP/BSP.obsolete/Library/UsbHostLib/SOURCE/MassStor</location>
+			<locationURI>PARENT-4-PROJECT_LOC/Library/UsbHostLib/SOURCE/MassStor</locationURI>
 		</link>
 		<link>
 			<name>User/diskio.c</name>

@@ -277,7 +277,7 @@ static void prvSetupHardware( void )
     SystemCoreClockUpdate();
 	
 		// Set APB clock as 1/2 HCLK
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+		CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
 	
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);

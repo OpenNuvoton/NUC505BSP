@@ -15,10 +15,17 @@
 #include "massstorage.h"
 #include "define.h"
 
+#ifdef __GNUC__
+#define MASS_BUFFER_ADDR        0x2000C000
+#define STORAGE_BUFFER_ADDR     0x2000D000
+#define SPI_BUFFER_ICP_MSC      0x2000E000
+#define MASS_FAT_ADDR           0x2000E200
+#else
 #define MASS_BUFFER_ADDR        0x20005000
 #define STORAGE_BUFFER_ADDR     0x20006000
 #define SPI_BUFFER_ICP_MSC      0x20007000
 #define MASS_FAT_ADDR           0x20007200
+#endif
 
 uint32_t volatile g_u32AddressSPI = FIRMWARE_CODE_ADDR;	/* SPI Flash Update Start Address */
 extern uint32_t EndTagAddr;
@@ -55,7 +62,7 @@ void UpdateSpiFlash(void);
 #pragma data_alignment=4
 uint8_t u8FormatData[512] = 
 #else
-__align(4) uint8_t u8FormatData[512] = 
+uint8_t u8FormatData[512] __attribute__((aligned(4))) =
 #endif
 {
     0xEB, 0x3C, 0x90, 0x4D, 0x53, 0x44, 0x4F, 0x53, 0x35, 0x2E, 0x30, 0x00, 0x02, 0x01,
@@ -95,7 +102,7 @@ __align(4) uint8_t u8FormatData[512] =
 #pragma data_alignment=4
 uint8_t u8RootDirData[512] = 
 #else
-__align(4) uint8_t u8RootDirData[512] = 
+uint8_t u8RootDirData[512] __attribute__((aligned(4))) =
 #endif
 {
     0x42, 0x20, 0x00, 0x49, 0x00, 0x6E, 0x00, 0x66,
@@ -109,9 +116,9 @@ __align(4) uint8_t u8RootDirData[512] =
     0x53, 0x59, 0x53, 0x54, 0x45, 0x4D, 0x7E, 0x31,
     0x20, 0x20, 0x20, 0x16, 0x00, 0x99, 0x0D, 0x5C,
     0x6D, 0x43, 0x6D, 0x43, 0x00, 0x00, 0x0E, 0x5C,
-    0x6D, 0x43, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,		
+    0x6D, 0x43, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x30, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
-    0x20, 0x20, 0x20, 		
+    0x20, 0x20, 0x20,
     0x08, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xBA, 0x59,
     0x83, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -171,31 +178,31 @@ void UpdateSpiFlash(void)
             SPIFlash_EraseSector(g_u32AddressSPI);
 
         for(j=0;j<2;j++)
-            SPIFlash_WriteInPageData(g_u32AddressSPI + j * 256, 256, (uint8_t *)(SPI_BUFFER_ICP_MSC + j * 256));	
-        g_u32AddressSPI+= 512;		
-				
+            SPIFlash_WriteInPageData(g_u32AddressSPI + j * 256, 256, (uint8_t *)(SPI_BUFFER_ICP_MSC + j * 256));
+        g_u32AddressSPI+= 512;
+
         /* Update Flow is done and set Timer for reset */
         if(((g_u32AddressSPI > (FIRMWARE_CODE_ADDR + *g_file_size)) && g_TimerInit == 0) && (*g_file_size != 0))
         {
             printf("\nFile Size: %dB\n",*g_file_size);
 
             g_TimerInit = 1;
-					
+
             /* Enable IP clock */
             CLK_EnableModuleClock(TMR0_MODULE);
-											
+
             /* Set timer frequency */
             TIMER_Open(TIMER0, TIMER_PERIODIC_MODE, 5);
 
             /* Enable timer interrupt */
             TIMER_EnableInt(TIMER0);
-											
+
             NVIC_EnableIRQ(TMR0_IRQn);
 
             /* Start Timer 0 */
-            TIMER_Start(TIMER0);				
-        }			
-    }							
+            TIMER_Start(TIMER0);
+        }
+    }
 };
 
 /* Timer for Update check */
@@ -266,7 +273,7 @@ void USBD_IRQHandler(void)
 
             if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
                 if (g_usbd_ShortPacket == 1) {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = (USBD->EP[EPA].EPRSPCTL & 0x10) | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
             }
@@ -502,7 +509,7 @@ void MSC_Init(void)
     g_sCSW.dCSWSignature = CSW_SIGNATURE;
     g_u32MassBase = MASS_BUFFER_ADDR;
     g_u32StorageBase = STORAGE_BUFFER_ADDR;
-		
+
     for(i =0;i<0x40*512;i++)
         pu8FAT[i] = 0;
 
@@ -511,7 +518,7 @@ void MSC_Init(void)
         pu8FAT[i*512 + 0] = 0xF8;
         pu8FAT[i*512 + 1] = 0xFF;
         pu8FAT[i*512 + 2] = 0xFF;
-        pu8FAT[i*512 + 3] = 0x00;		
+        pu8FAT[i*512 + 3] = 0x00;
     }	
 }
 
@@ -550,7 +557,7 @@ void MSC_ClassRequest(void)
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-								USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
                 g_u32EpStallLock = 0;
 
                 USBD_ResetDMA();
@@ -814,7 +821,7 @@ void MSC_ReceiveCBW(uint32_t u32Buf, uint32_t u32Len)
 }
 
 #define FAT_SECTORS_ADDRESS      u8FormatData[14]
-#define FAT_SECTORS				((u8FormatData[23] << 8) + u8FormatData[22])	* 2
+#define FAT_SECTORS             ((u8FormatData[23] << 8) + u8FormatData[22]) * 2
 #define ROOT_DIR_ADDRESS         FAT_SECTORS_ADDRESS + FAT_SECTORS
 #define ROOT_DIR_SECTORS        ((((u8FormatData[18] << 8) + u8FormatData[17]) * 32) / 512)  
 #define DATA_SECTOR_ADDRESS     ((FAT_SECTORS + FAT_SECTORS_ADDRESS + ROOT_DIR_SECTORS))
@@ -826,12 +833,12 @@ extern uint8_t *pu8FAT;
 #pragma data_alignment=4
 uint32_t  u32buff[128];
 #else
-__align(4) uint32_t  u32buff[128];
+uint32_t  u32buff[128] __attribute__((aligned(4)));
 #endif
 
 int8_t i8FileIndex[FILE_NAME_LENGTH] = 
 {   1,   3,   5,   7,   9,  14,  16,  18,  20,  22,  24,  28,  30,
-	-31, -29, -27, -25, -23, -18, -16, -14, -12, -10,  -8,  -4,  -2,
+   31, -29, -27, -25, -23, -18, -16, -14, -12, -10,  -8,  -4,  -2,
   -63, -61, -59, -57, -55, -50, -48, -46, -44, -42, -40, -36, -34 
 };
 
@@ -841,10 +848,10 @@ void Wt10_Command(void)
     uint32_t volatile sector_count = 0;
     uint32_t volatile i,k,l;
 
-    lba = get_be32(&g_sCBW.au8Data[0]) ;	
-		
+    lba = get_be32(&g_sCBW.au8Data[0]) ;
+
     sector_count = g_sCBW.dCBWDataTransferLength /512;
-		
+
     for(i=0;i<sector_count;i++)
     {
         int sectorIdx = lba + i;  
@@ -855,11 +862,11 @@ void Wt10_Command(void)
             if ( (sectorIdx >= FAT_SECTORS_ADDRESS) && (sectorIdx <= (FAT_SECTORS_ADDRESS+FAT_SECTORS -1)) )
                 MSC_BulkOut((uint32_t)(((uint32_t)pu8FAT) + ((sectorIdx - FAT_SECTORS_ADDRESS) % 0x80) * 512),  512);
             else if (sectorIdx == ROOT_DIR_ADDRESS) /* root dir */
-						{
-                MSC_BulkOut((uint32_t)u8RootDirData,  512);                                 
+            {
+                MSC_BulkOut((uint32_t)u8RootDirData,  512);
 
                 if(g_UpdateEnable == 0 || (g_u8MACOS == 1 && g_u8ShowFile != 1))           /* Check File name (When Update Function is not Enabled or MAC OS) */
-                {								
+                {
                     for(k =0;k<32;k++)                                                     /* Check Root Directory */
                     {
                         for(l=0;l<FILE_NAME_LENGTH;l++)
@@ -868,90 +875,90 @@ void Wt10_Command(void)
                                 if(u8RootDirData[k*16+i8FileIndex[l]] != u8FileName[l])    /* Check File Name */
                                     break; 
                         }
-												
+
                         if(l == FILE_NAME_LENGTH)                                          /* Match */ 
-                        {													
+                        {
                             g_file_size = (uint32_t *)&u8RootDirData[k *16 + 60];          /* Get File Size */
-													
+
                             if(*g_file_size == 0)
                                 continue;
-													
+
                             g_UpdateEnable = 1;                                            /* Enable Update Function */
 
-                            printf("Erase 0x%X for EndTag\n", (EndTagAddr & ~0x3FFF));														
-														SPIFlash_EraseSector(EndTagAddr & ~0x3FFF);
-														
+                            printf("Erase 0x%X for EndTag\n", (EndTagAddr & ~0x3FFF));
+                            SPIFlash_EraseSector(EndTagAddr & ~0x3FFF);
+
                             printf("File Name:");
                             for(l=0;l<FILE_NAME_LENGTH;l++)                                /* Display the Update File Name */
                             {
                                 if((u8RootDirData[k *16 + i8FileIndex[l]] != 0) && (u8RootDirData[k *16 + i8FileIndex[l]+1] == 0) )
-                                    printf("%c",u8RootDirData[k *16 + i8FileIndex[l]]);		
+                                    printf("%c",u8RootDirData[k *16 + i8FileIndex[l]]);
                                 else
-                                    break;	
+                                    break;
                             }
                             if(g_u8MACOS == 1)
                             {
                                 g_u8ShowFile = 1;
-															
+
                                 printf("\nFile Size: %dB\n",*g_file_size);
 
                                 g_TimerInit = 1;
-					
+
                                 /* Enable IP clock */
                                 CLK_EnableModuleClock(TMR0_MODULE);
-											
+
                                 /* Set timer frequency */
                                 TIMER_Open(TIMER0, TIMER_PERIODIC_MODE, 5);
 
                                 /* Enable timer interrupt */
                                 TIMER_EnableInt(TIMER0);
-											
+
                                 NVIC_EnableIRQ(TMR0_IRQn);
 
                                 /* Start Timer 0 */
-                                TIMER_Start(TIMER0);				 															
-                            }															  
+                                TIMER_Start(TIMER0);
+                            }
                             break;
-                        }								
-                    }					
-                }    
+                        }
+                    }
+                }
             }
             else if(sectorIdx >= DATA_SECTOR_ADDRESS)
-            {				
-                MSC_BulkOut(SPI_BUFFER_ICP_MSC,  512);				
-                if(g_UpdateEnable)		
-                    UpdateSpiFlash();		
+            {
+                MSC_BulkOut(SPI_BUFFER_ICP_MSC,  512);
+                if(g_UpdateEnable)
+                    UpdateSpiFlash();
                 else
                 {
                     uint8_t *pu8Data = (uint8_t *)SPI_BUFFER_ICP_MSC;
-									
-                    if(pu8Data[8] == 'M' && pu8Data[9] == 'a' && pu8Data[10] == 'c')									
+
+                    if(pu8Data[8] == 'M' && pu8Data[9] == 'a' && pu8Data[10] == 'c')
                     {
-                        if(g_u8MACOS == 0)	
-                        {								
+                        if(g_u8MACOS == 0)
+                        {
                             char *puchar = (char *)(&pu8Data[8]);
                             printf("%s\n",puchar);
-                            g_u8MACOS = 1; 													
-                        }					
-                        /* Finder progresses a copy of a file - HFS type code 'brok' & HFS creator code 'MACS' */ 												 
+                            g_u8MACOS = 1;
+                        }
+                        /* Finder progresses a copy of a file - HFS type code 'brok' & HFS creator code 'MACS' */
                         if(pu8Data[50] == 'b' && pu8Data[51] == 'r' && pu8Data[52] == 'o' && pu8Data[53] == 'k' &&
                            pu8Data[54] == 'M' && pu8Data[55] == 'A' && pu8Data[56] == 'C' && pu8Data[57] == 'S')
                         {
-                            g_u8MACOS_Update = 1;								
+                            g_u8MACOS_Update = 1;
                         }
-                    }			
-								}
+                    }
+                }
             }
             else
                 MSC_BulkOut(SPI_BUFFER_ICP_MSC,  512 );
         }
     }
     if(g_u8MACOS_Update)      /* Finder progresses a copy of a file */
-    {			
-        printf("EndTAG ADDR %X Erase %X\n", EndTagAddr, (EndTagAddr & ~0x3FFF));														
-		    SPIFlash_EraseSector(EndTagAddr & ~0x3FFF);
+    {
+        printf("EndTAG ADDR %X Erase %X\n", EndTagAddr, (EndTagAddr & ~0x3FFF));
+        SPIFlash_EraseSector(EndTagAddr & ~0x3FFF);
         g_UpdateEnable = 1;   /* Enable Update Function */
-    }			
+    }
 }
 
 
@@ -960,9 +967,9 @@ void Rd10_Command(void)
     uint32_t volatile lba,sector_count, i, j;
 
     lba = get_be32(&g_sCBW.au8Data[0]);
-	
-    sector_count = g_sCBW.dCBWDataTransferLength /512;	
-	
+
+    sector_count = g_sCBW.dCBWDataTransferLength /512;
+
     for(i=0;i<sector_count;i++)
     {	
         int sectorIdx = lba + i;  
@@ -972,11 +979,7 @@ void Rd10_Command(void)
 
         if (sectorIdx == 0x00000000)
         {
-            u8FormatData[FLASH_PAGE_SIZE-4] = 0x00;    
-            u8FormatData[FLASH_PAGE_SIZE-3] = 0x00;   
-            u8FormatData[FLASH_PAGE_SIZE-2] = 0x55;   
-            u8FormatData[FLASH_PAGE_SIZE-1] = 0xAA;   
-            MSC_BulkIn((uint32_t)u8FormatData, 512);        
+            MSC_BulkIn((uint32_t)u8FormatData, 512);
         }
         else
         {
@@ -986,8 +989,8 @@ void Rd10_Command(void)
                 MSC_BulkIn((uint32_t)u8RootDirData, 512);
             else
                 MSC_BulkIn((uint32_t)u32buff, 512);
-        }	 
-    }			
+        }
+    }
 }
 
 void MSC_ProcessCmd(void)
@@ -1081,7 +1084,7 @@ void MSC_ProcessCmd(void)
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x1;
                     }
-										Wt10_Command();	
+                    Wt10_Command();	
                     g_sCSW.dCSWDataResidue = 0;
                 }
                 else {  /* Hi <> Do (Case 8) */
@@ -1137,6 +1140,7 @@ void MSC_ProcessCmd(void)
                 if ((g_sCBW.au8Data[2] & 0x03) == 0x2) {
                     g_u8Remove = 1;
                 }
+                break;
             }
             case UFI_VERIFY_10: {
                 g_sCSW.dCSWDataResidue = 0;
@@ -1241,7 +1245,7 @@ void MSC_ProcessCmd(void)
         }
         else {
             if ((USBD_GetEpStall(EPA) == 0) && (!(USBD->EP[EPA].EPINTSTS & USBD_EPINTSTS_BUFEMPTYIF_Msk)))
-                USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;
+                USBD->EP[EPA].EPRSPCTL = (USBD->EP[EPA].EPRSPCTL & 0x10) | USB_EP_RSPCTL_SHORTTXEN;
         }
     }
 }

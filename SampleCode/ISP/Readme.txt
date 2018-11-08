@@ -3,9 +3,9 @@
       SPI Flash
   +----------------+  0x00000000 
   |     Loader     | 
-  +----------------+  0x00008000 
+  +----------------+  0x00010000 
   |      ISP       |  
-  +----------------+  0x00010000
+  +----------------+  0x00020000
   |                |
   |  App Firmware  |
   |                |
@@ -45,7 +45,7 @@
       - ISP will show the file name and file size befire updating SPI Flash.
 
 - App Firmware 
-   - The way to enter ISP mode: Set SYS->BOOTSET to 0XE and set CPU reset.
+   - The way to enter ISP mode: Set SYS->BOOTSET to 0XE and set CPU reset. (SYS->BOOTSET can't be modified when ICE mode)
 
 
 
@@ -73,7 +73,7 @@
 
 - The Tag is located at a specified offset which is defined in define.h (ISP_Demo root folder). Developer can modify and rebuild all projects to get new binary files.
   #define ISP_TAG_OFFSET         0x00100          /*  256B */ 	 
-  #define ISP_ENDTAG_OFFSET      0x05000          /*  20KB - The End Tag is added by Post-Build*/	 
+  #define ISP_ENDTAG_OFFSET      0x0F800          /*  62KB - The End Tag is added by Post-Build*/	 
   #define FIRMWARE_TAG_OFFSET    0x00100          /*  256B */
   #define FIRMWARE_ENDTAG_OFFSET 0x80000          /* 512KB - The End Tag is added by Post-Build*/	 
 	

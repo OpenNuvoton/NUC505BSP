@@ -14,11 +14,12 @@
 #include "define.h"
 
 #ifdef __ICCARM__
-/* IAR */
-static const uint32_t gu32TAG[4] @ (FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET) = {TAG0,FIRMWARE_ENDTAG_OFFSET,FIRMWARE_VERSION01,TAG1};
+const uint32_t gu32TAG[4] @ (FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET) = {TAG0,FIRMWARE_ENDTAG_OFFSET,FIRMWARE_VERSION02,TAG1};
+#elif defined __GNUC__
+/* FIRMWARE_TAG_OFFSET is defined in script file - section "mtpsig"  */
+const uint32_t gu32TAG[4] __attribute__ ((section(".mtpsig"))) = {TAG0,FIRMWARE_ENDTAG_OFFSET,FIRMWARE_VERSION02,TAG1};
 #else
-/* Keil */ 
-__attribute__((at(FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET))) static const unsigned int gu32TAG[4] = {TAG0,FIRMWARE_ENDTAG_OFFSET,FIRMWARE_VERSION02,TAG1};   
+const uint32_t gu32TAG[4] __attribute__((at(FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET)))  = {TAG0,FIRMWARE_ENDTAG_OFFSET,FIRMWARE_VERSION02,TAG1};
 #endif
 
 void SYS_Init(void)
@@ -33,7 +34,7 @@ void SYS_Init(void)
     CLK_SetCoreClock(96000000);
 	
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t) NULL, 1);
 	
     /* Update System Core Clock */
     SystemCoreClockUpdate();
@@ -67,7 +68,7 @@ void UART0_Init()
 
 void EnterISPmode(void)
 {
-    SYS->BOOTSET = 0x0E;
+    SYS->BOOTSET = 0x0E;    /* SYS->BOOTSET can't be modified when ICE mode */
     SYS->LVMPADDR = 0x0;
     SYS->LVMPLEN = 0x01;
     SYS->RVMPLEN = 0x01;

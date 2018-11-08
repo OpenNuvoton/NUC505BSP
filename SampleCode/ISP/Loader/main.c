@@ -14,22 +14,23 @@
 #include "spiflash_drv.h"
 #include "define.h"
 
-#ifdef __ICCARM__
-/* IAR */
-static const uint32_t gu32MtpAddr[1] @ MTP_OFFSET = {MTP_SIG};
-#else
-/* Keil */
- __attribute__((at(MTP_OFFSET))) static const unsigned int gu32MtpAddr[2] = {MTP_SIG};  
-#endif
- extern uint32_t  loaderImage1Base;
- 
 #define SPIM_IF         SPIM_CTL1_IFSEL_INTERN
 #define SPI_BUS_CLK     60000000
- 
+
 uint32_t g_au32Buf[8];
 uint32_t *g_pu32Buf;
-uint8_t	g_u8ISP = 1; 
- 
+uint8_t g_u8ISP = 1; 
+
+#ifdef __ICCARM__
+/* IAR */
+extern const uint32_t gu32MtpAddr;
+#elif defined __GNUC__
+/* MTP_OFFSET is defined in script file - section "mtpsig"  */
+extern const uint32_t gu32MtpAddr[1] __attribute__ ((section(".mtpsig")));
+#else
+extern const uint32_t gu32MtpAddr[1] __attribute__((at(MTP_OFFSET)));
+#endif
+
 void SYS_Init(void)
 {
 /*---------------------------------------------------------------------------------------------------------*/
@@ -47,7 +48,7 @@ void SYS_Init(void)
     /* Select IP clock source */
     /* PCLK divider = 1 (/2) */
     CLK_SetModuleClock(PCLK_MODULE, 0, 1);
-	
+
     /* UART0 clock source = XIN */
     CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     
@@ -99,35 +100,37 @@ void start_new_application(void *sp, void *pc)
 void EnterISP(void)
 {
     uint32_t u32Version = 0;
-	
+
     CLK_EnableModuleClock(SPIM_MODULE);
+
     SPIM_Open(SPIM, 0, SPI_BUS_CLK);
+
     memset((char *)g_au32Buf, 0, 32);
     
     /* Check Update Firmware Header */
-    SPIFlash_ReadData(ISP_CODE_OFFSET + ISP_TAG_OFFSET, TAG_LEN, (uint8_t *)g_au32Buf);			
-				
-    if ((g_au32Buf[TAG0_INDEX] == TAG0) && (g_au32Buf[TAG1_INDEX] == TAG1))		/* Check ISP Firmware Header Tag 0 & 1 */
-    {							
-        SPIFlash_ReadData(ISP_CODE_OFFSET + g_au32Buf[END_TAG_OFFSET_INDEX], 4, (uint8_t *)g_au32Buf);	/* Read End Tag */				
+    SPIFlash_ReadData(ISP_CODE_OFFSET + ISP_TAG_OFFSET, TAG_LEN, (uint8_t *)g_au32Buf);
+
+    if ((g_au32Buf[TAG0_INDEX] == TAG0) && (g_au32Buf[TAG1_INDEX] == TAG1))  /* Check ISP Firmware Header Tag 0 & 1 */
+    {
+        SPIFlash_ReadData(ISP_CODE_OFFSET + g_au32Buf[END_TAG_OFFSET_INDEX], 4, (uint8_t *)g_au32Buf);	/* Read End Tag */
 
         if(g_au32Buf[0] != END_TAG)
             printf("Update failed last time!\n");
-        else			
-        {					
-            u32Version =  g_au32Buf[VER_INDEX];		
-            printf("ISP\n");	
-            printf("  ISP FW Version : 0x%08X\n", u32Version);		
-			
+        else
+        {
+            u32Version =  g_au32Buf[VER_INDEX];
+            printf("ISP\n");
+            printf("  ISP FW Version : 0x%08X\n", u32Version);
+
             /* Loader ISP Firmware */
-            SPIFlash_ReadData(ISP_CODE_OFFSET, ISP_CODE_SIZE, (uint8_t *)ISP_CODE_ADDRESS);										
+            SPIFlash_ReadData(ISP_CODE_OFFSET, ISP_CODE_SIZE, (uint8_t *)ISP_CODE_ADDRESS);
             SYS->LVMPADDR = ISP_CODE_ADDRESS;
             SYS->LVMPLEN = 0x80;
             SYS->RVMPLEN = 0x01;
             SYS->IPRST0 = SYS_IPRST0_CPURST_Msk;
             __NOP();
             __NOP();
-			  }				
+        }
     }
     else
     {
@@ -136,47 +139,53 @@ void EnterISP(void)
     }
 }
 
-int main(void)
-{	
+int main(void) 
+{
+#ifdef __ICCARM__
+    uint32_t volatile u32Data = gu32MtpAddr;
+#else
     uint32_t volatile u32Data = gu32MtpAddr[0];
+#endif    
+
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
     
     /* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
-	
+
     printf("NUC505 Loader\n");
 
     /* Check Update Operation Condition - Firwmare set BOOTSET to 0xE and reset CPU to Enter ISP mode */
-    if((SYS->BOOTSET & 0xF) == 0xE)
+    if((SYS->BOOTSET & 0xF) == 0xE)    /* SYS->BOOTSET can't be modified when ICE mode */
         EnterISP();
-		
+
     g_pu32Buf = (uint32_t *)(FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET);
-		
+
     /* Check Firmware Tag */
     if ((g_pu32Buf[TAG0_INDEX] == TAG0) && (g_pu32Buf[TAG1_INDEX] == TAG1))
-    {	
+    {
         g_pu32Buf = (uint32_t *)(FIRMWARE_CODE_ADDR + g_pu32Buf[END_TAG_OFFSET_INDEX]);    /* Read End Tag */
-			
+
         if(*g_pu32Buf != END_TAG)
             printf("Update failed last time!\n");
         else
-        {					
+        {
             void *sp;
-            void *pc;		
-            printf("Jump to Firmware!!\n");										
+            void *pc;
+            printf("Jump to Firmware!!\n");
             SYS->LVMPADDR = FIRMWARE_CODE_ADDR;
             SYS->LVMPLEN = 0x01;
-            SYS->RVMPLEN = 0x01;			
+            SYS->RVMPLEN = 0x01;
             sp = *((void**)FIRMWARE_CODE_ADDR + 0);
             pc = *((void**)FIRMWARE_CODE_ADDR + 1);
-            start_new_application(sp, pc);							
-        }					
+            start_new_application(sp, pc);
+        }
     }
     printf("No Firmware!!\n");
+
     if(g_u8ISP)
         EnterISP();    /* Execute ISP */
-		
+
     while (1);
 }
 

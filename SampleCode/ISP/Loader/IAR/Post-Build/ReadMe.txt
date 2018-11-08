@@ -6,14 +6,14 @@
 If you want to change the Code / EndTag location, please make sure that the following settings of Merge.cmd are consistent with the definition in define.h.
 
 /* Tag Setting */   
-#define ISP_ENDTAG_OFFSET      0x05000          /*  20KB - The End Tag is added when Post-Build*/
+#define ISP_ENDTAG_OFFSET      0x0F800          /*  62KB - The End Tag is added when Post-Build*/
 #define FIRMWARE_ENDTAG_OFFSET 0x80000          /* 512KB - The End Tag is added when Post-Build*/	 
 	    
 /* Execute Address */   
-#define FIRMWARE_CODE_ADDR     0x10000          /* SPI Flash Offset 64KB ; Must be tha sam as the App execute address */
+#define FIRMWARE_CODE_ADDR     0x20000          /* SPI Flash Offset 128KB ; Must be tha sam as the App execute address */
    
 /* ISP Code address at SPI Flash */   
-#define ISP_CODE_OFFSET        0x08000          /* SPI Flash Offset 32KB */
+#define ISP_CODE_OFFSET        0x10000          /* SPI Flash Offset 64KB */
 
 [Merge.cmd]
 /**********************************************************************************************************************************
@@ -21,17 +21,17 @@ If you want to change the Code / EndTag location, please make sure that the foll
  *   +--------+------+
  *   | Loader | 0xFF |
  *   +--------+------+   
- *  0KB            32KB                               
+ *  0KB            64KB                               
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 32 ..\..\Loader\Loader.bin ..\..\ISP_Demo.bin
+.\Post-build\Pad.exe 1 64 ..\Loader.bin ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  *   ISP_Demo.bin
  *   +--------+------+-----+
  *   | Loader | 0xFF | ISP |
  *   +--------+------+-----+                              
- *  0KB            32KB  (ISP_CODE_OFFSET == 32KB)  
+ *  0KB            64KB  (ISP_CODE_OFFSET == 64KB)  
  **********************************************************************************************************************************/
 
 copy/B ..\..\ISP_Demo.bin + ..\..\ISP\ISP.bin ..\..\ISP_Demo.bin
@@ -41,38 +41,38 @@ copy/B ..\..\ISP_Demo.bin + ..\..\ISP\ISP.bin ..\..\ISP_Demo.bin
  *   +--------+------+-----+------+
  *   | Loader | 0xFF | ISP | 0xFF | 
  *   +--------+------+-----+------+
- *  0KB            32KB         52KB                    
+ *  0KB            64KB         126KB                    
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 52 ..\..\ISP_Demo.bin
+.\Post-build\Pad.exe 1 126 ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  *   ISP_Demo.bin
  *   +--------+------+-----+------+--------+
  *   | Loader | 0xFF | ISP | 0xFF | ENDTAG | 
  *   +--------+------+-----+------+--------+
- *  0KB            32KB         52KB (ISP_Demo.bin) 
- *                  0KB         20KB (ISP.bin - ISP_ENDTAG_OFFSET is 20KB)                     
+ *  0KB            64KB         126KB (ISP_Demo.bin) 
+ *                  0KB          62KB (ISP_ENDTAG_OFFSET)                    
  **********************************************************************************************************************************/
 
-copy/B ..\..\ISP_Demo.bin + ..\..\Loader\Post-build\EndTag.bin ..\..\ISP_Demo.bin
+copy/B ..\..\ISP_Demo.bin + .\Post-build\EndTag.bin ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  *   ISP_Demo.bin
  *   +--------+------+-----+------+--------+------+
  *   | Loader | 0xFF | ISP | 0xFF | ENDTAG | 0xFF |
  *   +--------+------+-----+------+--------+------+
- *  0KB            32KB         52KB             64KB 
+ *  0KB            64KB         126KB           128KB 
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 64 ..\..\ISP_Demo.bin
+.\Post-build\Pad.exe 1 128 ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  *   ISP_Demo.bin
  *   +--------+------+-----+------+--------+------+------------+
  *   | Loader | 0xFF | ISP | 0xFF | ENDTAG | 0xFF | DefaultApp |
  *   +--------+------+-----+------+--------+------+------------+
- *  0KB            32KB         52KB             64KB (FIRMWARE_CODE_ADDR is 64KB)  
+ *  0KB            64KB         126KB           128KB (FIRMWARE_CODE_ADDR is 128KB)  
  **********************************************************************************************************************************/
 
 copy/B ..\..\ISP_Demo.bin + ..\..\DefaultApp\DefaultApp.bin ..\..\ISP_Demo.bin
@@ -82,21 +82,21 @@ copy/B ..\..\ISP_Demo.bin + ..\..\DefaultApp\DefaultApp.bin ..\..\ISP_Demo.bin
  *   +--------+------+-----+------+--------+------+------------+------+
  *   | Loader | 0xFF | ISP | 0xFF | ENDTAG | 0xFF | DefaultApp | 0xFF |
  *   +--------+------+-----+------+--------+------+------------+------+
- *  0KB            32KB         52KB             64KB               576KB   
+ *  0KB            64KB         126KB           128KB               640KB   
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 576 ..\..\ISP_Demo.bin
+.\Post-build\Pad.exe 1 640 ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  *   ISP_Demo.bin
  *   +--------+------+-----+------+--------+------+------------+------+--------+
  *   | Loader | 0xFF | ISP | 0xFF | ENDTAG | 0xFF | DefaultApp | 0xFF | ENDTAG |
  *   +--------+------+-----+------+--------+------+------------+------+--------+
- *  0KB            32KB         52KB             64KB               576KB (ISP_Demo.bin)   
- *                                                0KB               512KB (DefaultApp.bin - FIRMWARE_ENDTAG_OFFSET is 512KB)
+ *  0KB            64KB         126KB           128KB               640KB (ISP_Demo.bin)   
+ *                                                0KB               512KB
  **********************************************************************************************************************************/
 
-copy/B ..\..\ISP_Demo.bin + ..\..\Loader\Post-build\EndTag.bin ..\..\ISP_Demo.bin
+copy/B ..\..\ISP_Demo.bin + .\Post-build\EndTag.bin ..\..\ISP_Demo.bin
 
 /**********************************************************************************************************************************
  * Copy UpdateApp.bin to the root folder of ISP demo code
@@ -112,17 +112,17 @@ copy ..\..\UpdateApp\UpdateApp.bin ..\..\UpdateApp.bin
  *  0KB               512KB 
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 512 ..\..\UpdateApp.bin
+.\Post-build\Pad.exe 1 512 ..\..\UpdateApp.bin
 
 /**********************************************************************************************************************************
  *   UpdateApp.bin
  *   +-----------+------+--------+
  *   | UpdateApp | 0xFF | ENDTAG |
  *   +-----------+------+--------+                               
- *  0KB               512KB (UpdateApp.bin - FIRMWARE_ENDTAG_OFFSET is 512KB)
+ *  0KB               512KB
  **********************************************************************************************************************************/
 
-copy/B ..\..\UpdateApp.bin + ..\..\Loader\Post-build\EndTag.bin ..\..\UpdateApp.bin
+copy/B ..\..\UpdateApp.bin + .\Post-build\EndTag.bin ..\..\UpdateApp.bin
 
 /**********************************************************************************************************************************
  * Copy DefaultApp.bin and rename to UpdateDefaultApp.bin to the root folder of ISP demo code
@@ -138,15 +138,15 @@ copy ..\..\DefaultApp\DefaultApp.bin ..\..\UpdateDefaultApp.bin
  *  0KB                      512KB 
  **********************************************************************************************************************************/
 
-..\..\Loader\Post-build\Pad.exe 1 512 ..\..\UpdateDefaultApp.bin
+.\Post-build\Pad.exe 1 512 ..\..\UpdateDefaultApp.bin
 
 /**********************************************************************************************************************************
  *   UpdateDefaultApp.bin
  *   +-----------+------+------+--------+
  *   | UpdateDefaultApp | 0xFF | ENDTAG |
  *   +-----------+------+------+--------+                               
- *  0KB               512KB (UpdateDefaultApp.bin - FIRMWARE_ENDTAG_OFFSET is 512KB)
+ *  0KB               512KB
  *******************************************************************************************************************/
 
-copy/B ..\..\UpdateDefaultApp.bin + ..\..\Loader\Post-build\EndTag.bin ..\..\UpdateDefaultApp.bin
+copy/B ..\..\UpdateDefaultApp.bin + .\Post-build\EndTag.bin ..\..\UpdateDefaultApp.bin
 

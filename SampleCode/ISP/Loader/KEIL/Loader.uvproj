@@ -76,7 +76,7 @@
             <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>1</RunUserProg2>
             <UserProg1Name>fromelf --bin ".\obj\@L.axf" --output "..\@L.bin"</UserProg1Name>
-            <UserProg2Name>..\Post-build\Merge.cmd</UserProg2Name>
+            <UserProg2Name>.\Post-build\Merge.cmd</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
           </AfterMake>
@@ -444,6 +444,11 @@
               <FileName>spiflash_drv.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\spiflash_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>signature.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\signature.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -234,7 +234,7 @@ int main(void)
 
 
 #ifdef CHECK_TEST
-    xTaskCreate( vCheckTask, ( signed portCHAR * ) "Check", mainCHECK_TASK_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );	
+    xTaskCreate( vCheckTask, "Check", mainCHECK_TASK_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );	
 #endif
 
 	
@@ -295,9 +295,15 @@ static void prvSetupHardware( void )
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;		
 
-	    /* Reset UART module */
+		// PA.5 ~ PA.7 set to output mode	
+		PA->MODE = (PA->MODE & ~(GPIO_MODE_MODE5_Msk | GPIO_MODE_MODE6_Msk | GPIO_MODE_MODE7_Msk)) |
+               (GPIO_MODE_OUTPUT << GPIO_MODE_MODE5_Pos) |
+               (GPIO_MODE_OUTPUT << GPIO_MODE_MODE6_Pos) |
+               (GPIO_MODE_OUTPUT << GPIO_MODE_MODE7_Pos); 
+
+	  /* Reset UART module */
     SYS_ResetModule(UART0_RST);
-	/* Init UART to 115200-8n1 for print message */
+		/* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
 		
 }

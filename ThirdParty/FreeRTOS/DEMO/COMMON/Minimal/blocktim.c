@@ -1,76 +1,30 @@
 /*
-    FreeRTOS V7.4.0 - Copyright (C) 2013 Real Time Engineers Ltd.
-
-    FEATURES AND PORTS ARE ADDED TO FREERTOS ALL THE TIME.  PLEASE VISIT
-    http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
-
-    ***************************************************************************
-     *                                                                       *
-     *    FreeRTOS tutorial books are available in pdf and paperback.        *
-     *    Complete, revised, and edited pdf reference manuals are also       *
-     *    available.                                                         *
-     *                                                                       *
-     *    Purchasing FreeRTOS documentation will not only help you, by       *
-     *    ensuring you get running as quickly as possible and with an        *
-     *    in-depth knowledge of how to use FreeRTOS, it will also help       *
-     *    the FreeRTOS project to continue with its mission of providing     *
-     *    professional grade, cross platform, de facto standard solutions    *
-     *    for microcontrollers - completely free of charge!                  *
-     *                                                                       *
-     *    >>> See http://www.FreeRTOS.org/Documentation for details. <<<     *
-     *                                                                       *
-     *    Thank you for using FreeRTOS, and thank you for your support!      *
-     *                                                                       *
-    ***************************************************************************
-
-
-    This file is part of the FreeRTOS distribution.
-
-    FreeRTOS is free software; you can redistribute it and/or modify it under
-    the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation AND MODIFIED BY the FreeRTOS exception.
-
-    >>>>>>NOTE<<<<<< The modification to the GPL is included to allow you to
-    distribute a combined work that includes FreeRTOS without being obliged to
-    provide the source code for proprietary components outside of the FreeRTOS
-    kernel.
-
-    FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
-    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-    details. You should have received a copy of the GNU General Public License
-    and the FreeRTOS license exception along with FreeRTOS; if not itcan be
-    viewed here: http://www.freertos.org/a00114.html and also obtained by
-    writing to Real Time Engineers Ltd., contact details for whom are available
-    on the FreeRTOS WEB site.
-
-    1 tab == 4 spaces!
-
-    ***************************************************************************
-     *                                                                       *
-     *    Having a problem?  Start by reading the FAQ "My application does   *
-     *    not run, what could be wrong?"                                     *
-     *                                                                       *
-     *    http://www.FreeRTOS.org/FAQHelp.html                               *
-     *                                                                       *
-    ***************************************************************************
-
-
-    http://www.FreeRTOS.org - Documentation, books, training, latest versions, 
-    license and Real Time Engineers Ltd. contact details.
-
-    http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
-    including FreeRTOS+Trace - an indispensable productivity tool, and our new
-    fully thread aware and reentrant UDP/IP stack.
-
-    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High 
-    Integrity Systems, who sell the code with commercial support, 
-    indemnification and middleware, under the OpenRTOS brand.
-    
-    http://www.SafeRTOS.com - High Integrity Systems also provide a safety 
-    engineered and independently SIL3 certified version for use in safety and 
-    mission critical applications that require provable dependability.
-*/
+ * FreeRTOS Kernel V10.0.0
+ * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software. If you wish to use our Amazon
+ * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * http://www.FreeRTOS.org
+ * http://aws.amazon.com/freertos
+ *
+ * 1 tab == 4 spaces!
+ */
 
 /*
  * This file contains some test scenarios that ensure tasks do not exit queue
@@ -97,72 +51,99 @@
 
 /* Task behaviour. */
 #define bktQUEUE_LENGTH				( 5 )
-#define bktSHORT_WAIT				( ( ( portTickType ) 20 ) / portTICK_RATE_MS )
+#define bktSHORT_WAIT				pdMS_TO_TICKS( ( TickType_t ) 20 )
 #define bktPRIMARY_BLOCK_TIME		( 10 )
 #define bktALLOWABLE_MARGIN			( 15 )
 #define bktTIME_TO_BLOCK			( 175 )
-#define bktDONT_BLOCK				( ( portTickType ) 0 )
-#define bktRUN_INDICATOR			( ( unsigned portBASE_TYPE ) 0x55 )
+#define bktDONT_BLOCK				( ( TickType_t ) 0 )
+#define bktRUN_INDICATOR			( ( UBaseType_t ) 0x55 )
+
+/* In case the demo does not have software timers enabled, as this file uses
+the configTIMER_TASK_PRIORITY setting. */
+#ifndef configTIMER_TASK_PRIORITY
+	#define configTIMER_TASK_PRIORITY ( configMAX_PRIORITIES - 1 )
+#endif
+
+/*-----------------------------------------------------------*/
+
+/*
+ * The two test tasks.  Their behaviour is commented within the functions.
+ */
+static void vPrimaryBlockTimeTestTask( void *pvParameters );
+static void vSecondaryBlockTimeTestTask( void *pvParameters );
+
+/*
+ * Very basic tests to verify the block times are as expected.
+ */
+static void prvBasicDelayTests( void );
+
+/*-----------------------------------------------------------*/
 
 /* The queue on which the tasks block. */
-static xQueueHandle xTestQueue;
+static QueueHandle_t xTestQueue;
 
 /* Handle to the secondary task is required by the primary task for calls
 to vTaskSuspend/Resume(). */
-static xTaskHandle xSecondary;
+static TaskHandle_t xSecondary;
 
 /* Used to ensure that tasks are still executing without error. */
-static volatile portBASE_TYPE xPrimaryCycles = 0, xSecondaryCycles = 0;
-static volatile portBASE_TYPE xErrorOccurred = pdFALSE;
+static volatile BaseType_t xPrimaryCycles = 0, xSecondaryCycles = 0;
+static volatile BaseType_t xErrorOccurred = pdFALSE;
 
 /* Provides a simple mechanism for the primary task to know when the
 secondary task has executed. */
-static volatile unsigned portBASE_TYPE xRunIndicator;
-
-/* The two test tasks.  Their behaviour is commented within the files. */
-static void vPrimaryBlockTimeTestTask( void *pvParameters );
-static void vSecondaryBlockTimeTestTask( void *pvParameters );
+static volatile UBaseType_t xRunIndicator;
 
 /*-----------------------------------------------------------*/
 
 void vCreateBlockTimeTasks( void )
 {
 	/* Create the queue on which the two tasks block. */
-    xTestQueue = xQueueCreate( bktQUEUE_LENGTH, sizeof( portBASE_TYPE ) );
+	xTestQueue = xQueueCreate( bktQUEUE_LENGTH, sizeof( BaseType_t ) );
 
-	/* vQueueAddToRegistry() adds the queue to the queue registry, if one is
-	in use.  The queue registry is provided as a means for kernel aware
-	debuggers to locate queues and has no purpose if a kernel aware debugger
-	is not being used.  The call to vQueueAddToRegistry() will be removed
-	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is
-	defined to be less than 1. */
-	vQueueAddToRegistry( xTestQueue, ( signed char * ) "Block_Time_Queue" );
+	if( xTestQueue != NULL )
+	{
+		/* vQueueAddToRegistry() adds the queue to the queue registry, if one
+		is in use.  The queue registry is provided as a means for kernel aware
+		debuggers to locate queues and has no purpose if a kernel aware
+		debugger is not being used.  The call to vQueueAddToRegistry() will be
+		removed by the pre-processor if configQUEUE_REGISTRY_SIZE is not
+		defined or is defined to be less than 1. */
+		vQueueAddToRegistry( xTestQueue, "Block_Time_Queue" );
 
-	/* Create the two test tasks. */
-	xTaskCreate( vPrimaryBlockTimeTestTask, ( signed char * )"BTest1", configMINIMAL_STACK_SIZE, NULL, bktPRIMARY_PRIORITY, NULL );
-	xTaskCreate( vSecondaryBlockTimeTestTask, ( signed char * )"BTest2", configMINIMAL_STACK_SIZE, NULL, bktSECONDARY_PRIORITY, &xSecondary );
+		/* Create the two test tasks. */
+		xTaskCreate( vPrimaryBlockTimeTestTask, "BTest1", configMINIMAL_STACK_SIZE, NULL, bktPRIMARY_PRIORITY, NULL );
+		xTaskCreate( vSecondaryBlockTimeTestTask, "BTest2", configMINIMAL_STACK_SIZE, NULL, bktSECONDARY_PRIORITY, &xSecondary );
+	}
 }
 /*-----------------------------------------------------------*/
 
 static void vPrimaryBlockTimeTestTask( void *pvParameters )
 {
-portBASE_TYPE xItem, xData;
-portTickType xTimeWhenBlocking;
-portTickType xTimeToBlock, xBlockedTime;
+BaseType_t xItem, xData;
+TickType_t xTimeWhenBlocking;
+TickType_t xTimeToBlock, xBlockedTime;
 
 	( void ) pvParameters;
 
 	for( ;; )
 	{
 		/*********************************************************************
-        Test 1
+		Test 0
 
-        Simple block time wakeup test on queue receives. */
+		Basic vTaskDelay() and vTaskDelayUntil() tests. */
+		prvBasicDelayTests();
+
+
+		/*********************************************************************
+		Test 1
+
+		Simple block time wakeup test on queue receives. */
 		for( xItem = 0; xItem < bktQUEUE_LENGTH; xItem++ )
 		{
 			/* The queue is empty. Attempt to read from the queue using a block
 			time.  When we wake, ensure the delta in time is as expected. */
-			xTimeToBlock = bktPRIMARY_BLOCK_TIME << xItem;
+			xTimeToBlock = ( TickType_t ) ( bktPRIMARY_BLOCK_TIME << xItem );
 
 			xTimeWhenBlocking = xTaskGetTickCount();
 
@@ -192,9 +173,9 @@ portTickType xTimeToBlock, xBlockedTime;
 		}
 
 		/*********************************************************************
-        Test 2
+		Test 2
 
-        Simple block time wakeup test on queue sends.
+		Simple block time wakeup test on queue sends.
 
 		First fill the queue.  It should be empty so all sends should pass. */
 		for( xItem = 0; xItem < bktQUEUE_LENGTH; xItem++ )
@@ -213,7 +194,7 @@ portTickType xTimeToBlock, xBlockedTime;
 		{
 			/* The queue is full. Attempt to write to the queue using a block
 			time.  When we wake, ensure the delta in time is as expected. */
-			xTimeToBlock = bktPRIMARY_BLOCK_TIME << xItem;
+			xTimeToBlock = ( TickType_t ) ( bktPRIMARY_BLOCK_TIME << xItem );
 
 			xTimeWhenBlocking = xTaskGetTickCount();
 
@@ -243,7 +224,7 @@ portTickType xTimeToBlock, xBlockedTime;
 		}
 
 		/*********************************************************************
-        Test 3
+		Test 3
 
 		Wake the other task, it will block attempting to post to the queue.
 		When we read from the queue the other task will wake, but before it
@@ -318,7 +299,7 @@ portTickType xTimeToBlock, xBlockedTime;
 
 
 		/*********************************************************************
-        Test 4
+		Test 4
 
 		As per test 3 - but with the send and receive the other way around.
 		The other task blocks attempting to read from the queue.
@@ -397,29 +378,29 @@ portTickType xTimeToBlock, xBlockedTime;
 
 static void vSecondaryBlockTimeTestTask( void *pvParameters )
 {
-portTickType xTimeWhenBlocking, xBlockedTime;
-portBASE_TYPE xData;
+TickType_t xTimeWhenBlocking, xBlockedTime;
+BaseType_t xData;
 
 	( void ) pvParameters;
 
 	for( ;; )
 	{
 		/*********************************************************************
-        Test 1 and 2
+		Test 0, 1 and 2
 
-		This task does does not participate in these tests. */
+		This task does not participate in these tests. */
 		vTaskSuspend( NULL );
 
 		/*********************************************************************
-        Test 3
+		Test 3
 
 		The first thing we do is attempt to read from the queue.  It should be
 		full so we block.  Note the time before we block so we can check the
 		wake time is as per that expected. */
 		xTimeWhenBlocking = xTaskGetTickCount();
 
-		/* We should unblock after bktTIME_TO_BLOCK having not sent
-		anything to the queue. */
+		/* We should unblock after bktTIME_TO_BLOCK having not sent anything to
+		the queue. */
 		xData = 0;
 		xRunIndicator = bktRUN_INDICATOR;
 		if( xQueueSend( xTestQueue, &xData, bktTIME_TO_BLOCK ) != errQUEUE_FULL )
@@ -485,10 +466,56 @@ portBASE_TYPE xData;
 }
 /*-----------------------------------------------------------*/
 
-portBASE_TYPE xAreBlockTimeTestTasksStillRunning( void )
+static void prvBasicDelayTests( void )
 {
-static portBASE_TYPE xLastPrimaryCycleCount = 0, xLastSecondaryCycleCount = 0;
-portBASE_TYPE xReturn = pdPASS;
+TickType_t xPreTime, xPostTime, x, xLastUnblockTime, xExpectedUnblockTime;
+const TickType_t xPeriod = 75, xCycles = 5, xAllowableMargin = ( bktALLOWABLE_MARGIN >> 1 );
+
+	/* Temporarily increase priority so the timing is more accurate, but not so
+	high as to disrupt the timer tests. */
+	vTaskPrioritySet( NULL, configTIMER_TASK_PRIORITY - 1 );
+
+	/* Crude check to too that vTaskDelay() blocks for the expected period. */
+	xPreTime = xTaskGetTickCount();
+	vTaskDelay( bktTIME_TO_BLOCK );
+	xPostTime = xTaskGetTickCount();
+
+	/* The priority is higher, so the allowable margin is halved when compared
+	to the other tests in this file. */
+	if( ( xPostTime - xPreTime ) > ( bktTIME_TO_BLOCK + xAllowableMargin ) )
+	{
+		xErrorOccurred = pdTRUE;
+	}
+
+	/* Now crude tests to check the vTaskDelayUntil() functionality. */
+	xPostTime = xTaskGetTickCount();
+	xLastUnblockTime = xPostTime;
+
+	for( x = 0; x < xCycles; x++ )
+	{
+		/* Calculate the next expected unblock time from the time taken before
+		this loop was entered. */
+		xExpectedUnblockTime = xPostTime + ( x * xPeriod );
+
+		vTaskDelayUntil( &xLastUnblockTime, xPeriod );
+
+		if( ( xTaskGetTickCount() - xExpectedUnblockTime ) > ( bktTIME_TO_BLOCK + xAllowableMargin ) )
+		{
+			xErrorOccurred = pdTRUE;
+		}
+
+		xPrimaryCycles++;
+	}
+
+	/* Reset to the original task priority ready for the other tests. */
+	vTaskPrioritySet( NULL, bktPRIMARY_PRIORITY );
+}
+/*-----------------------------------------------------------*/
+
+BaseType_t xAreBlockTimeTestTasksStillRunning( void )
+{
+static BaseType_t xLastPrimaryCycleCount = 0, xLastSecondaryCycleCount = 0;
+BaseType_t xReturn = pdPASS;
 
 	/* Have both tasks performed at least one cycle since this function was
 	last called? */

@@ -103,7 +103,7 @@
 #define configUSE_TICK_HOOK				1
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
 #define configTICK_RATE_HZ				( ( portTickType ) 1000 )
-#define configMAX_PRIORITIES			( ( unsigned portBASE_TYPE ) 5 )
+#define configMAX_PRIORITIES			5  /* ( ( unsigned portBASE_TYPE ) 5 ) */
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 60 )
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 8 * 1024 ) )
 #define configMAX_TASK_NAME_LEN			( 10 )
@@ -143,7 +143,7 @@ to exclude the API function. */
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
 	/* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
-	#define configPRIO_BITS       		__NVIC_PRIO_BITS
+	#define configPRIO_BITS       		4         /* __NVIC_PRIO_BITS   */
 #else
 	#define configPRIO_BITS       		4        /* 15 priority levels */
 #endif

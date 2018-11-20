@@ -67,7 +67,7 @@
 		<link>
 			<name>User/arm_fft_bin_data.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/arm_fft_bin_data.c</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/Library/CMSIS/DSP_Lib/Examples/arm_fft_bin_example/ARM/arm_fft_bin_data.c</locationURI>
 		</link>
 		<link>
 			<name>User/main.c</name>

@@ -23,15 +23,15 @@ void SysTick_Handler(void)
 void SYS_Init(void)
 {
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
     //SYS_UnlockReg();
-     
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
-    
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
     //CLK->APBCLK = CLK_APBCLK_UART0CKEN_Msk;     // Enable UART0 IP clock.
@@ -43,23 +43,23 @@ void SYS_Init(void)
     /* UART0 clock source = XIN */
     CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     //CLK->CLKDIV3 &= ~(CLK_CLKDIV3_UART0DIV_Msk | CLK_CLKDIV3_UART0SEL_Msk);
-    
+
     /* Update System Core Clock */
     /* Note too high system clock will cause over-spec of SPI Flash read command on running SPIROM code. */
     CLK_SetCoreClock(100000000);
     SystemCoreClockUpdate();
-    
+
     /* Init I/O multi-function pins */
     /* Configure multi-function pins for UART0 RXD and TXD */
-	SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
-	SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-    
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
+
     /* Lock protected registers */
     //SYS_LockReg();
-        
+
 }
 
-/* Code that will impact SPIM DMM is placed in the spimcode section, 
+/* Code that will impact SPIM DMM is placed in the spimcode section,
    which will be located at RAM instead of SPIROM at execution time. */
 #if defined ( __CC_ARM )
 //#pragma arm section code="spimcode"
@@ -97,21 +97,27 @@ void SPIMCode_DelayMicroSec(uint32_t u32Delay)
 void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk)
 {
     uint32_t u32Divider;
-        
-    if (u32SClk) {
+
+    if (u32SClk)
+    {
         u32Divider = u32SysClk / (u32SClk * 2);
-        if (u32Divider) {
-            if (u32SClk < (u32SysClk / (u32Divider * 2))) { // Not divisible.
+        if (u32Divider)
+        {
+            if (u32SClk < (u32SysClk / (u32Divider * 2)))   // Not divisible.
+            {
                 u32Divider ++;
             }
         }
-        else {
-            if (u32SClk < u32SysClk) {  // u32SysClk x (1/2) < u32SClk < u32SysClk
+        else
+        {
+            if (u32SClk < u32SysClk)    // u32SysClk x (1/2) < u32SClk < u32SysClk
+            {
                 u32Divider ++;
             }
         }
     }
-    else {
+    else
+    {
         u32Divider = 65535;
     }
 
@@ -124,58 +130,66 @@ void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk)
 uint32_t SPIMCode_GetBusClock(void)
 {
     uint32_t u32Divider = ((SPIM->CTL1 & SPIM_CTL1_DIVIDER_Msk) >> SPIM_CTL1_DIVIDER_Pos);
-    
+
     return u32Divider ? SystemCoreClock / (u32Divider * 2) : SystemCoreClock;
 }
 
 void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32RdCmdCode)
-{   
+{
     /* SPIM H/W may still be in operation due to in DMM mode, delay at least 250 peripheral cycles (SPI bus cycles). */
     /* +1 to fix round-down error */
     SPIMCode_DelayMicroSec((250 * 1000000 / SPIMCode_GetBusClock()) + 1);
-    
+
     /* To avoid running SPIROM code just below at over-spec clock. */
-    if (u32SysClk > SystemCoreClock) {
+    if (u32SysClk > SystemCoreClock)
+    {
         SPIMCode_SetBusClock(u32SysClk, 45000000);
     }
-    
+
     /* Change system core clock. Note this will call out SPIROM code. */
     CLK_SetCoreClock(u32SysClk);
     SystemCoreClockUpdate();
-    
+
     /* Re-delay because CLK_SetCoreClock/SystemCoreClockUpdate are located in SPIROM. */
     /* +1 to fix round-down error */
     SPIMCode_DelayMicroSec((250 * 1000000 / SPIMCode_GetBusClock()) + 1);
-    
+
     /* SPI flash device specific setting */
     {
         uint32_t u32JedecID = SPIFlash_ReadJedecID();
         uint8_t u8MID = u32JedecID & 0x000000FF;
-        
-        if (u8MID == MFGID_WINBOND) {
-            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO) {
+
+        if (u8MID == MFGID_WINBOND)
+        {
+            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO)
+            {
                 /* Required for Winbond SPI flash */
                 SPIFlash_W25Q_SetQuadEnable(1);
             }
         }
-        else if (u8MID == MFGID_MXIC) {
-            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO) {
+        else if (u8MID == MFGID_MXIC)
+        {
+            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO)
+            {
                 /* Required for MXIC SPI flash */
                 SPIFlash_MX25_SetQuadEnable(1);
             }
         }
-        else if (u8MID == MFGID_EON) {
+        else if (u8MID == MFGID_EON)
+        {
             // Do nothing
         }
-        else if (u8MID == MFGID_ISSI) {
+        else if (u8MID == MFGID_ISSI)
+        {
             // Configure dummy cycles for ISSI read commands. Set P[6:3] to 0 to stand for default.
             {
-                uint8_t params = SPIFlash_ISSI_ReadReadParams();        
+                uint8_t params = SPIFlash_ISSI_ReadReadParams();
                 params &= ~(BIT3 | BIT4 | BIT5 | BIT6);
                 SPIFlash_ISSI_SetReadParamsV(params);
             }
-    
-            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO) {
+
+            if (u32RdCmdCode == SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO)
+            {
                 /* Required for ISSI SPI flash */
                 SPIFlash_ISSI_SetQuadEnable(1);
             }
@@ -184,7 +198,7 @@ void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32Rd
 
     /* Change read command of SPI Flash. */
     SPIM_ENABLE_DMM_MODE(SPIM, u32RdCmdCode, 0);
-    
+
     /* Change SPI bus clock. */
     SPIMCode_SetBusClock(SystemCoreClock, u32SClk);
 }
@@ -201,13 +215,13 @@ const uint32_t MTPSIG __attribute__ ((section(".mtpsig")));
 
 int main(void)
 {
-    
+
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
-    
+
     /* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
-    
+
     printf("+------------------------------------------------+\n");
     printf("|           NUC505 Series SPIM Sample            |\n");
     printf("+------------------------------------------------+\n");
@@ -215,35 +229,35 @@ int main(void)
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
     printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
-    
+
     /* Note: Refer to SPI Flash spec for clock limit of different read commands. */
-    
+
     SPIMCode_ConfigDMMMode(90000000, 45000000, SPIM_CTL0_CMDCODE_READ_DATA);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
     printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
-    
+
     SPIMCode_ConfigDMMMode(75000000, 75000000, SPIM_CTL0_CMDCODE_FAST_READ);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
     printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
-    
+
     SPIMCode_ConfigDMMMode(60000000, 60000000, SPIM_CTL0_CMDCODE_FAST_READ_DUAL_OUT);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
     printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ_DUAL_OUT >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
-    
+
     SPIMCode_ConfigDMMMode(60000000, 60000000, SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
     printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
-    
+
     printf("[SPIM][SPIROM]\t\t\t\tPASSED\n");
-    
+
     while (1);
     //return 0;
 }

@@ -45,8 +45,10 @@ void GPIO_SetMode(void *gpio, uint32_t u32PinMask, uint32_t u32Mode)
     uint32_t i;
     GPIO_PA_T *p = (GPIO_PA_T *)gpio;
 
-    for (i=0; i<GPIO_PIN_MAX; i++) {
-        if (u32PinMask & (1 << i)) {
+    for (i=0; i<GPIO_PIN_MAX; i++)
+    {
+        if (u32PinMask & (1 << i))
+        {
             p->MODE = (p->MODE & ~(0x1 << i)) | (u32Mode << i);
         }
     }
@@ -73,7 +75,7 @@ void GPIO_EnableInt(void *gpio, uint32_t u32Pin, uint32_t u32IntAttribs)
 
     GPIO->INTCTL |= GPIO_INTCTL_INTCTL_Msk;
     u32Idx = GPIO_GET_OFFSET((uint32_t)gpio);
-    
+
     u32Value = *s_pu32INTEN[u32Idx];
     *s_pu32INTEN[u32Idx] = (u32Value & ~(0x00010001 << u32Pin)) | (u32IntAttribs << u32Pin);
 }
@@ -93,7 +95,7 @@ void GPIO_DisableInt(void *gpio, uint32_t u32Pin)
     uint32_t u32Idx;
 
     u32Idx = GPIO_GET_OFFSET((uint32_t)gpio);
-    
+
     *s_pu32INTEN[u32Idx] &= ~((0x00010001UL) << u32Pin);
 }
 
@@ -142,8 +144,10 @@ void GPIO_SetPullMode(void *gpio, uint32_t u32PinMask, uint32_t u32Mode)
     uint32_t i;
     GPIO_PA_T *p = (GPIO_PA_T *)gpio;
 
-    for (i=0; i<GPIO_PIN_MAX; i++) {
-        if (u32PinMask & (1 << i)) {
+    for (i=0; i<GPIO_PIN_MAX; i++)
+    {
+        if (u32PinMask & (1 << i))
+        {
             p->PUEN = (p->PUEN & ~(0x03 << (i << 1))) | (u32Mode << (i << 1));
         }
     }
@@ -163,19 +167,21 @@ void GPIO_SetPullMode(void *gpio, uint32_t u32PinMask, uint32_t u32Mode)
 void GPIO_ClrIntFlag(void *gpio, uint32_t u32PinMask)
 {
     uint32_t i, u32Value, u32Offset;
-    u32Offset = GPIO_GET_OFFSET((uint32_t)gpio); 
+    u32Offset = GPIO_GET_OFFSET((uint32_t)gpio);
     u32Value = *(__IO uint32_t *) (&GPIO->INTSTSA_B + (u32Offset >> 1));
-    for (i=0; i<GPIO_PIN_MAX; i++) { 
-        if (u32PinMask & (1 << i)) { 
-            if((u32Offset % 2) == 0) 
+    for (i=0; i<GPIO_PIN_MAX; i++)
+    {
+        if (u32PinMask & (1 << i))
+        {
+            if((u32Offset % 2) == 0)
                 u32Value |= ((0x00000001UL) << i);
             else
                 u32Value |= ((0x00000001UL) << (i + 16));
-            }
         }
+    }
     *(__IO uint32_t *) (&GPIO->INTSTSA_B + (u32Offset >> 1)) = u32Value;
 }
-        
+
 
 /*@}*/ /* end of group NUC505_GPIO_EXPORTED_FUNCTIONS */
 

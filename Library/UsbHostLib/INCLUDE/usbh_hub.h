@@ -41,7 +41,8 @@
  * Hub Status and Hub Change results
  * See USB 2.0 spec Table 11-19 and Table 11-20
  */
-typedef struct usb_port_status {
+typedef struct usb_port_status
+{
     uint16_t  wPortStatus;
     uint16_t  wPortChange;
 } USB_PORT_STATUS_T;
@@ -85,12 +86,14 @@ typedef struct usb_port_status {
 #define HUB_CHAR_PORTIND                0x0080 /* D7       */
 
 #ifdef __ICCARM__
-typedef struct usb_hub_status {
+typedef struct usb_hub_status
+{
     __packed uint16_t wHubStatus;
     __packed uint16_t wHubChange;
 } USB_HUB_STATUS_T;
 #else
-typedef struct __attribute__((__packed__)) usb_hub_status {
+typedef struct __attribute__((__packed__)) usb_hub_status
+{
     uint16_t wHubStatus;
     uint16_t wHubChange;
 } USB_HUB_STATUS_T;
@@ -121,8 +124,9 @@ typedef struct __attribute__((__packed__)) usb_hub_status {
  * Hub descriptor
  * See USB 2.0 spec Table 11-13
  */
-#ifdef __ICCARM__ 
-typedef struct usb_hub_descriptor {
+#ifdef __ICCARM__
+typedef struct usb_hub_descriptor
+{
     __packed uint8_t  bDescLength;
     __packed uint8_t  bDescriptorType;
     __packed uint8_t  bNbrPorts;
@@ -133,7 +137,8 @@ typedef struct usb_hub_descriptor {
     __packed uint8_t  PortPwrCtrlMask[MAX_PORTS_PER_HUB/8];
 } USB_HUB_DESC_T;
 #else
-typedef struct __attribute__((__packed__)) usb_hub_descriptor {
+typedef struct __attribute__((__packed__)) usb_hub_descriptor
+{
     uint8_t  bDescLength;
     uint8_t  bDescriptorType;
     uint8_t  bNbrPorts;
@@ -145,7 +150,8 @@ typedef struct __attribute__((__packed__)) usb_hub_descriptor {
 } USB_HUB_DESC_T;
 #endif
 
-typedef struct usb_hub {
+typedef struct usb_hub
+{
     USB_DEV_T       *dev;
     URB_T           *urb;               /* Interrupt polling pipe */
     short           error;

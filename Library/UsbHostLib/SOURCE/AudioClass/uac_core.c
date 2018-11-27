@@ -34,7 +34,7 @@
 
 /**
  *  @brief  Obtain Audio Class device's channel number.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
@@ -45,7 +45,7 @@
 int32_t  UAC_GetChannelNumber(UAC_DEV_T *audev, uint8_t target)
 {
     UAC_INFO_T  *uac_info = (UAC_INFO_T *)audev->priv;
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
@@ -55,7 +55,7 @@ int32_t  UAC_GetChannelNumber(UAC_DEV_T *audev, uint8_t target)
             return UAC_RET_DEV_NOT_SUPPORTED;
         return uac_info->ft_play->bNrChannels;
     }
-    else 
+    else
     {
         if (!uac_info->ft_rec)
             return UAC_RET_DEV_NOT_SUPPORTED;
@@ -66,11 +66,11 @@ int32_t  UAC_GetChannelNumber(UAC_DEV_T *audev, uint8_t target)
 
 /**
  *  @brief  Obtain Audio Class device subframe bit resolution..
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
- *  @param[out] byte_cnt  The number of bytes occupied by one audio subframe. Can be 1, 2, 3 or 4. 
+ *  @param[out] byte_cnt  The number of bytes occupied by one audio subframe. Can be 1, 2, 3 or 4.
  *  @return   Bit resolution or error code.
  *  @retval   < 0        Failed. UAC device may not present or function not supported.
  *  @retval   Otherwise  The number of effectively used bits from the available bits in an audio subframe.
@@ -78,7 +78,7 @@ int32_t  UAC_GetChannelNumber(UAC_DEV_T *audev, uint8_t target)
 int32_t  UAC_GetBitResolution(UAC_DEV_T *audev, uint8_t target, uint8_t *byte_cnt)
 {
     UAC_INFO_T  *uac_info = (UAC_INFO_T *)audev->priv;
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
@@ -89,7 +89,7 @@ int32_t  UAC_GetBitResolution(UAC_DEV_T *audev, uint8_t target, uint8_t *byte_cn
         *byte_cnt = uac_info->ft_play->bSubframeSize;
         return uac_info->ft_play->bBitResolution;
     }
-    else 
+    else
     {
         if (!uac_info->it_microphone)
             return UAC_RET_DEV_NOT_SUPPORTED;
@@ -111,14 +111,14 @@ uint32_t  srate_to_u32(uint8_t *srate)
 
 /**
  *  @brief  Get a list of sampling rate frequences supported by the UAC device.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
  *  @param[out] srate_list  A word array provided by user application to hold the sampling rate list.
  *  @param[in]  max_cnt  Available number of entries of srate_list[]. Must be > 2.
  *  @param[out] type   Indicates how the sampling frequency can be programmed.
- *                     0:  Continuous sampling frequency. srate_list[0] is the lower bound 
+ *                     0:  Continuous sampling frequency. srate_list[0] is the lower bound
  *                          in Hz of the sampling frequency and srate_list[1] is the upper bound.
  *                     1~255:  The number of discrete sampling frequencies supported. They are
  *                             listed in srate_list[].
@@ -126,28 +126,28 @@ uint32_t  srate_to_u32(uint8_t *srate)
  *  @retval   0        Success
  *  @retval   Otherwise  Failed
  */
-int32_t  UAC_GetSamplingRate(UAC_DEV_T *audev, uint8_t target, uint32_t *srate_list, 
-                                int max_cnt, uint8_t *type)
+int32_t  UAC_GetSamplingRate(UAC_DEV_T *audev, uint8_t target, uint32_t *srate_list,
+                             int max_cnt, uint8_t *type)
 {
     UAC_INFO_T  *uac_info = (UAC_INFO_T *)audev->priv;
     AC_FT1_T    *ft;
     int         i;
-    
+
     if (target == UAC_SPEAKER)
-        ft = uac_info->ft_play; 
+        ft = uac_info->ft_play;
     else
-        ft = uac_info->ft_rec; 
+        ft = uac_info->ft_rec;
 
     if (!ft)
         return UAC_RET_DEV_NOT_SUPPORTED;
-        
+
     *type = ft->bSamFreqType;
-    
+
     if (*type == 0)
     {
         if (max_cnt < 2)
             return UAC_RET_OUT_OF_MEMORY;
-            
+
         srate_list[0] = srate_to_u32(&ft->tSamFreq[0][0]);
         srate_list[1] = srate_to_u32(&ft->tSamFreq[1][0]);
     }
@@ -157,12 +157,12 @@ int32_t  UAC_GetSamplingRate(UAC_DEV_T *audev, uint8_t target, uint32_t *srate_l
             srate_list[i] = srate_to_u32(&ft->tSamFreq[i][0]);
     }
     return 0;
-}    
+}
 
 
 /**
  *  @brief  Set sampling rate frequency.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
@@ -175,7 +175,7 @@ int32_t  UAC_GetSamplingRate(UAC_DEV_T *audev, uint8_t target, uint32_t *srate_l
  *                     - \ref UAC_GET_MAX
  *                     - \ref UAC_SET_RES
  *                     - \ref UAC_GET_RES
- *  @param[in]  srate  Sampling rate frequncy to be set or get. 
+ *  @param[in]  srate  Sampling rate frequncy to be set or get.
  *  @return   Success or failed.
  *  @retval   0        Success
  *  @retval   Otheriwse  Error occurred
@@ -188,24 +188,24 @@ int32_t  UAC_SamplingRateControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, 
     int         pipe, len;
     uint8_t     bmRequestType;
     uint8_t     tSampleFreq[3];
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
     if (target == UAC_SPEAKER)
         ep = uac_info->epd_play;
-    else 
+    else
         ep = uac_info->epd_rec;
-        
+
     if (ep == NULL)
         return UAC_RET_DEV_NOT_SUPPORTED;
-        
+
     tSampleFreq[0] = *srate & 0xff;
     tSampleFreq[1] = (*srate >> 8) & 0xff;
     tSampleFreq[2] = (*srate >> 16) & 0xff;
 
     bmRequestType = USB_TYPE_CLASS | USB_RECIP_ENDPOINT;
-    
+
     if (req & 0x80)
     {
         pipe = usb_rcvctrlpipe(udev, 0);
@@ -215,10 +215,10 @@ int32_t  UAC_SamplingRateControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, 
     {
         pipe = usb_sndctrlpipe(udev, 0);
     }
-    
-    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType, 
+
+    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType,
                            (SAMPLING_FREQ_CONTROL << 8),               // wValue
-                           ep->bEndpointAddress,   // wIndex 
+                           ep->bEndpointAddress,   // wIndex
                            tSampleFreq, 3, UAC_REQ_TIMEOUT);
     if (len == 3)
     {
@@ -233,7 +233,7 @@ int32_t  UAC_SamplingRateControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, 
 
 /**
  *  @brief  Control Audio Class device mute on/off.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
@@ -266,7 +266,7 @@ int32_t  UAC_MuteControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16_t
     AC_FU_T     *fu;
     int         pipe, len;
     uint8_t     bmRequestType;
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
@@ -276,12 +276,12 @@ int32_t  UAC_MuteControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16_t
         fu = uac_info->fu_rec;
     else
         return UAC_RET_INVALID;
-        
+
     //if (uac_check_fu_ctrl(uac_info, target, chn, MUTE_CONTROL) != 0)
     //  return UAC_RET_DEV_NOT_SUPPORTED;
 
     bmRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE;
-    
+
     if (req & 0x80)
     {
         pipe = usb_rcvctrlpipe(udev, 0);
@@ -291,10 +291,10 @@ int32_t  UAC_MuteControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16_t
     {
         pipe = usb_sndctrlpipe(udev, 0);
     }
-    
-    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType, 
+
+    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType,
                            (MUTE_CONTROL << 8) | chn,                  // wValue
-                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex 
+                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex
                            mute, 1, UAC_REQ_TIMEOUT);
     if (len == 1)
         return 0;
@@ -305,7 +305,7 @@ int32_t  UAC_MuteControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16_t
 
 /**
  *  @brief  Audio Class device volume control.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
@@ -335,7 +335,7 @@ int32_t  UAC_MuteControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16_t
  *  @param[in]  volume   Audio Class device volume value, which is intepreted as the following:
  *                       0x7FFF:    127.9961 dB
  *                       . . .
- *                       0x0100:      1.0000 dB 
+ *                       0x0100:      1.0000 dB
  *                       . . .
  *                       0x0002:      0.0078 dB
  *                       0x0001:      0.0039 dB
@@ -359,7 +359,7 @@ int32_t  UAC_VolumeControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16
     AC_FU_T     *fu;
     int         pipe, len;
     uint8_t     bmRequestType;
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
@@ -369,12 +369,12 @@ int32_t  UAC_VolumeControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16
         fu = uac_info->fu_rec;
     else
         return UAC_RET_INVALID;
-        
+
     //if (uac_check_fu_ctrl(uac_info, target, chn, VOLUME_CONTROL) != 0)
     //  return UAC_RET_DEV_NOT_SUPPORTED;
 
     bmRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE;
-    
+
     if (req & 0x80)
     {
         pipe = usb_rcvctrlpipe(udev, 0);
@@ -384,11 +384,11 @@ int32_t  UAC_VolumeControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16
     {
         pipe = usb_sndctrlpipe(udev, 0);
     }
-        
-    
-    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType, 
+
+
+    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType,
                            (VOLUME_CONTROL << 8) | chn,          // wValue
-                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex 
+                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex
                            (uint8_t *)volume, 2, UAC_REQ_TIMEOUT);
     if (len == 2)
         return 0;
@@ -399,7 +399,7 @@ int32_t  UAC_VolumeControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint16
 
 /**
  *  @brief  Audio Class device automatic gain control.
- *  @param[in]  audev  UAC device 
+ *  @param[in]  audev  UAC device
  *  @param[in]  target Select the control target.
  *                     - \ref UAC_SPEAKER
  *                     - \ref UAC_MICROPHONE
@@ -432,7 +432,7 @@ int32_t  UAC_AutoGainControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint
     AC_FU_T     *fu;
     int         pipe, len;
     uint8_t     bmRequestType;
-    
+
     if (uac_info == NULL)
         return UAC_RET_IO_ERR;
 
@@ -442,12 +442,12 @@ int32_t  UAC_AutoGainControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint
         fu = uac_info->fu_rec;
     else
         return UAC_RET_INVALID;
-        
+
     //if (uac_check_fu_ctrl(uac_info, target, chn, MUTE_CONTROL) != 0)
     //  return UAC_RET_DEV_NOT_SUPPORTED;
 
     bmRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE;
-    
+
     if (req & 0x80)
     {
         pipe = usb_rcvctrlpipe(udev, 0);
@@ -458,9 +458,9 @@ int32_t  UAC_AutoGainControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint
         pipe = usb_sndctrlpipe(udev, 0);
     }
 
-    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType, 
+    len = USBH_SendCtrlMsg(udev, pipe, req, bmRequestType,
                            (AUTOMATIC_GAIN_CONTROL << 8) | chn,        // wValue
-                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex 
+                           (fu->bUnitID << 8) | (audev->ctrl_ifnum),   // wIndex
                            mute, 1, UAC_REQ_TIMEOUT);
     if (len == 1)
         return 0;
@@ -471,7 +471,7 @@ int32_t  UAC_AutoGainControl(UAC_DEV_T *audev, uint8_t target, uint8_t req, uint
 
 /// @cond HIDDEN_SYMBOLS
 
-static void iso_in_irq(URB_T *urb) 
+static void iso_in_irq(URB_T *urb)
 {
     UAC_DEV_T *audev = (UAC_DEV_T *)urb->context;
     uint8_t     *buff;
@@ -479,12 +479,12 @@ static void iso_in_irq(URB_T *urb)
     int         status;
 
     /* We don't want to do anything if we are about to be removed! */
-    if (!audev || !audev->udev) 
+    if (!audev || !audev->udev)
         return;
 
     //printf("Iso in - SF=%d, EC=%d, L=%d.\n", urb->start_frame, urb->error_count, urb->actual_length);
     //printf("IN: SF=%d, L=%d\n", urb->start_frame, urb->actual_length);
-       
+
     for (i = 0; i < urb->number_of_packets; i++)
     {
         len = urb->iso_frame_desc[i].actual_length;
@@ -495,7 +495,7 @@ static void iso_in_irq(URB_T *urb)
         cp_len = audev->au_in_bufsz - audev->au_in_bufidx;
         if (cp_len > len)
             cp_len = len;
-        
+
         memcpy(&(audev->au_in_buff[audev->au_in_bufidx]), buff, cp_len);
         audev->au_in_func(audev, &(audev->au_in_buff[audev->au_in_bufidx]), cp_len);
 
@@ -510,15 +510,15 @@ static void iso_in_irq(URB_T *urb)
             audev->au_in_bufidx = len;
         }
     }
-    
+
     if (!audev->in_streaming)
         return;
-        
+
     urb->transfer_flags = USB_ISO_ASAP;
     urb->number_of_packets = ISO_FRAME_COUNT;
     urb->transfer_buffer_length = AU_IN_MAX_PKTSZ * ISO_FRAME_COUNT;
     urb->actual_length = 0;
-    for (i = 0; i < ISO_FRAME_COUNT; i++) 
+    for (i = 0; i < ISO_FRAME_COUNT; i++)
     {
         urb->iso_frame_desc[i].status = 0;
         urb->iso_frame_desc[i].actual_length = 0;
@@ -539,7 +539,7 @@ static void iso_in_irq(URB_T *urb)
  *  @brief  Install isochronous-in (microphone) callback function. Received audio data from
  *          UAC device will be delivered to user application by this callback function.
  *  @param[in] audev      Audio Class device
- *  @param[in] au_in_buff Audio stream input buffer. User application prepares and announces 
+ *  @param[in] au_in_buff Audio stream input buffer. User application prepares and announces
  *                        this buffer. UAC driver will directly move received audio data into
  *                        it. Once UAC driver moves audio data into au_in_buff, it will call
  *                        the callback to notify user.
@@ -556,14 +556,14 @@ int32_t UAC_InstallIsoInCbFun(UAC_DEV_T *audev, uint8_t *au_in_buff, int bufsiz,
 
     if (!func || !uac_info)
         return UAC_RET_INVALID;
-        
+
     ep = uac_info->epd_rec;
     if (!ep)
     {
         USBAS_DBGMSG("Isochronous-in endpoint not found in this device!\n");
         return UAC_RET_DEV_NOT_SUPPORTED;
     }
-    
+
     audev->au_in_func = func;
     audev->au_in_buff = au_in_buff;
     audev->au_in_bufsz = bufsiz;
@@ -588,7 +588,7 @@ int32_t UAC_StartIsoInPipe(UAC_DEV_T *audev)
 
     if (!uac_info || !audev->au_in_func || (audev->urbin[0]))
         return UAC_RET_INVALID;
-        
+
     ep = uac_info->epd_rec;
     if (!ep)
     {
@@ -597,7 +597,7 @@ int32_t UAC_StartIsoInPipe(UAC_DEV_T *audev)
     }
 
     audev->au_in_bufidx = 0;
-    
+
     /* Set interface alternative settings */
     if (USBH_SetInterface(audev->udev, uac_info->ifd_rec->bInterfaceNumber, uac_info->ifd_rec->bAlternateSetting) != 0)
         return UAC_RET_IO_ERR;
@@ -605,7 +605,7 @@ int32_t UAC_StartIsoInPipe(UAC_DEV_T *audev)
     for (uidx = 0; uidx < ISO_IN_URB_CNT; uidx++)
     {
         urb = USBH_AllocUrb();
-        if (urb == NULL) 
+        if (urb == NULL)
         {
             USBAS_DBGMSG("Failed to allocated URB!\n");
             ret = UAC_RET_OUT_OF_MEMORY;
@@ -624,14 +624,14 @@ int32_t UAC_StartIsoInPipe(UAC_DEV_T *audev)
         urb->transfer_buffer_length = AU_IN_MAX_PKTSZ * ISO_FRAME_COUNT;
         urb->actual_length = 0;
 
-        for (i = 0; i < ISO_FRAME_COUNT; i++) 
+        for (i = 0; i < ISO_FRAME_COUNT; i++)
         {
             urb->iso_frame_desc[i].offset = i * AU_IN_MAX_PKTSZ;
             urb->iso_frame_desc[i].length = AU_IN_MAX_PKTSZ;
         }
 
         ret = USBH_SubmitUrb(urb);
-        if (ret) 
+        if (ret)
         {
             USBAS_DBGMSG("Error - failed to submit URB (%d)", ret);
             ret = UAC_RET_IO_ERR;
@@ -668,15 +668,15 @@ int32_t UAC_StopIsoInPipe(UAC_DEV_T *audev)
 {
     UAC_INFO_T  *uac_info = (UAC_INFO_T *)audev->priv;
     int    i;
-    
+
     audev->in_streaming = 0;
 
     /* Set interface alternative settings */
     USBH_SetInterface(audev->udev, uac_info->ifd_rec->bInterfaceNumber, 0);
-        
+
     for (i = 0; i < ISO_IN_URB_CNT; i++)
     {
-        if (audev->urbin[i]) 
+        if (audev->urbin[i])
         {
             USBH_UnlinkUrb(audev->urbin[i]);
             USBH_FreeUrb(audev->urbin[i]);
@@ -696,22 +696,22 @@ static void iso_out_irq(URB_T *urb)
     int         i, status;
 
     /* We don't want to do anything if we are about to be removed! */
-    if (!audev || !audev->udev) 
+    if (!audev || !audev->udev)
         return;
 
     ep = ((UAC_INFO_T *)audev->priv)->epd_play;
 
     //printf("Iso out - SF=%d, EC=%d, L=%d.\n", urb->start_frame, urb->error_count, urb->actual_length);
     //printf("OUT: SF=%d, L=%d\n", urb->start_frame, urb->actual_length);
-       
+
     if (!audev->out_streaming)
         return;
-        
+
     urb->transfer_flags = USB_ISO_ASAP;
     urb->number_of_packets = ISO_FRAME_COUNT;
     urb->transfer_buffer_length = AU_OUT_MAX_PKTSZ * ISO_FRAME_COUNT;
     urb->actual_length = 0;
-    for (i = 0; i < ISO_FRAME_COUNT; i++) 
+    for (i = 0; i < ISO_FRAME_COUNT; i++)
     {
         urb->iso_frame_desc[i].status = 0;
         urb->iso_frame_desc[i].offset = i * AU_OUT_MAX_PKTSZ;
@@ -746,14 +746,14 @@ int32_t UAC_InstallIsoOutCbFun(UAC_DEV_T *audev, UAC_CB_FUNC *func)
 
     if (!func || !uac_info)
         return UAC_RET_INVALID;
-        
+
     ep = uac_info->epd_play;
     if (!ep)
     {
         USBAS_DBGMSG("Isochronous-out endpoint not found in this device!\n");
         return UAC_RET_DEV_NOT_SUPPORTED;
     }
-    
+
     audev->au_out_func = func;
     return UAC_RET_OK;
 }
@@ -775,7 +775,7 @@ int32_t UAC_StartIsoOutPipe(UAC_DEV_T *audev)
 
     if (!uac_info || !audev->au_out_func || (audev->urbout[0]))
         return UAC_RET_INVALID;
-        
+
     ep = uac_info->epd_play;
     if (!ep)
     {
@@ -790,7 +790,7 @@ int32_t UAC_StartIsoOutPipe(UAC_DEV_T *audev)
     for (uidx = 0; uidx < ISO_OUT_URB_CNT; uidx++)
     {
         urb = USBH_AllocUrb();
-        if (urb == NULL) 
+        if (urb == NULL)
         {
             USBAS_DBGMSG("Failed to allocated URB!\n");
             ret = UAC_RET_OUT_OF_MEMORY;
@@ -809,7 +809,7 @@ int32_t UAC_StartIsoOutPipe(UAC_DEV_T *audev)
         urb->transfer_buffer_length = AU_OUT_MAX_PKTSZ * ISO_FRAME_COUNT;
         urb->actual_length = 0;
 
-        for (i = 0; i < ISO_FRAME_COUNT; i++) 
+        for (i = 0; i < ISO_FRAME_COUNT; i++)
         {
             urb->iso_frame_desc[i].offset = i * AU_OUT_MAX_PKTSZ;
             urb->iso_frame_desc[i].length = audev->au_out_func(audev, (uint8_t *)urb->transfer_buffer + urb->iso_frame_desc[i].offset, ep->wMaxPacketSize);
@@ -822,7 +822,7 @@ int32_t UAC_StartIsoOutPipe(UAC_DEV_T *audev)
         }
 
         ret = USBH_SubmitUrb(urb);
-        if (ret) 
+        if (ret)
         {
             USBAS_DBGMSG("Error - failed to submit URB (%d)", ret);
             ret = UAC_RET_IO_ERR;
@@ -859,15 +859,15 @@ int32_t UAC_StopIsoOutPipe(UAC_DEV_T *audev)
 {
     UAC_INFO_T  *uac_info = (UAC_INFO_T *)audev->priv;
     int    i;
-    
+
     audev->out_streaming = 0;
 
     /* Set interface alternative settings */
     USBH_SetInterface(audev->udev, uac_info->ifd_play->bInterfaceNumber, 0);
-        
+
     for (i = 0; i < ISO_OUT_URB_CNT; i++)
     {
-        if (audev->urbout[i]) 
+        if (audev->urbout[i])
         {
             USBH_UnlinkUrb(audev->urbout[i]);
             USBH_FreeUrb(audev->urbout[i]);

@@ -9,7 +9,7 @@
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include "ovlymgr.h"
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif

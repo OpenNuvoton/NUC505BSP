@@ -44,7 +44,8 @@
 void UART_ClearIntFlag(UART_T* uart , uint32_t u32InterruptFlag)
 {
 
-    if(u32InterruptFlag & UART_INTSTS_RLSINT_Msk) { /* Clear Receive Line Status Interrupt */
+    if(u32InterruptFlag & UART_INTSTS_RLSINT_Msk)   /* Clear Receive Line Status Interrupt */
+    {
         uart->FIFOSTS |= UART_FIFOSTS_BIF_Msk | UART_FIFOSTS_FEF_Msk | UART_FIFOSTS_PEF_Msk;
         uart->FIFOSTS |= UART_FIFOSTS_ADDRDETF_Msk;
     }
@@ -52,19 +53,23 @@ void UART_ClearIntFlag(UART_T* uart , uint32_t u32InterruptFlag)
     if(u32InterruptFlag & UART_INTSTS_MODEMINT_Msk)  /* Clear Modem Status Interrupt */
         uart->MODEMSTS |= UART_MODEMSTS_CTSDETF_Msk;
 
-    if(u32InterruptFlag & UART_INTSTS_BUFERRINT_Msk) { /* Clear Buffer Error Interrupt */
+    if(u32InterruptFlag & UART_INTSTS_BUFERRINT_Msk)   /* Clear Buffer Error Interrupt */
+    {
         uart->FIFOSTS |= UART_FIFOSTS_RXOVIF_Msk | UART_FIFOSTS_TXOVIF_Msk;
     }
 
-    if(u32InterruptFlag & UART_INTSTS_CTSWKIF_Msk) { /* Clear CTS Wake-up Interrupt */
+    if(u32InterruptFlag & UART_INTSTS_CTSWKIF_Msk)   /* Clear CTS Wake-up Interrupt */
+    {
         uart->INTSTS |= UART_INTSTS_CTSWKIF_Msk;
     }
 
-    if(u32InterruptFlag & UART_INTSTS_DATWKIF_Msk) { /* Clear Data Wake-up Interrupt */
+    if(u32InterruptFlag & UART_INTSTS_DATWKIF_Msk)   /* Clear Data Wake-up Interrupt */
+    {
         uart->INTSTS |= UART_INTSTS_DATWKIF_Msk;
     }
 
-    if(u32InterruptFlag & UART_INTSTS_LININT_Msk) { /* Clear LIN Bus Interrupt */
+    if(u32InterruptFlag & UART_INTSTS_LININT_Msk)   /* Clear LIN Bus Interrupt */
+    {
         uart->INTSTS |= UART_INTSTS_LINIF_Msk;
         uart->LINSTS |= UART_LINSTS_BITEF_Msk    | UART_LINSTS_BRKDETF_Msk  |
                         UART_LINSTS_SLVSYNCF_Msk | UART_LINSTS_SLVIDPEF_Msk |
@@ -172,7 +177,7 @@ void UART_EnableFlowCtrl(UART_T* uart)
  *                                      - \ref UART_INTEN_MODEMIEN_Msk   : Modem status interrupt
  *                                      - \ref UART_INTEN_RLSIEN_Msk     : Receive Line status interrupt
  *                                      - \ref UART_INTEN_THREIEN_Msk    : Tx empty interrupt
- *                                      - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt 
+ *                                      - \ref UART_INTEN_RDAIEN_Msk     : Rx ready interrupt
  *
  *    @return       None
  *
@@ -210,19 +215,24 @@ void UART_Open(UART_T* uart, uint32_t u32baudrate)
     uint32_t u32ClkTbl[2] = {__HXT, 0};
     uint32_t u32Baud_Div = 0;
 
-    if(uart == UART0) {
+    if(uart == UART0)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0SEL_Msk) >> CLK_CLKDIV3_UART0SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0DIV_Msk) >> CLK_CLKDIV3_UART0DIV_Pos;
-    } else if(uart == UART1) {
+    }
+    else if(uart == UART1)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1SEL_Msk) >> CLK_CLKDIV3_UART1SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1DIV_Msk) >> CLK_CLKDIV3_UART1DIV_Pos;
-    } else {
+    }
+    else
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART2SEL_Msk) >> CLK_CLKDIV3_UART2SEL_Pos;
 
@@ -244,7 +254,8 @@ void UART_Open(UART_T* uart, uint32_t u32baudrate)
         u32ClkTbl[u8UartClkSrcSel] = CLK_GetPLLClockFreq();
 
     /* Set UART baud rate */
-    if(u32baudrate != 0) {
+    if(u32baudrate != 0)
+    {
         u32Baud_Div = UART_BAUD_MODE2_DIVIDER((u32ClkTbl[u8UartClkSrcSel]) / (u8UartClkDivNum + 1), u32baudrate);
 
         if(u32Baud_Div > 0xFFFF)
@@ -270,10 +281,12 @@ uint32_t UART_Read(UART_T* uart, uint8_t *pu8RxBuf, uint32_t u32ReadBytes)
 {
     uint32_t  u32Count, u32delayno;
 
-    for(u32Count = 0; u32Count < u32ReadBytes; u32Count++) {
+    for(u32Count = 0; u32Count < u32ReadBytes; u32Count++)
+    {
         u32delayno = 0;
 
-        while(uart->FIFOSTS & UART_FIFOSTS_RXEMPTY_Msk) { /* Check RX empty => failed */
+        while(uart->FIFOSTS & UART_FIFOSTS_RXEMPTY_Msk)   /* Check RX empty => failed */
+        {
             u32delayno++;
             if(u32delayno >= 0x40000000)
                 return FALSE;
@@ -318,19 +331,24 @@ void UART_SetLine_Config(UART_T* uart, uint32_t u32baudrate, uint32_t u32data_wi
     uint32_t u32ClkTbl[2] = {__HXT, 0};
     uint32_t u32Baud_Div = 0;
 
-    if(uart == UART0) {
+    if(uart == UART0)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0SEL_Msk) >> CLK_CLKDIV3_UART0SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0DIV_Msk) >> CLK_CLKDIV3_UART0DIV_Pos;
-    } else if(uart == UART1) {
+    }
+    else if(uart == UART1)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1SEL_Msk) >> CLK_CLKDIV3_UART1SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1DIV_Msk) >> CLK_CLKDIV3_UART1DIV_Pos;
-    } else {
+    }
+    else
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART2SEL_Msk) >> CLK_CLKDIV3_UART2SEL_Pos;
 
@@ -343,7 +361,8 @@ void UART_SetLine_Config(UART_T* uart, uint32_t u32baudrate, uint32_t u32data_wi
         u32ClkTbl[u8UartClkSrcSel] = CLK_GetPLLClockFreq();
 
     /* Set UART baud rate */
-    if(u32baudrate != 0) {
+    if(u32baudrate != 0)
+    {
         u32Baud_Div = UART_BAUD_MODE2_DIVIDER((u32ClkTbl[u8UartClkSrcSel]) / (u8UartClkDivNum + 1), u32baudrate);
 
         if(u32Baud_Div > 0xFFFF)
@@ -399,19 +418,24 @@ void UART_SelectIrDAMode(UART_T* uart, uint32_t u32Baudrate, uint32_t u32Directi
     /* Select IrDA function mode */
     uart->FUNCSEL = UART_FUNCSEL_IrDA;
 
-    if(uart == UART0) {
+    if(uart == UART0)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0SEL_Msk) >> CLK_CLKDIV3_UART0SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART0DIV_Msk) >> CLK_CLKDIV3_UART0DIV_Pos;
-    } else if(uart == UART1) {
+    }
+    else if(uart == UART1)
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1SEL_Msk) >> CLK_CLKDIV3_UART1SEL_Pos;
 
         /* Get UART clock divider number */
         u8UartClkDivNum = (CLK->CLKDIV3 & CLK_CLKDIV3_UART1DIV_Msk) >> CLK_CLKDIV3_UART1DIV_Pos;
-    } else {
+    }
+    else
+    {
         /* Get UART clock source selection */
         u8UartClkSrcSel = (CLK->CLKDIV3 & CLK_CLKDIV3_UART2SEL_Msk) >> CLK_CLKDIV3_UART2SEL_Pos;
 
@@ -424,7 +448,8 @@ void UART_SelectIrDAMode(UART_T* uart, uint32_t u32Baudrate, uint32_t u32Directi
         u32ClkTbl[u8UartClkSrcSel] = CLK_GetPLLClockFreq();
 
     /* Set UART IrDA baud rate in mode 0 */
-    if(u32Baudrate != 0) {
+    if(u32Baudrate != 0)
+    {
         u32Baud_Div = UART_BAUD_MODE0_DIVIDER((u32ClkTbl[u8UartClkSrcSel]) / (u8UartClkDivNum + 1), u32Baudrate);
 
         if(u32Baud_Div < 0xFFFF)
@@ -432,10 +457,13 @@ void UART_SelectIrDAMode(UART_T* uart, uint32_t u32Baudrate, uint32_t u32Directi
     }
 
     /* Configure IrDA relative settings */
-    if(u32Direction == UART_IRDA_TXEN) {
+    if(u32Direction == UART_IRDA_TXEN)
+    {
         uart->IRDA &= ~UART_IRDA_TXINV_Msk;    //Tx signal is not inverse
         uart->IRDA |= UART_IRDA_TXEN_Msk;
-    } else {
+    }
+    else
+    {
         uart->IRDA |= UART_IRDA_RXINV_Msk;     //Rx signal is inverse
         uart->IRDA &= ~UART_IRDA_TXEN_Msk;
     }
@@ -507,9 +535,11 @@ uint32_t UART_Write(UART_T* uart, uint8_t *pu8TxBuf, uint32_t u32WriteBytes)
 {
     uint32_t  u32Count, u32delayno;
 
-    for(u32Count = 0; u32Count != u32WriteBytes; u32Count++) {
+    for(u32Count = 0; u32Count != u32WriteBytes; u32Count++)
+    {
         u32delayno = 0;
-        while((uart->FIFOSTS & UART_FIFOSTS_TXEMPTYF_Msk) == 0) { /* Wait Tx empty and Time-out manner */
+        while((uart->FIFOSTS & UART_FIFOSTS_TXEMPTYF_Msk) == 0)   /* Wait Tx empty and Time-out manner */
+        {
             u32delayno++;
             if(u32delayno >= 0x40000000)
                 return FALSE;

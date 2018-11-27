@@ -44,7 +44,7 @@ uint32_t SPIM_Open(SPIM_T *spim, uint32_t u32SPIMode, uint32_t u32BusClock)
     SYS->IPRST1 &= ~SYS_IPRST1_SPIMRST_Msk;
 
     SPIM_SetIF(spim, SPIM_CTL1_IFSEL_INTERN);
-    
+
     return SPIM_SetBusClock(spim, u32BusClock);
 }
 
@@ -57,7 +57,8 @@ uint32_t SPIM_Open(SPIM_T *spim, uint32_t u32SPIMode, uint32_t u32BusClock)
 void SPIM_Close(SPIM_T *spim)
 {
 #if 0   // User program will take care.
-    if ((spim->CTL1 & SPIM_CTL1_IFSEL_Msk) == SPIM_CTL1_IFSEL_GPIO) {
+    if ((spim->CTL1 & SPIM_CTL1_IFSEL_Msk) == SPIM_CTL1_IFSEL_GPIO)
+    {
         // Configure multi-function pins for GPIO.
         SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk | (0 << SYS_GPA_MFPH_PA8MFP_Pos);    // GPIOA[8]
         SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk | (0 << SYS_GPA_MFPH_PA9MFP_Pos);    // GPIOA[9]
@@ -90,20 +91,26 @@ uint32_t SPIM_SetBusClock(SPIM_T *spim, uint32_t u32BusClock)
 {
     uint32_t u32Divider;
 
-    if (u32BusClock) {
+    if (u32BusClock)
+    {
         u32Divider = SystemCoreClock / (u32BusClock * 2);
-        if (u32Divider) {
-            if (u32BusClock < (SystemCoreClock / (u32Divider * 2))) { // Not divisible.
+        if (u32Divider)
+        {
+            if (u32BusClock < (SystemCoreClock / (u32Divider * 2)))   // Not divisible.
+            {
                 u32Divider ++;
             }
         }
-        else {
-            if (u32BusClock < SystemCoreClock) {  // SystemCoreClock x (1/2) < u32BusClock < SystemCoreClock
+        else
+        {
+            if (u32BusClock < SystemCoreClock)    // SystemCoreClock x (1/2) < u32BusClock < SystemCoreClock
+            {
                 u32Divider ++;
             }
         }
     }
-    else {
+    else
+    {
         u32Divider = 65535;
     }
 
@@ -138,7 +145,8 @@ uint32_t SPIM_GetBusClock(SPIM_T *spim)
 void SPIM_EnableInt(SPIM_T *spim, uint32_t u32Mask)
 {
     // Enable the only one interrupt.
-    if ((u32Mask & SPIM_INT_MASK) == SPIM_INT_MASK) {
+    if ((u32Mask & SPIM_INT_MASK) == SPIM_INT_MASK)
+    {
         spim->CTL0 |= SPIM_CTL0_IEN_Msk;
     }
 }
@@ -157,7 +165,8 @@ void SPIM_EnableInt(SPIM_T *spim, uint32_t u32Mask)
 void SPIM_DisableInt(SPIM_T *spim, uint32_t u32Mask)
 {
     // Disable the only one interrupt.
-    if ((u32Mask & SPIM_INT_MASK) == SPIM_INT_MASK) {
+    if ((u32Mask & SPIM_INT_MASK) == SPIM_INT_MASK)
+    {
         spim->CTL0 &= ~SPIM_CTL0_IEN_Msk;
     }
 }
@@ -178,7 +187,8 @@ uint32_t SPIM_GetIntFlag(SPIM_T *spim, uint32_t u32Mask)
     uint32_t u32IntFlag = 0;
 
     // Check the only one interrupt flag.
-    if ((u32Mask & SPIM_INT_MASK) && (spim->CTL0 & SPIM_CTL0_IF_Msk)) {
+    if ((u32Mask & SPIM_INT_MASK) && (spim->CTL0 & SPIM_CTL0_IF_Msk))
+    {
         u32IntFlag |= SPIM_INT_MASK;
     }
 
@@ -196,15 +206,17 @@ uint32_t SPIM_GetIntFlag(SPIM_T *spim, uint32_t u32Mask)
 void SPIM_SetIF(SPIM_T *spim, uint32_t u32IFSel)
 {
     static uint32_t s_u32IFSelIntern = (uint32_t) -1;
-    
-    if (u32IFSel == SPIM_CTL1_IFSEL_MCP || u32IFSel == SPIM_CTL1_IFSEL_MCP64 || u32IFSel == SPIM_CTL1_IFSEL_INTERN) {
-        if (s_u32IFSelIntern == (uint32_t) -1) {
+
+    if (u32IFSel == SPIM_CTL1_IFSEL_MCP || u32IFSel == SPIM_CTL1_IFSEL_MCP64 || u32IFSel == SPIM_CTL1_IFSEL_INTERN)
+    {
+        if (s_u32IFSelIntern == (uint32_t) -1)
+        {
             uint32_t u32JedecID;
-        
+
             /* There are two interfaces for internal SPI Flash. Read JEDEC ID for check. */
             s_u32IFSelIntern = SPIM_CTL1_IFSEL_MCP;
             spim->CTL1 = (spim->CTL1 & ~SPIM_CTL1_IFSEL_Msk) | s_u32IFSelIntern;         // Set Slave Peripheral to MCP.
-        
+
             /* Read JEDEC ID. */
             SPIM_SET_SS_LOW(SPIM);                                          // SS activated.
             SPIM_ENABLE_IO_MODE(SPIM, SPIM_CTL0_BITMODE_STAN, 1);           // I/O mode, 1-bit, output.
@@ -221,18 +233,21 @@ void SPIM_SetIF(SPIM_T *spim, uint32_t u32IFSel)
             u32JedecID = SPIM_READ_RX0(SPIM);
             u32JedecID &= 0x00FFFFFF;
             SPIM_SET_SS_HIGH(SPIM);                                         // SS deactivated.
-    
-            if (u32JedecID == 0x00000000 || u32JedecID == 0x00FFFFFF) {
+
+            if (u32JedecID == 0x00000000 || u32JedecID == 0x00FFFFFF)
+            {
                 s_u32IFSelIntern = SPIM_CTL1_IFSEL_MCP64;
                 spim->CTL1 = (spim->CTL1 & ~SPIM_CTL1_IFSEL_Msk) | s_u32IFSelIntern;   // Set Slave Peripheral MCP64.
             }
         }
-        else {
+        else
+        {
             spim->CTL1 = (spim->CTL1 & ~SPIM_CTL1_IFSEL_Msk) | s_u32IFSelIntern;   // Set Slave Peripheral MCP/MCP64.
         }
     }
-    
-    if (u32IFSel == SPIM_CTL1_IFSEL_GPIO/* || u32IFSel == SPIM_CTL1_IFSEL_EXTERN*/) {
+
+    if (u32IFSel == SPIM_CTL1_IFSEL_GPIO/* || u32IFSel == SPIM_CTL1_IFSEL_EXTERN*/)
+    {
         spim->CTL1 = (spim->CTL1 & ~SPIM_CTL1_IFSEL_Msk) | SPIM_CTL1_IFSEL_GPIO;        // Set Slave Peripheral to GPIO.
     }
 }
@@ -251,7 +266,8 @@ void SPIM_SetIF(SPIM_T *spim, uint32_t u32IFSel)
 void SPIM_ClearIntFlag(SPIM_T *spim, uint32_t u32Mask)
 {
     // Clear the only one interrupt flag.
-    if (u32Mask & SPIM_INT_MASK) {
+    if (u32Mask & SPIM_INT_MASK)
+    {
         spim->CTL0 |= SPIM_CTL0_IF_Msk;
     }
 }
@@ -272,7 +288,7 @@ void SPIM_DMAWritePage(SPIM_T *spim, uint32_t u32FlashAddr, uint32_t u32Len, uin
      * Based on the formula below, choose a safe setting.
      * Deselect time interval of DMA write mode = (DWDELSEL + 1) * AHB clock cycle time */
     spim->RXCLKDLY = (spim->RXCLKDLY & ~SPIM_RXCLKDLY_DWDELSEL_Msk) | (0xF << SPIM_RXCLKDLY_DWDELSEL_Pos);
-    
+
     spim->SRAMADDR = (uint32_t) pu8TxBuf;               // SRAM address.
     spim->DMATBCNT = u32Len;                            // Transfer length.
     spim->FADDR = u32FlashAddr;                         // Flash address.

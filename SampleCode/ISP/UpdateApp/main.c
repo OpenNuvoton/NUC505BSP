@@ -32,10 +32,10 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(96000000);
-	
+
     /* Set PCLK divider */
     CLK_SetModuleClock(PCLK_MODULE, (uint32_t) NULL, 1);
-	
+
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
@@ -72,7 +72,7 @@ void EnterISPmode(void)
     SYS->LVMPADDR = 0x0;
     SYS->LVMPLEN = 0x01;
     SYS->RVMPLEN = 0x01;
-	
+
     SYS->IPRST0 = SYS_IPRST0_CPURST_Msk;
     __NOP();
     __NOP();
@@ -82,13 +82,13 @@ void EnterISPmode(void)
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void)
-{		
+{
     SYS_Init();
     UART0_Init();
 
     printf("+----------------------------------------+\n");
     printf("|         NUC505 ISP Sample Code         |\n");
-    printf("|              APP Ver.02                |\n"); 
+    printf("|              APP Ver.02                |\n");
     printf("+----------------------------------------+\n");
     printf("Version %08X\n",gu32TAG[VER_INDEX]);
     printf("Press any key to ISP mode\n");

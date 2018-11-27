@@ -116,8 +116,8 @@ extern "C"
 #define I2S_LEFT                1                                  /*!< Select left channel */
 
 /* I2S Internal CODEC Select */
-#define I2S_DISABLE_INTERNAL_CODEC      0			/*!< CODECRST=0, CODECSEL=1 */
-#define I2S_ENABLE_INTERNAL_CODEC       1			/*!< CODECRST=1, CODECSEL=0 */
+#define I2S_DISABLE_INTERNAL_CODEC      0           /*!< CODECRST=0, CODECSEL=1 */
+#define I2S_ENABLE_INTERNAL_CODEC       1           /*!< CODECRST=1, CODECSEL=0 */
 
 /*@}*/ /* end of group NUC505_I2S_EXPORTED_CONSTANTS */
 
@@ -351,7 +351,7 @@ static __INLINE void I2S_SET_MONO_RX_CHANNEL(I2S_T *i2s, uint32_t u32Ch)
   */
 static __INLINE void I2S_SET_TX_TH_LEVEL(I2S_T *i2s, uint32_t u32Word)
 {
-	i2s->CTL &= ~I2S_CTL_TXTH_Msk;
+    i2s->CTL &= ~I2S_CTL_TXTH_Msk;
     i2s->CTL |= u32Word;
 }
 
@@ -380,7 +380,7 @@ static __INLINE void I2S_SET_TX_TH_LEVEL(I2S_T *i2s, uint32_t u32Word)
   */
 static __INLINE void I2S_SET_RX_TH_LEVEL(I2S_T *i2s, uint32_t u32Word)
 {
-	i2s->CTL &= ~I2S_CTL_RXTH_Msk;
+    i2s->CTL &= ~I2S_CTL_RXTH_Msk;
     i2s->CTL |= u32Word;
 }
 
@@ -749,10 +749,10 @@ static __INLINE void I2S_SET_INTERNAL_CODEC(I2S_T *i2s, uint32_t u32Address, uin
   */
 static __INLINE uint32_t I2S_GET_INTERNAL_CODEC(I2S_T *i2s, uint32_t u32Address)
 {
-   (i2s)->CODECCTL &= ~I2S_CODECCTL_RW_Msk;
-   (i2s)->CODECCTL = (0x7F << I2S_CODECCTL_I2CCKDIV_Pos) | (0x40 << I2S_CODECCTL_DEVID_Pos) | (u32Address << I2S_CODECCTL_ADDR_Pos);
-   while(((i2s)->CODECCTL & I2S_CODECCTL_BUSY_Msk));
-   return (i2s)->CODECCTL & 0x0000FFFF;
+    (i2s)->CODECCTL &= ~I2S_CODECCTL_RW_Msk;
+    (i2s)->CODECCTL = (0x7F << I2S_CODECCTL_I2CCKDIV_Pos) | (0x40 << I2S_CODECCTL_DEVID_Pos) | (u32Address << I2S_CODECCTL_ADDR_Pos);
+    while(((i2s)->CODECCTL & I2S_CODECCTL_BUSY_Msk));
+    return (i2s)->CODECCTL & 0x0000FFFF;
 }
 
 

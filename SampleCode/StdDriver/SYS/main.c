@@ -5,9 +5,9 @@
  * $Date: 14/07/24 4:08p $
  * @brief    NUC505 Series Global Control and Clock Control Driver Sample Code
  *
- * 1.	Demonstrate delay function by systick.
- * 2.	Demonstrate core clock switching.
- * 3.	Demonstrate how to enable module clock and set module clock divider.
+ * 1.   Demonstrate delay function by systick.
+ * 2.   Demonstrate core clock switching.
+ * 3.   Demonstrate how to enable module clock and set module clock divider.
  *
  * @note
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.

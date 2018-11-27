@@ -20,17 +20,17 @@ int main(void)
 {
     /* Init Hardware */
     Hardware_Init();
-    
+
     /* Start AudioLib */
     AudioLib_Start();
-    
+
     /* Start USBLib */
     USBLib_Start();
-    
+
     while ( 1 )
     {
         AudioLib_Process();
-        
+
         USBLib_Process();
     }
     //return 0;

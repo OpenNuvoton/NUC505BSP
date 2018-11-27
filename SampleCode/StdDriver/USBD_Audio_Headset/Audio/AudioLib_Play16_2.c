@@ -14,30 +14,30 @@
 void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
 {
     /* executed in main loop */
-    
+
     int32_t i, i32PlayPcmWorkSmplCnt, i32Amount;
-    
+
     int16_t i16Left, i16Right;
-    
+
     int16_t *pi16I2sPlayPcmBuf;
     int16_t *pi16PlayPcmWorkBuf;
-    
+
     if ( psAudioLib->m_i32PlayPcmWorkSmplCnt >= psAudioLib->m_u16PlaySmplCnt1 )
     {
         i32PlayPcmWorkSmplCnt = psAudioLib->m_u16PlaySmplCnt1;
-        
+
         if ( psAudioLib->m_i32PlayPcmWorkSmplCnt >= psAudioLib->m_u16PlaySmplCnt2 )
         {
             i32PlayPcmWorkSmplCnt = psAudioLib->m_u16PlaySmplCnt2;
         }
-        
+
         NVIC_DisableIRQ(USBD_IRQn);
         psAudioLib->m_i32PlayPcmWorkSmplCnt -= i32PlayPcmWorkSmplCnt;
         NVIC_EnableIRQ(USBD_IRQn);
-        
+
         pi16I2sPlayPcmBuf  = (int16_t *)psAudioLib->m_pu8I2sPlayPcmBuf;
         pi16PlayPcmWorkBuf = (int16_t *)psAudioLib->m_pu8PlayPcmWorkBuf;
-        
+
         for ( i = 0; i < 96; i += 2 )
         {
             i16Left  = (((int32_t)psAudioLib->m_i16PlayLPrevPcm * (0x2000 - psAudioLib->m_u32PlayLInterpoResidual))+
@@ -51,7 +51,7 @@ void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
                 {
                     psAudioLib->m_i16PlayLPrevPcm = pi16PlayPcmWorkBuf[psAudioLib->m_u32PlayLPcmWorkBufIdx];
                     psAudioLib->m_u32PlayLInterpoResidual -= 0x2000;
-                    
+
                     psAudioLib->m_u32PlayLPcmWorkBufIdx += 2;
                     if ( psAudioLib->m_u32PlayLPcmWorkBufIdx >= RING_BUF_16CNT )
                     {
@@ -59,7 +59,7 @@ void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
                     }
                 }
             }
-            
+
             i16Right = (((int32_t)psAudioLib->m_i16PlayRPrevPcm * (0x2000 - psAudioLib->m_u32PlayRInterpoResidual))+
                         ((int32_t)pi16PlayPcmWorkBuf[psAudioLib->m_u32PlayRPcmWorkBufIdx] * psAudioLib->m_u32PlayRInterpoResidual)) >> 13;
             psAudioLib->m_u32PlayRInterpoResidual += psAudioLib->m_u32PlayInterpoFactor;
@@ -71,7 +71,7 @@ void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
                 {
                     psAudioLib->m_i16PlayRPrevPcm = pi16PlayPcmWorkBuf[psAudioLib->m_u32PlayRPcmWorkBufIdx];
                     psAudioLib->m_u32PlayRInterpoResidual -= 0x2000;
-                    
+
                     psAudioLib->m_u32PlayRPcmWorkBufIdx += 2;
                     if ( psAudioLib->m_u32PlayRPcmWorkBufIdx >= RING_BUF_16CNT )
                     {
@@ -79,32 +79,32 @@ void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
                     }
                 }
             }
-            
+
             pi16I2sPlayPcmBuf[psAudioLib->m_u32I2sPlayPcmBufIdx++] = i16Right;
-            
+
             if ( psAudioLib->m_u32I2sPlayPcmBufIdx >= RING_BUF_16CNT )
                 psAudioLib->m_u32I2sPlayPcmBufIdx = 0;
-            
+
             pi16I2sPlayPcmBuf[psAudioLib->m_u32I2sPlayPcmBufIdx++] = i16Left;
-            
+
             if ( psAudioLib->m_u32I2sPlayPcmBufIdx >= RING_BUF_16CNT )
                 psAudioLib->m_u32I2sPlayPcmBufIdx = 0;
         }
-        
+
         i32Amount = (int32_t)(psAudioLib->m_u32PlayPcmWorkBufIdx2 - psAudioLib->m_u32PlayLPcmWorkBufIdx);
-        
+
         if ( i32Amount < 0 )
         {
             i32Amount += RING_BUF_16CNT;
         }
-        
+
         if ( i32Amount > psAudioLib->m_u16I2sSmplCntPlayTooSlow )
         {
             psAudioLib->m_u32PlayInterpoFactor        = psAudioLib->m_u32PlayInterpoFactor2 + 1;
             psAudioLib->m_u32PlayResAdjustSpeedEnable = 1;
             //printf("\t%d> %d P\n", i32Amount, psAudioLib->m_u16I2sSmplCntPlayTooSlow);
         }
-        
+
         if ( psAudioLib->m_u32PlayResAdjustSpeedEnable )
         {
             if ( i32Amount < psAudioLib->m_u16I2sSmplCntPlayTooFast )
@@ -113,16 +113,16 @@ void _UAC_SpkCopyFrom16_2(S_AUDIO_LIB* psAudioLib)
                 //printf("\t%d< %d P\n", i32Amount, psAudioLib->m_u16I2sSmplCntPlayTooFast);
             }
         }
-        #if 0
+#if 0
         if ( s_u32TimerCnt != g_u32TimerCnt )
         {
             s_u32TimerCnt = g_u32TimerCnt;
             //if ( psAudioLib->m_i32PlayPcmWorkSmplCnt != 0 )
-                //printf("%dP\n", psAudioLib->m_i32PlayPcmWorkSmplCnt);
+            //printf("%dP\n", psAudioLib->m_i32PlayPcmWorkSmplCnt);
             if ( i32Amount != 0 )
                 printf("\t%dP\n", i32Amount);
         }
-        #endif
+#endif
         /* start playback when ring buffer ready */
         if ( psAudioLib->m_u8PlayFlag == 0 )
         {

@@ -146,10 +146,12 @@ void SpiFlash_WaitReady(void)
 {
     uint8_t ReturnValue;
 
-    do {
+    do
+    {
         ReturnValue = SpiFlash_ReadStatusReg();
         ReturnValue = ReturnValue & 1;
-    } while(ReturnValue!=0); // check the BUSY bit
+    }
+    while(ReturnValue!=0);   // check the BUSY bit
 }
 
 void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint8_t *u8DataBuffer)
@@ -181,9 +183,11 @@ void SpiFlash_NormalPageProgram(uint32_t StartAddress, uint8_t *u8DataBuffer)
     SPI_WRITE_TX(SPI_FLASH_PORT, StartAddress       & 0xFF);
 
     // write data
-    while(1) {
+    while(1)
+    {
         if(i >= TEST_LENGTH) break;
-        if(!SPI_GET_TX_FIFO_FULL_FLAG(SPI_FLASH_PORT)) {
+        if(!SPI_GET_TX_FIFO_FULL_FLAG(SPI_FLASH_PORT))
+        {
             SPI_WRITE_TX(SPI_FLASH_PORT, u8DataBuffer[i++]);
         }
     }
@@ -217,7 +221,8 @@ void SpiFlash_NormalRead(uint32_t StartAddress, uint8_t *u8DataBuffer)
     SPI_ClearRxFIFO(SPI_FLASH_PORT);
 
     // read data
-    for(i=0; i<TEST_LENGTH; i++) {
+    for(i=0; i<TEST_LENGTH; i++)
+    {
         SPI_WRITE_TX(SPI_FLASH_PORT, 0x00);
         while(SPI_IS_BUSY(SPI_FLASH_PORT));
         u8DataBuffer[i] = SPI_READ_RX(SPI_FLASH_PORT);
@@ -243,9 +248,9 @@ int main(void)
     /* Init UART0 to 115200-8n1 for print message */
     UART0_Init();
 
-		/* Init SPI0, IP clock and multi-function I/O */
-		SPI0_Init();
-		
+    /* Init SPI0, IP clock and multi-function I/O */
+    SPI0_Init();
+
     /* Configure SPI_FLASH_PORT as a master, MSB first, 8-bit transaction, SPI Mode-0 timing, clock is 2MHz */
     SPI_Open(SPI_FLASH_PORT, SPI_MASTER, SPI_MODE_0, 8, 2000000);
 
@@ -261,10 +266,12 @@ int main(void)
     SpiFlash_WaitReady();
 
 ///    if((u16ID = SpiFlash_ReadMidDid()) != 0x1C14) {
-		if((u16ID = SpiFlash_ReadMidDid()) != 0xEF14) {
+    if((u16ID = SpiFlash_ReadMidDid()) != 0xEF14)
+    {
         printf("Wrong ID, 0x%x\n", u16ID);
         while ( 1 );
-    } else
+    }
+    else
         printf("Flash found.\n");
 
     printf("Erase chip ...");
@@ -278,14 +285,16 @@ int main(void)
     printf("[OK]\n");
 
     /* init source data buffer */
-    for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++) {
+    for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++)
+    {
         SrcArray[u32ByteCount] = u32ByteCount;
     }
 
     printf("Start to normal write data to Flash ...");
     /* Program SPI flash */
     u32FlashAddress = 0;
-    for(u32PageNumber=0; u32PageNumber<TEST_NUMBER; u32PageNumber++) {
+    for(u32PageNumber=0; u32PageNumber<TEST_NUMBER; u32PageNumber++)
+    {
         /* page program */
         SpiFlash_NormalPageProgram(u32FlashAddress, SrcArray);
         SpiFlash_WaitReady();
@@ -295,7 +304,8 @@ int main(void)
     printf("[OK]\n");
 
     /* clear destination data buffer */
-    for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++) {
+    for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++)
+    {
         DestArray[u32ByteCount] = 0;
     }
 
@@ -303,12 +313,14 @@ int main(void)
 
     /* Read SPI flash */
     u32FlashAddress = 0;
-    for(u32PageNumber=0; u32PageNumber<TEST_NUMBER; u32PageNumber++) {
+    for(u32PageNumber=0; u32PageNumber<TEST_NUMBER; u32PageNumber++)
+    {
         /* page read */
         SpiFlash_NormalRead(u32FlashAddress, DestArray);
         u32FlashAddress += 0x100;
 
-        for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++) {
+        for(u32ByteCount=0; u32ByteCount<TEST_LENGTH; u32ByteCount++)
+        {
             if(DestArray[u32ByteCount] != SrcArray[u32ByteCount])
                 nError ++;
         }
@@ -325,61 +337,61 @@ int main(void)
 void SYS_Init(void)
 {
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
     //SYS_UnlockReg();
-     
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(FREQ_96MHZ);
-    
-	/* PCLK divider */
-	CLK_SetModuleClock(PCLK_MODULE, (uint32_t) NULL, 1);
-		
+
+    /* PCLK divider */
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t) NULL, 1);
+
     /* Lock protected registers */
     //SYS_LockReg();
-        
+
 }
 
 void UART0_Init(void)
 {
-		/* Enable UART0 Module clock */
+    /* Enable UART0 Module clock */
     CLK_EnableModuleClock(UART0_MODULE);
-		/* UART0 module clock from EXT */
-		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
+    /* UART0 module clock from EXT */
+    CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     /* Reset IP */
-    SYS_ResetModule(UART0_RST);    
+    SYS_ResetModule(UART0_RST);
     /* Configure UART0 and set UART0 Baud-rate */
-		UART_Open(UART0, 115200);
-		/*---------------------------------------------------------------------------------------------------------*/
+    UART_Open(UART0, 115200);
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for UART0 RXD and TXD */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;	
-	
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
+
 }
 
 void SPI0_Init(void)
 {
-		/* Enable SPI0 Module clock */
+    /* Enable SPI0 Module clock */
     CLK_EnableModuleClock(SPI0_MODULE);
-		/* SPI0 module clock from EXT */
-		CLK_SetModuleClock(SPI0_MODULE, CLK_SPI0_SRC_PLL, 0);
+    /* SPI0 module clock from EXT */
+    CLK_SetModuleClock(SPI0_MODULE, CLK_SPI0_SRC_PLL, 0);
     /* Reset IP */
-    SYS_ResetModule(SPI0_RST);    
+    SYS_ResetModule(SPI0_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for SPI0 */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB2MFP_Msk) ) | SYS_GPB_MFPL_PB2MFP_SPI0_SS;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB3MFP_Msk) ) | SYS_GPB_MFPL_PB3MFP_SPI0_CLK;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB4MFP_Msk) ) | SYS_GPB_MFPL_PB4MFP_SPI0_MOSI;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB5MFP_Msk) ) | SYS_GPB_MFPL_PB5MFP_SPI0_MISO;	
-	
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB2MFP_Msk) ) | SYS_GPB_MFPL_PB2MFP_SPI0_SS;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB3MFP_Msk) ) | SYS_GPB_MFPL_PB3MFP_SPI0_CLK;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB4MFP_Msk) ) | SYS_GPB_MFPL_PB4MFP_SPI0_MOSI;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB5MFP_Msk) ) | SYS_GPB_MFPL_PB5MFP_SPI0_MISO;
+
 }
 
 /*** (C) COPYRIGHT 2018 Nuvoton Technology Corp. ***/

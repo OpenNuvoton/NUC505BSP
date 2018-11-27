@@ -21,7 +21,7 @@
 FATFS FatFs[_VOLUMES];      /* File system object for logical drive */
 
 #if defined (__GNUC__)
-#define VECTOR_SIZE		48
+#define VECTOR_SIZE     48
 uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(128)));
 #endif
 

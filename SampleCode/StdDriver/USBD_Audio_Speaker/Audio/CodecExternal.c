@@ -22,10 +22,10 @@ static volatile uint8_t s_u8PlayMute __attribute__((aligned(4)));
 void Codec_Vol(S_AUDIO_LIB* psAudioLib)
 {
     /* executed in main loop */
-    
-    #if CONFIG_AUDIO_PLAY
+
+#if CONFIG_AUDIO_PLAY
     /* note need to ramp up ramp down to avoid pop-noise */
-    
+
     if ( s_u8PlayMute != psAudioLib->m_u8PlayMute )
     {
         s_u8PlayMute = psAudioLib->m_u8PlayMute;
@@ -40,7 +40,7 @@ void Codec_Vol(S_AUDIO_LIB* psAudioLib)
             ;/* TODO */
         }
     }
-    
+
     if ( s_i16PlayVolumeL != psAudioLib->m_i16PlayVolumeL )
     {
         s_i16PlayVolumeL = psAudioLib->m_i16PlayVolumeL;
@@ -49,7 +49,7 @@ void Codec_Vol(S_AUDIO_LIB* psAudioLib)
         else
             ;/* TODO */
     }
-    
+
     if ( s_i16PlayVolumeR != psAudioLib->m_i16PlayVolumeR )
     {
         s_i16PlayVolumeR = psAudioLib->m_i16PlayVolumeR;
@@ -58,7 +58,7 @@ void Codec_Vol(S_AUDIO_LIB* psAudioLib)
         else
             ;/* TODO */
     }
-    #endif  // CONFIG_AUDIO_PLAY
+#endif  // CONFIG_AUDIO_PLAY
 }
 
 #if CONFIG_NAU8822L
@@ -66,7 +66,7 @@ void HeadphoneOutMicIn_Init(void)
 {
     _I2C_WriteData( 0x0000, 0x0000 );   /* Reset all registers */
     CLK_SysTickDelay(10000);
-    
+
     //input source is MIC
     _I2C_WriteData(  1, 0x01F );//R1 MICBIASEN ABIASEN IOBUFEN REFIMP
     _I2C_WriteData(  4, 0x070 );//R4 select audio format(I2S format) and word length (32bits)
@@ -94,9 +94,9 @@ void HeadphoneOutMicIn_Init(void)
 {
     _I2C_WriteData( 0x0000, 0x0000 );   /* Reset all registers */
     CLK_SysTickDelay(10000);
-    
+
     _I2C_WriteData( 0x0066, 0x0060 );
-    
+
     _I2C_WriteData( 0x0003, 0x0010 );
     // FLL Setting
     _I2C_WriteData( 0x0004, 0x0001 );
@@ -107,8 +107,9 @@ void HeadphoneOutMicIn_Init(void)
     _I2C_WriteData( 0x000C, 0x0048 );
     // Digital Audio Bus Format
     _I2C_WriteData( 0x001C, 0x0002 );
-    #define _I2S_MODE_DIR 1
-    if (_I2S_MODE_DIR ==  1) { //_I2S_MODE_MASTER
+#define _I2S_MODE_DIR 1
+    if (_I2S_MODE_DIR ==  1)   //_I2S_MODE_MASTER
+    {
         _I2C_WriteData( 0x001D, 0x3012 ); //301A:Master 3012:Slave
         _I2C_WriteData( 0x001E, 0x2000 );
     }
@@ -139,24 +140,24 @@ void HeadphoneOutMicIn_Init(void)
 void Codec_Init(void)
 {
     int16_t i;
-    
+
     _I2C_SetTxCallback();
-    
+
     /* External CODEC Init */
     HeadphoneOutMicIn_Init();
-    
+
     printf("I2C write External CODEC OK\n");
-    
+
     _I2C_SetRxCallback();
-    
+
     for ( i = 0; i <= 51; i ++ )
     {
         printf("%02d ", i);
         _I2C_ReadData( i );
     }
-    
+
     printf("I2C read External CODEC OK\n");
-    
+
     printf("External CODEC init [OK]\n");
 }
 #endif  // CONFIG_CODEC_EXTERNAL

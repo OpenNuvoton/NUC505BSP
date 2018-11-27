@@ -15,7 +15,7 @@
 #include "gpio.h"
 
 #if defined (__GNUC__)
-#define VECTOR_SIZE		48
+#define VECTOR_SIZE     48
 uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(128)));
 #endif
 
@@ -49,7 +49,7 @@ void SYS_Init(void)
     SystemCoreClockUpdate();
 
     /* Set PCLK Divider */
-    CLK_SetModuleClock(PCLK_MODULE, 0, 1);		/* PCLK divider = 1 */
+    CLK_SetModuleClock(PCLK_MODULE, 0, 1);      /* PCLK divider = 1 */
 
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);

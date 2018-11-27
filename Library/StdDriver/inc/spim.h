@@ -111,7 +111,7 @@ extern "C"
   * @brief                  Enable DMA mode.
   * @param[in]  spim        Base address of SPIM module.
   * @param[in]  isWrite     0 for DMA Read mode; 1 for DMA Write mode.
-  * @param[in]  u32CmdCode  Command code. 
+  * @param[in]  u32CmdCode  Command code.
   * - Valid values for DMA Write mode include:
   *     - \ref SPIM_CTL0_CMDCODE_PAGE_PROG
   *     - \ref SPIM_CTL0_CMDCODE_QUAD_PAGE_PROG_TYPE1

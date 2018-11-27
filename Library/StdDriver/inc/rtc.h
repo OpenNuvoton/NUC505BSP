@@ -63,13 +63,13 @@ extern "C"
 #define RTC_FRIDAY       ((uint32_t) 0x00000005)
 #define RTC_SATURDAY     ((uint32_t) 0x00000006)
 
-#define RTC_ALARM_MASK		0xFF
+#define RTC_ALARM_MASK      0xFF
 
-#define RTC_CLKSRC_INTERNAL		 ((uint32_t) 0x00000001)
-#define RTC_CLKSRC_EXTERNAL   	 ((uint32_t) 0x00000000)
+#define RTC_CLKSRC_INTERNAL      ((uint32_t) 0x00000001)
+#define RTC_CLKSRC_EXTERNAL      ((uint32_t) 0x00000000)
 
-#define RTC_TRIGGER_EDGE		 ((uint32_t) 0x00000020)
-#define RTC_TRIGGER_LEVEL   	 ((uint32_t) 0x00000000)
+#define RTC_TRIGGER_EDGE         ((uint32_t) 0x00000020)
+#define RTC_TRIGGER_LEVEL        ((uint32_t) 0x00000000)
 
 /*@}*/ /* end of group NUC505_RTC_EXPORTED_CONSTANTS */
 
@@ -81,7 +81,8 @@ extern "C"
 /**
   * @brief  RTC define Time Data Struct
   */
-typedef struct {
+typedef struct
+{
     uint32_t u32Year;          /*!<  Year value */
     uint32_t u32Month;         /*!<  Month value */
     uint32_t u32Day;           /*!<  Day value */
@@ -105,23 +106,23 @@ typedef struct {
 
 
 /**
- *  @brief    	Read spare register
+ *  @brief      Read spare register
  *
- *	@param[in]    u32RegNum    The spare register number(0~7)
+ *  @param[in]    u32RegNum    The spare register number(0~7)
  *
- *  @return   	Spare register content.
- * \hideinitializer 
+ *  @return     Spare register content.
+ * \hideinitializer
  */
 #define RTC_READ_SPARE_REGISTER(u32RegNum)    (RTC->SPR[u32RegNum])
 
 /**
- *  @brief    	Write spare register
+ *  @brief      Write spare register
  *
- *	@param[in]    u32RegNum    The spare register number(0~7)
- *	@param[in]    u32RegValue  The spare register value
+ *  @param[in]    u32RegNum    The spare register number(0~7)
+ *  @param[in]    u32RegValue  The spare register value
  *
- *  @return   	None
- * \hideinitializer 
+ *  @return     None
+ * \hideinitializer
  */
 #define RTC_WRITE_SPARE_REGISTER(u32RegNum, u32RegValue)    (RTC->SPR[u32RegNum] = u32RegValue)
 
@@ -132,7 +133,7 @@ typedef struct {
  *
  *  @return   0 = This year is not a leap year. \n
  *            1 = This year is a leap year.
- * \hideinitializer 
+ * \hideinitializer
  */
 #define RTC_IS_LEAP_YEAR    ((RTC->LEAPYEAR & (RTC_LEAPYEAR_LEAPYEAR_Msk))?1:0)
 
@@ -142,7 +143,7 @@ typedef struct {
  *  @param    None
  *
  *  @return   None
- * \hideinitializer 
+ * \hideinitializer
  */
 #define RTC_CLEAR_ALARM_INT_FLAG    (RTC->INTSTS = RTC_INTSTS_ALMIF_Msk)
 
@@ -152,7 +153,7 @@ typedef struct {
  *  @param    None
  *
  *  @return    None
- * \hideinitializer 
+ * \hideinitializer
  */
 #define RTC_CLEAR_TICK_INT_FLAG    (RTC->INTSTS = RTC_INTSTS_TICKIF_Msk)
 
@@ -162,7 +163,7 @@ typedef struct {
  *  @param    None
  *
  *  @return   Alarm interrupt status
- * \hideinitializer 
+ * \hideinitializer
  */
 #define RTC_GET_ALARM_INT_FLAG    ((RTC->INTSTS & RTC_INTSTS_ALMIF_Msk) >> RTC_INTSTS_ALMIF_Pos)
 
@@ -172,7 +173,7 @@ typedef struct {
  *  @param    None
  *
  *  @return   Alarm interrupt status
- * \hideinitializer 
+ * \hideinitializer
  */
 #define RTC_GET_TICK_INT_FLAG    ((RTC->INTSTS & RTC_INTSTS_TICKIF_Msk) >> RTC_INTSTS_TICKIF_Pos)
 

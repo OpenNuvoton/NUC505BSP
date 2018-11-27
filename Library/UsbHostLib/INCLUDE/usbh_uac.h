@@ -41,8 +41,8 @@
 #define UAC_RET_DEV_NOT_SUPPORTED    -19    /*!< Function not supported by the UAC device.  \hideinitializer */
 
 
-/* 
- * Audio Class-Specific Request Codes 
+/*
+ * Audio Class-Specific Request Codes
  */
 #define UAC_SET_CUR                  0x01   /*!< UAC request to set current value  \hideinitializer */
 #define UAC_GET_CUR                  0x81   /*!< UAC request to get current value  \hideinitializer */
@@ -54,7 +54,7 @@
 #define UAC_GET_RES                  0x84   /*!< UAC request to get resolution  \hideinitializer */
 #define UAC_GET_STAT                 0xFF   /*!< UAC request to get status  \hideinitializer */
 
-/* 
+/*
  * Audio Class-Specific Channel selection
  */
 #define UAC_CH_MASTER                0      /*!< Select all channels  \hideinitializer */
@@ -75,7 +75,7 @@
 
 /*@}*/ /* end of group NUC505_USBH_AS_EXPORTED_CONSTANTS */
 
-struct uac_dev_t; 
+struct uac_dev_t;
 
 
 /** @addtogroup NUC505_USBH_AS_EXPORTED_TYPEDEFS USB Host Audio Class Driver Exported Type Define
@@ -96,7 +96,8 @@ typedef int (UAC_CB_FUNC)(struct uac_dev_t *dev, uint8_t *data, int len);    /*!
  *  Audio Class device
  */
 /*! Audio Class device structure \hideinitializer      */
-typedef struct uac_dev_t {              
+typedef struct uac_dev_t
+{
     USB_DEV_T           *udev;          /*!< USB device pointer of UAC_DEV_T \hideinitializer  */
     int                 ctrl_ifnum;     /*!< Audio control interface numder \hideinitializer   */
     int                 au_in_ifnum;    /*!< Audio data-in interface numder \hideinitializer   */
@@ -113,8 +114,8 @@ typedef struct uac_dev_t {
     URB_T *             urbout[ISO_OUT_URB_CNT];     /*!< Audio data output URB \hideinitializer            */
     uint8_t             iso_inbuf[ISO_IN_URB_CNT][AU_IN_MAX_PKTSZ*ISO_FRAME_COUNT];    /*!< USB isochronous-in buffer \hideinitializer  */
     uint8_t             iso_outbuf[ISO_OUT_URB_CNT][AU_OUT_MAX_PKTSZ*ISO_FRAME_COUNT]; /*!< USB isochronous-out buffer \hideinitializer  */
-	uint8_t             in_streaming;   /*!< Audio data in is streaming or not. \hideinitializer        */
-	uint8_t             out_streaming;  /*!< Audio data out is streaming or not. \hideinitializer        */
+    uint8_t             in_streaming;   /*!< Audio data in is streaming or not. \hideinitializer        */
+    uint8_t             out_streaming;  /*!< Audio data out is streaming or not. \hideinitializer        */
 
     /*
      *  The followings are used for interworking with user application.

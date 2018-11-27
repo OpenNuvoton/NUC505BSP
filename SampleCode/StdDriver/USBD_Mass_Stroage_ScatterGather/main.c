@@ -84,25 +84,25 @@ int32_t main (void)
     UART0_Init();
 
 #if defined (__ICCARM__)
-    #pragma section = "VECTOR2"              
+#pragma section = "VECTOR2"
 
-        extern uint32_t __Vectors[];
-        extern uint32_t __Vectors_Size[];	
-        uint32_t* pu32Src;    
-        uint32_t* pu32Dst;
+    extern uint32_t __Vectors[];
+    extern uint32_t __Vectors_Size[];
+    uint32_t* pu32Src;
+    uint32_t* pu32Dst;
 
-        pu32Src = (uint32_t *)&USBD_IRQHandler_SRAM;        
+    pu32Src = (uint32_t *)&USBD_IRQHandler_SRAM;
 //         printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
-        memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
-        SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
+    memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
+    SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
 
-        /* Change USBD vector to interrupt handler in SRAM */
-        /* IAR compiler doesn't following initial configuration file to relocate USBD IRQHandler() */
-        pu32Dst = (uint32_t*) ((uint32_t)__section_begin("VECTOR2")+0x64);
-        *pu32Dst = (uint32_t)pu32Src;
-        
-#endif    
-    
+    /* Change USBD vector to interrupt handler in SRAM */
+    /* IAR compiler doesn't following initial configuration file to relocate USBD IRQHandler() */
+    pu32Dst = (uint32_t*) ((uint32_t)__section_begin("VECTOR2")+0x64);
+    *pu32Dst = (uint32_t)pu32Src;
+
+#endif
+
     printf("NUC505 USB Mass Storage\n");
 
     USBD_Open(&gsInfo, MSC_ClassRequest, NULL);
@@ -114,14 +114,17 @@ int32_t main (void)
     NVIC_EnableIRQ(USBD_IRQn);
 
     /* Start transaction */
-    while(1) {
-        if (USBD_IS_ATTACHED()) {
+    while(1)
+    {
+        if (USBD_IS_ATTACHED())
+        {
             USBD_Start();
             break;
         }
     }
 
-    while(1) {
+    while(1)
+    {
         if (g_usbd_Configured)
             MSC_ProcessCmd();
     }

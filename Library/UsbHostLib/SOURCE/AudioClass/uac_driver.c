@@ -4,7 +4,7 @@
  * $Revision: 1 $
  * $Date: 16/09/12 5:47p $
  * @brief    NUC505 MCU USB Host Audio Class driver
- *        
+ *
  * @note     Support mono and stero audio input and output.
  * Copyright (C) 2016 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
@@ -44,8 +44,10 @@ static UAC_DEV_T *alloc_as_device(void)
 {
     int     i;
 
-    for (i = 0; i < CONFIG_AU_MAX_DEV; i++) {
-        if (g_au_dev[i].udev == NULL) {
+    for (i = 0; i < CONFIG_AU_MAX_DEV; i++)
+    {
+        if (g_au_dev[i].udev == NULL)
+        {
             memset((char *)&g_au_dev[i], 0, sizeof(UAC_DEV_T));
             g_au_dev[i].ctrl_ifnum = -1;
             g_au_dev[i].au_in_ifnum = -1;
@@ -70,8 +72,10 @@ UAC_DEV_T *find_as_deivce_by_udev(USB_DEV_T *udev)
     if (udev == NULL)
         return NULL;
 
-    for (i = 0; i < CONFIG_AU_MAX_DEV; i++) {
-        if (g_au_dev[i].udev == udev) {
+    for (i = 0; i < CONFIG_AU_MAX_DEV; i++)
+    {
+        if (g_au_dev[i].udev == udev)
+        {
             return &g_au_dev[i];
         }
     }
@@ -82,8 +86,10 @@ int  find_as_device(UAC_DEV_T *hdev)
 {
     int    i;
 
-    for (i = 0; i < CONFIG_AU_MAX_DEV; i++) {
-        if (&g_au_dev[i] == hdev) {
+    for (i = 0; i < CONFIG_AU_MAX_DEV; i++)
+    {
+        if (&g_au_dev[i] == hdev)
+        {
             return TRUE;
         }
     }
@@ -98,11 +104,11 @@ static int  au_probe(USB_DEV_T *dev, USB_IF_DESC_T *ifd, const USB_DEV_ID_T *id)
     UAC_DEV_T    *audev, *p;
     int         i;
     if ((ifd->bInterfaceSubClass != SUBCLS_AUDIOCONTROL) &&
-    	(ifd->bInterfaceSubClass != SUBCLS_AUDIOSTREAMING))
-   	{
-				printf("Does not support audio sub-class %x\n", ifd->bInterfaceSubClass);
-				return UAC_RET_DRV_NOT_SUPPORTED;
-		}
+            (ifd->bInterfaceSubClass != SUBCLS_AUDIOSTREAMING))
+    {
+        printf("Does not support audio sub-class %x\n", ifd->bInterfaceSubClass);
+        return UAC_RET_DRV_NOT_SUPPORTED;
+    }
 
 
     ifnum = ifd->bInterfaceNumber;
@@ -110,64 +116,65 @@ static int  au_probe(USB_DEV_T *dev, USB_IF_DESC_T *ifd, const USB_DEV_ID_T *id)
     audev = find_as_deivce_by_udev(dev);
     if (audev == NULL)
     {
-				audev = alloc_as_device();
-				if (audev == NULL)
-						return USB_ERR_NODEV;
+        audev = alloc_as_device();
+        if (audev == NULL)
+            return USB_ERR_NODEV;
     }
 
     audev->udev = dev;
     audev->next = NULL;
-    
+
     USBAS_DBGMSG("au_probe called for ifnum %d\n", ifnum);
 
-		if (ifd->bInterfaceSubClass == SUBCLS_AUDIOSTREAMING)
-		{
-				ep_info = NULL;
-				for (i = 0; i < dev->ep_list_cnt; i++) 
-				{
-						if ((dev->ep_list[i].ifnum == ifnum) &&
-									((dev->ep_list[i].bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) == USB_ENDPOINT_XFER_ISOC)) 
-						{
-								ep_info = &dev->ep_list[i];
-								USBAS_DBGMSG("Isochronous Endpoint 0x%x found.\n", ep_info->bEndpointAddress);
-						}
-				}
-				if (ep_info == NULL) 
-				{
-						USBAS_DBGMSG("couldn't find isochronous endpoints\n");
-						return USB_ERR_NODEV;
-				}
-				
-				if ((ep_info->bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_DIR_IN)
-				{
-						audev->ep_au_in = ep_info;
-						audev->au_in_ifnum = ifnum;
-						USBAS_DBGMSG("Audio in stream interface is %d\n", ifnum);
-				}
-				else
-				{
-						audev->ep_au_out = ep_info;
-						audev->au_out_ifnum = ifnum;
-						USBAS_DBGMSG("Audio out stream interface is %d\n", ifnum);
-				}
-			}
-		else
-		{
-				audev->ctrl_ifnum = ifnum;
-				USBAS_DBGMSG("Audio control interface is %d\n", ifnum);
-		}
+    if (ifd->bInterfaceSubClass == SUBCLS_AUDIOSTREAMING)
+    {
+        ep_info = NULL;
+        for (i = 0; i < dev->ep_list_cnt; i++)
+        {
+            if ((dev->ep_list[i].ifnum == ifnum) &&
+                    ((dev->ep_list[i].bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) == USB_ENDPOINT_XFER_ISOC))
+            {
+                ep_info = &dev->ep_list[i];
+                USBAS_DBGMSG("Isochronous Endpoint 0x%x found.\n", ep_info->bEndpointAddress);
+            }
+        }
+        if (ep_info == NULL)
+        {
+            USBAS_DBGMSG("couldn't find isochronous endpoints\n");
+            return USB_ERR_NODEV;
+        }
+
+        if ((ep_info->bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_DIR_IN)
+        {
+            audev->ep_au_in = ep_info;
+            audev->au_in_ifnum = ifnum;
+            USBAS_DBGMSG("Audio in stream interface is %d\n", ifnum);
+        }
+        else
+        {
+            audev->ep_au_out = ep_info;
+            audev->au_out_ifnum = ifnum;
+            USBAS_DBGMSG("Audio out stream interface is %d\n", ifnum);
+        }
+    }
+    else
+    {
+        audev->ctrl_ifnum = ifnum;
+        USBAS_DBGMSG("Audio control interface is %d\n", ifnum);
+    }
 
     /*
      *  Chaining newly found Audio Class device to end of Audio Class device list.
      */
     if (g_audev_list == NULL)
         g_audev_list = audev;
-    else {
+    else
+    {
         for (p = g_audev_list; p->next != NULL; p = p->next)
             ;
         p->next = audev;
     }
-    
+
     return uac_config_parser(audev);
 }
 
@@ -183,21 +190,21 @@ static void  au_disconnect(USB_DEV_T *dev)
     if (audev == NULL)
         return;
 
-		for (i = 0; i < ISO_IN_URB_CNT; i++)
-		{
-				if (audev->urbin[i]) 
-				{
-						USBH_UnlinkUrb(audev->urbin[i]);
-						USBH_FreeUrb(audev->urbin[i]);
-				}
-		}
+    for (i = 0; i < ISO_IN_URB_CNT; i++)
+    {
+        if (audev->urbin[i])
+        {
+            USBH_UnlinkUrb(audev->urbin[i]);
+            USBH_FreeUrb(audev->urbin[i]);
+        }
+    }
 
-		for (i = 0; i < ISO_OUT_URB_CNT; i++)
-		{
-				if (audev->urbout[i]) 
-				{
-        	USBH_UnlinkUrb(audev->urbout[i]);
-        	USBH_FreeUrb(audev->urbout[i]);
+    for (i = 0; i < ISO_OUT_URB_CNT; i++)
+    {
+        if (audev->urbout[i])
+        {
+            USBH_UnlinkUrb(audev->urbout[i]);
+            USBH_FreeUrb(audev->urbout[i]);
         }
     }
 
@@ -206,9 +213,12 @@ static void  au_disconnect(USB_DEV_T *dev)
      */
     if (audev == g_audev_list)
         g_audev_list = g_audev_list->next;
-    else {
-        for (p = g_audev_list; p != NULL; p = p->next) {
-            if (p->next == audev) {
+    else
+    {
+        for (p = g_audev_list; p != NULL; p = p->next)
+        {
+            if (p->next == audev)
+            {
                 p->next = audev->next;
                 break;
             }
@@ -218,7 +228,8 @@ static void  au_disconnect(USB_DEV_T *dev)
 }
 
 
-static USB_DEV_ID_T  au_id_table[] = {
+static USB_DEV_ID_T  au_id_table[] =
+{
     USB_DEVICE_ID_MATCH_INT_CLASS,    /* match_flags */
     0, 0, 0, 0, 0, 0, 0,
     UAC_IFACE_CODE,                    /* Audio Interface Class Code */
@@ -227,7 +238,8 @@ static USB_DEV_ID_T  au_id_table[] = {
 };
 
 
-static USB_DRIVER_T  au_driver = {
+static USB_DRIVER_T  au_driver =
+{
     "audio class driver",
     au_probe,
     au_disconnect,

@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 11 $
  * $Date: 14/05/30 6:02p $
- * @brief    Demonstrate the RTC function and displays the current time to the 
+ * @brief    Demonstrate the RTC function and displays the current time to the
  *           UART console
  *
  * @note
@@ -42,7 +42,8 @@ void RTC_TickHandle(void)
 void RTC_IRQHandler(void)
 {
 
-    if ( (RTC->INTEN & RTC_INTEN_TICKIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_TICKIF_Msk) ) {      /* tick interrupt occurred */
+    if ( (RTC->INTEN & RTC_INTEN_TICKIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_TICKIF_Msk) )        /* tick interrupt occurred */
+    {
         RTC->INTSTS = 0x2;
         RTC_TickHandle();
     }

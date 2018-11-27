@@ -15,9 +15,9 @@
 #ifdef __VCOM_MOUSE__
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t HID_MouseReportDescriptor[] = 
+uint8_t HID_MouseReportDescriptor[] =
 #else
-uint8_t HID_MouseReportDescriptor[] __attribute__((aligned(4))) = 
+uint8_t HID_MouseReportDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     0x05, 0x01,         /* Usage Page(Generic Desktop Controls) */
@@ -51,9 +51,9 @@ uint8_t HID_MouseReportDescriptor[] __attribute__((aligned(4))) =
 #elif defined __VCOM_KEYBOARD__
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t HID_KeyboardReportDescriptor[] = 
+uint8_t HID_KeyboardReportDescriptor[] =
 #else
-uint8_t HID_KeyboardReportDescriptor[] __attribute__((aligned(4))) = 
+uint8_t HID_KeyboardReportDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     0x05, 0x01,         /* Usage Page(Generic Desktop Controls) */
@@ -94,9 +94,9 @@ uint8_t HID_KeyboardReportDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Device Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8DeviceDescriptor[] = 
+uint8_t gu8DeviceDescriptor[] =
 #else
-uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) = 
+uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     LEN_DEVICE,         /* bLength */
@@ -122,9 +122,9 @@ uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Qualifier Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8QualifierDescriptor[] = 
+uint8_t gu8QualifierDescriptor[] =
 #else
-uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) = 
+uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     LEN_QUALIFIER,          /* bLength            */
@@ -141,9 +141,9 @@ uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ConfigDescriptor[] = 
+uint8_t gu8ConfigDescriptor[] =
 #else
-uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) = 
+uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     LEN_CONFIG,     /* bLength              */
@@ -246,7 +246,7 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
     EPB_MAX_PKT_SIZE & 0x00FF,
     (EPB_MAX_PKT_SIZE & 0xFF00) >> 8,
     0x00,                           /* bInterval        */
-    
+
     /* HID class device */
     /* I/F descr: HID keyboard*/
     LEN_INTERFACE,  /* bLength */
@@ -255,7 +255,7 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
     0x00,           /* bAlternateSetting */
     0x01,           /* bNumEndpoints */
     0x03,           /* bInterfaceClass */
-    
+
     /* Note: set report protocol(0),Set_Protocol / Get_protocol request is options. CV3.0 Test pass */
     0x00,           /* bInterfaceSubClass */
 #ifdef __VCOM_MOUSE__
@@ -281,7 +281,7 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
     sizeof(HID_KeyboardReportDescriptor) & 0x00FF,
     ((sizeof(HID_KeyboardReportDescriptor) & 0xFF00) >> 8),
 #endif
-    
+
     /* EP Descriptor: interrupt in. */
     LEN_ENDPOINT,   /* bLength */
     DESC_ENDPOINT,  /* bDescriptorType */
@@ -296,9 +296,9 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8OtherConfigDescriptor[] = 
+uint8_t gu8OtherConfigDescriptor[] =
 #else
-uint8_t gu8OtherConfigDescriptor[] __attribute__((aligned(4))) = 
+uint8_t gu8OtherConfigDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     LEN_CONFIG,     /* bLength              */
@@ -418,8 +418,8 @@ uint8_t gu8OtherConfigDescriptor[] __attribute__((aligned(4))) =
 #elif defined __VCOM_KEYBOARD__
     HID_KEYBOARD,   /* bInterfaceProtocol */
 #endif
-    0x00,           /* iInterface */    
-    
+    0x00,           /* iInterface */
+
     /* HID Descriptor */
     LEN_HID,        /* Size of this descriptor in UINT8s. */
     DESC_HID,       /* HID descriptor type. */
@@ -445,17 +445,17 @@ uint8_t gu8OtherConfigDescriptor[] __attribute__((aligned(4))) =
     /* wMaxPacketSize */
     EPD_OTHER_MAX_PKT_SIZE & 0x00FF,
     ((EPD_OTHER_MAX_PKT_SIZE & 0xFF00) >> 8),
-    HID_DEFAULT_INT_IN_INTERVAL     /* bInterval */    
-    
+    HID_DEFAULT_INT_IN_INTERVAL     /* bInterval */
+
 };
 
 
 /*!<USB Language String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8StringLang[] = 
+uint8_t gu8StringLang[] =
 #else
-uint8_t gu8StringLang[] __attribute__((aligned(4))) = 
+uint8_t gu8StringLang[] __attribute__((aligned(4))) =
 #endif
 {
     4,              /* bLength */
@@ -466,9 +466,9 @@ uint8_t gu8StringLang[] __attribute__((aligned(4))) =
 /*!<USB Vendor String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8VendorStringDesc[] = 
+uint8_t gu8VendorStringDesc[] =
 #else
-uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) = 
+uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) =
 #endif
 {
     16,
@@ -479,9 +479,9 @@ uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) =
 /*!<USB Product String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ProductStringDesc[] = 
+uint8_t gu8ProductStringDesc[] =
 #else
-uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) = 
+uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) =
 #endif
 {
     32,             /* bLength          */
@@ -489,7 +489,8 @@ uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) =
     'U', 0, 'S', 0, 'B', 0, ' ', 0, 'V', 0, 'i', 0, 'r', 0, 't', 0, 'u', 0, 'a', 0, 'l', 0, ' ', 0, 'C', 0, 'O', 0, 'M', 0
 };
 
-uint8_t *gpu8UsbString[4] = {
+uint8_t *gpu8UsbString[4] =
+{
     gu8StringLang,
     gu8VendorStringDesc,
     gu8ProductStringDesc,
@@ -518,7 +519,8 @@ uint32_t gu32UsbHidReportLen[3] =
 #endif
 };
 
-S_USBD_INFO_T gsInfo = {
+S_USBD_INFO_T gsInfo =
+{
     gu8DeviceDescriptor,
     gu8ConfigDescriptor,
     gpu8UsbString,

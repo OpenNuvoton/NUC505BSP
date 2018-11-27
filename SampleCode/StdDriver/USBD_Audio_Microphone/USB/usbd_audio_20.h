@@ -79,7 +79,7 @@
 
 #define EPA_BUF_BASE   (CEP_BUF_BASE + CEP_BUF_LEN)
 
-//FEEDBACK 
+//FEEDBACK
 #define EPE_BUF_BASE    (EPA_BUF_BASE + EPA_BUF_LEN)
 #define EPE_BUF_LEN     64
 #define EPE_MAX_PKT_SIZE  64

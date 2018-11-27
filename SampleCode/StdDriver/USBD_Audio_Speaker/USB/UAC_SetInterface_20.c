@@ -17,9 +17,9 @@ extern S_AUDIO_LIB g_sAudioLib;
 void UAC_SetInterface_20(uint32_t u32AltInterface)
 {
     S_AUDIO_LIB* psAudioLib = &g_sAudioLib;
-    
+
     if ((gUsbCmd.wIndex & 0xff) == 1)        /* Interface 1 */
-    { 
+    {
         /* Audio Iso OUT interface */
         if (u32AltInterface == 2)            /* Interface 1, Alternate 2 */
         {
@@ -43,6 +43,6 @@ void UAC_SetInterface_20(uint32_t u32AltInterface)
             USBD->EP[EPB].EPRSPCTL |= USBD_EPRSPCTL_FLUSH_Msk;
             printf("dp-\n");
         }
-        
+
     }
 }

@@ -33,29 +33,34 @@ int rb_full(struct RingBuff *rb)
 
 void rb_next_write(struct RingBuff *rb, void **next_wrt_p, unsigned *next_wrt_cap)
 {
-    if (rb_full(rb)) {
+    if (rb_full(rb))
+    {
         *next_wrt_p = NULL;
         *next_wrt_cap = 0;
         return;
     }
-    
+
     *next_wrt_p = (void *) ((unsigned) rb->buff + rb->wrt_ind);
-    if (rb->wrt_ind >= rb->rd_ind) {
+    if (rb->wrt_ind >= rb->rd_ind)
+    {
         *next_wrt_cap = rb->max_size - rb->wrt_ind;
     }
-    else {
+    else
+    {
         *next_wrt_cap = rb->rd_ind - rb->wrt_ind;
     }
 }
 
 void rb_write_done(struct RingBuff *rb, unsigned n)
 {
-    if (n > (rb->max_size - rb->size)) {
+    if (n > (rb->max_size - rb->size))
+    {
         printf("Warning: ring buffer overflow!\n");
     }
-    
+
     rb->wrt_ind += n;
-    if (rb->wrt_ind >= rb->max_size) {
+    if (rb->wrt_ind >= rb->max_size)
+    {
         rb->wrt_ind -= rb->max_size;
     }
     rb->size += n;
@@ -63,29 +68,34 @@ void rb_write_done(struct RingBuff *rb, unsigned n)
 
 void rb_next_read(struct RingBuff *rb, void **next_rd_p, unsigned *next_rd_cap)
 {
-    if (rb_empty(rb)) {
+    if (rb_empty(rb))
+    {
         *next_rd_p = NULL;
         *next_rd_cap = 0;
         return;
     }
-    
+
     *next_rd_p = (void *) ((unsigned) rb->buff + rb->rd_ind);
-    if (rb->rd_ind >= rb->wrt_ind) {
+    if (rb->rd_ind >= rb->wrt_ind)
+    {
         *next_rd_cap = rb->max_size - rb->rd_ind;
     }
-    else {
+    else
+    {
         *next_rd_cap = rb->wrt_ind - rb->rd_ind;
     }
 }
 
 void rb_read_done(struct RingBuff *rb, unsigned n)
 {
-    if (n > rb->size) {
+    if (n > rb->size)
+    {
         printf("Warning: ring buffer underflow!\n");
     }
-    
+
     rb->rd_ind += n;
-    if (rb->rd_ind >= rb->max_size) {
+    if (rb->rd_ind >= rb->max_size)
+    {
         rb->rd_ind -= rb->max_size;
     }
     rb->size -= n;

@@ -27,7 +27,7 @@
 #define MASS_FAT_ADDR           0x20007200
 #endif
 
-uint32_t volatile g_u32AddressSPI = FIRMWARE_CODE_ADDR;	/* SPI Flash Update Start Address */
+uint32_t volatile g_u32AddressSPI = FIRMWARE_CODE_ADDR; /* SPI Flash Update Start Address */
 extern uint32_t EndTagAddr;
 
 /* Global variables for Control Pipe */
@@ -60,23 +60,23 @@ uint8_t *pu8FAT = (uint8_t *)MASS_FAT_ADDR; /* 0x80 * 512 */
 void UpdateSpiFlash(void);
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t u8FormatData[512] = 
+uint8_t u8FormatData[512] =
 #else
 uint8_t u8FormatData[512] __attribute__((aligned(4))) =
 #endif
 {
     0xEB, 0x3C, 0x90, 0x4D, 0x53, 0x44, 0x4F, 0x53, 0x35, 0x2E, 0x30, 0x00, 0x02, 0x01,
     /* Reserved Sector */
-    0x06,    
+    0x06,
     0x00,
     /* Byte 16 */
-    0x02, 
+    0x02,
     /* Byte 17 & 18 */
     0x00, 0x02,
     /* Byte 19 & 20 (number of sector IN THE FILE SYSTEM) */
     0x00, 0x20,
     /* Removable */
-    0xF8, 
+    0xF8,
     /* Size of each FAT */
     0x10, 0x00,
     /* Sector per Track */
@@ -85,22 +85,22 @@ uint8_t u8FormatData[512] __attribute__((aligned(4))) =
     0x01, 0x00,
     /* Hidden sector */
     0x00, 0x00, 0x00, 0x00,
-    /* Large sector */	
+    /* Large sector */
     0x00, 0x00, 0x00, 0x00,
     /* Physical Disk Number */
-    0x00, 
+    0x00,
     /* Reserved */
-    0x00, 
+    0x00,
     /* Sig */
-    0x29, 
-    0xB9, 0xC1, 0xAA, 0x42, 
-    0x4E, 0x4F, 0x20, 0x4E, 0x41, 0x4D, 0x45, 
+    0x29,
+    0xB9, 0xC1, 0xAA, 0x42,
+    0x4E, 0x4F, 0x20, 0x4E, 0x41, 0x4D, 0x45,
     0x20, 0x20, 0x20, 0x20, 0x46, 0x41,
     0x54, 0x31, 0x32, 0x20, 0x20, 0x20
 };
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t u8RootDirData[512] = 
+uint8_t u8RootDirData[512] =
 #else
 uint8_t u8RootDirData[512] __attribute__((aligned(4))) =
 #endif
@@ -124,7 +124,8 @@ uint8_t u8RootDirData[512] __attribute__((aligned(4))) =
     0x83, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-uint8_t g_au8InquiryID[36] = {
+uint8_t g_au8InquiryID[36] =
+{
     0x00,                   /* Peripheral Device Type */
     0x80,                   /* RMB */
     0x00,                   /* ISO/ECMA, ANSI Version */
@@ -141,28 +142,33 @@ uint8_t g_au8InquiryID[36] = {
     '1', '.', '0', '0'
 };
 
-static uint8_t g_au8ModePage_01[12] = {
+static uint8_t g_au8ModePage_01[12] =
+{
     0x01, 0x0A, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00,
     0x03, 0x00, 0x00, 0x00
 };
 
-static uint8_t g_au8ModePage_05[32] = {
+static uint8_t g_au8ModePage_05[32] =
+{
     0x05, 0x1E, 0x13, 0x88, 0x08, 0x20, 0x02, 0x00,
     0x01, 0xF4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x05, 0x1E, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x01, 0x68, 0x00, 0x00
 };
 
-static uint8_t g_au8ModePage_1B[12] = {
+static uint8_t g_au8ModePage_1B[12] =
+{
     0x1B, 0x0A, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00
 };
 
-static uint8_t g_au8ModePage_1C[8] = {
+static uint8_t g_au8ModePage_1C[8] =
+{
     0x1C, 0x06, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00
 };
 
-static uint8_t g_au8ModePage[24] = {
+static uint8_t g_au8ModePage[24] =
+{
     0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x02, 0x00, 0x1C, 0x0A, 0x80, 0x03,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
@@ -177,7 +183,7 @@ void UpdateSpiFlash(void)
         if((g_u32AddressSPI % 0x1000) == 0)
             SPIFlash_EraseSector(g_u32AddressSPI);
 
-        for(j=0;j<2;j++)
+        for(j=0; j<2; j++)
             SPIFlash_WriteInPageData(g_u32AddressSPI + j * 256, 256, (uint8_t *)(SPI_BUFFER_ICP_MSC + j * 256));
         g_u32AddressSPI+= 512;
 
@@ -226,13 +232,15 @@ void USBD_IRQHandler(void)
     if (!IrqStL)    return;
 
     /* USB interrupt */
-    if (IrqStL & USBD_GINTSTS_USBIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_USBIF_Msk)
+    {
         IrqSt = USBD->BUSINTSTS & USBD->BUSINTEN;
 
         if (IrqSt & USBD_BUSINTSTS_SOFIF_Msk)
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_SOFIF_Msk);
 
-        if (IrqSt & USBD_BUSINTSTS_RSTIF_Msk) {
+        if (IrqSt & USBD_BUSINTSTS_RSTIF_Msk)
+        {
             USBD_SwReset();
             g_u8Remove = 0;
             g_u8BulkState = BULK_CBW;
@@ -252,27 +260,33 @@ void USBD_IRQHandler(void)
             USBD_CLR_CEP_INT_FLAG(0x1ffc);
         }
 
-        if (IrqSt & USBD_BUSINTSTS_RESUMEIF_Msk) {
+        if (IrqSt & USBD_BUSINTSTS_RESUMEIF_Msk)
+        {
             USBD_ENABLE_BUS_INT(USBD_BUSINTEN_RSTIEN_Msk|USBD_BUSINTEN_SUSPENDIEN_Msk);
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_RESUMEIF_Msk);
         }
 
-        if (IrqSt & USBD_BUSINTSTS_SUSPENDIF_Msk) {
+        if (IrqSt & USBD_BUSINTSTS_SUSPENDIF_Msk)
+        {
             USBD_ENABLE_BUS_INT(USBD_BUSINTEN_RSTIEN_Msk | USBD_BUSINTEN_RESUMEIEN_Msk);
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_SUSPENDIF_Msk);
         }
 
-        if (IrqSt & USBD_BUSINTSTS_HISPDIF_Msk) {
+        if (IrqSt & USBD_BUSINTSTS_HISPDIF_Msk)
+        {
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk);
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_HISPDIF_Msk);
         }
 
-        if (IrqSt & USBD_BUSINTSTS_DMADONEIF_Msk) {
+        if (IrqSt & USBD_BUSINTSTS_DMADONEIF_Msk)
+        {
             g_usbd_DmaDone = 1;
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_DMADONEIF_Msk);
 
-            if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk) {
-                if (g_usbd_ShortPacket == 1) {
+            if (USBD->DMACTL & USBD_DMACTL_DMARD_Msk)
+            {
+                if (g_usbd_ShortPacket == 1)
+                {
                     USBD->EP[EPA].EPRSPCTL = (USBD->EP[EPA].EPRSPCTL & 0x10) | USB_EP_RSPCTL_SHORTTXEN;    /* packet end */
                     g_usbd_ShortPacket = 0;
                 }
@@ -282,11 +296,15 @@ void USBD_IRQHandler(void)
         if (IrqSt & USBD_BUSINTSTS_PHYCLKVLDIF_Msk)
             USBD_CLR_BUS_INT_FLAG(USBD_BUSINTSTS_PHYCLKVLDIF_Msk);
 
-        if (IrqSt & USBD_BUSINTSTS_VBUSDETIF_Msk) {
-            if (USBD_IS_ATTACHED()) {
+        if (IrqSt & USBD_BUSINTSTS_VBUSDETIF_Msk)
+        {
+            if (USBD_IS_ATTACHED())
+            {
                 /* USB Plug In */
                 USBD_ENABLE_USB();
-            } else {
+            }
+            else
+            {
                 /* USB Un-plug */
                 USBD_DISABLE_USB();
             }
@@ -294,51 +312,64 @@ void USBD_IRQHandler(void)
         }
     }
 
-    if (IrqStL & USBD_GINTSTS_CEPIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_CEPIF_Msk)
+    {
         IrqSt = USBD->CEPINTSTS & USBD->CEPINTEN;
 
-        if (IrqSt & USBD_CEPINTSTS_SETUPTKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_SETUPTKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_SETUPTKIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_SETUPPKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_SETUPPKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_SETUPPKIF_Msk);
             USBD_ProcessSetupPacket();
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_OUTTKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_OUTTKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_OUTTKIF_Msk);
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_INTKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_INTKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-            if (!(IrqSt & USBD_CEPINTSTS_STSDONEIF_Msk)) {
+            if (!(IrqSt & USBD_CEPINTSTS_STSDONEIF_Msk))
+            {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk);
                 USBD_CtrlIn();
-            } else {
+            }
+            else
+            {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_TXPKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_TXPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_PINGIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_PINGIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_PINGIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_TXPKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_TXPKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
             USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
-            if (g_usbd_CtrlInSize) {
+            if (g_usbd_CtrlInSize)
+            {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
-            } else {
+            }
+            else
+            {
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             }
@@ -346,109 +377,129 @@ void USBD_IRQHandler(void)
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_RXPKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_RXPKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_RXPKIF_Msk);
             USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk|USBD_CEPINTEN_STSDONEIEN_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_NAKIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_NAKIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_NAKIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_STALLIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_STALLIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STALLIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_ERRIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_ERRIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_ERRIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_STSDONEIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_STSDONEIF_Msk)
+        {
             USBD_UpdateDeviceState();
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
             USBD_ENABLE_CEP_INT(USBD_CEPINTEN_SETUPPKIEN_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_BUFFULLIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_BUFFULLIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_BUFFULLIF_Msk);
             return;
         }
 
-        if (IrqSt & USBD_CEPINTSTS_BUFEMPTYIF_Msk) {
+        if (IrqSt & USBD_CEPINTSTS_BUFEMPTYIF_Msk)
+        {
             USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_BUFEMPTYIF_Msk);
             return;
         }
     }
 
     /* bulk in */
-    if (IrqStL & USBD_GINTSTS_EPAIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPAIF_Msk)
+    {
         IrqSt = USBD->EP[EPA].EPINTSTS & USBD->EP[EPA].EPINTEN;
 
         USBD_ENABLE_EP_INT(EPA, 0);
         USBD_CLR_EP_INT_FLAG(EPA, IrqSt);
     }
     /* bulk out */
-    if (IrqStL & USBD_GINTSTS_EPBIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPBIF_Msk)
+    {
         IrqSt = USBD->EP[EPB].EPINTSTS & USBD->EP[EPB].EPINTEN;
-        if (IrqSt & USBD_EPINTSTS_RXPKIF_Msk) {
+        if (IrqSt & USBD_EPINTSTS_RXPKIF_Msk)
+        {
             g_u8MscOutPacket = 1;
         }
 
         USBD_CLR_EP_INT_FLAG(EPB, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPCIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPCIF_Msk)
+    {
         IrqSt = USBD->EP[EPC].EPINTSTS & USBD->EP[EPC].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPC, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPDIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPDIF_Msk)
+    {
         IrqSt = USBD->EP[EPD].EPINTSTS & USBD->EP[EPD].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPD, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPEIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPEIF_Msk)
+    {
         IrqSt = USBD->EP[EPE].EPINTSTS & USBD->EP[EPE].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPE, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPFIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPFIF_Msk)
+    {
         IrqSt = USBD->EP[EPF].EPINTSTS & USBD->EP[EPF].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPF, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPGIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPGIF_Msk)
+    {
         IrqSt = USBD->EP[EPG].EPINTSTS & USBD->EP[EPG].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPG, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPHIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPHIF_Msk)
+    {
         IrqSt = USBD->EP[EPH].EPINTSTS & USBD->EP[EPH].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPH, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPIIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPIIF_Msk)
+    {
         IrqSt = USBD->EP[EPI].EPINTSTS & USBD->EP[EPI].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPI, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPJIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPJIF_Msk)
+    {
         IrqSt = USBD->EP[EPJ].EPINTSTS & USBD->EP[EPJ].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPJ, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPKIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPKIF_Msk)
+    {
         IrqSt = USBD->EP[EPK].EPINTSTS & USBD->EP[EPK].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPK, IrqSt);
     }
 
-    if (IrqStL & USBD_GINTSTS_EPLIF_Msk) {
+    if (IrqStL & USBD_GINTSTS_EPLIF_Msk)
+    {
         IrqSt = USBD->EP[EPL].EPINTSTS & USBD->EP[EPL].EPINTEN;
         USBD_CLR_EP_INT_FLAG(EPL, IrqSt);
     }
@@ -510,54 +561,65 @@ void MSC_Init(void)
     g_u32MassBase = MASS_BUFFER_ADDR;
     g_u32StorageBase = STORAGE_BUFFER_ADDR;
 
-    for(i =0;i<0x40*512;i++)
+    for(i =0; i<0x40*512; i++)
         pu8FAT[i] = 0;
 
-    for(i =0;i<0x40;i++)
+    for(i =0; i<0x40; i++)
     {
         pu8FAT[i*512 + 0] = 0xF8;
         pu8FAT[i*512 + 1] = 0xFF;
         pu8FAT[i*512 + 2] = 0xFF;
         pu8FAT[i*512 + 3] = 0x00;
-    }	
+    }
 }
 
 void MSC_ClassRequest(void)
 {
-    if (gUsbCmd.bmRequestType & 0x80) { /* request data transfer direction */
+    if (gUsbCmd.bmRequestType & 0x80)   /* request data transfer direction */
+    {
         // Device to host
-        switch (gUsbCmd.bRequest) {
-        case GET_MAX_LUN: {
+        switch (gUsbCmd.bRequest)
+        {
+        case GET_MAX_LUN:
+        {
             /* Check interface number with cfg descriptor and check wValue = 0, wLength = 1 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1)) {
-            /* Return current configuration setting */
-            USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
-            USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
-            USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
+            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 1))
+            {
+                /* Return current configuration setting */
+                USBD_PrepareCtrlIn((uint8_t *)&g_u32MSCMaxLun, 1);
+                USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_INTKIF_Msk);
+                USBD_ENABLE_CEP_INT(USBD_CEPINTEN_INTKIEN_Msk);
             }
-            else {/* Invalid Get MaxLun command */
+            else  /* Invalid Get MaxLun command */
+            {
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
             }
             break;
         }
-        default: {
+        default:
+        {
             /* Setup error, stall the device */
             USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
             break;
         }
         }
-    } else {
+    }
+    else
+    {
         /* Host to device */
-        switch (gUsbCmd.bRequest) {
-        case BULK_ONLY_MASS_STORAGE_RESET: {
+        switch (gUsbCmd.bRequest)
+        {
+        case BULK_ONLY_MASS_STORAGE_RESET:
+        {
             /* Check interface number with cfg descriptor and check wValue = 0, wLength = 0 */
-            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0)) {
+            if ((gUsbCmd.wValue == 0) && (gUsbCmd.wIndex == 0) && (gUsbCmd.wLength == 0))
+            {
                 g_u8Prevent = 1;
                 /* Status stage */
                 USBD_CLR_CEP_INT_FLAG(USBD_CEPINTSTS_STSDONEIF_Msk);
                 USBD_SET_CEP_STATE(USB_CEPCTL_NAKCLR);
                 USBD_ENABLE_CEP_INT(USBD_CEPINTEN_STSDONEIEN_Msk);
-                USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH); 
+                USBD_SET_CEP_STATE(USB_CEPCTL_FLUSH);
                 g_u32EpStallLock = 0;
 
                 USBD_ResetDMA();
@@ -566,12 +628,14 @@ void MSC_ClassRequest(void)
                 g_u8BulkState = BULK_CBW;
                 g_u8MscOutPacket = 0;
             }
-            else {/* Invalid Get MaxLun command */
+            else  /* Invalid Get MaxLun command */
+            {
                 USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
             }
             break;
         }
-        default: {
+        default:
+        {
             /* Stall */
             /* Setup error, stall the device */
             USBD_SET_CEP_STATE(USBD_CEPCTL_STALLEN_Msk);
@@ -585,10 +649,12 @@ void MSC_ClassRequest(void)
 void MSC_RequestSense(void)
 {
     memset((uint8_t *)(g_u32MassBase), 0, 18);
-    if (g_u8Prevent) {
+    if (g_u8Prevent)
+    {
         g_u8Prevent = 0;
         *(uint8_t *)(g_u32MassBase) = 0x70;
-    } else
+    }
+    else
         *(uint8_t *)(g_u32MassBase) = 0xf0;
 
     *(uint8_t *)(g_u32MassBase + 2) = g_au8SenseKey[0];
@@ -648,7 +714,8 @@ void MSC_ModeSense10(void)
     *((uint32_t *)g_u32MassBase  ) = 0;
     *((uint32_t *)g_u32MassBase + 1) = 0;
 
-    switch (g_sCBW.au8Data[0]) {
+    switch (g_sCBW.au8Data[0])
+    {
     case 0x01:
         *((uint8_t *)g_u32MassBase) = 19;
         i = 8;
@@ -736,12 +803,14 @@ void MSC_BulkOut(uint32_t u32Addr, uint32_t u32Len)
     g_usbd_ShortPacket = 0;
 
     u32Loop = u32Len / USBD_MAX_DMA_LEN;
-    for (i=0; i<u32Loop; i++) {
+    for (i=0; i<u32Loop; i++)
+    {
         MSC_ActiveDMA(u32Addr+i*USBD_MAX_DMA_LEN, USBD_MAX_DMA_LEN);
     }
 
     u32Loop = u32Len % USBD_MAX_DMA_LEN;
-    if (u32Loop) {
+    if (u32Loop)
+    {
         MSC_ActiveDMA(u32Addr+i*USBD_MAX_DMA_LEN, u32Loop);
     }
 }
@@ -755,11 +824,14 @@ void MSC_BulkIn(uint32_t u32Addr, uint32_t u32Len)
     USBD_SET_DMA_READ(BULK_IN_EP_NUM);
 
     u32Loop = u32Len / USBD_MAX_DMA_LEN;
-    for (i=0; i<u32Loop; i++) {
+    for (i=0; i<u32Loop; i++)
+    {
         USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_TXPKIEN_Msk);
         g_usbd_ShortPacket = 0;
-        while(1) {
-            if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk) {
+        while(1)
+        {
+            if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk)
+            {
                 MSC_ActiveDMA(u32Addr+i*USBD_MAX_DMA_LEN, USBD_MAX_DMA_LEN);
                 break;
             }
@@ -768,13 +840,17 @@ void MSC_BulkIn(uint32_t u32Addr, uint32_t u32Len)
 
     addr = u32Addr + i * USBD_MAX_DMA_LEN;
     u32Loop = u32Len % USBD_MAX_DMA_LEN;
-    if (u32Loop) {
+    if (u32Loop)
+    {
         count = u32Loop / g_u32EpMaxPacketSize;
-        if (count) {
+        if (count)
+        {
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_TXPKIEN_Msk);
             g_usbd_ShortPacket = 0;
-            while(1) {
-                if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk) {
+            while(1)
+            {
+                if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk)
+                {
                     MSC_ActiveDMA(addr, count * g_u32EpMaxPacketSize);
                     break;
                 }
@@ -782,11 +858,14 @@ void MSC_BulkIn(uint32_t u32Addr, uint32_t u32Len)
             addr += (count * g_u32EpMaxPacketSize);
         }
         count = u32Loop % g_u32EpMaxPacketSize;
-        if (count) {
+        if (count)
+        {
             USBD_ENABLE_EP_INT(EPA, USBD_EPINTEN_TXPKIEN_Msk);
             g_usbd_ShortPacket = 1;
-            while(1) {
-                if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk) {
+            while(1)
+            {
+                if (USBD_GET_EP_INT_FLAG(EPA) & USBD_EPINTSTS_BUFEMPTYIF_Msk)
+                {
                     MSC_ActiveDMA(addr, count);
                     break;
                 }
@@ -811,7 +890,8 @@ void MSC_ReceiveCBW(uint32_t u32Buf, uint32_t u32Len)
     g_usbd_DmaDone = 0;
     USBD_ENABLE_DMA();
 
-    while(g_usbd_Configured) {
+    while(g_usbd_Configured)
+    {
         if (g_usbd_DmaDone == 1)
             break;
 
@@ -823,10 +903,10 @@ void MSC_ReceiveCBW(uint32_t u32Buf, uint32_t u32Len)
 #define FAT_SECTORS_ADDRESS      u8FormatData[14]
 #define FAT_SECTORS             ((u8FormatData[23] << 8) + u8FormatData[22]) * 2
 #define ROOT_DIR_ADDRESS         FAT_SECTORS_ADDRESS + FAT_SECTORS
-#define ROOT_DIR_SECTORS        ((((u8FormatData[18] << 8) + u8FormatData[17]) * 32) / 512)  
+#define ROOT_DIR_SECTORS        ((((u8FormatData[18] << 8) + u8FormatData[17]) * 32) / 512)
 #define DATA_SECTOR_ADDRESS     ((FAT_SECTORS + FAT_SECTORS_ADDRESS + ROOT_DIR_SECTORS))
 
-extern uint8_t *pu8FAT;     
+extern uint8_t *pu8FAT;
 #define FLASH_PAGE_SIZE      512
 
 #ifdef __ICCARM__
@@ -836,10 +916,11 @@ uint32_t  u32buff[128];
 uint32_t  u32buff[128] __attribute__((aligned(4)));
 #endif
 
-int8_t i8FileIndex[FILE_NAME_LENGTH] = 
-{   1,   3,   5,   7,   9,  14,  16,  18,  20,  22,  24,  28,  30,
-   31, -29, -27, -25, -23, -18, -16, -14, -12, -10,  -8,  -4,  -2,
-  -63, -61, -59, -57, -55, -50, -48, -46, -44, -42, -40, -36, -34 
+int8_t i8FileIndex[FILE_NAME_LENGTH] =
+{
+    1,   3,   5,   7,   9,  14,  16,  18,  20,  22,  24,  28,  30,
+    31, -29, -27, -25, -23, -18, -16, -14, -12, -10,  -8,  -4,  -2,
+    -63, -61, -59, -57, -55, -50, -48, -46, -44, -42, -40, -36, -34
 };
 
 void Wt10_Command(void)
@@ -852,9 +933,9 @@ void Wt10_Command(void)
 
     sector_count = g_sCBW.dCBWDataTransferLength /512;
 
-    for(i=0;i<sector_count;i++)
+    for(i=0; i<sector_count; i++)
     {
-        int sectorIdx = lba + i;  
+        int sectorIdx = lba + i;
         if (sectorIdx == 0x00000000)
             MSC_BulkOut((uint32_t)u8FormatData,  512);
         else
@@ -867,16 +948,16 @@ void Wt10_Command(void)
 
                 if(g_UpdateEnable == 0 || (g_u8MACOS == 1 && g_u8ShowFile != 1))           /* Check File name (When Update Function is not Enabled or MAC OS) */
                 {
-                    for(k =0;k<32;k++)                                                     /* Check Root Directory */
+                    for(k =0; k<32; k++)                                                   /* Check Root Directory */
                     {
-                        for(l=0;l<FILE_NAME_LENGTH;l++)
+                        for(l=0; l<FILE_NAME_LENGTH; l++)
                         {
                             if(u8FileName[l] != 0)                                         /* Need to Check File Name - Character*/
                                 if(u8RootDirData[k*16+i8FileIndex[l]] != u8FileName[l])    /* Check File Name */
-                                    break; 
+                                    break;
                         }
 
-                        if(l == FILE_NAME_LENGTH)                                          /* Match */ 
+                        if(l == FILE_NAME_LENGTH)                                          /* Match */
                         {
                             g_file_size = (uint32_t *)&u8RootDirData[k *16 + 60];          /* Get File Size */
 
@@ -889,7 +970,7 @@ void Wt10_Command(void)
                             SPIFlash_EraseSector(EndTagAddr & ~0x3FFF);
 
                             printf("File Name:");
-                            for(l=0;l<FILE_NAME_LENGTH;l++)                                /* Display the Update File Name */
+                            for(l=0; l<FILE_NAME_LENGTH; l++)                              /* Display the Update File Name */
                             {
                                 if((u8RootDirData[k *16 + i8FileIndex[l]] != 0) && (u8RootDirData[k *16 + i8FileIndex[l]+1] == 0) )
                                     printf("%c",u8RootDirData[k *16 + i8FileIndex[l]]);
@@ -942,7 +1023,7 @@ void Wt10_Command(void)
                         }
                         /* Finder progresses a copy of a file - HFS type code 'brok' & HFS creator code 'MACS' */
                         if(pu8Data[50] == 'b' && pu8Data[51] == 'r' && pu8Data[52] == 'o' && pu8Data[53] == 'k' &&
-                           pu8Data[54] == 'M' && pu8Data[55] == 'A' && pu8Data[56] == 'C' && pu8Data[57] == 'S')
+                                pu8Data[54] == 'M' && pu8Data[55] == 'A' && pu8Data[56] == 'C' && pu8Data[57] == 'S')
                         {
                             g_u8MACOS_Update = 1;
                         }
@@ -970,9 +1051,9 @@ void Rd10_Command(void)
 
     sector_count = g_sCBW.dCBWDataTransferLength /512;
 
-    for(i=0;i<sector_count;i++)
-    {	
-        int sectorIdx = lba + i;  
+    for(i=0; i<sector_count; i++)
+    {
+        int sectorIdx = lba + i;
 
         for (j = 0; j < FLASH_PAGE_SIZE/4; j++)
             u32buff[j] = 0;
@@ -998,17 +1079,20 @@ void MSC_ProcessCmd(void)
     uint32_t i;
     uint32_t Hcount, Dcount;
 
-    if (g_u8MscOutPacket) {
+    if (g_u8MscOutPacket)
+    {
         g_u8MscOutPacket = 0;
 
-        if (g_u8BulkState == BULK_CBW) {
+        if (g_u8BulkState == BULK_CBW)
+        {
 
             /* Check CBW */
             g_u32CbwSize = USBD->EP[EPB].EPDATCNT & 0xffff;
             MSC_ReceiveCBW(g_u32MassBase, g_u32CbwSize);
 
             /* Check Signature & length of CBW */
-            if ((*(uint32_t *)(g_u32MassBase) != CBW_SIGNATURE) || (g_u32CbwSize != 31)) {
+            if ((*(uint32_t *)(g_u32MassBase) != CBW_SIGNATURE) || (g_u32CbwSize != 31))
+            {
                 /* Invalid CBW */
                 g_u8Prevent = 1;
                 USBD_SetEpStall(EPA);
@@ -1026,20 +1110,27 @@ void MSC_ProcessCmd(void)
             Hcount = g_sCBW.dCBWDataTransferLength;
 
             /* Parse Op-Code of CBW */
-        switch (g_sCBW.u8OPCode) {
+            switch (g_sCBW.u8OPCode)
+            {
             case UFI_READ_12:
-            case UFI_READ_10: {
+            case UFI_READ_10:
+            {
                 Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
-                if (g_sCBW.bmCBWFlags == 0x80) {    /* IN */
-                    if (Hcount == Dcount) { /* Hi == Di (Case 6)*/
+                if (g_sCBW.bmCBWFlags == 0x80)      /* IN */
+                {
+                    if (Hcount == Dcount)   /* Hi == Di (Case 6)*/
+                    {
                         g_sCSW.bCSWStatus = 0;
                     }
-                    else if (Hcount < Dcount) {  /* Hn < Di (Case 2) || Hi < Di (Case 7) */
-                        if (Hcount) {   /* Hi < Di (Case 7) */
+                    else if (Hcount < Dcount)    /* Hn < Di (Case 2) || Hi < Di (Case 7) */
+                    {
+                        if (Hcount)     /* Hi < Di (Case 7) */
+                        {
                             g_u8Prevent = 1;
                             g_sCSW.bCSWStatus = 0x01;
                         }
-                        else {  /* Hn < Di (Case 2) */
+                        else    /* Hn < Di (Case 2) */
+                        {
                             g_u8Prevent = 1;
                             g_sCSW.bCSWStatus = 0x01;
                             g_sCSW.dCSWDataResidue = 0;
@@ -1047,12 +1138,14 @@ void MSC_ProcessCmd(void)
                             return;
                         }
                     }
-                    else if (Hcount > Dcount) { /* Hi > Dn (Case 4) || Hi > Di (Case 5) */
+                    else if (Hcount > Dcount)   /* Hi > Dn (Case 4) || Hi > Di (Case 5) */
+                    {
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x01;
                     }
                 }
-                else {  /* Ho <> Di (Case 10) */
+                else    /* Ho <> Di (Case 10) */
+                {
                     g_u8Prevent = 1;
                     USBD_SetEpStall(EPB);
                     g_sCSW.bCSWStatus = 0x01;
@@ -1065,29 +1158,36 @@ void MSC_ProcessCmd(void)
                 break;
             }
             case UFI_WRITE_12:
-            case UFI_WRITE_10: {
+            case UFI_WRITE_10:
+            {
                 Dcount = (get_be32(&g_sCBW.au8Data[4])>>8) * 512;
-                if (g_sCBW.bmCBWFlags == 0x00) {    /* OUT */
-                    if (Hcount == Dcount) { /* Ho == Do (Case 12)*/
+                if (g_sCBW.bmCBWFlags == 0x00)      /* OUT */
+                {
+                    if (Hcount == Dcount)   /* Ho == Do (Case 12)*/
+                    {
                         g_sCSW.bCSWStatus = 0;
                     }
-                    else if (Hcount < Dcount) { /* Hn < Do (Case 3) || Ho < Do (Case 13) */
+                    else if (Hcount < Dcount)   /* Hn < Do (Case 3) || Ho < Do (Case 13) */
+                    {
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x1;
-                        if (Hcount == 0) {  /* Hn < Do (Case 3) */
+                        if (Hcount == 0)    /* Hn < Do (Case 3) */
+                        {
                             g_sCSW.dCSWDataResidue = 0;
                             MSC_AckCmd();
                             return;
                         }
                     }
-                    else if (Hcount > Dcount) { /* Ho > Do (Case 11) */
+                    else if (Hcount > Dcount)   /* Ho > Do (Case 11) */
+                    {
                         g_u8Prevent = 1;
                         g_sCSW.bCSWStatus = 0x1;
                     }
-                    Wt10_Command();	
+                    Wt10_Command();
                     g_sCSW.dCSWDataResidue = 0;
                 }
-                else {  /* Hi <> Do (Case 8) */
+                else    /* Hi <> Do (Case 8) */
+                {
                     g_u8Prevent = 1;
                     g_sCSW.bCSWStatus = 0x1;
                     USBD_SetEpStall(EPA);
@@ -1095,23 +1195,29 @@ void MSC_ProcessCmd(void)
                     MSC_AckCmd();
                     return;
                 }
-            break;
-        }
-        case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL: {
-            if (g_sCBW.au8Data[2] & 0x01) {
-                g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
-                g_au8SenseKey[1] = 0x24;
-                g_au8SenseKey[2] = 0;
-                g_u8Prevent = 1;
-            } else
-                g_u8Prevent = 0;
+                break;
+            }
+            case UFI_PREVENT_ALLOW_MEDIUM_REMOVAL:
+            {
+                if (g_sCBW.au8Data[2] & 0x01)
+                {
+                    g_au8SenseKey[0] = 0x05;  //INVALID COMMAND
+                    g_au8SenseKey[1] = 0x24;
+                    g_au8SenseKey[2] = 0;
+                    g_u8Prevent = 1;
+                }
+                else
+                    g_u8Prevent = 0;
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = g_u8Prevent;
-            break;
-        }
-            case UFI_TEST_UNIT_READY: {
-                if (Hcount != 0) {
-                    if (g_sCBW.bmCBWFlags == 0) {   /* Ho > Dn (Case 9) */
+                break;
+            }
+            case UFI_TEST_UNIT_READY:
+            {
+                if (Hcount != 0)
+                {
+                    if (g_sCBW.bmCBWFlags == 0)     /* Ho > Dn (Case 9) */
+                    {
                         g_u8Prevent = 1;
                         USBD_SetEpStall(EPB);
                         g_sCSW.bCSWStatus = 0x1;
@@ -1119,8 +1225,10 @@ void MSC_ProcessCmd(void)
                         MSC_AckCmd();
                     }
                 }
-                else {  /* Hn == Dn (Case 1) */
-                    if (g_u8Remove) {
+                else    /* Hn == Dn (Case 1) */
+                {
+                    if (g_u8Remove)
+                    {
                         g_sCSW.dCSWDataResidue = 0;
                         g_sCSW.bCSWStatus = 1;
                         g_au8SenseKey[0] = 0x02;    /* Not ready */
@@ -1128,7 +1236,8 @@ void MSC_ProcessCmd(void)
                         g_au8SenseKey[2] = 0;
                         g_u8Prevent = 1;
                     }
-                    else {
+                    else
+                    {
                         g_sCSW.bCSWStatus = 0;
                         g_sCSW.dCSWDataResidue = 0;
                     }
@@ -1136,24 +1245,30 @@ void MSC_ProcessCmd(void)
                 }
                 return;
             }
-            case UFI_START_STOP: {
-                if ((g_sCBW.au8Data[2] & 0x03) == 0x2) {
+            case UFI_START_STOP:
+            {
+                if ((g_sCBW.au8Data[2] & 0x03) == 0x2)
+                {
                     g_u8Remove = 1;
                 }
                 break;
             }
-            case UFI_VERIFY_10: {
+            case UFI_VERIFY_10:
+            {
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
-            case UFI_REQUEST_SENSE: {
-                if ((Hcount > 0) && (Hcount <= 18)){
+            case UFI_REQUEST_SENSE:
+            {
+                if ((Hcount > 0) && (Hcount <= 18))
+                {
                     MSC_RequestSense();
                     g_sCSW.bCSWStatus = 0;
                     g_sCSW.dCSWDataResidue = 0;
                 }
-                else {
+                else
+                {
                     USBD_SetEpStall(EPA);
                     g_u8Prevent = 1;
                     g_sCSW.bCSWStatus = 0x01;
@@ -1161,46 +1276,54 @@ void MSC_ProcessCmd(void)
                 }
                 break;
             }
-            case UFI_READ_FORMAT_CAPACITY: {
+            case UFI_READ_FORMAT_CAPACITY:
+            {
                 MSC_ReadFormatCapacity();
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
-            case UFI_READ_CAPACITY: {
+            case UFI_READ_CAPACITY:
+            {
                 MSC_ReadCapacity();
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
             case UFI_MODE_SELECT_6:
-            case UFI_MODE_SELECT_10: {
+            case UFI_MODE_SELECT_10:
+            {
                 MSC_BulkOut(g_u32StorageBase, g_sCBW.dCBWDataTransferLength);
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
-            case UFI_MODE_SENSE_10: {
+            case UFI_MODE_SENSE_10:
+            {
                 MSC_ModeSense10();
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
-            case UFI_MODE_SENSE_6: {
+            case UFI_MODE_SENSE_6:
+            {
                 MSC_ModeSense6();
                 g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = 0;
                 break;
             }
-            case UFI_INQUIRY: {
-                if ((Hcount > 0) && (Hcount <= 36)){
+            case UFI_INQUIRY:
+            {
+                if ((Hcount > 0) && (Hcount <= 36))
+                {
                     /* Bulk IN buffer */
                     USBD_MemCopy((uint8_t *)(g_u32MassBase), (uint8_t *)g_au8InquiryID, Hcount);
                     MSC_BulkIn(g_u32MassBase, Hcount);
                     g_sCSW.bCSWStatus = 0;
                     g_sCSW.dCSWDataResidue = 0;
                 }
-                else {
+                else
+                {
                     USBD_SetEpStall(EPA);
                     g_u8Prevent = 1;
                     g_sCSW.bCSWStatus = 0x01;
@@ -1216,7 +1339,8 @@ void MSC_ProcessCmd(void)
                 g_sCSW.dCSWDataResidue = 0;
                 break;
             }
-            default: {
+            default:
+            {
                 /* Unsupported command */
                 g_au8SenseKey[0] = 0x05;
                 g_au8SenseKey[1] = 0x20;
@@ -1229,21 +1353,24 @@ void MSC_ProcessCmd(void)
                     g_sCSW.dCSWDataResidue = 0;
                 g_sCSW.bCSWStatus = g_u8Prevent;
             }
-        }
-        MSC_AckCmd();
+            }
+            MSC_AckCmd();
         }
     }
 
     /* For MSC compliance test, if received an invalid command should stall it */
-    while(1) {
-        if (USBD->EP[EPA].EPINTSTS & USBD_EPINTSTS_BUFEMPTYIF_Msk) {
+    while(1)
+    {
+        if (USBD->EP[EPA].EPINTSTS & USBD_EPINTSTS_BUFEMPTYIF_Msk)
+        {
             if (g_u32EpStallLock & 0x1)
                 USBD_SetEpStall(EPA);
             if (g_u32EpStallLock & 0x2)
                 USBD_SetEpStall(EPB);
             break;
         }
-        else {
+        else
+        {
             if ((USBD_GetEpStall(EPA) == 0) && (!(USBD->EP[EPA].EPINTSTS & USBD_EPINTSTS_BUFEMPTYIF_Msk)))
                 USBD->EP[EPA].EPRSPCTL = (USBD->EP[EPA].EPRSPCTL & 0x10) | USB_EP_RSPCTL_SHORTTXEN;
         }
@@ -1259,7 +1386,8 @@ void MSC_ActiveDMA(uint32_t u32Addr, uint32_t u32Len)
     USBD_SET_DMA_LEN(u32Len);
     g_usbd_DmaDone = 0;
     USBD_ENABLE_DMA();
-    while(g_usbd_Configured) {
+    while(g_usbd_Configured)
+    {
         if (g_usbd_DmaDone)
             break;
 

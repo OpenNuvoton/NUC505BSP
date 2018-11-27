@@ -17,7 +17,7 @@
  *----------------------------------------------------------------------------*/
 uint32_t SystemCoreClock = __HSI;               /*!< System Clock Frequency (Core Clock)*/
 uint32_t CyclesPerUs      = (__HSI / 1000000);  /*!< Cycles per micro second            */
-uint32_t gau32ClkSrcTbl[] = {__HXT, 0}; 				/*!< System clock source table */
+uint32_t gau32ClkSrcTbl[] = {__HXT, 0};                 /*!< System clock source table */
 
 #if defined (__ICCARM__)
 void SystemCoreClockUpdate (void) @ "SystemCoreClockUpdate";    // Ensure this function can be initialized by copy.
@@ -34,10 +34,13 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 
     u32ClkSrc = CLK->CLKDIV0 & CLK_CLKDIV0_HCLKSEL_Msk;
 
-    if(u32ClkSrc != CLK_CLKDIV0_HCLKSEL_Msk) {
+    if(u32ClkSrc != CLK_CLKDIV0_HCLKSEL_Msk)
+    {
         /* Use the clock sources directly */
         u32Freq = gau32ClkSrcTbl[u32ClkSrc];
-    } else {
+    }
+    else
+    {
         /* Use PLL clock */
         u32Freq = CLK_GetPLLClockFreq();
     }

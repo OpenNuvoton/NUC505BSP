@@ -25,9 +25,9 @@ S_MODCLK s_ClkArray[]=
 {
 
     /* Don't not set following three clock divider if run code between SPIM or SRAM */
-//	SRAM23_MODULE, 0,
-//	ROM_MODULE,	0,				/* 0 means no divider and select field in clock controller. */
-//	SPIM_MODULE,	0,			/* 0 means no divider and select field in clock controller. */
+//  SRAM23_MODULE, 0,
+//  ROM_MODULE, 0,              /* 0 means no divider and select field in clock controller. */
+//  SPIM_MODULE,    0,          /* 0 means no divider and select field in clock controller. */
 
     SDH_MODULE, CLK_SDH_SRC_PLL,
     USBD_MODULE, CLK_USBD_SRC_PLL,
@@ -36,23 +36,23 @@ S_MODCLK s_ClkArray[]=
     TMR1_MODULE, CLK_TMR1_SRC_EXT,
     TMR2_MODULE, CLK_TMR2_SRC_EXT,
     TMR3_MODULE, CLK_TMR3_SRC_EXT,
-    WDT_MODULE,	CLK_WDT_SRC_EXT,
+    WDT_MODULE, CLK_WDT_SRC_EXT,
     PWM_MODULE, CLK_PWM_SRC_PLL,
-    I2C0_MODULE,	0,			/* 0 means no divider and select field in clock controller. */
-    I2C1_MODULE,	0,			/* 0 means no divider and select field in clock controller. */
-    RTC_MODULE,	0,			/* 0 means no divider and select field in clock controller. */
+    I2C0_MODULE,    0,          /* 0 means no divider and select field in clock controller. */
+    I2C1_MODULE,    0,          /* 0 means no divider and select field in clock controller. */
+    RTC_MODULE, 0,          /* 0 means no divider and select field in clock controller. */
 
-    SPI0_MODULE,		CLK_SPI0_SRC_PLL,		/* Only clock src */
-    SPI1_MODULE,		CLK_SPI1_SRC_PLL,		/* Only clock src */
+    SPI0_MODULE,        CLK_SPI0_SRC_PLL,       /* Only clock src */
+    SPI1_MODULE,        CLK_SPI1_SRC_PLL,       /* Only clock src */
 
     /* Don't not set following UART0 clock divider if print message from UART0 */
-    //UART0_MODULE,		CLK_UART0_SRC_PLL,
+    //UART0_MODULE,     CLK_UART0_SRC_PLL,
 
-    UART1_MODULE,		CLK_UART1_SRC_PLL,
-    UART2_MODULE,		CLK_UART2_SRC_PLL,
+    UART1_MODULE,       CLK_UART1_SRC_PLL,
+    UART2_MODULE,       CLK_UART2_SRC_PLL,
 
-    I2S_MODULE,		CLK_I2S_SRC_APLL,
-    ADC_MODULE,		CLK_ADC_SRC_PLL,
+    I2S_MODULE,     CLK_I2S_SRC_APLL,
+    ADC_MODULE,     CLK_ADC_SRC_PLL,
 
 };
 

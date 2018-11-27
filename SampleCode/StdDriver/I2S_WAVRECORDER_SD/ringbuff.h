@@ -18,7 +18,8 @@ extern "C"
 {
 #endif
 
-struct RingBuff {
+struct RingBuff
+{
     void *buff;
     unsigned size;
     unsigned max_size;

@@ -74,14 +74,16 @@
 /** @addtogroup NUC505_SD_EXPORTED_TYPEDEF SD Exported Type Defines
   @{
 */
-typedef struct SD_info_t {
+typedef struct SD_info_t
+{
     uint32_t    CardType;       /*!< SD_TYPE_SD_HIGH for SDHC, SD_TYPE_SD_LOW for SD, or SD_TYPE_MMC for MMC */
     uint32_t    RCA;            /*!< relative card address */
     uint8_t     IsCardInsert;   /*!< card insert state */
 } SD_INFO_T;
 
 /* we allocate one of these for every device that we remember */
-typedef struct disk_data_t {
+typedef struct disk_data_t
+{
     struct disk_data_t  *next;    /*!< next device */
 
     /* information about the device -- always good */
@@ -133,7 +135,7 @@ extern DISK_DATA_T SD_DiskInfo0;
  *  @param    [in] u32IntMask    Interrupt type mask:
  *                           \ref SDH_INTSTS_BLKDIF_Msk / \ref SDH_INTSTS_CRCIF_Msk   / \ref SDH_INTSTS_CRC7_Msk /
  *                           \ref SDH_INTSTS_CRC16_Msk  / \ref SDH_INTSTS_CRCSTS_Msk  / \ref SDH_INTSTS_DAT0STS_Msk /
- *                           \ref SDH_INTSTS_CDIF0_Msk  / \ref SDH_INTSTS_RTOIF_Msk   / \ref SDH_INTSTS_DITOIF_Msk / 
+ *                           \ref SDH_INTSTS_CDIF0_Msk  / \ref SDH_INTSTS_RTOIF_Msk   / \ref SDH_INTSTS_DITOIF_Msk /
  *                           \ref SDH_INTSTS_CDSTS0_Msk / \ref SDH_INTSTS_DAT1STS_Msk /
  *
  *  @retval 0: The specified interrupt is not happened.

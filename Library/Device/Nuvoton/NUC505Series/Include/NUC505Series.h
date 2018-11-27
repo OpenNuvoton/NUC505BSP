@@ -54,7 +54,7 @@
   *
   * \page pg2 Revision History
   * Please refer to NuMicro NUC505 Series CMSIS BSP Revision History.pdf under BSP\\Document directory for the BSP Revision History
-  *  
+  *
 */
 #ifndef __NUC505SERIES_H__
 #define __NUC505SERIES_H__
@@ -75,7 +75,8 @@ extern "C" {
 /**
  * @details  Interrupt Number Definition.
  */
-typedef enum IRQn {
+typedef enum IRQn
+{
     /******  Cortex-M4 Processor Exceptions Numbers ***************************************************/
     NonMaskableInt_IRQn           = -14,      /*!<  2 Non Maskable Interrupt                        */
     MemoryManagement_IRQn         = -12,      /*!<  4 Memory Management Interrupt                   */
@@ -88,32 +89,32 @@ typedef enum IRQn {
 
     /******  NUC505 Specific Interrupt Numbers ********************************************************/
 
-    PWR_IRQn                      = 0,        /*!< Power On Interrupt                    						*/
+    PWR_IRQn                      = 0,        /*!< Power On Interrupt                                           */
     WDT_IRQn                      = 1,        /*!< Watch Dog Timer Interrupt                        */
     APU_IRQn                      = 2,        /*!< Audio Process Unit Interrupt                     */
-    I2S_IRQn                      = 3,        /*!< I2S  Interrupt	*/
-    EINT0_IRQn                    = 4,        /*!< External GPIO Group 0 Interrupt               									*/
-    EINT1_IRQn                    = 5,        /*!< External GPIO Group 1 Interrupt  																*/
-    EINT2_IRQn                    = 6,        /*!< External GPIO Group 2 Interrupt                        					*/
-    EINT3_IRQn                    = 7,        /*!< External GPIO Group 3 Interrupt                       					*/
-    SPIM_IRQn                     = 8,        /*!< SPI_ROM Interrupt                       					*/
-    USBD_IRQn                     = 9,        /*!< USB Device 2.0 Interrupt                       	*/
-    TMR0_IRQn                   	= 10,       /*!< Timer0 Interrupt                       						*/
-    TMR1_IRQn                   	= 11,       /*!< Timer1 Interrupt                       					*/
-    TMR2_IRQn                   	= 12,       /*!< Timer2 Interrupt                       					*/
-    TMR3_IRQn                   	= 13,       /*!< Timer3 Interrupt                       					*/
-    SDH_IRQn                      = 14,       /*!< SDH Interrupt                       						*/
-    PWM0_IRQn                     = 15,       /*!< PWM0 Interrupt                       						*/
-    PWM1_IRQn                     = 16,       /*!< PWM1 Interrupt                            				*/
-    PWM2_IRQn                     = 17,       /*!< PWM2 Interrupt                            				*/
-    PWM3_IRQn                     = 18,       /*!< PWM3 Interrupt                            				*/
+    I2S_IRQn                      = 3,        /*!< I2S  Interrupt   */
+    EINT0_IRQn                    = 4,        /*!< External GPIO Group 0 Interrupt                                                  */
+    EINT1_IRQn                    = 5,        /*!< External GPIO Group 1 Interrupt                                                                  */
+    EINT2_IRQn                    = 6,        /*!< External GPIO Group 2 Interrupt                                          */
+    EINT3_IRQn                    = 7,        /*!< External GPIO Group 3 Interrupt                                          */
+    SPIM_IRQn                     = 8,        /*!< SPI_ROM Interrupt                                        */
+    USBD_IRQn                     = 9,        /*!< USB Device 2.0 Interrupt                         */
+    TMR0_IRQn                       = 10,       /*!< Timer0 Interrupt                                               */
+    TMR1_IRQn                       = 11,       /*!< Timer1 Interrupt                                           */
+    TMR2_IRQn                       = 12,       /*!< Timer2 Interrupt                                           */
+    TMR3_IRQn                       = 13,       /*!< Timer3 Interrupt                                           */
+    SDH_IRQn                      = 14,       /*!< SDH Interrupt                                            */
+    PWM0_IRQn                     = 15,       /*!< PWM0 Interrupt                                               */
+    PWM1_IRQn                     = 16,       /*!< PWM1 Interrupt                                           */
+    PWM2_IRQn                     = 17,       /*!< PWM2 Interrupt                                           */
+    PWM3_IRQn                     = 18,       /*!< PWM3 Interrupt                                           */
     RTC_IRQn                      = 19,       /*!< Real Time Clock Interrupt                        */
-    SPI0_IRQn                     = 20,       /*!< SPI0 Interrupt                            				*/
-    I2C1_IRQn                     = 21,       /*!< I2C1 Interrupt                            				*/
-    I2C0_IRQn                     = 22,       /*!< I2C0 Interrupt                            				*/
-    UART0_IRQn                    = 23,       /*!< UART0 Interrupt                            			*/
-    UART1_IRQn                    = 24,       /*!< UART1 Interrupt                            			*/
-    ADC_IRQn                      = 25,       /*!< ADC Interrupt                            				*/
+    SPI0_IRQn                     = 20,       /*!< SPI0 Interrupt                                           */
+    I2C1_IRQn                     = 21,       /*!< I2C1 Interrupt                                           */
+    I2C0_IRQn                     = 22,       /*!< I2C0 Interrupt                                           */
+    UART0_IRQn                    = 23,       /*!< UART0 Interrupt                                      */
+    UART1_IRQn                    = 24,       /*!< UART1 Interrupt                                      */
+    ADC_IRQn                      = 25,       /*!< ADC Interrupt                                            */
     WWDT_IRQn                     = 26,       /*!< Window Watch Dog Timer Interrupt                 */
     USBH_IRQn                     = 27,       /*!< USB Host 1.1 Interrupt                           */
     UART2_IRQn                    = 28,       /*!< UART1 Interrupt                           */
@@ -160,7 +161,7 @@ IRQn_Type;
     @addtogroup ADC Analog to Digital Converter(ADC)
     Memory Mapped Structure for ADC Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -202,8 +203,8 @@ typedef struct
      * |[31:24] |EXTSMPT   |ADC Extend Sampling Time
      * |        |          |When A/D converting at high conversion rate, the sampling time of analog input voltage may not enough if the input channel loading is heavy, software can extend A/D sampling time after trigger source is coming to get enough sampling time.
      * |        |          |Note: The unit is ADC clock.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * INTCTL
@@ -229,8 +230,8 @@ typedef struct
      * |[9]     |KEYIEN    |Keypad Interrupt Enable Control
      * |        |          |0 = Keypad down interrupt Disabled.
      * |        |          |1 = Keypad down interrupt Enabled.
- */
-    __IO uint32_t INTCTL;                
+    */
+    __IO uint32_t INTCTL;
 
     /**
      * DAT
@@ -242,8 +243,8 @@ typedef struct
      * |[11:0]  |RESULT    |A/D Conversion Result
      * |        |          |This field contains conversion result of ADC.
      * |        |          |When A/D conversion done, 12-bit ADC conversion result with unsigned format will be filled in RESULT[11:0.
- */
-    __I  uint32_t DAT;                   
+    */
+    __I  uint32_t DAT;
 
 } ADC_T;
 
@@ -291,7 +292,7 @@ typedef struct
     @addtogroup CLK System Clock Controller(CLK)
     Memory Mapped Structure for CLK Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -325,8 +326,8 @@ typedef struct
      * |[24]    |PDWTCPU   |Control Power-down Entry Condition
      * |        |          |0 = Chip enters Power-down mode when the HXTEN bit is set to 1.
      * |        |          |1 = Chip enters Power-down mode when the both PDWTCPU and HXTEN bits are set to 1 and CPU run WFI instruction.
- */
-    __IO uint32_t PWRCTL;                
+    */
+    __IO uint32_t PWRCTL;
 
     /**
      * AHBCLK
@@ -356,8 +357,8 @@ typedef struct
      * |[9]     |USBHCKEN  |USB Host Clock Enable Control
      * |        |          |0 = USB Host Clock Disabled.
      * |        |          |1 = USB Host Clock Enabled.
- */
-    __IO uint32_t AHBCLK;                
+    */
+    __IO uint32_t AHBCLK;
 
     /**
      * APBCLK
@@ -414,9 +415,9 @@ typedef struct
      * |[15]    |ADCCKEN   |ADC Clock Enable Control
      * |        |          |0 = ADC Clock Disabled.
      * |        |          |1 = ADC Clock Enabled.
- */
-    __IO uint32_t APBCLK;                
-         uint32_t RESERVE0[1];
+    */
+    __IO uint32_t APBCLK;
+    uint32_t RESERVE0[1];
 
 
     /**
@@ -447,8 +448,8 @@ typedef struct
      * |[31]    |USBHSEL   |USB Host Clock Source Select (USBH_SrcCLK)
      * |        |          |0 = USB Host Clock source from HXT.
      * |        |          |1 = USB Host Clock source from PLL_FOUT.
- */
-    __IO uint32_t CLKDIV0;               
+    */
+    __IO uint32_t CLKDIV0;
 
     /**
      * CLKDIV1
@@ -472,8 +473,8 @@ typedef struct
      * |[30]    |SDHSEL    |SDH Clock Select (SDH_SrcCLK)
      * |        |          |0 = SDH Clock source from HXT.
      * |        |          |1 = SDH Clock source from PLL_FOUT.
- */
-    __IO uint32_t CLKDIV1;               
+    */
+    __IO uint32_t CLKDIV1;
 
     /**
      * CLKDIV2
@@ -496,8 +497,8 @@ typedef struct
      * |[29]    |SPI1SEL   |SPI1 Engine Clock Select (SPI1SEL)
      * |        |          |0 = SPI1 Engine Clock source from HXT.
      * |        |          |1 = SPI1 Engine Clock source from PLL_FOUT.
- */
-    __IO uint32_t CLKDIV2;               
+    */
+    __IO uint32_t CLKDIV2;
 
     /**
      * CLKDIV3
@@ -524,8 +525,8 @@ typedef struct
      * |[20]    |UART2SEL  |UART2 Source Clock Select (UART2_SrcCLK)
      * |        |          |0 = UART2 Source Clock source from HXT.
      * |        |          |1 = UART2 Source Clock source from PLL_FOUT.
- */
-    __IO uint32_t CLKDIV3;               
+    */
+    __IO uint32_t CLKDIV3;
 
     /**
      * PLLCTL
@@ -546,9 +547,9 @@ typedef struct
      * |[17]    |PD        |Power-down Mode
      * |        |          |0 = PLL in Normal mode.
      * |        |          |1 = PLL in Power-down mode (Default).
- */
-    __IO uint32_t PLLCTL;                
-         uint32_t RESERVE1[1];
+    */
+    __IO uint32_t PLLCTL;
+    uint32_t RESERVE1[1];
 
 
     /**
@@ -575,9 +576,9 @@ typedef struct
      * |        |          |1 = Fraction mode.
      * |[31:20] |FRAC      |Sigma-delta Modulator Control Pins
      * |        |          |Set the fractional number of the Feedback divider.
- */
-    __IO uint32_t APLLCTL;               
-         uint32_t RESERVE2[1];
+    */
+    __IO uint32_t APLLCTL;
+    uint32_t RESERVE2[1];
 
 
     /**
@@ -605,8 +606,8 @@ typedef struct
      * |[26]    |TMR2SEL   |Timer2 Engine Clock Select (TMR2_SrcCLK)
      * |        |          |0 = Timer2 Engine Clock source from RTC_CLK.
      * |        |          |1 = Timer2 Engine Clock source from HXT.
- */
-    __IO uint32_t CLKDIV4;               
+    */
+    __IO uint32_t CLKDIV4;
 
     /**
      * CLKDIV5
@@ -633,8 +634,8 @@ typedef struct
      * |[26]    |PWMSEL    |PWM Engine Clock Select (PWM_SrcCLK)
      * |        |          |0 = PWM Engine Clock source from HXT.
      * |        |          |1 = PWM Engine Clock source from PLL_FOUT.
- */
-    __IO uint32_t CLKDIV5;               
+    */
+    __IO uint32_t CLKDIV5;
 
 } CLK_T;
 
@@ -874,7 +875,7 @@ typedef struct
     @addtogroup SYS System Manager Controller (SYS)
     Memory Mapped Structure for SYS Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -889,8 +890,8 @@ typedef struct
      * |[23:0]  |PDID      |Part Device Identification Number (Read Only)
      * |        |          |This register reflects device part number code.
      * |        |          |Software can read this register to identify which device is use.
- */
-    __I  uint32_t PDID;                  
+    */
+    __I  uint32_t PDID;
 
     /**
      * BOOTSET
@@ -908,8 +909,8 @@ typedef struct
      * |        |          |1111 = Boot from SPI Flash.
      * |        |          |Note: If BOOTSET is equal to ICE Mode, the software cannot change BOOTSET to other mode.
      * |        |          |But other modes don't have this limitation.
- */
-    __IO uint32_t BOOTSET;               
+    */
+    __IO uint32_t BOOTSET;
 
     /**
      * IPRST0
@@ -927,8 +928,8 @@ typedef struct
      * |        |          |The CHIPRST is same as the POR reset, all the chip controllers is reset and the chip setting from flash are also reload.
      * |        |          |0 = Chip normal operation.
      * |        |          |1 = Chip one-shot reset.
- */
-    __IO uint32_t IPRST0;                
+    */
+    __IO uint32_t IPRST0;
 
     /**
      * LVDCTL
@@ -954,8 +955,8 @@ typedef struct
      * |[4]     |PORENB    |Power on Reset Enable Control
      * |        |          |0 = Function Enabled. (Default)
      * |        |          |1 = Function Disabled.
- */
-    __IO uint32_t LVDCTL;                
+    */
+    __IO uint32_t LVDCTL;
 
     /**
      * WAKEUP
@@ -1062,8 +1063,8 @@ typedef struct
      * |        |          |0 = USB Host wake-up source is deasserted.
      * |        |          |1 = USB Host wake-up source is asserted.
      * |        |          |Note: Write 1 to clear this bit
- */
-    __IO uint32_t WAKEUP;                
+    */
+    __IO uint32_t WAKEUP;
 
     /**
      * IPRST1
@@ -1182,8 +1183,8 @@ typedef struct
      * |        |          |User needs to set this bit to 0 to release from the reset stat.
      * |        |          |0 = SPI1 controller normal operation.
      * |        |          |1 = SPI1 controller reset.
- */
-    __IO uint32_t IPRST1;                
+    */
+    __IO uint32_t IPRST1;
 
     /**
      * NMICTL
@@ -1240,8 +1241,8 @@ typedef struct
      * |[23]    |LVDIF     |Low Voltage Detect (LVD) Interrupt Flag (Read Only)
      * |        |          |0 = LVD interrupt is deasserted.
      * |        |          |1 = LVD interrupt is asserted.
- */
-    __IO uint32_t NMICTL;                
+    */
+    __IO uint32_t NMICTL;
 
     /**
      * RSTSTS
@@ -1270,8 +1271,8 @@ typedef struct
      * |        |          |0 = No effect.
      * |        |          |1 = Power-on Reset (POR) had issued the reset signal to reset the system.
      * |        |          |Note: Write 1 to clear this bit to 0.
- */
-    __IO uint32_t RSTSTS;                
+    */
+    __IO uint32_t RSTSTS;
 
     /**
      * AHBCTL
@@ -1297,9 +1298,9 @@ typedef struct
      * |        |          |Otherwise, the CPU always has the highest AHB bus priority.
      * |        |          |0 = No effect.
      * |        |          |1 = The highest AHB bus priority for CPU is active.
- */
-    __IO uint32_t AHBCTL;                
-         uint32_t RESERVE0[3];
+    */
+    __IO uint32_t AHBCTL;
+    uint32_t RESERVE0[3];
 
 
     /**
@@ -1317,8 +1318,8 @@ typedef struct
      * |[22:20] |PA5MFP    |PA.5 Multi-function Pin Selection
      * |[26:24] |PA6MFP    |PA.6 Multi-function Pin Selection
      * |[30:28] |PA7MFP    |PA.7 Multi-function Pin Selection
- */
-    __IO uint32_t GPA_MFPL;              
+    */
+    __IO uint32_t GPA_MFPL;
 
     /**
      * GPA_MFPH
@@ -1335,8 +1336,8 @@ typedef struct
      * |[22:20] |PA13MFP   |PA.13 Multi-function Pin Selection
      * |[26:24] |PA14MFP   |PA.14 Multi-function Pin Selection
      * |[30:28] |PA15MFP   |PA.15 Multi-function Pin Selection
- */
-    __IO uint32_t GPA_MFPH;              
+    */
+    __IO uint32_t GPA_MFPH;
 
     /**
      * GPB_MFPL
@@ -1353,8 +1354,8 @@ typedef struct
      * |[22:20] |PB5MFP    |PB.5 Multi-function Pin Selection
      * |[26:24] |PB6MFP    |PB.6 Multi-function Pin Selection
      * |[30:28] |PB7MFP    |PB.7 Multi-function Pin Selection
- */
-    __IO uint32_t GPB_MFPL;              
+    */
+    __IO uint32_t GPB_MFPL;
 
     /**
      * GPB_MFPH
@@ -1371,8 +1372,8 @@ typedef struct
      * |[22:20] |PB13MFP   |PB.13 Multi-function Pin Selection
      * |[26:24] |PB14MFP   |PB.14 Multi-function Pin Selection
      * |[30:28] |PB15MFP   |PB.15 Multi-function Pin Selection
- */
-    __IO uint32_t GPB_MFPH;              
+    */
+    __IO uint32_t GPB_MFPH;
 
     /**
      * GPC_MFPL
@@ -1389,8 +1390,8 @@ typedef struct
      * |[22:20] |PC5MFP    |PC.5 Multi-function Pin Selection
      * |[26:24] |PC6MFP    |PC.6 Multi-function Pin Selection
      * |[30:28] |PC7MFP    |PC.7 Multi-function Pin Selection
- */
-    __IO uint32_t GPC_MFPL;              
+    */
+    __IO uint32_t GPC_MFPL;
 
     /**
      * GPC_MFPH
@@ -1406,8 +1407,8 @@ typedef struct
      * |[18:16] |PC12MFP   |PC.12 Multi-function Pin Selection
      * |[22:20] |PC13MFP   |PC.13 Multi-function Pin Selection
      * |[26:24] |PC14MFP   |PC.14 Multi-function Pin Selection
- */
-    __IO uint32_t GPC_MFPH;              
+    */
+    __IO uint32_t GPC_MFPH;
 
     /**
      * GPD_MFPL
@@ -1421,9 +1422,9 @@ typedef struct
      * |[10:8]  |PD2MFP    |PD.2 Multi-function Pin Selection
      * |[14:12] |PD3MFP    |PD.3 Multi-function Pin Selection
      * |[18:16] |PD4MFP    |PD.4 Multi-function Pin Selection
- */
-    __IO uint32_t GPD_MFPL;              
-         uint32_t RESERVE1[1];
+    */
+    __IO uint32_t GPD_MFPL;
+    uint32_t RESERVE1[1];
 
 
     /**
@@ -1437,8 +1438,8 @@ typedef struct
      * |        |          |This is the start address for mapping to the address 0x0000_0000 in VECMAP function.
      * |        |          |Only when CPU reset or setting RLDVMP to 1, the loading signal will be loaded to the SYS_RVMPADDR registe.
      * |        |          |Note: This register can only be reset by CHIPRST and HW Reset.
- */
-    __IO uint32_t LVMPADDR;              
+    */
+    __IO uint32_t LVMPADDR;
 
     /**
      * LVMPLEN
@@ -1453,8 +1454,8 @@ typedef struct
      * |        |          |Mapping memory length = VMP_LEN * 1K (bytes).
      * |        |          |Note1: The maximum mapping length is 128K bytes
      * |        |          |Note2: This register only can be reset by CHIPRST and HW Reset.
- */
-    __IO uint32_t LVMPLEN;               
+    */
+    __IO uint32_t LVMPLEN;
 
     /**
      * RVMPADDR
@@ -1467,8 +1468,8 @@ typedef struct
      * |        |          |This is the real start address parameter for mapping to the address 0x0000_0000 in VECMAP function.
      * |        |          |(Default value is mapping to IBR_ROM start address.).
      * |        |          |Note: This register is only loaded from ADDR during CPU Reset process (SYS_IPRST0[0]) or setting RLDVMP.
- */
-    __I  uint32_t RVMPADDR;              
+    */
+    __I  uint32_t RVMPADDR;
 
     /**
      * RVMPLEN
@@ -1486,9 +1487,9 @@ typedef struct
      * |        |          |Mapping memory length = VMP_LEN * 1K (bytes).
      * |        |          |Note1: Read Only
      * |        |          |Note2: These bits are only loaded from LEN when setting CPURST (SYS_IPRST0[0]) or setting RLDVMP.
- */
-    __IO uint32_t RVMPLEN;               
-         uint32_t RESERVE2[3];
+    */
+    __IO uint32_t RVMPLEN;
+    uint32_t RESERVE2[3];
 
 
     /**
@@ -1504,8 +1505,8 @@ typedef struct
      * |        |          |11111 = All embedded pads are pull-up Enabled.
      * |        |          |Other = Reserved.
      * |        |          |Note: In Power-down mode, user should set EPADPUEN[4:0] to 0x12.
- */
-    __IO uint32_t EPADPUEN;              
+    */
+    __IO uint32_t EPADPUEN;
 
     /**
      * GPADS
@@ -1594,8 +1595,8 @@ typedef struct
      * |        |          |101 = 19.5 mA.
      * |        |          |110 = 21.7 mA.
      * |        |          |111 = 26.1 mA.
- */
-    __IO uint32_t GPADS;                 
+    */
+    __IO uint32_t GPADS;
 
     /**
      * GPAIBE
@@ -1620,8 +1621,8 @@ typedef struct
      * |        |          |0 = PA.x schmitt Trigger Input Buffer Disabled.
      * |        |          |1 = PA.x schmitt Trigger Input Buffer Enabled (Default).
      * |        |          |Note: If both Schmitt Trigger and CMOS input buffer are set to 0, the input signal from PAD will always be zero.
- */
-    __IO uint32_t GPAIBE;                
+    */
+    __IO uint32_t GPAIBE;
 
     /**
      * GPBIBE
@@ -1638,8 +1639,8 @@ typedef struct
      * |        |          |0 = PB.x Schmitt Trigger Input Buffer Disabled.
      * |        |          |1 = PB.x Schmitt Trigger Input Buffer Enabled (Default).
      * |        |          |Note: If both Schmitt Trigger and CMOS input buffer are set to 0, the input signal from PAD will always be zero.
- */
-    __IO uint32_t GPBIBE;                
+    */
+    __IO uint32_t GPBIBE;
 
     /**
      * GPCIBE
@@ -1656,8 +1657,8 @@ typedef struct
      * |        |          |0 = PC.x Schmitt Trigger Input Buffer Disabled.
      * |        |          |1 = PC.x Schmitt Trigger Input Buffer Enabled (Default).
      * |        |          |Note: If both Schmitt Trigger and CMOS input buffer are set to 0, the input signal from PAD will always be zero.
- */
-    __IO uint32_t GPCIBE;                
+    */
+    __IO uint32_t GPCIBE;
 
     /**
      * GPDIBE
@@ -1682,8 +1683,8 @@ typedef struct
      * |        |          |1 = PD.x Input Buffer Enabled (Default).
      * |        |          |Note1: If setting to 0, the input signal from PAD will always be zero.
      * |        |          |Note2: If using PD.2, PD.3, and PD.4 as analog pads, user must disable PD.2, PD.3, and PD.4 input buffer.
- */
-    __IO uint32_t GPDIBE;                
+    */
+    __IO uint32_t GPDIBE;
 
     /**
      * GPDDS
@@ -1722,9 +1723,9 @@ typedef struct
      * |        |          |101 = 19.5 mA.
      * |        |          |110 = 21.7 mA.
      * |        |          |111 = 26.1 mA.
- */
-    __IO uint32_t GPDDS;                 
-         uint32_t RESERVE3[30];
+    */
+    __IO uint32_t GPDDS;
+    uint32_t RESERVE3[30];
 
 
     /**
@@ -1737,8 +1738,8 @@ typedef struct
      * |[15:0]  |RSTDBCNT  |External nRESET De-bounce Counter
      * |        |          |This 16-bit external nRESET pin de-bounce counter can specify the external nRESET pin de-bounce time up to around 5.46ms (0xFFFF) at XIN=12 MHz.
      * |        |          |Note: The default external nRESET pin de-bounce time is 0.1ms (0x04B0) at XIN = 12 MHz.
- */
-    __IO uint32_t RSTDBCNT;              
+    */
+    __IO uint32_t RSTDBCNT;
 
     /**
      * RSTDBEN
@@ -1751,8 +1752,8 @@ typedef struct
      * |        |          |This bit is to enable or disable the external nRESET pin de-bounce process.
      * |        |          |0 = De-bounce function Disabled.
      * |        |          |1 = De-bounce function Enabled.
- */
-    __IO uint32_t RSTDBEN;               
+    */
+    __IO uint32_t RSTDBEN;
 
 } SYS_T;
 
@@ -2268,11 +2269,11 @@ typedef struct
     @addtogroup GPIO General Purpose Input/Output Controller(GPIO)
     Memory Mapped Structure for GPIO Controller
 @{ */
- 
+
 typedef struct
 {
 
-	
+
     /**
      * Px_MODE
      * ===================================================================================================
@@ -2408,8 +2409,8 @@ typedef struct
      * |        |          |Max. n=15 for port A/B.
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=4 for port D.
- */
-    __IO uint32_t MODE; 
+    */
+    __IO uint32_t MODE;
 
     /**
      * Px_PUEN
@@ -2578,8 +2579,8 @@ typedef struct
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=4 for port D.
      * |        |          |Note2: Refer to Figure 6.4-1
- */
-    __IO uint32_t PUEN; 
+    */
+    __IO uint32_t PUEN;
 
     /**
      * Px_DOUT
@@ -2716,7 +2717,7 @@ typedef struct
      * |        |          |Max. n=15 for port A/B.
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=7 for port D.
- */
+    */
     __IO uint32_t DOUT;
 
     /**
@@ -2838,10 +2839,10 @@ typedef struct
      * |        |          |Max. n=15 for port A/B.
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=4 for port D.
- */
-    __I  uint32_t PIN;                
-         uint32_t RESERVE1[28];   
-				 
+    */
+    __I  uint32_t PIN;
+    uint32_t RESERVE1[28];
+
     /**
      * Px_INTSRCGP
      * ===================================================================================================
@@ -2993,10 +2994,10 @@ typedef struct
      * |        |          |Max. n=15 for port A/B.
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=4 for port D.
- */				 
+    */
     __IO uint32_t INTSRCGP;
-         uint32_t RESERVE2[3];
-				 
+    uint32_t RESERVE2[3];
+
     /**
      * Px_INTEN
      * ===================================================================================================
@@ -3356,10 +3357,10 @@ typedef struct
      * |        |          |Max. n=15 for port A/B.
      * |        |          |Max. n=14 for port C.
      * |        |          |Max. n=4 for port D.
- */				 
+    */
     __IO uint32_t INTEN;
-         uint32_t RESERVE3[4];
-				 
+    uint32_t RESERVE3[4];
+
     /**
      * Px_LATCHDAT
      * ===================================================================================================
@@ -3463,58 +3464,59 @@ typedef struct
      * |        |          |Max.   n=15 for port A/B.
      * |        |          |Max.   n=14 for port C.
      * |        |          |Max. n=4   for port D.
- */				 
+    */
     __IO uint32_t LATCHDAT;
-		
+
 } GPIO_PA_T;
 
 
 typedef struct
 {
-    __IO uint32_t MODE;               
-    __IO uint32_t PUEN;               
-    __IO uint32_t DOUT;               
-    __I  uint32_t PIN;                
-         uint32_t RESERVE1[25];   
+    __IO uint32_t MODE;
+    __IO uint32_t PUEN;
+    __IO uint32_t DOUT;
+    __I  uint32_t PIN;
+    uint32_t RESERVE1[25];
     __IO uint32_t INTSRCGP;
-         uint32_t RESERVE2[3];
+    uint32_t RESERVE2[3];
     __IO uint32_t INTEN;
-         uint32_t RESERVE3[4];
+    uint32_t RESERVE3[4];
     __IO uint32_t LATCHDAT;
 } GPIO_PB_T;
 
 
 typedef struct
 {
-    __IO uint32_t MODE;               
-    __IO uint32_t PUEN;               
-    __IO uint32_t DOUT;               
-    __I  uint32_t PIN;                
-         uint32_t RESERVE1[22];   
+    __IO uint32_t MODE;
+    __IO uint32_t PUEN;
+    __IO uint32_t DOUT;
+    __I  uint32_t PIN;
+    uint32_t RESERVE1[22];
     __IO uint32_t INTSRCGP;
-         uint32_t RESERVE2[3];
+    uint32_t RESERVE2[3];
     __IO uint32_t INTEN;
-         uint32_t RESERVE3[4];
+    uint32_t RESERVE3[4];
     __IO uint32_t LATCHDAT;
 } GPIO_PC_T;
 
 
 typedef struct
 {
-    __IO uint32_t MODE;               
-    __IO uint32_t PUEN;               
-    __IO uint32_t DOUT;               
-    __I  uint32_t PIN;                
-         uint32_t RESERVE1[19];   
+    __IO uint32_t MODE;
+    __IO uint32_t PUEN;
+    __IO uint32_t DOUT;
+    __I  uint32_t PIN;
+    uint32_t RESERVE1[19];
     __IO uint32_t INTSRCGP;
-         uint32_t RESERVE2[3];
+    uint32_t RESERVE2[3];
     __IO uint32_t INTEN;
-         uint32_t RESERVE3[4];
+    uint32_t RESERVE3[4];
     __IO uint32_t LATCHDAT;
 } GPIO_PD_T;
 
 
-typedef struct {
+typedef struct
+{
 
 
     /**
@@ -3565,10 +3567,10 @@ typedef struct {
      * |        |          |1101 = Sample interrupt input once per 8192 APB clocks.
      * |        |          |1110 = Sample interrupt input once per 16384 APB clocks.
      * |        |          |1111 = Sample interrupt input once per 32768 APB clocks.
- */	
-    __IO uint32_t DBCTL; 
-         uint32_t RESERVE1[11];
-				 
+    */
+    __IO uint32_t DBCTL;
+    uint32_t RESERVE1[11];
+
     /**
      * GPIO_INTCTL
      * ===================================================================================================
@@ -3604,10 +3606,10 @@ typedef struct {
      * |        |          |0 = When the GPIO interrupt occurs, the GPIO interrupt controller generates 1 APB clock pulse to the NVIC.
      * |        |          |1 = When the GPIO interrupt occurs, the interrupt from GPIO to NVIC will keep till the CPU clear the interrupt trigger source.
      * |        |          |(GPIO_INTSTSA_B, GPIO_INTSTSC_D).
- */				 
-    __IO uint32_t INTCTL;  
-         uint32_t RESERVE2[4];
-				 
+    */
+    __IO uint32_t INTCTL;
+    uint32_t RESERVE2[4];
+
     /**
      * GPIO_INTSTSA_B
      * ===================================================================================================
@@ -3855,8 +3857,8 @@ typedef struct {
      * |        |          |1 = Clear the corresponding pending interrupt.
      * |        |          |Read Operation:
      * |        |          |0 = No interrupt at PB.n1 = PB.n generates an interrupt.
- */				 
-    __IO uint32_t INTSTSA_B;   
+    */
+    __IO uint32_t INTSTSA_B;
 
     /**
      * GPIO_INTSTSC_D
@@ -4004,9 +4006,9 @@ typedef struct {
      * |        |          |1 = Clear the corresponding pending interrupt.
      * |        |          |Read Operation:
      * |        |          |0 = No interrupt at PD.n.
-     * |        |          |1 = PD.n generates an interrupt.     
- */
-    __IO uint32_t INTSTSC_D;        
+     * |        |          |1 = PD.n generates an interrupt.
+    */
+    __IO uint32_t INTSTSC_D;
 
 } GPIO_T;
 
@@ -4606,7 +4608,7 @@ typedef struct {
     @addtogroup I2C Inter-IC Bus Controller(I2C)
     Memory Mapped Structure for I2C Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -4641,8 +4643,8 @@ typedef struct
      * |[7]     |INTEN     |I2C Interrupt Enable Control
      * |        |          |0 = I2C interrupt Disabled.
      * |        |          |1 = I2C interrupt Enabled.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * ADDR0
@@ -4658,8 +4660,8 @@ typedef struct
      * |        |          |The content of this register is irrelevant when I2C is in Master mode.
      * |        |          |In Slave mode, the seven most significant bits must be loaded with the chip's own address.
      * |        |          |The I2C hardware will react if either of the address is matche.
- */
-    __IO uint32_t ADDR0;                 
+    */
+    __IO uint32_t ADDR0;
 
     /**
      * DAT
@@ -4670,8 +4672,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[7:0]   |DAT       |I2C Data Bits
      * |        |          |Bit [7:0] is located with the 8-bit transferred data of I2C serial port.
- */
-    __IO uint32_t DAT;                   
+    */
+    __IO uint32_t DAT;
 
     /**
      * STATUS
@@ -4685,8 +4687,8 @@ typedef struct
      * |        |          |The three least significant bits are always 0.
      * |        |          |The five most significant bits contain the status code.
      * |        |          |Refer to section 6.11.6.4 for detail descriptio.
- */
-    __I  uint32_t STATUS;                
+    */
+    __I  uint32_t STATUS;
 
     /**
      * CLKDIV
@@ -4698,8 +4700,8 @@ typedef struct
      * |[7:0]   |DIVIDER   |I2C Clock Divided Bits
      * |        |          |The I2C clock rate bits: Data Baud Rate of I2C = (PCLK) / (4x (DIVIDER+1)).
      * |        |          |The minimum value of DIVIDER is 4.
- */
-    __IO uint32_t CLKDIV;                
+    */
+    __IO uint32_t CLKDIV;
 
     /**
      * TOCTL
@@ -4720,8 +4722,8 @@ typedef struct
      * |        |          |1 = Enabled.
      * |        |          |Note: When Enabled, the 14-bit time-out counter will start counting when SI (I2C_CTL[3]) is cleared.
      * |        |          |Setting flag SI to high will reset counter and re-start up counting after SI is cleare.
- */
-    __IO uint32_t TOCTL;                 
+    */
+    __IO uint32_t TOCTL;
 
     /**
      * ADDR1
@@ -4737,8 +4739,8 @@ typedef struct
      * |        |          |The content of this register is irrelevant when I2C is in Master mode.
      * |        |          |In Slave mode, the seven most significant bits must be loaded with the chip's own address.
      * |        |          |The I2C hardware will react if either of the address is matche.
- */
-    __IO uint32_t ADDR1;                 
+    */
+    __IO uint32_t ADDR1;
 
     /**
      * ADDR2
@@ -4754,8 +4756,8 @@ typedef struct
      * |        |          |The content of this register is irrelevant when I2C is in Master mode.
      * |        |          |In Slave mode, the seven most significant bits must be loaded with the chip's own address.
      * |        |          |The I2C hardware will react if either of the address is matche.
- */
-    __IO uint32_t ADDR2;                 
+    */
+    __IO uint32_t ADDR2;
 
     /**
      * ADDR3
@@ -4771,8 +4773,8 @@ typedef struct
      * |        |          |The content of this register is irrelevant when I2C is in Master mode.
      * |        |          |In Slave mode, the seven most significant bits must be loaded with the chip's own address.
      * |        |          |The I2C hardware will react if either of the address is matche.
- */
-    __IO uint32_t ADDR3;                 
+    */
+    __IO uint32_t ADDR3;
 
     /**
      * ADDRMSK0
@@ -4787,8 +4789,8 @@ typedef struct
      * |        |          |I2C bus controllers support multiple address recognition with four address mask register.
      * |        |          |When the bit in the address mask register is set to one, it means the received corresponding address bit is don't-care.
      * |        |          |If the bit is set to zero, that means the received corresponding register bit should be exact the same as address registe.
- */
-    __IO uint32_t ADDRMSK0;              
+    */
+    __IO uint32_t ADDRMSK0;
 
     /**
      * ADDRMSK1
@@ -4803,8 +4805,8 @@ typedef struct
      * |        |          |I2C bus controllers support multiple address recognition with four address mask register.
      * |        |          |When the bit in the address mask register is set to one, it means the received corresponding address bit is don't-care.
      * |        |          |If the bit is set to zero, that means the received corresponding register bit should be exact the same as address registe.
- */
-    __IO uint32_t ADDRMSK1;              
+    */
+    __IO uint32_t ADDRMSK1;
 
     /**
      * ADDRMSK2
@@ -4819,8 +4821,8 @@ typedef struct
      * |        |          |I2C bus controllers support multiple address recognition with four address mask register.
      * |        |          |When the bit in the address mask register is set to one, it means the received corresponding address bit is don't-care.
      * |        |          |If the bit is set to zero, that means the received corresponding register bit should be exact the same as address registe.
- */
-    __IO uint32_t ADDRMSK2;              
+    */
+    __IO uint32_t ADDRMSK2;
 
     /**
      * ADDRMSK3
@@ -4835,9 +4837,9 @@ typedef struct
      * |        |          |I2C bus controllers support multiple address recognition with four address mask register.
      * |        |          |When the bit in the address mask register is set to one, it means the received corresponding address bit is don't-care.
      * |        |          |If the bit is set to zero, that means the received corresponding register bit should be exact the same as address registe.
- */
-    __IO uint32_t ADDRMSK3;              
-         uint32_t RESERVE0[2];
+    */
+    __IO uint32_t ADDRMSK3;
+    uint32_t RESERVE0[2];
 
 
     /**
@@ -4850,8 +4852,8 @@ typedef struct
      * |[0]     |WKEN      |I2C Wake-Up Enable Control
      * |        |          |0 = I2C wake-up function Disabled.
      * |        |          |1 = I2C wake-up function Enabled.
- */
-    __IO uint32_t WKCTL;                 
+    */
+    __IO uint32_t WKCTL;
 
     /**
      * WKSTS
@@ -4864,8 +4866,8 @@ typedef struct
      * |        |          |0 = No wake up occurred.
      * |        |          |1 = Wake up from Power-down mode.
      * |        |          |Note: Software can write 1 to clear this bit.
- */
-    __IO uint32_t WKSTS;                 
+    */
+    __IO uint32_t WKSTS;
 
 } I2C_T;
 
@@ -4961,7 +4963,7 @@ typedef struct
     @addtogroup I2S I2S Interface Controller(I2S)
     Memory Mapped Structure for I2S Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -5084,15 +5086,15 @@ typedef struct
      * |        |          |In Slave mode, I2S_BCLK and I2S_LRCLK pins are received from CODE.
      * |        |          |0 = Master mode.
      * |        |          |1 = Slave mode.
-     * |        |          |Note: If using internal codec, the I2S must be master mode. 
+     * |        |          |Note: If using internal codec, the I2S must be master mode.
      * |[28]    |CODECSEL  |Internal Codec Or External Codec Selection
      * |        |          |0 = I2S interface connect to internal codec.
      * |        |          |1 = I2S interface connect to external codec.
      * |[29]    |CODECRST  |Internal Codec Hardware Reset Control
      * |        |          |0 = Reset Operation.
      * |        |          |1 = Normal Operation.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * CLKDIV
@@ -5112,8 +5114,8 @@ typedef struct
      * |        |          |User can program these bits to generate the frequency of BCLK, when I2S operates in master mode.
      * |        |          |In Slave mode, the frequency of BCLK is controlled by master devic.
      * |        |          |F_BCLK = F_I2SCLK / (2*(BCLKDIV+1)).
- */
-    __IO uint32_t CLKDIV;                
+    */
+    __IO uint32_t CLKDIV;
 
     /**
      * IEN
@@ -5170,8 +5172,8 @@ typedef struct
      * |        |          |Interrupt occurs if this bit is set to 1 and left channel zero-cross is detected.
      * |        |          |0 = Interrupt Disabled.
      * |        |          |1 = Interrupt Enabled.
- */
-    __IO uint32_t IEN;                   
+    */
+    __IO uint32_t IEN;
 
     /**
      * STATUS
@@ -5199,7 +5201,7 @@ typedef struct
      * |        |          |Indicates that the current transmit data belongs to right channel
      * |        |          |0 = Left channel.
      * |        |          |1 = Right channel.
-     * |        |          |Note: This bit is read only, 
+     * |        |          |Note: This bit is read only,
      * |[4]     |RDMAEIF   |RX DMA Equal End Address Interrupt Flag
      * |        |          |If RX DMA current address is equal to I2S_RXEADDR register, this interrupt flag will be set.
      * |        |          |If the RDMAEIEN is set, an interrupt to NVIC will occu.
@@ -5306,8 +5308,8 @@ typedef struct
      * |        |          |....
      * |        |          |1111 = 15 words in transmit FIFO.
      * |        |          |Note: IF TXFULL flag is 1, and TXCNT = 0x0. It means there are 16 words in the FIFO.
- */
-    __IO uint32_t STATUS;                
+    */
+    __IO uint32_t STATUS;
 
     /**
      * TX
@@ -5320,8 +5322,8 @@ typedef struct
      * |        |          |I2S contains 16 words (16x32 bit) data FIFO for data transmssion.
      * |        |          |Write data to this register to prepare data for transmission.
      * |        |          |The remaining word number is indicated by TXCNT[3:0] in I2S_STATU.
- */
-    __O  uint32_t TX;                    
+    */
+    __O  uint32_t TX;
 
     /**
      * RX
@@ -5334,8 +5336,8 @@ typedef struct
      * |        |          |I2S contains 16 words (16x32 bit) data FIFO for data receiving.
      * |        |          |Read this register to get data in FIFO.
      * |        |          |The remaining data word number is indicated by RXCNT[3:0] in I2S_STATUS registe.
- */
-    __I  uint32_t RX;                    
+    */
+    __I  uint32_t RX;
 
     /**
      * CODECCTL
@@ -5365,9 +5367,9 @@ typedef struct
      * |        |          |Thus, this bit is used to indicate the end of the I2C comman.
      * |        |          |0 = I2C command is finished.
      * |        |          |1 = I2C command is not finished.
- */
-    __IO uint32_t CODECCTL;              
-         uint32_t RESERVE0[1];
+    */
+    __IO uint32_t CODECCTL;
+    uint32_t RESERVE0[1];
 
 
     /**
@@ -5380,8 +5382,8 @@ typedef struct
      * |[31:0]  |ADDR      |TX DMA Start Address Register
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: The address can't be set smaller than 0x2000_0000.
- */
-    __IO uint32_t TXSTADDR;              
+    */
+    __IO uint32_t TXSTADDR;
 
     /**
      * TXTHADDR
@@ -5393,8 +5395,8 @@ typedef struct
      * |[31:0]  |ADDR      |TX DMA Threshold Address Register
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: The address can't be set smaller than 0x2000_0000.
- */
-    __IO uint32_t TXTHADDR;              
+    */
+    __IO uint32_t TXTHADDR;
 
     /**
      * TXEADDR
@@ -5407,8 +5409,8 @@ typedef struct
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: If WDWIDTH[1:0] is equal to 0x2 or 0x3, user must set the correct end address to avoid the swap between right channel and left channel in stereo mode.
      * |        |          |Note2: The address can't be set smaller than 0x2000_0000.
- */
-    __IO uint32_t TXEADDR;               
+    */
+    __IO uint32_t TXEADDR;
 
     /**
      * TXCADDR
@@ -5418,8 +5420,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |ADDR      |TX DMA Current Address Register
- */
-    __I  uint32_t TXCADDR;               
+    */
+    __I  uint32_t TXCADDR;
 
     /**
      * RXSTADDR
@@ -5431,8 +5433,8 @@ typedef struct
      * |[31:0]  |ADDR      |RX DMA Start Address Register
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: The address can't be set smaller than 0x2000_0000.
- */
-    __IO uint32_t RXSTADDR;              
+    */
+    __IO uint32_t RXSTADDR;
 
     /**
      * RXTHADDR
@@ -5444,8 +5446,8 @@ typedef struct
      * |[31:0]  |ADDR      |RX DMA Threshold Address Register
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: The address can't be set smaller than 0x2000_0000.
- */
-    __IO uint32_t RXTHADDR;              
+    */
+    __IO uint32_t RXTHADDR;
 
     /**
      * RXEADDR
@@ -5457,9 +5459,9 @@ typedef struct
      * |[31:0]  |ADDR      |RX DMA End Address Register
      * |        |          |Note1: The address is word boundary.
      * |        |          |Note2: If WDWIDTH[1:0] is equal to 0x2 or 0x3, user must set the correct end address to avoid the swap between right channel and left channel in stereo mode.
-     * |        |          |Note3: The address can't be set smaller than 0x2000_0000. 
- */
-    __IO uint32_t RXEADDR;               
+     * |        |          |Note3: The address can't be set smaller than 0x2000_0000.
+    */
+    __IO uint32_t RXEADDR;
 
     /**
      * RXCADDR
@@ -5469,8 +5471,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |ADDR      |RX DMA Current Address Register
- */
-    __I  uint32_t RXCADDR;               
+    */
+    __I  uint32_t RXCADDR;
 
     /**
      * RXAVGCTL
@@ -5487,8 +5489,8 @@ typedef struct
      * |        |          |1110 = Average window is 16384 (2^14) samples.
      * |        |          |1111 = Average window is 32768 (2^15) samples.
      * |        |          |Note: Every window size samples will generate one average result.
- */
-    __IO uint32_t RXAVGCTL;              
+    */
+    __IO uint32_t RXAVGCTL;
 
     /**
      * RXLCHAVG
@@ -5500,8 +5502,8 @@ typedef struct
      * |[31:0]  |RESULT    |RX Left Channel Data Average Result
      * |        |          |The average result of left channel received data.
      * |        |          |Note: If MONO (I2S_CTL[6]) = 1, the average result is only in this register whatever RXLCH (I2S_CTL[23]) = 1 or 0
- */
-    __I  uint32_t RXLCHAVG;              
+    */
+    __I  uint32_t RXLCHAVG;
 
     /**
      * RXRCHAVG
@@ -5513,8 +5515,8 @@ typedef struct
      * |[31:0]  |RESULT    |RX Right Channel Data Average Result
      * |        |          |The average result of left channel received data.
      * |        |          |Note: If MONO (I2S_CTL[6]), this register will be useless.
- */
-    __I  uint32_t RXRCHAVG;              
+    */
+    __I  uint32_t RXRCHAVG;
 
 } I2S_T;
 
@@ -5763,7 +5765,7 @@ typedef struct
     @addtogroup PWM Pulse Width Modulation Controller(PWM)
     Memory Mapped Structure for PWM Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -5787,8 +5789,8 @@ typedef struct
      * |[31:24] |DZCNT23   |Dead-Time Interval Register 1
      * |        |          |These 8-bit determine Dead-time length.
      * |        |          |Dead-time = (DTCNT23[7:0]+1) * PWM_CLK period.
- */
-    __IO uint32_t CLKPSC;                
+    */
+    __IO uint32_t CLKPSC;
 
     /**
      * CLKDIV
@@ -5813,8 +5815,8 @@ typedef struct
      * |        |          |010 = PWM_CLK/8.
      * |        |          |011 = PWM_CLK/16.
      * |        |          |100 = PWM_CLK/1.
- */
-    __IO uint32_t CLKDIV;                
+    */
+    __IO uint32_t CLKDIV;
 
     /**
      * CTL
@@ -5861,7 +5863,7 @@ typedef struct
      * |        |          |Note: If there is a rising transition at this bit, it will cause PWM_PERIOD2 and PWM_CMPDAT2 be cleared.
      * |[24]    |CNTEN3    |PWM Counter 3 Enable Control
      * |        |          |0 = PWM Counter and clock prescaler stops running.
-     * |        |          |1 = PWM Counter and clock prescaler starts running. 
+     * |        |          |1 = PWM Counter and clock prescaler starts running.
      * |[26]    |PINV3     |PWM Counter 3 Inverter ON/OFF
      * |        |          |0 = Inverter OFF.
      * |        |          |1 = Inverter ON.
@@ -5869,8 +5871,8 @@ typedef struct
      * |        |          |0 = One-Shot mode.
      * |        |          |1 = Auto-Reload mode.
      * |        |          |Note: If there is a rising transition at this bit, it will cause PWM_PERIOD3 and PWM_CMPDAT3 be cleared.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * PERIOD0
@@ -5887,8 +5889,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to PERIOD will take effect in the next PWM cycle.
- */
-    __IO uint32_t PERIOD0;               
+    */
+    __IO uint32_t PERIOD0;
 
     /**
      * CMPDAT0
@@ -5905,8 +5907,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to CMP will take effect in the next PWM cycle.
- */
-    __IO uint32_t CMPDAT0;               
+    */
+    __IO uint32_t CMPDAT0;
 
     /**
      * CNT0
@@ -5917,8 +5919,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |CNT       |PWM Data Register
      * |        |          |User can monitor CNT to know current value in 16-bit down counter.
- */
-    __I  uint32_t CNT0;                  
+    */
+    __I  uint32_t CNT0;
 
     /**
      * PERIOD1
@@ -5935,8 +5937,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to PERIOD will take effect in the next PWM cycle.
- */
-    __IO uint32_t PERIOD1;               
+    */
+    __IO uint32_t PERIOD1;
 
     /**
      * CMPDAT1
@@ -5953,8 +5955,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to CMP will take effect in the next PWM cycle.
- */
-    __IO uint32_t CMPDAT1;               
+    */
+    __IO uint32_t CMPDAT1;
 
     /**
      * CNT1
@@ -5965,8 +5967,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |CNT       |PWM Data Register
      * |        |          |User can monitor CNT to know current value in 16-bit down counter.
- */
-    __I  uint32_t CNT1;                  
+    */
+    __I  uint32_t CNT1;
 
     /**
      * PERIOD2
@@ -5983,8 +5985,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to PERIOD will take effect in the next PWM cycle.
- */
-    __IO uint32_t PERIOD2;               
+    */
+    __IO uint32_t PERIOD2;
 
     /**
      * CMPDAT2
@@ -6001,8 +6003,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to CMP will take effect in the next PWM cycle.
- */
-    __IO uint32_t CMPDAT2;               
+    */
+    __IO uint32_t CMPDAT2;
 
     /**
      * CNT2
@@ -6013,8 +6015,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |CNT       |PWM Data Register
      * |        |          |User can monitor CNT to know current value in 16-bit down counter.
- */
-    __I  uint32_t CNT2;                  
+    */
+    __I  uint32_t CNT2;
 
     /**
      * PERIOD3
@@ -6031,8 +6033,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to PERIOD will take effect in the next PWM cycle.
- */
-    __IO uint32_t PERIOD3;               
+    */
+    __IO uint32_t PERIOD3;
 
     /**
      * CMPDAT3
@@ -6049,8 +6051,8 @@ typedef struct
      * |        |          |l CMP < PERIOD: PWM low width = (PERIOD-CMP) unit; PWM high width = (CMP+1) unit.
      * |        |          |l CMP = 0: PWM low width = (PERIOD) unit; PWM high width = 1 unit.
      * |        |          |Note: Any write to CMP will take effect in the next PWM cycle.
- */
-    __IO uint32_t CMPDAT3;               
+    */
+    __IO uint32_t CMPDAT3;
 
     /**
      * CNT3
@@ -6061,9 +6063,9 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |CNT       |PWM Data Register
      * |        |          |User can monitor CNT to know current value in 16-bit down counter.
- */
-    __I  uint32_t CNT3;                  
-         uint32_t RESERVE0[1];
+    */
+    __I  uint32_t CNT3;
+    uint32_t RESERVE0[1];
 
 
     /**
@@ -6077,8 +6079,8 @@ typedef struct
      * |        |          |0 = Period interrupt Disabled.
      * |        |          |1 = Period interrupt Enabled.
      * |        |          |Note: Each bit controls the corresponding PWM channel.
- */
-    __IO uint32_t INTEN;                 
+    */
+    __IO uint32_t INTEN;
 
     /**
      * INTSTS
@@ -6091,10 +6093,10 @@ typedef struct
      * |        |          |0 = Interrupt Flag OFF.
      * |        |          |1 = Interrupt Flag ON.
      * |        |          |Note1: Each bit controls the corresponding PWM channel.
-     * |        |          |Note2: User can clear each interrupt flag by writing a one to corresponding bit 
- */
-    __IO uint32_t INTSTS;                
-         uint32_t RESERVE1[2];
+     * |        |          |Note2: User can clear each interrupt flag by writing a one to corresponding bit
+    */
+    __IO uint32_t INTSTS;
+    uint32_t RESERVE1[2];
 
 
     /**
@@ -6162,8 +6164,8 @@ typedef struct
      * |        |          |0 = No capture falling latch condition happened.
      * |        |          |1 = Capture falling latch condition happened, and this flag will be set to high.
      * |        |          |Note: This bit must be cleared by writing 1 to it.
- */
-    __IO uint32_t CAPCTL01;              
+    */
+    __IO uint32_t CAPCTL01;
 
     /**
      * CAPCTL23
@@ -6228,8 +6230,8 @@ typedef struct
      * |        |          |0 = No capture falling latch condition happened.
      * |        |          |1 = Capture falling latch condition happened, this flag will be set to high.
      * |        |          |Note: This bit must be cleared by writing 1 to it.
- */
-    __IO uint32_t CAPCTL23;              
+    */
+    __IO uint32_t CAPCTL23;
 
     /**
      * RCAPDAT0
@@ -6240,8 +6242,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |RCAPDAT   |Capture Rising Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has rising transition.
- */
-    __IO uint32_t RCAPDAT0;              
+    */
+    __IO uint32_t RCAPDAT0;
 
     /**
      * FCAPDAT0
@@ -6252,8 +6254,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |FCAPDAT   |Capture Falling Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has Falling transition.
- */
-    __IO uint32_t FCAPDAT0;              
+    */
+    __IO uint32_t FCAPDAT0;
 
     /**
      * RCAPDAT1
@@ -6264,8 +6266,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |RCAPDAT   |Capture Rising Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has rising transition.
- */
-    __IO uint32_t RCAPDAT1;              
+    */
+    __IO uint32_t RCAPDAT1;
 
     /**
      * FCAPDAT1
@@ -6276,8 +6278,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |FCAPDAT   |Capture Falling Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has Falling transition.
- */
-    __IO uint32_t FCAPDAT1;              
+    */
+    __IO uint32_t FCAPDAT1;
 
     /**
      * RCAPDAT2
@@ -6288,8 +6290,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |RCAPDAT   |Capture Rising Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has rising transition.
- */
-    __IO uint32_t RCAPDAT2;              
+    */
+    __IO uint32_t RCAPDAT2;
 
     /**
      * FCAPDAT2
@@ -6300,8 +6302,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |FCAPDAT   |Capture Falling Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has Falling transition.
- */
-    __IO uint32_t FCAPDAT2;              
+    */
+    __IO uint32_t FCAPDAT2;
 
     /**
      * RCAPDAT3
@@ -6312,8 +6314,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |RCAPDAT   |Capture Rising Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has rising transition.
- */
-    __IO uint32_t RCAPDAT3;              
+    */
+    __IO uint32_t RCAPDAT3;
 
     /**
      * FCAPDAT3
@@ -6324,8 +6326,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |FCAPDAT   |Capture Falling Latch Register
      * |        |          |Latch the PWM counter when Channel 0/1/2/3 has Falling transition.
- */
-    __IO uint32_t FCAPDAT3;              
+    */
+    __IO uint32_t FCAPDAT3;
 
     /**
      * CAPINEN
@@ -6343,8 +6345,8 @@ typedef struct
      * |        |          |n = 1, Capture channel 1 is from PB.11 or PC.10.
      * |        |          |n = 2, Capture channel 2 is from PB.12 or PC.11.
      * |        |          |n = 3, Capture channel 3 is from PB.13 or PC.12.
- */
-    __IO uint32_t CAPINEN;               
+    */
+    __IO uint32_t CAPINEN;
 
     /**
      * POEN
@@ -6357,8 +6359,8 @@ typedef struct
      * |        |          |0 = PWM Counter Output Disabled.
      * |        |          |1 = PWM Counter Output Enabled.
      * |        |          |Note: Each bit controls the corresponding PWM channel.
- */
-    __IO uint32_t POEN;                  
+    */
+    __IO uint32_t POEN;
 
 } PWM_T;
 
@@ -6598,7 +6600,7 @@ typedef struct
     @addtogroup RTC Real Time Clock Controller(RTC)
     Memory Mapped Structure for RTC Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -6625,8 +6627,8 @@ typedef struct
      * |        |          |[3]: Status of power off request pwr_key_off
      * |        |          |[2]: Level shifter reset
      * |        |          |[1]: Level shifter enable
- */
-    __IO  uint32_t INIT;                  
+    */
+    __IO  uint32_t INIT;
 
     /**
      * RWEN
@@ -6637,13 +6639,13 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |RWEN      |RTC Register Access Enable Password (R/W)
      * |        |          |0xA965 = Access Password.
-     * |        |          |Others = Access Disabled. 
+     * |        |          |Others = Access Disabled.
      * |[16]    |RWENF     |RTC Register Access Enable Flag (Read Only)
      * |        |          |0 = RTC register access Disabled.
      * |        |          |1 = RTC register access Enabled.
      * |        |          |This bit will be set after RTC_RWEN[15:0] register is load a 0xA965, and it will be cleared when RTC_RWEN[15:0] is not 0xA965.
- */
-    __IO uint32_t RWEN;                  
+    */
+    __IO uint32_t RWEN;
 
     /**
      * FREQADJ
@@ -6663,8 +6665,8 @@ typedef struct
      * |        |          |This bit will be kept at "High" while the calibration is ongoing and cleared to "Low" automatically while the calibration is done and the content of RTC 1Hz Counter Register is valid calibration flow is as follows.
      * |        |          |0 = RTC Clock calibration mechanism Disabled.
      * |        |          |1 = RTC Clock calibration mechanism Enabled.
- */
-    __IO uint32_t FREQADJ;               
+    */
+    __IO uint32_t FREQADJ;
 
     /**
      * TIME
@@ -6679,8 +6681,8 @@ typedef struct
      * |[14:12] |TENMIN    |10-Min Time Digit
      * |[19:16] |HR        |1-Hour Time Digit
      * |[21:20] |TENHR     |10-Hour Time Digit
- */
-    __IO uint32_t TIME;                  
+    */
+    __IO uint32_t TIME;
 
     /**
      * CAL
@@ -6695,8 +6697,8 @@ typedef struct
      * |[12]    |TENMON    |10-Month Calendar Digit
      * |[19:16] |YEAR      |1-Year Calendar Digit
      * |[23:20] |TENYEAR   |10-Year Calendar Digit
- */
-    __IO uint32_t CAL;                   
+    */
+    __IO uint32_t CAL;
 
     /**
      * CLKFMT
@@ -6709,8 +6711,8 @@ typedef struct
      * |        |          |Indicate that RTC_TIME and RTC_TALM are in 24-hour mode or 12-hour mode.
      * |        |          |0 = 12-hour time scale with AM and PM indication selected.
      * |        |          |1 = 24-hour time scale selected.
- */
-    __IO uint32_t CLKFMT;                
+    */
+    __IO uint32_t CLKFMT;
 
     /**
      * WEEKDAY
@@ -6727,8 +6729,8 @@ typedef struct
      * |        |          |4 = Thursday.
      * |        |          |5 = Friday.
      * |        |          |6 = Saturday.
- */
-    __IO uint32_t WEEKDAY;               
+    */
+    __IO uint32_t WEEKDAY;
 
     /**
      * TALM
@@ -6754,8 +6756,8 @@ typedef struct
      * |[23]    |MSKHR     |Mask Alarm By Hour
      * |        |          |0 = Activate.
      * |        |          |1 = Mask.
- */
-    __IO uint32_t TALM;                  
+    */
+    __IO uint32_t TALM;
 
     /**
      * CALM
@@ -6783,8 +6785,8 @@ typedef struct
      * |[31]    |MSKWEEKDAY|Mask Alarm By Week Day
      * |        |          |0 =Activate.
      * |        |          |1 =Mask.
- */
-    __IO uint32_t CALM;                  
+    */
+    __IO uint32_t CALM;
 
     /**
      * LEAPYEAR
@@ -6796,8 +6798,8 @@ typedef struct
      * |[0]     |LEAPYEAR  |Leap Year Indication Register (Read Only)
      * |        |          |0 = This year is not a leap year.
      * |        |          |1 = This year is leap year.
- */
-    __I  uint32_t LEAPYEAR;              
+    */
+    __I  uint32_t LEAPYEAR;
 
     /**
      * INTEN
@@ -6818,8 +6820,8 @@ typedef struct
      * |[3]     |RALMIEN   |Relative Alarm Interrupt Enable Control
      * |        |          |0 = RTC Relative Alarm Interrupt Disabled.
      * |        |          |1 = RTC Relative Alarm Interrupt Enabled.
- */
-    __IO uint32_t INTEN;                 
+    */
+    __IO uint32_t INTEN;
 
     /**
      * INTSTS
@@ -6850,8 +6852,8 @@ typedef struct
      * |        |          |1 = Relative time counter and calendar counter have counted to a specified time recorded in RTC_TALM and RTC_CALM
      * |        |          |RTC alarm interrupt has been activated.
      * |        |          |Note: Software can also clear this bit after RTC interrupt has occurred
- */
-    __IO uint32_t INTSTS;                
+    */
+    __IO uint32_t INTSTS;
 
     /**
      * TICK
@@ -6870,8 +6872,8 @@ typedef struct
      * |        |          |101 = Time tick is 1/32 second.
      * |        |          |110 = Time tick is 1/64 second.
      * |        |          |111 = Time tick is 1/28 second.
- */
-    __IO uint32_t TICK;                  
+    */
+    __IO uint32_t TICK;
 
     /**
      * POWCTL
@@ -6892,7 +6894,7 @@ typedef struct
      * |        |          |1 = Force the RTC_RPWR to low.
      * |[2]     |POWOFFEN  |Hardware Power Clear Enable Control
      * |        |          |0 = The RTC_RPWR pin won't be influenced by the pressed time of power key.
-     * |        |          |1 = The RTC_RPWR pin will clear to low when the power key is pressed over the POWOFFT second. 
+     * |        |          |1 = The RTC_RPWR pin will clear to low when the power key is pressed over the POWOFFT second.
      * |[3]     |ALMIEN    |Normal Time Alarm
      * |        |          |0 = Normal time alarm control Disabled.
      * |        |          |1 = Normal time alarm control Enabled.
@@ -6910,9 +6912,9 @@ typedef struct
      * |        |          |Its time scalar is one second so that the default is 5 second.
      * |[31:20] |RALMTIME  |Relative Time Alarm Period (Second Unit)
      * |        |          |Indicates the period of the relative time alarm. Its maximum value is 1800.
-     * |        |          |When RALMIEN (RTC_INTEN[3]) = 0 , it will be cleared to 0. 
- */
-    __IO uint32_t POWCTL;                
+     * |        |          |When RALMIEN (RTC_INTEN[3]) = 0 , it will be cleared to 0.
+    */
+    __IO uint32_t POWCTL;
 
     /**
      * SET
@@ -6931,8 +6933,8 @@ typedef struct
      * |        |          |input signal when IOMSEL = 0 (Read Only).
      * |[4]     |XOUTDAT   |X32_OUT PAD Status
      * |        |          |input signal when IOMSEL = 0 (Read Only).
- */
-    __IO uint32_t SET;                   
+    */
+    __IO uint32_t SET;
 
     /**
      * CLKSRC
@@ -6944,8 +6946,8 @@ typedef struct
      * |[0]     |CKSRC     |Internal RC Oscillator Control
      * |        |          |0 = Internal RC oscillator Disabled.
      * |        |          |1 = Internal RC oscillator Enabled.
- */
-    __IO uint32_t CLKSRC;                
+    */
+    __IO uint32_t CLKSRC;
 
     /**
      * CALCNT
@@ -6956,9 +6958,9 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:0]  |CALCNT    |Cycle Number Of PCLK During 1Hz
      * |        |          |That is generated by dividing RTC Clock.
-     * |        |          |This number can be used to deduct the real clock rate of RTC clock. 
- */
-    __I  uint32_t CALCNT;                
+     * |        |          |This number can be used to deduct the real clock rate of RTC clock.
+    */
+    __I  uint32_t CALCNT;
 
     /**
      * SYNC
@@ -6970,8 +6972,8 @@ typedef struct
      * |[0]     |SYNC      |Polling The Flag To Detect RTC Register Write Complete
      * |        |          |0 = Register cannot be written.
      * |        |          |1 = Register can be written because write complete.
- */
-    __I  uint32_t SYNC;                  
+    */
+    __I  uint32_t SYNC;
     __I  uint32_t RESERVE0[3];
 
 
@@ -6984,8 +6986,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:0]  |RTC_SPRn  |RTC Spare Register
      * |        |          |n = 0~7.
- */
-    __IO uint32_t SPR[8];                  
+    */
+    __IO uint32_t SPR[8];
 
 } RTC_T;
 
@@ -7213,7 +7215,7 @@ typedef struct
     @addtogroup SDH SD Card Host Interface(SDH)
     Memory Mapped Structure for SDH Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -7226,9 +7228,9 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |DATA      |SDH Receiving/Transmit Flash Buffer
-     * |        |          |This buffer is used to receive/transmit data. It can be accessed by CPU or DMAC.      
- */
-         uint32_t FB[32];                   
+     * |        |          |This buffer is used to receive/transmit data. It can be accessed by CPU or DMAC.
+    */
+    uint32_t FB[32];
     __I  uint32_t RESERVE0[224];
 
 
@@ -7258,9 +7260,9 @@ typedef struct
      * |        |          |This bit indicates that the DMA is transferred or not.
      * |        |          |0 = DMA transfer is not in progress.
      * |        |          |1 = DMA transfer is in progress.
- */
-    __IO uint32_t DMACTL;                
-         uint32_t RESERVE1[1];
+    */
+    __IO uint32_t DMACTL;
+    uint32_t RESERVE1[1];
 
 
     /**
@@ -7277,8 +7279,8 @@ typedef struct
      * |[31:1]  |DMASA     |DMA Transfer Starting Address
      * |        |          |This field pads 0 as least significant bit indicates a 32-bit starting address of system memory (SRAM) for DMAC to retrieve or fill in data.
      * |        |          |If DMAC is not in Normal mode, this field will be interpreted as a starting address of Physical Address Descriptor (PAD) table.
- */
-    __IO uint32_t DMASA;                 
+    */
+    __IO uint32_t DMASA;
 
     /**
      * DMABCNT
@@ -7290,8 +7292,8 @@ typedef struct
      * |[25:0]  |BCNT      |DMA Transfer Byte Count (Read Only)
      * |        |          |This field indicates the remained byte count of DMAC transfer.
      * |        |          |The value of this field is valid only when DMAC is busy; otherwise, it is .
- */
-    __I  uint32_t DMABCNT;               
+    */
+    __I  uint32_t DMABCNT;
 
     /**
      * DMAINTEN
@@ -7306,8 +7308,8 @@ typedef struct
      * |[1]     |WEOTIEN   |Wrong EOT Encountered Interrupt Enable Control
      * |        |          |0 = Interrupt generation Disabled when wrong EOT is encountered.
      * |        |          |1 = Interrupt generation Enabled when wrong EOT is encountered.
- */
-    __IO uint32_t DMAINTEN;              
+    */
+    __IO uint32_t DMAINTEN;
 
     /**
      * DMAINTSTS
@@ -7325,9 +7327,9 @@ typedef struct
      * |        |          |0 = No EOT encountered before DMA transfer finished.
      * |        |          |1 = EOT encountered before DMA transfer finished.
      * |        |          |Note: This bit is read only, but can be cleared by writing '1' to it.
- */
-    __IO uint32_t DMAINTSTS;             
-         uint32_t RESERVE2[250];
+    */
+    __IO uint32_t DMAINTSTS;
+    uint32_t RESERVE2[250];
 
 
     /**
@@ -7345,8 +7347,8 @@ typedef struct
      * |[1]     |SDEN      |Secure-Digital Functionality Enable Control
      * |        |          |0 = SD functionality Disabled.
      * |        |          |1 = SD functionality Enabled.
- */
-    __IO uint32_t GCTL;                  
+    */
+    __IO uint32_t GCTL;
 
     /**
      * GINTEN
@@ -7358,8 +7360,8 @@ typedef struct
      * |[0]     |DTAIEN    |DMAC READ/WRITE Target Abort Interrupt Enable Control
      * |        |          |0 = DMAC READ/WRITE target abort interrupt generation Disabled.
      * |        |          |1 = DMAC READ/WRITE target abort interrupt generation Enabled.
- */
-    __IO uint32_t GINTEN;                
+    */
+    __IO uint32_t GINTEN;
 
     /**
      * GINTSTS
@@ -7374,9 +7376,9 @@ typedef struct
      * |        |          |0 = No bus ERROR response received.
      * |        |          |1 = Bus ERROR response received.
      * |        |          |Note: This bit is read only, but can be cleared by writing '1' to it.
- */
-    __IO  uint32_t GINTSTS;               
-         uint32_t RESERVE3[5];
+    */
+    __IO  uint32_t GINTSTS;
+    uint32_t RESERVE3[5];
 
 
     /**
@@ -7442,8 +7444,8 @@ typedef struct
      * |[27:24] |SDNWR     |NWR Parameter For Block Write Operation
      * |        |          |This value indicates the NWR parameter for data block write operation in SD clock counts.
      * |        |          |The actual clock cycle will be SDNWR+.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * CMDARG
@@ -7455,8 +7457,8 @@ typedef struct
      * |[31:0]  |ARGUMENT  |SD Command Argument
      * |        |          |This register contains a 32-bit value specifies the argument of SD command from host controller to SD card.
      * |        |          |Before triggering SDH_CTL [COEN], software should fill argument in this fiel.
- */
-    __IO uint32_t CMDARG;                
+    */
+    __IO uint32_t CMDARG;
 
     /**
      * INTEN
@@ -7494,8 +7496,8 @@ typedef struct
      * |        |          |Host need clock to get data on pin DAT3.
      * |        |          |Please make sure SDH_CTL[CLKKEEP0] is 1 in order to generate free running clock for DAT3 pi.
      * |        |          |1 = From GPIO pin.
- */
-    __IO uint32_t INTEN;                 
+    */
+    __IO uint32_t INTEN;
 
     /**
      * INTSTS
@@ -7572,8 +7574,8 @@ typedef struct
      * |        |          |1 = Card removed.
      * |[18]    |DAT1STS   |DAT1 Pin Status Of SD Port (Read Only)
      * |        |          |This bit indicates the DAT1 pin status of SD port.
- */
-    __IO  uint32_t INTSTS;                
+    */
+    __IO  uint32_t INTSTS;
 
     /**
      * RESP0
@@ -7585,8 +7587,8 @@ typedef struct
      * |[31:0]  |RESPTK0   |SD Receiving Response Token 0
      * |        |          |SD host controller will receive a response token for getting a reply from SD card when RIEN (SDH_CTL[1]) is set.
      * |        |          |This field contains response bit 47-16 of the response toke.
- */
-    __I  uint32_t RESP0;                 
+    */
+    __I  uint32_t RESP0;
 
     /**
      * RESP1
@@ -7598,8 +7600,8 @@ typedef struct
      * |[7:0]   |RESPTK1   |SD Receiving Response Token 1
      * |        |          |SD host controller will receive a response token for getting a reply from SD card when RIEN (SDH_CTL[1]) is set.
      * |        |          |This register contains the bit 15-8 of the response toke.
- */
-    __I  uint32_t RESP1;                 
+    */
+    __I  uint32_t RESP1;
 
     /**
      * BLEN
@@ -7612,8 +7614,8 @@ typedef struct
      * |        |          |An 11-bit value specifies the SD transfer byte count of a block.
      * |        |          |The actual byte count is equal to BLKLEN +.
      * |        |          |Note: The default SD block length is 512 bytes.
- */
-    __IO uint32_t BLEN;                  
+    */
+    __IO uint32_t BLEN;
 
     /**
      * TOUT
@@ -7628,8 +7630,8 @@ typedef struct
      * |        |          |The time period depends on SD engine clock frequency.
      * |        |          |Do not write a small number into this field, or you may never get response or data due to time-ou.
      * |        |          |Note: Filling 0x0 into this field will disable hardware time-out function.
- */
-    __IO uint32_t TOUT;                  
+    */
+    __IO uint32_t TOUT;
 
 } SDH_T;
 
@@ -7803,7 +7805,7 @@ typedef struct
     @addtogroup SPIM SPI Master(SPIM)
     Memory Mapped Structure for SPIM Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -7900,8 +7902,8 @@ typedef struct
      * |        |          |Note1: Quad mode of SPI Flash must be enabled first by I/O mode before using quad page program/quad read commands.
      * |        |          |Note2: See support list for SPI Flash which support these command codes.
      * |        |          |Note3: For TYPE_1, TYPE_2, and TYPE_3 program flows, refer to Figure 6.14-3, 6.14-4, and 6.14-5.
- */
-    __IO uint32_t CTL0;                  
+    */
+    __IO uint32_t CTL0;
 
     /**
      * CTL1
@@ -7942,8 +7944,8 @@ typedef struct
      * |        |          |The value in this field is the frequency divider of the system clock to generate the serial clock on the output SPIM_CLK pin.
      * |        |          |The desired frequency is obtained according to the following equation:
      * |        |          |Note: When set DIVIDER to zero, the frequency of SPIM_CLK will be equal to the frequency of SYS_CLK.
- */
-    __IO uint32_t CTL1;                  
+    */
+    __IO uint32_t CTL1;
 
     /**
      * VALIDCTL
@@ -7962,8 +7964,8 @@ typedef struct
      * |        |          |The function can check whether the code in SPI Flash is valid or no.
      * |        |          |0=>1 (Rising Edge) = Enable the validation and clear the VALIDSTS bit.
      * |        |          |1=>0 (Falling Edge) = Disable the validation and update the VALIDSTS bit.
- */
-    __IO uint32_t VALIDCTL;              
+    */
+    __IO uint32_t VALIDCTL;
 
     /**
      * RXCLKDLY
@@ -7990,7 +7992,7 @@ typedef struct
      * |        |          |011 = Select sample clock through 6 Delay Cells.
      * |        |          |...
      * |        |          |111 = Select sample clock through 14 Delay Cells.
- */
+    */
     __IO  uint32_t RXCLKDLY;
 
     /**
@@ -8010,8 +8012,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, received data will be held in the order SPIM_RX3[23:0], SPIM_RX2[23:0], SPIM_RX1[23:0], SPIM_RX0[23:0].
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, received data will be held in the order SPIM_RX0[7:0], SPIM_RX0[15:8], SPIM_RX0[23:16].
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, received data will be held in the order SPIM_RX0[7], SPIM_RX0[6], ..., SPIM_RX0[0].
- */
-    __I  uint32_t RX0;                   
+    */
+    __I  uint32_t RX0;
 
     /**
      * RX1
@@ -8030,8 +8032,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, received data will be held in the order SPIM_RX3[23:0], SPIM_RX2[23:0], SPIM_RX1[23:0], SPIM_RX0[23:0].
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, received data will be held in the order SPIM_RX0[7:0], SPIM_RX0[15:8], SPIM_RX0[23:16].
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, received data will be held in the order SPIM_RX0[7], SPIM_RX0[6], ..., SPIM_RX0[0].
- */
-    __I  uint32_t RX1;                   
+    */
+    __I  uint32_t RX1;
 
     /**
      * RX2
@@ -8050,8 +8052,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, received data will be held in the order SPIM_RX3[23:0], SPIM_RX2[23:0], SPIM_RX1[23:0], SPIM_RX0[23:0].
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, received data will be held in the order SPIM_RX0[7:0], SPIM_RX0[15:8], SPIM_RX0[23:16].
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, received data will be held in the order SPIM_RX0[7], SPIM_RX0[6], ..., SPIM_RX0[0].
- */
-    __I  uint32_t RX2;                   
+    */
+    __I  uint32_t RX2;
 
     /**
      * RX3
@@ -8070,8 +8072,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, received data will be held in the order SPIM_RX3[23:0], SPIM_RX2[23:0], SPIM_RX1[23:0], SPIM_RX0[23:0].
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, received data will be held in the order SPIM_RX0[7:0], SPIM_RX0[15:8], SPIM_RX0[23:16].
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, received data will be held in the order SPIM_RX0[7], SPIM_RX0[6], ..., SPIM_RX0[0].
- */
-    __I  uint32_t RX3;                   
+    */
+    __I  uint32_t RX3;
 
     /**
      * TX0
@@ -8090,8 +8092,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX3[23:0], SPIM_TX2[23:0], SPIM_TX1[23:0], SPIM_TX0[23:0] in next transfer.
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX0[7:0], SPIM_TX0[15:8], SPIM_TX0[23:16] in next transfer.
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, data will be transmitted in the order SPIM_TX0[7], SPIM_TX0[6], ..., SPIM_TX0[0] in next transfer.
- */
-    __IO uint32_t TX0;                   
+    */
+    __IO uint32_t TX0;
 
     /**
      * TX1
@@ -8110,8 +8112,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX3[23:0], SPIM_TX2[23:0], SPIM_TX1[23:0], SPIM_TX0[23:0] in next transfer.
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX0[7:0], SPIM_TX0[15:8], SPIM_TX0[23:16] in next transfer.
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, data will be transmitted in the order SPIM_TX0[7], SPIM_TX0[6], ..., SPIM_TX0[0] in next transfer.
- */
-    __IO uint32_t TX1;                   
+    */
+    __IO uint32_t TX1;
 
     /**
      * TX2
@@ -8130,8 +8132,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX3[23:0], SPIM_TX2[23:0], SPIM_TX1[23:0], SPIM_TX0[23:0] in next transfer.
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX0[7:0], SPIM_TX0[15:8], SPIM_TX0[23:16] in next transfer.
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, data will be transmitted in the order SPIM_TX0[7], SPIM_TX0[6], ..., SPIM_TX0[0] in next transfer.
- */
-    __IO uint32_t TX2;                   
+    */
+    __IO uint32_t TX2;
 
     /**
      * TX3
@@ -8150,8 +8152,8 @@ typedef struct
      * |        |          |Example 1: If SPIM_CTL0[BURSTNUM] = 0x3 and SPIM_CTL1[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX3[23:0], SPIM_TX2[23:0], SPIM_TX1[23:0], SPIM_TX0[23:0] in next transfer.
      * |        |          |Example 2: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x17, data will be transmitted in the order SPIM_TX0[7:0], SPIM_TX0[15:8], SPIM_TX0[23:16] in next transfer.
      * |        |          |Example 3: If SPIM_CTL0[BURSTNUM] = 0x0 and SPIM_CTL0[DWIDTH] = 0x07, data will be transmitted in the order SPIM_TX0[7], SPIM_TX0[6], ..., SPIM_TX0[0] in next transfer.
- */
-    __IO uint32_t TX3;                   
+    */
+    __IO uint32_t TX3;
 
     /**
      * SRAMADDR
@@ -8164,8 +8166,8 @@ typedef struct
      * |        |          |For DMA Read mode, this is the destination address for DMA transfer.
      * |        |          |For DMA Write mode, this is the source address for DMA transfer.
      * |        |          |Note: This address must be word-aligned.
- */
-    __IO uint32_t SRAMADDR;              
+    */
+    __IO uint32_t SRAMADDR;
 
     /**
      * DMATBCNT
@@ -8176,8 +8178,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[23:0]  |CNT       |DMA Transfer Byte Count Register
      * |        |          |It indicates the transfer length for DMA process. The unit for counting is byte.
- */
-    __IO uint32_t DMATBCNT;              
+    */
+    __IO uint32_t DMATBCNT;
 
     /**
      * FADDR
@@ -8190,8 +8192,8 @@ typedef struct
      * |        |          |For DMA Read mode, this is the source address for DMA transfer.
      * |        |          |For DMA Write mode, this is the destination address for DMA transfer.
      * |        |          |Note: This address must be word-aligned.
- */
-    __IO uint32_t FADDR;                 
+    */
+    __IO uint32_t FADDR;
 
 } SPIM_T;
 
@@ -8311,7 +8313,7 @@ typedef struct
     @addtogroup SPI Serial Peripheral Interface Controller(SPI)
     Memory Mapped Structure for SPI Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -8373,8 +8375,8 @@ typedef struct
      * |        |          |A byte suspend interval will be inserted among each byte.
      * |        |          |The period of the byte suspend interval depends on the setting of SUSPITV (SPI_CTL[7:4].
      * |        |          |Note1: Byte reorder function is only available if DWIDTH is defined as 16, 24, and 32 bits.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * CLKDIV
@@ -8388,8 +8390,8 @@ typedef struct
      * |        |          |The frequency is obtained according to the following equatio.
      * |        |          |where
      * |        |          |is the SPI engine clock source, which is defined in the clock control, clock control register.
- */
-    __IO uint32_t CLKDIV;                
+    */
+    __IO uint32_t CLKDIV;
 
     /**
      * SSCTL
@@ -8442,8 +8444,8 @@ typedef struct
      * |        |          |In Slave mode, these bits indicate the time out period when there is serial clock input during slave select active.
      * |        |          |The clock source of the time out counter is Slave engine clock.
      * |        |          |If the value is 0, it indicates the slave mode time-out function is disable.
- */
-    __IO uint32_t SSCTL;                 
+    */
+    __IO uint32_t SSCTL;
     __I  uint32_t RESERVE0[1];
 
 
@@ -8498,8 +8500,8 @@ typedef struct
      * |        |          |If the valid data count of the receive FIFO buffer is larger than the RXTH setting, the RXTHIF bit will be set to 1, else the RXTHIF bit will be cleared to 0.
      * |[30:28] |TXTH      |Transmit FIFO Threshold
      * |        |          |If the valid data count of the transmit FIFO buffer is less than or equal to the TXTH setting, the TXTHIF bit will be set to 1, else the TXTHIF bit will be cleared to 0.
- */
-    __IO uint32_t FIFOCTL;               
+    */
+    __IO uint32_t FIFOCTL;
 
     /**
      * STATUS
@@ -8595,9 +8597,9 @@ typedef struct
      * |        |          |This bit field indicates the valid data count of receive FIFO buffer.
      * |[31:28] |TXCNT     |Transmit FIFO Data Count (Read Only)
      * |        |          |This bit field indicates the valid data count of transmit FIFO buffer.
- */
-    __IO  uint32_t STATUS;                
-         uint32_t RESERVE1[2];
+    */
+    __IO  uint32_t STATUS;
+    uint32_t RESERVE1[2];
 
 
     /**
@@ -8612,9 +8614,9 @@ typedef struct
      * |        |          |The number of valid bits depends on the setting of transmit bit width field of the SPI_CTL register.
      * |        |          |For example, if DWIDTH (SPI_CTL[12:8]) is set to 0x08, the bits TX[7:0] will be transmitted
      * |        |          |If DWIDTH (SPI_CTL[12:8]) is set to 0x00, the SPI controller will perform a 32-bit transfer.
- */
-    __O  uint32_t TX;                    
-         uint32_t RESERVE2[3];
+    */
+    __O  uint32_t TX;
+    uint32_t RESERVE2[3];
 
 
     /**
@@ -8629,8 +8631,8 @@ typedef struct
      * |        |          |The data receive register holds the earliest datum received from SPI data input pin
      * |        |          |If the RXEMPTY (SPI_STATUS[8]) is not set to 1, the receive FIFO buffer can be accessed through software by reading this register
      * |        |          |This is a read-only register
- */
-    __I  uint32_t RX;                    
+    */
+    __I  uint32_t RX;
 
 } SPI_T;
 
@@ -8819,7 +8821,7 @@ typedef struct
     @addtogroup TIMER Timer Controller(TIMER)
     Memory Mapped Structure for TIMER Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -8874,8 +8876,8 @@ typedef struct
      * |        |          |Timer counter will be held while CPU is held by ICE.
      * |        |          |1 = ICE debug mode acknowledgement Disabled.
      * |        |          |Timer counter will keep going no matter CPU is held by ICE or not.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * CMP
@@ -8891,8 +8893,8 @@ typedef struct
      * |        |          |Note1: Never write 0x0 or 0x1 in the CMPDAT field, or the timer will run into unknown state.
      * |        |          |Note2: When timer is operating in Continuous Counting mode, the 24-bit up counter will keep counting continuously even if software writes a new value into CMPDAT field.
      * |        |          |But if timer is operating at other modes, the 24-bit up counter will restart counting and using the newest CMPDAT value to be the timer compared value if software writes a new value to the CMPDAT fiel.
- */
-    __IO uint32_t CMP;                   
+    */
+    __IO uint32_t CMP;
 
     /**
      * INTSTS
@@ -8911,8 +8913,8 @@ typedef struct
      * |        |          |0 = Timer does not cause CPU wake-up.
      * |        |          |1 = CPU wake-up from Power-down mode and Deep Power-down mode, if timer time-out interrupt signal generated.
      * |        |          |Note: This bit is cleared by writing 1 to it.
- */
-    __IO uint32_t INTSTS;                
+    */
+    __IO uint32_t INTSTS;
 
     /**
      * CNT
@@ -8926,8 +8928,8 @@ typedef struct
      * |        |          |User can read TIMERx_CNT for getting current 24- bit counter value if TIMERx_CTL[24] is set to 0
      * |        |          |2. EXTCNTEN (TIMERx_CTL[24] ) = 1 : CNT is 24- bit event counter value.
      * |        |          |Note: User can read CNT for getting the current 24- bit event counter value if TIMERx_CTL[24] is 1
- */
-    __I  uint32_t CNT;                   
+    */
+    __I  uint32_t CNT;
 
     /**
      * CAP
@@ -8938,8 +8940,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[23:0]  |CAPDAT    |Timer Capture Data Register
      * |        |          |When the CAPEN (TIMERx_EXTCTL[3]) bit is set, CAPFUNCS (TIMERx_EXTCTL[4]) bit is 0, and a transition on TMx_EXT pin matched the CAPEDGE (TIMERx_EXTCTL[2:1]) setting, CAPIF (TIMERx_EINTSTS[0]) will be set to 1 and the current timer counter value (TIMERx_CNT value) will be auto-loaded into the CAPDAT field.
- */
-    __I  uint32_t CAP;                   
+    */
+    __I  uint32_t CAP;
 
     /**
      * EXTCTL
@@ -8960,11 +8962,11 @@ typedef struct
      * |[3]     |CAPEN     |Timer External Pin Enable Control
      * |        |          |This bit enables the CAPFUNCS (TIMERx_EXTCTL[4]) function on the TMx_EXT pin.
      * |        |          |0 = CAPFUNCS function of TMx_EXT (x= 0~3) pin will be ignored.
-     * |        |          |1 = CAPFUNCS function of TMx_EXT (x= 0~3) pin is active. 
+     * |        |          |1 = CAPFUNCS function of TMx_EXT (x= 0~3) pin is active.
      * |[4]     |CAPFUNCS  |Timer External Reset Counter / Capture Mode Select
      * |        |          |0 = Transition on TMx_EXT (x= 0~3) pin is using to save the 24-bit timer counter value.
      * |        |          |(TIMERx_CNT value) to timer capture value (TIMERx_CAP value) if CAPIF (TIMERx_EINTSTS[0]) is set to 1
-     * |        |          |1 = Transition on TMx_EXT (x= 0~3) pin is using to reset the 24-bit timer counter value. 
+     * |        |          |1 = Transition on TMx_EXT (x= 0~3) pin is using to reset the 24-bit timer counter value.
      * |[5]     |CAPIEN    |Timer External Interrupt Enable Control
      * |        |          |0 = TMx_EXT (x= 0~3) pin detection Interrupt Disabled.
      * |        |          |1 = TMx_EXT (x= 0~3) pin detection Interrupt Enabled.
@@ -8979,8 +8981,8 @@ typedef struct
      * |        |          |0 = TMx_CNT_OUT (x= 0~3) pin de-bounce Disabled.
      * |        |          |1 = TMx_CNT_OUT (x= 0~3) pin de-bounce Enabled.
      * |        |          |Note: If this bit is enabled, the edge detection of TMx_CNT_OUT pin is detected with de-bounce circuit.
- */
-    __IO uint32_t EXTCTL;                
+    */
+    __IO uint32_t EXTCTL;
 
     /**
      * EINTSTS
@@ -8995,8 +8997,8 @@ typedef struct
      * |        |          |0 = TMx_EXT (x= 0~3) pin interrupt did not occur.
      * |        |          |1 = TMx_EXT (x= 0~3) pin interrupt occurred.
      * |        |          |Note: This bit is cleared by writing 1 to it.
- */
-    __IO uint32_t EINTSTS;               
+    */
+    __IO uint32_t EINTSTS;
     __I  uint32_t RESERVE0[1];
 
 } TIMER_T;
@@ -9084,7 +9086,7 @@ typedef struct
     @addtogroup UART Universal Asynchronous Receiver/Transmitter Controller(UART)
     Memory Mapped Structure for UART Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -9102,8 +9104,8 @@ typedef struct
      * |        |          |The UART Controller will send out the data stored in transmitter FIFO top location through the UART_TX.
      * |        |          |Read Operation:
      * |        |          |By reading this register, the UART will return an 8-bit data received from receiving FIFO.
- */
-    __IO uint32_t DAT;                   
+    */
+    __IO uint32_t DAT;
 
     /**
      * INTEN
@@ -9157,8 +9159,8 @@ typedef struct
      * |[18]    |ABRIEN    |Auto-Baud Rate Interrupt Enable Control
      * |        |          |0 = Auto-baud rate interrupt Disabled.
      * |        |          |1 = Auto-baud rate interrupt Enabled.
- */
-    __IO uint32_t INTEN;                 
+    */
+    __IO uint32_t INTEN;
 
     /**
      * FIFO
@@ -9203,8 +9205,8 @@ typedef struct
      * |        |          |0110 = nRTS Trigger Level is 62/14 (64 FIFO/16 FIFO).
      * |        |          |Others = Reserved.
      * |        |          |Note: This field is used for automatic nRTS flow control.
- */
-    __IO uint32_t FIFO;                  
+    */
+    __IO uint32_t FIFO;
 
     /**
      * LINE
@@ -9241,8 +9243,8 @@ typedef struct
      * |        |          |1 = Break Control Enabled.
      * |        |          |Note: When this bit is set to logic 1, the serial data output (TX) is forced to the Spacing State (logic 0).
      * |        |          |This bit acts only on TX line and has no effect on the transmitter logi.
- */
-    __IO uint32_t LINE;                  
+    */
+    __IO uint32_t LINE;
 
     /**
      * MODEM
@@ -9267,8 +9269,8 @@ typedef struct
      * |        |          |This bit mirror from nRTS pin output of voltage logic status.
      * |        |          |0 = nRTS pin output is low level voltage logic state.
      * |        |          |1 = nRTS pin output is high level voltage logic state.
- */
-    __IO uint32_t MODEM;                 
+    */
+    __IO uint32_t MODEM;
 
     /**
      * MODEMSTS
@@ -9291,8 +9293,8 @@ typedef struct
      * |        |          |This bit defines the active level state of nCTS pin input.
      * |        |          |0 = nCTS pin input is high level active.
      * |        |          |1 = nCTS pin input is low level active. (Default)
- */
-    __IO  uint32_t MODEMSTS;              
+    */
+    __IO  uint32_t MODEMSTS;
 
     /**
      * FIFOSTS
@@ -9311,12 +9313,12 @@ typedef struct
      * |        |          |0 = Auto-baud rate detect function is not finished.
      * |        |          |1 = Auto-baud rate detect function is finished.
      * |        |          |Note1: This bit is set to logic "1" when auto-baud rate detect function is finished.
-     * |        |          |Note2: This bit is read only, but can be cleared by writing "1" to it. 
+     * |        |          |Note2: This bit is read only, but can be cleared by writing "1" to it.
      * |[2]     |ABRDTOIF  |Auto-baud Rate Time-out Interrupt (Read Only)
      * |        |          |0 = Auto-baud rate counter is underflow.
      * |        |          |1 = Auto-baud rate counter is overflow.
      * |        |          |Note1: This bit is set to logic "1" in Auto-baud Rate Detect mode and the baud rate counter is overflow.
-     * |        |          |Note2: This bit is read only, but can be cleared by writing "1" to it. 
+     * |        |          |Note2: This bit is read only, but can be cleared by writing "1" to it.
      * |[3]     |ADDRDETF  |RS-485 Address Byte Detect Flag (Read Only)
      * |        |          |0 = Receiver detects a data that is not an address bit (bit 9 ='0').
      * |        |          |1 = Receiver detects a data that is an address bit (bit 9 ='1').
@@ -9326,7 +9328,7 @@ typedef struct
      * |        |          |This bit is set to logic 1 whenever the received character does not have a valid "parity bit".
      * |        |          |0 = No parity error is generated.
      * |        |          |1 = Parity error is generated.
-     * |        |          |Note: This bit is read only, but can be cleared by writing '1' to it. 
+     * |        |          |Note: This bit is read only, but can be cleared by writing '1' to it.
      * |[5]     |FEF       |Framing Error Flag (Read Only)
      * |        |          |This bit is set to logic 1 whenever the received character does not have a valid "stop bit" (that is, the stop bit following the last data bit or parity bit is detected as logic 0).
      * |        |          |0 = No framing error is generated.
@@ -9383,8 +9385,8 @@ typedef struct
      * |        |          |0 = TX FIFO is not empty.
      * |        |          |1 = TX FIFO is empty.
      * |        |          |Note: This bit is cleared automatically when TX FIFO is not empty or the last byte transmission has not completed.
- */
-    __IO  uint32_t FIFOSTS;               
+    */
+    __IO  uint32_t FIFOSTS;
 
     /**
      * INTSTS
@@ -9490,8 +9492,8 @@ typedef struct
      * |        |          |1 = Chip wake-up from power-down state by data wake-up.
      * |        |          |Note1: If WKDATIEN (UART_INTEN[10]) is enabled, the wake-up interrupt is generated.
      * |        |          |Note2: This bit is read only, but can be cleared by writing '1' to it.
- */
-    __IO  uint32_t INTSTS;                
+    */
+    __IO  uint32_t INTSTS;
 
     /**
      * TOUT
@@ -9509,8 +9511,8 @@ typedef struct
      * |[15:8]  |DLY       |TX Delay Time Value
      * |        |          |This field is used to programming the transfer delay time between the last stop bit and next start bit.
      * |        |          |The unit is bit tim.
- */
-    __IO uint32_t TOUT;                  
+    */
+    __IO uint32_t TOUT;
 
     /**
      * BAUD
@@ -9537,8 +9539,8 @@ typedef struct
      * |        |          |This bit combines with BAUDM0 (UART_BAUD[28]) to select baud rate calculation mode.
      * |        |          |The detail description is shown in Table 6.10-.
      * |        |          |In IrDA mode must be operated in mode 0.
- */
-    __IO uint32_t BAUD;                  
+    */
+    __IO uint32_t BAUD;
 
     /**
      * IRDA
@@ -9557,8 +9559,8 @@ typedef struct
      * |[6]     |RXINV     |IrDA Inverse Receive Input Signal
      * |        |          |0 = None inverse receiving input signal.
      * |        |          |1 = Inverse receiving input signal. (Default)
- */
-    __IO uint32_t IRDA;                  
+    */
+    __IO uint32_t IRDA;
 
     /**
      * ALTCTL
@@ -9611,8 +9613,8 @@ typedef struct
      * |[31:24] |ADDRMV    |Address Match Value
      * |        |          |This field contains the RS-485 address match values.
      * |        |          |This field is used for RS-485 auto address detection mode.
- */
-    __IO uint32_t ALTCTL;                
+    */
+    __IO uint32_t ALTCTL;
 
     /**
      * FUNCSEL
@@ -9627,8 +9629,8 @@ typedef struct
      * |        |          |10 = IrDA function.
      * |        |          |11 = RS-485 function.
      * |        |          |Note: In IrDA function mode (FUNCSEL(UART_FUNCSEL[1:0])=10), the first received data is unreliable and it should be skipped if IrDA receiver is enabled (TXEN(UART_IRDA[1])=0) at the first time.
- */
-    __IO uint32_t FUNCSEL;               
+    */
+    __IO uint32_t FUNCSEL;
 
     /**
      * LINCTL
@@ -9712,8 +9714,8 @@ typedef struct
      * |        |          |If the parity generated by hardware, and user fills in ID0~ID5, (PID [29:24]), hardware will calculate P0 (PID[30]) and P1 (PID[31]), otherwise user must fill a frame ID and parity in this field.
      * |        |          |Note1: User can fill in any 8-bit value to this field and the bit 24 indicates ID0 (LSB first).
      * |        |          |Note2: This field can be used for LIN Master mode or Slave mode.
- */
-    __IO uint32_t LINCTL;                
+    */
+    __IO uint32_t LINCTL;
 
     /**
      * LINSTS
@@ -9761,8 +9763,8 @@ typedef struct
      * |        |          |When occur bit error, if the LINIEN (UART_INTEN[8]) = 1, an interrupt will be generated.
      * |        |          |Note1: This bit is read only, but it can be cleared by writing 1 to it.
      * |        |          |Note2: This bit is only valid when enable bit error detection function (BITERREN (UART_LINCTL [12]) = 1).
- */
-    __IO  uint32_t LINSTS;                
+    */
+    __IO  uint32_t LINSTS;
 
 } UART_T;
 
@@ -10095,165 +10097,167 @@ typedef struct
     @addtogroup USBD USB Device Controller(USBD)
     Memory Mapped Structure for USBD Controller
 @{ */
- 
- typedef struct {
 
-    union {
+typedef struct
+{
 
-    /**
-     * EPxDAT
-     * ===================================================================================================
-     * Offset: 0x64+x*0x28   Endpoint x Data Register
-     * ---------------------------------------------------------------------------------------------------
-     * |Bits    |Field     |Descriptions
-     * | :----: | :----:   | :---- |
-     * |[31:0]  |EPDAT     |Endpoint A~L Data Register
-     * |        |          |Endpoint A~L data buffer for the buffer transaction (read or write).
-     * |        |          |Only word or byte access are supported.
- */			
+    union
+    {
+
+        /**
+         * EPxDAT
+         * ===================================================================================================
+         * Offset: 0x64+x*0x28   Endpoint x Data Register
+         * ---------------------------------------------------------------------------------------------------
+         * |Bits    |Field     |Descriptions
+         * | :----: | :----:   | :---- |
+         * |[31:0]  |EPDAT     |Endpoint A~L Data Register
+         * |        |          |Endpoint A~L data buffer for the buffer transaction (read or write).
+         * |        |          |Only word or byte access are supported.
+        */
         __IO uint32_t EPDAT;
-  /**
-     * EPxDAT_BYTE
-     * ===================================================================================================
-     * Offset: 0x64+x*0x28   Endpoint x Data Register for Byte Access
-     * ---------------------------------------------------------------------------------------------------
-     * |Bits    |Field     |Descriptions
-     * | :----: | :----:   | :---- |
-     * |[31:0]  |EPDAT     |Endpoint A~L Data Register
-     * |        |          |Endpoint A~L data buffer for the buffer transaction (read or write).
-     * |        |          |Only word or byte access are supported.
- */							
+        /**
+           * EPxDAT_BYTE
+           * ===================================================================================================
+           * Offset: 0x64+x*0x28   Endpoint x Data Register for Byte Access
+           * ---------------------------------------------------------------------------------------------------
+           * |Bits    |Field     |Descriptions
+           * | :----: | :----:   | :---- |
+           * |[31:0]  |EPDAT     |Endpoint A~L Data Register
+           * |        |          |Endpoint A~L data buffer for the buffer transaction (read or write).
+           * |        |          |Only word or byte access are supported.
+        */
         __IO uint8_t  EPDAT_BYTE;
 
     }; ///< Define EPx Data Register 32-bit or 8-bit access
- /**
-     * EPxINTSTS
-     * ===================================================================================================
-     * Offset: 0x68+x*0x28  Endpoint x Interrupt Status Register
-     * ---------------------------------------------------------------------------------------------------
-     * |Bits    |Field     |Descriptions
-     * | :----: | :----:   | :---- |
-     * |[0]     |BUFFULLIF |Buffer Full
-     * |        |          |For an IN endpoint, the currently selected buffer is full, or no buffer is available to the local side for writing (no space to write).
-     * |        |          |For an OUT endpoint, there is a buffer available on the local side, and there are FIFO full of bytes available to be read (entire packet is available for reading.
-     * |        |          |0 = The endpoint packet buffer is not full.
-     * |        |          |1 = The endpoint packet buffer is full.
-     * |        |          |Note: This bit is read-only.
-     * |[1]     |BUFEMPTYIF|Buffer Empty
-     * |        |          |For an IN endpoint, a buffer is available to the local side for writing up to FIFO full of bytes.
-     * |        |          |0 = The endpoint buffer is not empty.
-     * |        |          |1 = The endpoint buffer is empty.
-     * |        |          |For an OUT endpoint:
-     * |        |          |0 = The currently selected buffer does not have a count of 0.
-     * |        |          |1 = The currently selected buffer has a count of 0, or no buffer is available on the local side (nothing to read).
-     * |        |          |Note: This bit is read-only.
-     * |[2]     |SHORTTXIF |Short Packet Transferred Interrupt
-     * |        |          |0 = The length of the last packet was not less than the Maximum Packet Size (EPMPS).
-     * |        |          |1 = The length of the last packet was less than the Maximum Packet Size (EPMPS).
-     * |        |          |Note: Write 1 to clear this bit to 0.
-     * |[3]     |TXPKIF    |Data Packet Transmitted Interrupt
-     * |        |          |0 = No data packet is transmitted from the endpoint to the host.
-     * |        |          |1 = A data packet is transmitted from the endpoint to the host.
-     * |        |          |Note: Write 1 to clear this bit to 0.
-     * |[4]     |RXPKIF    |Data Packet Received Interrupt
-     * |        |          |0 = No data packet is received from the host by the endpoint.
-     * |        |          |1 = A data packet is received from the host by the endpoint.
-     * |        |          |Note: Write 1 to clear this bit to 0.
-     * |[5]     |OUTTKIF   |Data OUT Token Interrupt
-     * |        |          |0 = A Data OUT token has not been received from the host.
-     * |        |          |1 = A Data OUT token has been received from the host.
-     * |        |          |This bit also set by PING token (in high-speed only.
-     * |        |          |Note: Write 1 to clear this bit to 0.
-     * |[6]     |INTKIF    |Data IN Token Interrupt
-     * |        |          |0 = No Data IN token has been received from the host.
-     * |        |          |1 = A Data IN token has been received from the host.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[7]     |PINGIF    |PING Token Interrupt
-     * |        |          |0 = A Data PING token has not been received from the host.
-     * |        |          |1 = A Data PING token has been received from the host.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[8]     |NAKIF     |USB NAK Sent
-     * |        |          |0 = The last USB IN packet could be provided, and was acknowledged with an ACK.
-     * |        |          |1 = The last USB IN packet could not be provided, and was acknowledged with a NAK.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[9]     |STALLIF   |USB STALL Sent
-     * |        |          |0 = The last USB packet could be accepted or provided because the endpoint was stalled, and was acknowledged with a STALL.
-     * |        |          |1 = The last USB packet could not be accepted or provided because the endpoint was stalled, and was acknowledged with a STALL.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[10]    |NYETIF    |NYET Sent
-     * |        |          |0 = The space available in the RAM is sufficient to accommodate the next on coming data packet.
-     * |        |          |1 = The space available in the RAM is not sufficient to accommodate the next on coming data packet.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[11]    |ERRIF     |ERR Sent
-     * |        |          |0 = No any error in the transaction.
-     * |        |          |1 = There occurs any error in the transaction.
-     * |        |          |Write 1 to clear this bit to 0.
-     * |[12]    |SHORTRXIF |Bulk Out Short Packet Received
-     * |        |          |0 = No bulk out short packet is received.
-     * |        |          |1 = Received bulk out short packet (including zero length packet).
-     * |        |          |Write 1 to clear this bit to 0.
- */
+    /**
+        * EPxINTSTS
+        * ===================================================================================================
+        * Offset: 0x68+x*0x28  Endpoint x Interrupt Status Register
+        * ---------------------------------------------------------------------------------------------------
+        * |Bits    |Field     |Descriptions
+        * | :----: | :----:   | :---- |
+        * |[0]     |BUFFULLIF |Buffer Full
+        * |        |          |For an IN endpoint, the currently selected buffer is full, or no buffer is available to the local side for writing (no space to write).
+        * |        |          |For an OUT endpoint, there is a buffer available on the local side, and there are FIFO full of bytes available to be read (entire packet is available for reading.
+        * |        |          |0 = The endpoint packet buffer is not full.
+        * |        |          |1 = The endpoint packet buffer is full.
+        * |        |          |Note: This bit is read-only.
+        * |[1]     |BUFEMPTYIF|Buffer Empty
+        * |        |          |For an IN endpoint, a buffer is available to the local side for writing up to FIFO full of bytes.
+        * |        |          |0 = The endpoint buffer is not empty.
+        * |        |          |1 = The endpoint buffer is empty.
+        * |        |          |For an OUT endpoint:
+        * |        |          |0 = The currently selected buffer does not have a count of 0.
+        * |        |          |1 = The currently selected buffer has a count of 0, or no buffer is available on the local side (nothing to read).
+        * |        |          |Note: This bit is read-only.
+        * |[2]     |SHORTTXIF |Short Packet Transferred Interrupt
+        * |        |          |0 = The length of the last packet was not less than the Maximum Packet Size (EPMPS).
+        * |        |          |1 = The length of the last packet was less than the Maximum Packet Size (EPMPS).
+        * |        |          |Note: Write 1 to clear this bit to 0.
+        * |[3]     |TXPKIF    |Data Packet Transmitted Interrupt
+        * |        |          |0 = No data packet is transmitted from the endpoint to the host.
+        * |        |          |1 = A data packet is transmitted from the endpoint to the host.
+        * |        |          |Note: Write 1 to clear this bit to 0.
+        * |[4]     |RXPKIF    |Data Packet Received Interrupt
+        * |        |          |0 = No data packet is received from the host by the endpoint.
+        * |        |          |1 = A data packet is received from the host by the endpoint.
+        * |        |          |Note: Write 1 to clear this bit to 0.
+        * |[5]     |OUTTKIF   |Data OUT Token Interrupt
+        * |        |          |0 = A Data OUT token has not been received from the host.
+        * |        |          |1 = A Data OUT token has been received from the host.
+        * |        |          |This bit also set by PING token (in high-speed only.
+        * |        |          |Note: Write 1 to clear this bit to 0.
+        * |[6]     |INTKIF    |Data IN Token Interrupt
+        * |        |          |0 = No Data IN token has been received from the host.
+        * |        |          |1 = A Data IN token has been received from the host.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[7]     |PINGIF    |PING Token Interrupt
+        * |        |          |0 = A Data PING token has not been received from the host.
+        * |        |          |1 = A Data PING token has been received from the host.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[8]     |NAKIF     |USB NAK Sent
+        * |        |          |0 = The last USB IN packet could be provided, and was acknowledged with an ACK.
+        * |        |          |1 = The last USB IN packet could not be provided, and was acknowledged with a NAK.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[9]     |STALLIF   |USB STALL Sent
+        * |        |          |0 = The last USB packet could be accepted or provided because the endpoint was stalled, and was acknowledged with a STALL.
+        * |        |          |1 = The last USB packet could not be accepted or provided because the endpoint was stalled, and was acknowledged with a STALL.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[10]    |NYETIF    |NYET Sent
+        * |        |          |0 = The space available in the RAM is sufficient to accommodate the next on coming data packet.
+        * |        |          |1 = The space available in the RAM is not sufficient to accommodate the next on coming data packet.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[11]    |ERRIF     |ERR Sent
+        * |        |          |0 = No any error in the transaction.
+        * |        |          |1 = There occurs any error in the transaction.
+        * |        |          |Write 1 to clear this bit to 0.
+        * |[12]    |SHORTRXIF |Bulk Out Short Packet Received
+        * |        |          |0 = No bulk out short packet is received.
+        * |        |          |1 = Received bulk out short packet (including zero length packet).
+        * |        |          |Write 1 to clear this bit to 0.
+    */
     __IO uint32_t EPINTSTS;
-   /**
-     * EPxINTEN
-     * ===================================================================================================
-     * Offset: 0x6C+x*0x28   Endpoint x Interrupt Enable Register
-     * ---------------------------------------------------------------------------------------------------
-     * |Bits    |Field     |Descriptions
-     * | :----: | :----:   | :---- |
-     * |[0]     |BUFFULLIEN|Buffer Full Interrupt
-     * |        |          |When set, this bit enables a local interrupt to be set when a buffer full condition is detected on the bus.
-     * |        |          |0 = Buffer full interrupt Disabled.
-     * |        |          |1 = Buffer full interrupt Enabled.
-     * |[1]     |BUFEMPTYIEN|Buffer Empty Interrupt
-     * |        |          |When set, this bit enables a local interrupt to be set when a buffer empty condition is detected on the bus.
-     * |        |          |0 = Buffer empty interrupt Disabled.
-     * |        |          |1 = Buffer empty interrupt Enabled.
-     * |[2]     |SHORTTXIEN|Short Packet Transferred Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a short data packet has been transferred to/from the host.
-     * |        |          |0 = Short data packet interrupt Disabled.
-     * |        |          |1 = Short data packet interrupt Enabled.
-     * |[3]     |TXPKIEN   |Data Packet Transmitted Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a data packet has been received from the host.
-     * |        |          |0 = Data packet has been received from the host interrupt Disabled.
-     * |        |          |1 = Data packet has been received from the host interrupt Enabled.
-     * |[4]     |RXPKIEN   |Data Packet Received Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a data packet has been transmitted to the host.
-     * |        |          |0 = Data packet has been transmitted to the host interrupt Disabled.
-     * |        |          |1 = Data packet has been transmitted to the host interrupt Enabled.
-     * |[5]     |OUTTKIEN  |Data OUT Token Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a Data OUT token has been received from the host.
-     * |        |          |0 = Data OUT token interrupt Disabled.
-     * |        |          |1 = Data OUT token interrupt Enabled.
-     * |[6]     |INTKIEN   |Data IN Token Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a Data IN token has been received from the host.
-     * |        |          |0 = Data IN token interrupt Disabled.
-     * |        |          |1 = Data IN token interrupt Enabled.
-     * |[7]     |PINGIEN   |PING Token Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a PING token has been received from the host.
-     * |        |          |0 = PING token interrupt Disabled.
-     * |        |          |1 = PING token interrupt Enabled.
-     * |[8]     |NAKIEN    |USB NAK Sent Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a NAK token is sent to the host.
-     * |        |          |0 = NAK token interrupt Disabled.
-     * |        |          |1 = NAK token interrupt Enabled.
-     * |[9]     |STALLIEN  |USB STALL Sent Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set when a stall token is sent to the host.
-     * |        |          |0 = STALL token interrupt Disabled.
-     * |        |          |1 = STALL token interrupt Enabled.
-     * |[10]    |NYETIEN   |NYET Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set whenever NYET condition occurs on the bus for this endpoint.
-     * |        |          |0 = NYET condition interrupt Disabled.
-     * |        |          |1 = NYET condition interrupt Enabled.
-     * |[11]    |ERRIEN    |ERR Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set whenever ERR condition occurs on the bus for this endpoint.
-     * |        |          |0 = Error event interrupt Disabled.
-     * |        |          |1 = Error event interrupt Enabled.
-     * |[12]    |SHORTRXIEN|Bulk Out Short Packet Interrupt Enable Bit
-     * |        |          |When set, this bit enables a local interrupt to be set whenever bulk out short packet occurs on the bus for this endpoint.
-     * |        |          |0 = Bulk out interrupt Disabled.
-     * |        |          |1 = Bulk out interrupt Enabled.
- */
+    /**
+      * EPxINTEN
+      * ===================================================================================================
+      * Offset: 0x6C+x*0x28   Endpoint x Interrupt Enable Register
+      * ---------------------------------------------------------------------------------------------------
+      * |Bits    |Field     |Descriptions
+      * | :----: | :----:   | :---- |
+      * |[0]     |BUFFULLIEN|Buffer Full Interrupt
+      * |        |          |When set, this bit enables a local interrupt to be set when a buffer full condition is detected on the bus.
+      * |        |          |0 = Buffer full interrupt Disabled.
+      * |        |          |1 = Buffer full interrupt Enabled.
+      * |[1]     |BUFEMPTYIEN|Buffer Empty Interrupt
+      * |        |          |When set, this bit enables a local interrupt to be set when a buffer empty condition is detected on the bus.
+      * |        |          |0 = Buffer empty interrupt Disabled.
+      * |        |          |1 = Buffer empty interrupt Enabled.
+      * |[2]     |SHORTTXIEN|Short Packet Transferred Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a short data packet has been transferred to/from the host.
+      * |        |          |0 = Short data packet interrupt Disabled.
+      * |        |          |1 = Short data packet interrupt Enabled.
+      * |[3]     |TXPKIEN   |Data Packet Transmitted Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a data packet has been received from the host.
+      * |        |          |0 = Data packet has been received from the host interrupt Disabled.
+      * |        |          |1 = Data packet has been received from the host interrupt Enabled.
+      * |[4]     |RXPKIEN   |Data Packet Received Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a data packet has been transmitted to the host.
+      * |        |          |0 = Data packet has been transmitted to the host interrupt Disabled.
+      * |        |          |1 = Data packet has been transmitted to the host interrupt Enabled.
+      * |[5]     |OUTTKIEN  |Data OUT Token Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a Data OUT token has been received from the host.
+      * |        |          |0 = Data OUT token interrupt Disabled.
+      * |        |          |1 = Data OUT token interrupt Enabled.
+      * |[6]     |INTKIEN   |Data IN Token Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a Data IN token has been received from the host.
+      * |        |          |0 = Data IN token interrupt Disabled.
+      * |        |          |1 = Data IN token interrupt Enabled.
+      * |[7]     |PINGIEN   |PING Token Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a PING token has been received from the host.
+      * |        |          |0 = PING token interrupt Disabled.
+      * |        |          |1 = PING token interrupt Enabled.
+      * |[8]     |NAKIEN    |USB NAK Sent Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a NAK token is sent to the host.
+      * |        |          |0 = NAK token interrupt Disabled.
+      * |        |          |1 = NAK token interrupt Enabled.
+      * |[9]     |STALLIEN  |USB STALL Sent Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set when a stall token is sent to the host.
+      * |        |          |0 = STALL token interrupt Disabled.
+      * |        |          |1 = STALL token interrupt Enabled.
+      * |[10]    |NYETIEN   |NYET Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set whenever NYET condition occurs on the bus for this endpoint.
+      * |        |          |0 = NYET condition interrupt Disabled.
+      * |        |          |1 = NYET condition interrupt Enabled.
+      * |[11]    |ERRIEN    |ERR Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set whenever ERR condition occurs on the bus for this endpoint.
+      * |        |          |0 = Error event interrupt Disabled.
+      * |        |          |1 = Error event interrupt Enabled.
+      * |[12]    |SHORTRXIEN|Bulk Out Short Packet Interrupt Enable Bit
+      * |        |          |When set, this bit enables a local interrupt to be set whenever bulk out short packet occurs on the bus for this endpoint.
+      * |        |          |0 = Bulk out interrupt Disabled.
+      * |        |          |1 = Bulk out interrupt Enabled.
+    */
     __IO uint32_t EPINTEN;
     /**
      * EPxDATCNT
@@ -10267,7 +10271,7 @@ typedef struct
      * |        |          |For an OUT endpoint (EPDIR(USBD_EPxCFG[3] is low.), this register returns the number of received valid bytes in the Host OUT transfer.
      * |[30:16] |DMALOOP   |DMA Loop
      * |        |          |This register is the remaining DMA loop to complete. Each loop means 32-byte transfer.
- */
+    */
     __I  uint32_t EPDATCNT;
 
     /**
@@ -10320,7 +10324,7 @@ typedef struct
      * |        |          |The received packet size is reference USBD_EPxDATCNT registe.
      * |        |          |0 = Buffer Not Disabled when Bulk-OUT short packet is received.
      * |        |          |1 = Buffer Disabled when Bulk-OUT short packet is received.
- */
+    */
     __IO uint32_t EPRSPCTL;
     /**
      * EPxMPS
@@ -10331,7 +10335,7 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[10:0]  |EPMPS     |Endpoint Maximum Packet Size
      * |        |          |This field determines the Maximum Packet Size of the Endpoint.
- */
+    */
     __IO uint32_t EPMPS;
     /**
      * EPxTXCNT
@@ -10343,7 +10347,7 @@ typedef struct
      * |[10:0]  |TXCNT     |Endpoint Transfer Count
      * |        |          |For IN endpoints, this field determines the total number of bytes to be sent to the host in case of manual validation method.
      * |        |          |For OUT endpoints, this field has no effect.
- */
+    */
     __IO uint32_t EPTXCNT;
 
     /**
@@ -10371,7 +10375,7 @@ typedef struct
      * |[7:4]   |EPNUM     |Endpoint Number
      * |        |          |This field selects the number of the endpoint. Valid numbers 1 to 15.
      * |        |          |Do not support two endpoints have same endpoint number.
- */
+    */
     __IO uint32_t EPCFG;
     /**
      * EPxBUFSTART
@@ -10382,7 +10386,7 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[11:0]  |SADDR     |Endpoint Start Address
      * |        |          |This is the start-address of the RAM space allocated for the endpoint A~L.
- */
+    */
     __IO uint32_t EPBUFSTART;
     /**
      * EPxBUFEND
@@ -10393,7 +10397,7 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[11:0]  |EADDR     |Endpoint End Address
      * |        |          |This is the end-address of the RAM space allocated for the endpoint A~L.
- */
+    */
     __IO uint32_t EPBUFEND;
 
 
@@ -10468,9 +10472,9 @@ typedef struct
      * |        |          |When set, the corresponding Endpoint L's interrupt status register should be read to determine the cause of the interrupt.
      * |        |          |0 = No interrupt event occurred.
      * |        |          |1 = The related interrupt event is occurred.
- */
-    __IO  uint32_t GINTSTS;               
-         uint32_t RESERVE0[1];
+    */
+    __IO  uint32_t GINTSTS;
+    uint32_t RESERVE0[1];
 
 
     /**
@@ -10536,9 +10540,9 @@ typedef struct
      * |        |          |When set, this bit enables a local interrupt to be generated when an interrupt is pending for the endpoint L
      * |        |          |0 = The related interrupt Disabled.
      * |        |          |1 = The related interrupt Enabled.
- */
-    __IO uint32_t GINTEN;                
-         uint32_t RESERVE1[1];
+    */
+    __IO uint32_t GINTEN;
+    uint32_t RESERVE1[1];
 
 
     /**
@@ -10585,8 +10589,8 @@ typedef struct
      * |        |          |0 = No VBUS is plug-in.
      * |        |          |1 = VBUS is plug-in.
      * |        |          |Write 1 to clear this bit to 0.
- */
-    __IO uint32_t BUSINTSTS;             
+    */
+    __IO uint32_t BUSINTSTS;
 
     /**
      * BUSINTEN
@@ -10627,8 +10631,8 @@ typedef struct
      * |        |          |This bit enables the VBUS floating detection interrupt.
      * |        |          |0 = VBUS floating detection interrupt Disabled.
      * |        |          |1 = VBUS floating detection interrupt Enabled.
- */
-    __IO uint32_t BUSINTEN;              
+    */
+    __IO uint32_t BUSINTEN;
 
     /**
      * OPER
@@ -10647,8 +10651,8 @@ typedef struct
      * |[2]     |CURSPD    |Current USB Speed
      * |        |          |0 = The device has settled in Full Speed.
      * |        |          |1 = The USB device controller has settled in High-speed.
- */
-    __IO uint32_t OPER;                  
+    */
+    __IO uint32_t OPER;
 
     /**
      * FRAMECNT
@@ -10661,8 +10665,8 @@ typedef struct
      * |        |          |This field contains the micro-frame number for the frame number in the frame counter field.
      * |[13:3]  |FRAMECNT  |Frame Counter
      * |        |          |This field contains the frame count from the most recent start-of-frame packet.
- */
-    __I  uint32_t FRAMECNT;              
+    */
+    __I  uint32_t FRAMECNT;
 
     /**
      * FADDR
@@ -10674,8 +10678,8 @@ typedef struct
      * |[6:0]   |FADDR     |USB Function Address
      * |        |          |This field contains the current USB address of the device.
      * |        |          |This field is cleared when a root port reset is detected.
- */
-    __IO uint32_t FADDR;                 
+    */
+    __IO uint32_t FADDR;
 
     /**
      * TEST
@@ -10694,22 +10698,23 @@ typedef struct
      * |        |          |110 = Reserved.
      * |        |          |111 = Reserved.
      * |        |          |Note: This field is cleared when root port reset is detected.
- */
-    __IO uint32_t TEST;                  
+    */
+    __IO uint32_t TEST;
 
-    union {
-    /**
-     * CEPDAT
-     * ===================================================================================================
-     * Offset: 0x28  Control-Endpoint Data Buffer
-     * ---------------------------------------------------------------------------------------------------
-     * |Bits    |Field     |Descriptions
-     * | :----: | :----:   | :---- |
-     * |[31:0]  |DAT       |Control-Endpoint Data Buffer
-     * |        |          |Control endpoint data buffer for the buffer transaction (read or write).
-     * |        |          |Only word or byte access is supported.
- */
-    __IO uint32_t CEPDAT;                
+    union
+    {
+        /**
+         * CEPDAT
+         * ===================================================================================================
+         * Offset: 0x28  Control-Endpoint Data Buffer
+         * ---------------------------------------------------------------------------------------------------
+         * |Bits    |Field     |Descriptions
+         * | :----: | :----:   | :---- |
+         * |[31:0]  |DAT       |Control-Endpoint Data Buffer
+         * |        |          |Control endpoint data buffer for the buffer transaction (read or write).
+         * |        |          |Only word or byte access is supported.
+        */
+        __IO uint32_t CEPDAT;
         /**
          * CEPDAT_BYTE
          * ===================================================================================================
@@ -10721,8 +10726,8 @@ typedef struct
          * |        |          |Control endpoint data buffer for the buffer transaction (read or write).
          * |        |          |Only word or byte access is supported.
         */
-    __IO uint8_t  CEPDAT_BYTE;    
-    };///< Define Control-Endpoint Data Register 32-bit or 8-bit access  
+        __IO uint8_t  CEPDAT_BYTE;
+    };///< Define Control-Endpoint Data Register 32-bit or 8-bit access
 
     /**
      * CEPCTL
@@ -10757,8 +10762,8 @@ typedef struct
      * |        |          |0 = No packet buffer and its corresponding USBD_CEPDATCNT register to be cleared.
      * |        |          |1 = The packet buffer and its corresponding USBD_CEPDATCNT register to be cleared.
      * |        |          |This bit is self-cleared.
- */
-    __IO uint32_t CEPCTL;                
+    */
+    __IO uint32_t CEPCTL;
 
     /**
      * CEPINTEN
@@ -10806,8 +10811,8 @@ typedef struct
      * |[12]    |BUFEMPTYIEN|Buffer Empty Interrupt
      * |        |          |0 = The buffer empty interrupt in Control Endpoint Disabled.
      * |        |          |1= The buffer empty interrupt in Control Endpoint Enabled.
- */
-    __IO uint32_t CEPINTEN;              
+    */
+    __IO uint32_t CEPINTEN;
 
     /**
      * CEPINTSTS
@@ -10870,8 +10875,8 @@ typedef struct
      * |        |          |0 = The control-endpoint buffer is not empty.
      * |        |          |1 = The control-endpoint buffer is empty.
      * |        |          |Note: Write 1 to clear this bit to 0.
- */
-    __IO uint32_t CEPINTSTS;             
+    */
+    __IO uint32_t CEPINTSTS;
 
     /**
      * CEPTXCNT
@@ -10884,8 +10889,8 @@ typedef struct
      * |        |          |There is no mode selection for the control endpoint (but it operates like manual mode).The local-CPU has to fill the control-endpoint buffer with the data to be sent for an in-token and to write the count of bytes in this register.
      * |        |          |When zero is written into this field, a zero length packet is sent to the host.
      * |        |          |When the count written in the register is more than the MPS, the data sent will be of only MP.
- */
-    __IO uint32_t CEPTXCNT;              
+    */
+    __IO uint32_t CEPTXCNT;
 
     /**
      * CEPRXCNT
@@ -10896,8 +10901,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[7:0]   |RXCNT     |Out-Transfer Data Count
      * |        |          |The USB device controller maintains the count of the data received in case of an out transfer, during the control transfer.
- */
-    __I  uint32_t CEPRXCNT;              
+    */
+    __I  uint32_t CEPRXCNT;
 
     /**
      * CEPDATCNT
@@ -10908,8 +10913,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[15:0]  |DATCNT    |Control-Endpoint Data Count
      * |        |          |The USB device controller maintains the count of the data of control-endpoint.
- */
-    __I  uint32_t CEPDATCNT;             
+    */
+    __I  uint32_t CEPDATCNT;
 
     /**
      * SETUP1_0
@@ -10951,8 +10956,8 @@ typedef struct
      * |        |          |00001010 = Get Interface.
      * |        |          |00001011 = Set Interface.
      * |        |          |00001100 = Synch Frame.
- */
-    __I  uint32_t SETUP1_0;              
+    */
+    __I  uint32_t SETUP1_0;
 
     /**
      * SETUP3_2
@@ -10967,8 +10972,8 @@ typedef struct
      * |[15:8]  |SETUP3    |Setup Byte 3 [15:8]
      * |        |          |This register provides byte 3 of the last setup packet received.
      * |        |          |For a Standard Device Request, the most significant byte of the wValue field is returne.
- */
-    __I  uint32_t SETUP3_2;              
+    */
+    __I  uint32_t SETUP3_2;
 
     /**
      * SETUP5_4
@@ -10983,8 +10988,8 @@ typedef struct
      * |[15:8]  |SETUP5    |Setup Byte 5[15:8]
      * |        |          |This register provides byte 5 of the last setup packet received.
      * |        |          |For a Standard Device Request, the most significant byte of the wIndex field is returne.
- */
-    __I  uint32_t SETUP5_4;              
+    */
+    __I  uint32_t SETUP5_4;
 
     /**
      * SETUP7_6
@@ -10999,8 +11004,8 @@ typedef struct
      * |[15:8]  |SETUP7    |Setup Byte 7[15:8]
      * |        |          |This register provides byte 7 of the last setup packet received.
      * |        |          |For a Standard Device Request, the most significant byte of the wLength field is returne.
- */
-    __I  uint32_t SETUP7_6;              
+    */
+    __I  uint32_t SETUP7_6;
 
     /**
      * CEPBUFSTART
@@ -11011,8 +11016,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[11:0]  |SADDR     |Control-Endpoint Start Address
      * |        |          |This is the start-address of the RAM space allocated for the control-endpoint.
- */
-    __IO uint32_t CEPBUFSTART;           
+    */
+    __IO uint32_t CEPBUFSTART;
 
     /**
      * CEPBUFEND
@@ -11023,8 +11028,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[11:0]  |EADDR     |Control-Endpoint End Address
      * |        |          |This is the end-address of the RAM space allocated for the control-endpoint.
- */
-    __IO uint32_t CEPBUFEND;             
+    */
+    __IO uint32_t CEPBUFEND;
 
     /**
      * DMACTL
@@ -11048,9 +11053,9 @@ typedef struct
      * |[7]     |DMARST    |Reset DMA State Machine
      * |        |          |0 = No reset the DMA state machine.
      * |        |          |1 = Reset the DMA state machine.
- */
-    __IO uint32_t DMACTL;     
-    
+    */
+    __IO uint32_t DMACTL;
+
     /**
      * DMACNT
      * ===================================================================================================
@@ -11060,12 +11065,12 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[19:0]  |DMACNT    |DMA Transfer Count
      * |        |          |The transfer count of the DMA operation to be performed is written to this register.
- */
-    __IO uint32_t DMACNT;                  
+    */
+    __IO uint32_t DMACNT;
 
     USBD_EP_T EP[12];
-         uint32_t RESERVE2[1];
- 
+    uint32_t RESERVE2[1];
+
     /**
      * UVCHDAT0
      * ===================================================================================================
@@ -11074,8 +11079,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |DAT       |The first head data(byte 0 was sent first)
- */
-    __IO uint32_t UVCHDAT0;              
+    */
+    __IO uint32_t UVCHDAT0;
 
     /**
      * UVCHDAT1
@@ -11085,8 +11090,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |DAT       |The second head data(byte 0 was sent first)
- */
-    __IO uint32_t UVCHDAT1;              
+    */
+    __IO uint32_t UVCHDAT1;
 
     /**
      * UVCHDAT2
@@ -11096,8 +11101,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[31:0]  |DAT       |The third head data(byte 0 was sent first)
- */
-    __IO uint32_t UVCHDAT2;              
+    */
+    __IO uint32_t UVCHDAT2;
 
     /**
      * UVCEPAHCNT
@@ -11107,8 +11112,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPAHCNT;            
+    */
+    __IO uint32_t UVCEPAHCNT;
 
     /**
      * UVCEPBHCNT
@@ -11118,8 +11123,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPBHCNT;            
+    */
+    __IO uint32_t UVCEPBHCNT;
 
     /**
      * UVCEPCHCNT
@@ -11129,8 +11134,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPCHCNT;            
+    */
+    __IO uint32_t UVCEPCHCNT;
 
     /**
      * UVCEPDHCNT
@@ -11140,8 +11145,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPDHCNT;            
+    */
+    __IO uint32_t UVCEPDHCNT;
 
     /**
      * UVCEPEHCNT
@@ -11151,8 +11156,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPEHCNT;            
+    */
+    __IO uint32_t UVCEPEHCNT;
 
     /**
      * UVCEPFHCNT
@@ -11162,8 +11167,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPFHCNT;            
+    */
+    __IO uint32_t UVCEPFHCNT;
 
     /**
      * UVCEPGHCNT
@@ -11173,8 +11178,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPGHCNT;            
+    */
+    __IO uint32_t UVCEPGHCNT;
 
     /**
      * UVCEPHHCNT
@@ -11184,8 +11189,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPHHCNT;            
+    */
+    __IO uint32_t UVCEPHHCNT;
 
     /**
      * UVCEPIHCNT
@@ -11195,8 +11200,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPIHCNT;            
+    */
+    __IO uint32_t UVCEPIHCNT;
 
     /**
      * UVCEPJHCNT
@@ -11206,8 +11211,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPJHCNT;            
+    */
+    __IO uint32_t UVCEPJHCNT;
 
     /**
      * UVCEPKHCNT
@@ -11217,8 +11222,8 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPKHCNT;            
+    */
+    __IO uint32_t UVCEPKHCNT;
 
     /**
      * UVCEPLHCNT
@@ -11228,9 +11233,9 @@ typedef struct
      * |Bits    |Field     |Descriptions
      * | :----: | :----:   | :---- |
      * |[3:0]   |CNT       |This is the header count for the endpoint A~L The header count must be EVEN.
- */
-    __IO uint32_t UVCEPLHCNT;            
-         uint32_t RESERVE3[287];
+    */
+    __IO uint32_t UVCEPLHCNT;
+    uint32_t RESERVE3[287];
 
 
     /**
@@ -11243,8 +11248,8 @@ typedef struct
      * |[31:0]  |DMAADDR   |DMAADDR
      * |        |          |The register specifies the address from which the DMA has to read / write.
      * |        |          |The address must WORD (32-bit) aligne.
- */
-    __IO uint32_t DMAADDR;               
+    */
+    __IO uint32_t DMAADDR;
 
     /**
      * PHYCTL
@@ -11258,7 +11263,7 @@ typedef struct
      * |        |          |When this bit is 0, USB PHY is in Low Power Mode and USB PHY TX driver is enable only when USB Device Controller (USBD) transmit the data out to USB bus
      * |        |          |In this mode, HS signal quality is not guaranteed.
      * |        |          |0 = USB PHY Low Power Mode Enabled.
-     * |        |          |1 = USB PHY Low Power Mode Disabled.     
+     * |        |          |1 = USB PHY Low Power Mode Disabled.
      * |[8]     |DPPUEN    |DP Pull-Up
      * |        |          |0 = Pull-up resistor on D+ Disabled.
      * |        |          |1 = Pull-up resistor on D+ Enabled.
@@ -11271,8 +11276,8 @@ typedef struct
      * |[31]    |VBUSDET   |VBUS Status
      * |        |          |0 = The VBUS is not detected yet.
      * |        |          |1 = The VBUS is detected.
- */
-    __IO uint32_t PHYCTL;                
+    */
+    __IO uint32_t PHYCTL;
 
 } USBD_T;
 
@@ -13373,7 +13378,7 @@ typedef struct
     @addtogroup USBH USB Host Controller(USBH)
     Memory Mapped Structure for USBH Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -13389,8 +13394,8 @@ typedef struct
      * |        |          |Indicates the Open HCI Specification revision number implemented by the Hardware.
      * |        |          |Host Controller supports 1.1 specificatio.
      * |        |          |(X.Y = XYh).
- */
-    __I  uint32_t HcRevision;            
+    */
+    __I  uint32_t HcRevision;
 
     /**
      * HcControl
@@ -13434,8 +13439,8 @@ typedef struct
      * |        |          |01 = USBOPERATIONAL.
      * |        |          |10 = USBRESUME.
      * |        |          |11 = USBRESET.
- */
-    __IO uint32_t HcControl;             
+    */
+    __IO uint32_t HcControl;
 
     /**
      * HcCommandStatus
@@ -13464,8 +13469,8 @@ typedef struct
      * |        |          |These bits are incremented on each scheduling overrun error.
      * |        |          |It is initialized to 00b and wraps around at 11b.
      * |        |          |This will be incremented when a scheduling overrun is detected even if SO (HcInterruptStatus[0]) has already been se.
- */
-    __IO uint32_t HcCommandStatus;       
+    */
+    __IO uint32_t HcCommandStatus;
 
     /**
      * HcInterruptStatus
@@ -13500,8 +13505,8 @@ typedef struct
      * |        |          |This bit is set when the content of HcRhStatus or the content of HcRhPortStatus1 register has changed.
      * |        |          |0 = The content of HcRhStatus and the content of HcRhPortStatus1 register didn't change.
      * |        |          |1 = The content of HcRhStatus or the content of HcRhPortStatus1 register has changed.
- */
-    __IO uint32_t HcInterruptStatus;     
+    */
+    __IO uint32_t HcInterruptStatus;
 
     /**
      * HcInterruptEnable
@@ -13561,8 +13566,8 @@ typedef struct
      * |        |          |Read Operation:
      * |        |          |0 = Interrupt generation due to RHSC (HcInterruptStatus[6]), FNO (HcInterruptStatus[5]), RD (HcInterruptStatus[3]), SF (HcInterruptStatus[2]), WDH (HcInterruptStatus[1]) or SO (HcInterruptStatus[0]) Disabled even if the corresponding bit in HcInterruptEnable is high.
      * |        |          |1 = Interrupt generation due to RHSC (HcInterruptStatus[6]), FNO (HcInterruptStatus[5]), RD (HcInterruptStatus[3]), SF (HcInterruptStatus[2]), WDH (HcInterruptStatus[1]) or SO (HcInterruptStatus[0]) Enabled if the corresponding bit in HcInterruptEnable is high.
- */
-    __IO uint32_t HcInterruptEnable;     
+    */
+    __IO uint32_t HcInterruptEnable;
 
     /**
      * HcInterruptDisable
@@ -13621,8 +13626,8 @@ typedef struct
      * |        |          |Read Operation:
      * |        |          |0 = Interrupt generation due to RHSC (HcInterruptStatus[6]), FNO (HcInterruptStatus[5]), RD (HcInterruptStatus[3]), SF (HcInterruptStatus[2]), WDH (HcInterruptStatus[1]) or SO (HcInterruptStatus[0]) Disabled even if the corresponding bit in HcInterruptEnable is high.
      * |        |          |1 = Interrupt generation due to RHSC (HcInterruptStatus[6]), FNO (HcInterruptStatus[5]), RD (HcInterruptStatus[3]), SF (HcInterruptStatus[2]), WDH (HcInterruptStatus[1]) or SO (HcInterruptStatus[0]) Enabled if the corresponding bit in HcInterruptEnable is high.
- */
-    __IO uint32_t HcInterruptDisable;    
+    */
+    __IO uint32_t HcInterruptDisable;
 
     /**
      * HcHCCA
@@ -13633,8 +13638,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:8]  |HCCA      |Host Controller Communication Area
      * |        |          |Pointer to indicate base address of the Host Controller Communication Area (HCCA).
- */
-    __IO uint32_t HcHCCA;                
+    */
+    __IO uint32_t HcHCCA;
 
     /**
      * HcPeriodCurrentED
@@ -13645,8 +13650,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |PCED      |Periodic Current ED
      * |        |          |Pointer to indicate physical address of the current Isochronous or Interrupt Endpoint Descriptor.
- */
-    __IO uint32_t HcPeriodCurrentED;     
+    */
+    __IO uint32_t HcPeriodCurrentED;
 
     /**
      * HcControlHeadED
@@ -13657,8 +13662,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |CHED      |Control Head ED
      * |        |          |Pointer to indicate physical address of the first Endpoint Descriptor of the Control list.
- */
-    __IO uint32_t HcControlHeadED;       
+    */
+    __IO uint32_t HcControlHeadED;
 
     /**
      * HcControlCurrentED
@@ -13669,8 +13674,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |CCED      |Control Current Head ED
      * |        |          |Pointer to indicate the physical address of the current Endpoint Descriptor of the Control list.
- */
-    __IO uint32_t HcControlCurrentED;    
+    */
+    __IO uint32_t HcControlCurrentED;
 
     /**
      * HcBulkHeadED
@@ -13681,8 +13686,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |BHED      |Bulk Head ED
      * |        |          |Pointer to indicate the physical address of the first Endpoint Descriptor of the Bulk list.
- */
-    __IO uint32_t HcBulkHeadED;          
+    */
+    __IO uint32_t HcBulkHeadED;
 
     /**
      * HcBulkCurrentED
@@ -13693,8 +13698,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |BCED      |Bulk Current Head ED
      * |        |          |Pointer to indicate the physical address of the current endpoint of the Bulk list.
- */
-    __IO uint32_t HcBulkCurrentED;       
+    */
+    __IO uint32_t HcBulkCurrentED;
 
     /**
      * HcDoneHead
@@ -13705,8 +13710,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[31:4]  |DH        |Done Head
      * |        |          |Pointer to indicate the physical address of the last completed Transfer Descriptor that was added to the Done queue.
- */
-    __IO uint32_t HcDoneHead;            
+    */
+    __IO uint32_t HcDoneHead;
 
     /**
      * HcFmInterval
@@ -13724,8 +13729,8 @@ typedef struct
      * |        |          |This bit is toggled by Host Controller Driver when it loads a new value into FI (HcFmInterval[13:0]).
      * |        |          |0 = Host Controller Driver didn't load new value into FI (HcFmInterval[13:0]).
      * |        |          |1 = Host Controller Driver loads a new value into FI (HcFmInterval[13:0]).
- */
-    __IO uint32_t HcFmInterval;          
+    */
+    __IO uint32_t HcFmInterval;
 
     /**
      * HcFmRemaining
@@ -13740,8 +13745,8 @@ typedef struct
      * |        |          |In addition, the counter loads when the Host Controller transitions into USBOPERATIONA.
      * |[31]    |FRT       |Frame Remaining Toggle
      * |        |          |This bit is loaded from the FIT (HcFmInterval[31]) whenever FR (HcFmRemaining[13:0]) reaches 0.
- */
-    __I  uint32_t HcFmRemaining;         
+    */
+    __I  uint32_t HcFmRemaining;
 
     /**
      * HcFmNumber
@@ -13753,8 +13758,8 @@ typedef struct
      * |[15:0]  |FN        |Frame Number
      * |        |          |This 16-bit incrementing counter field is incremented coincident with the loading of FR (HcFmRemaining[13:0]).
      * |        |          |The count rolls over from 'FFFFh' to '0h.'.
- */
-    __I  uint32_t HcFmNumber;            
+    */
+    __I  uint32_t HcFmNumber;
 
     /**
      * HcPeriodicStart
@@ -13765,8 +13770,8 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[13:0]  |PS        |Periodic Start
      * |        |          |This field contains a value used by the List Processor to determine where in a frame the Periodic List processing must begin.
- */
-    __IO uint32_t HcPeriodicStart;       
+    */
+    __IO uint32_t HcPeriodicStart;
 
     /**
      * HcLSThreshold
@@ -13779,8 +13784,8 @@ typedef struct
      * |        |          |This field contains a value which is compared to the FR (HcFmRemaining[13:0]) field prior to initiating a Low-speed transaction.
      * |        |          |The transaction is started only if FR (HcFmRemaining[13:0]) >= this field.
      * |        |          |The value is calculated by Host Controller Driver with the consideration of transmission and setup overhea.
- */
-    __IO uint32_t HcLSThreshold;         
+    */
+    __IO uint32_t HcLSThreshold;
 
     /**
      * HcRhDescriptorA
@@ -13804,8 +13809,8 @@ typedef struct
      * |        |          |This bit describes how the overcurrent status for the Root Hub ports reported.
      * |        |          |0 = Overcurrent status is reported.
      * |        |          |1 = Overcurrent status is not reported.
- */
-    __IO uint32_t HcRhDescriptorA;       
+    */
+    __IO uint32_t HcRhDescriptorA;
 
     /**
      * HcRhDescriptorB
@@ -13822,8 +13827,8 @@ typedef struct
      * |        |          |0 = Port power controlled by global power switching.
      * |        |          |1 = Port power controlled by port power switching.
      * |        |          |PPCM[15:3] and PPCM[0] are reserved.
- */
-    __IO uint32_t HcRhDescriptorB;       
+    */
+    __IO uint32_t HcRhDescriptorB;
 
     /**
      * HcRhStatus
@@ -13868,8 +13873,8 @@ typedef struct
      * |        |          |Write Operation:
      * |        |          |0 = No effect.
      * |        |          |1 = Clear DRWE (HcRhStatus[15]).
- */
-    __IO uint32_t HcRhStatus;            
+    */
+    __IO uint32_t HcRhStatus;
 
     /**
      * HcRhPortStatus1
@@ -13961,8 +13966,8 @@ typedef struct
      * |        |          |Write 1 to clear this bit to zero.
      * |        |          |0 = Port reset is not completed.
      * |        |          |1 = Port reset is completed.
- */
-    __IO uint32_t HcRhPortStatus1;       
+    */
+    __IO uint32_t HcRhPortStatus1;
 
     /**
      * HcRhPortStatus2
@@ -14054,9 +14059,9 @@ typedef struct
      * |        |          |Write 1 to clear this bit to zero.
      * |        |          |0 = Port reset is not completed.
      * |        |          |1 = Port reset is completed.
- */
-    __IO uint32_t HcRhPortStatus2;       
-         uint32_t RESERVE0[105];
+    */
+    __IO uint32_t HcRhPortStatus2;
+    uint32_t RESERVE0[105];
 
 
     /**
@@ -14070,8 +14075,8 @@ typedef struct
      * |        |          |This bit controls if USB transceiver could enter the standby mode to reduce power consumption.
      * |        |          |0 = The USB transceiver would never enter the standby mode.
      * |        |          |1 = The USB transceiver will enter Standby mode while port is in power off state (port power is inactive).
- */
-    __IO uint32_t HcPhyControl;          
+    */
+    __IO uint32_t HcPhyControl;
 
     /**
      * HcMiscControl
@@ -14109,8 +14114,8 @@ typedef struct
      * |        |          |Set this bit high, the transceiver of port 2 will also be forced into the standby mode no matter what USB host controller operation is.
      * |        |          |0 = The connection between USB host controller and transceiver of port 2 is enabled.
      * |        |          |1 = The connection between USB host controller and transceiver of port 2 is disabled and the transceiver of port 2 will also be forced into the standby mode.
- */
-    __IO uint32_t HcMiscControl;         
+    */
+    __IO uint32_t HcMiscControl;
 
 } USBH_T;
 
@@ -14395,7 +14400,7 @@ typedef struct
     @addtogroup WDT Watch Dog Timer Controller(WDT)
     Memory Mapped Structure for WDT Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -14454,8 +14459,8 @@ typedef struct
      * |        |          |Watchdog Timer counter will be held while CPU is held by ICE.
      * |        |          |1 = ICE debug mode acknowledgement Disabled.
      * |        |          |Watchdog Timer counter will keep going no matter CPU is held by ICE or not.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * ALTCTL
@@ -14472,9 +14477,9 @@ typedef struct
      * |        |          |10 = Watchdog Timer reset delay period is (16+2) * WDT_CLK.
      * |        |          |11 = Watchdog Timer reset delay period is (1+2) * WDT_CLK.
      * |        |          |Note: This bit will be reset to 0 if Watchdog Timer time-out reset happened.
- */
-    __IO uint32_t ALTCTL;                
-         uint32_t RESERVE0[6];
+    */
+    __IO uint32_t ALTCTL;
+    uint32_t RESERVE0[6];
 
 
     /**
@@ -14489,8 +14494,8 @@ typedef struct
      * |        |          |0 = Watchdog Timer time-out reset did not occur.
      * |        |          |1 = Watchdog Timer time-out reset occurred.
      * |        |          |Note: This bit is cleared by writing 1 to RSTFC (WDT_CTL [2]).
- */
-    __I  uint32_t RSTSTS;                
+    */
+    __I  uint32_t RSTSTS;
 
 } WDT_T;
 
@@ -14544,7 +14549,7 @@ typedef struct
     @addtogroup WWDT Window Watchdog Timer(WWDT)
     Memory Mapped Structure for WWDT Controller
 @{ */
- 
+
 typedef struct
 {
 
@@ -14560,8 +14565,8 @@ typedef struct
      * |        |          |Writing 0x00005AA5 to this register will reload the Window Watchdog Timer counter value to 0x3F.
      * |        |          |Software can only write RLDCNT to reload WWDT counter value when current WWDT counter value between 0 and CMPDAT.
      * |        |          |If software writes RLDCNT when current WWDT counter value is larger than CMPDAT, WWDT reset signal will generate immediately.
- */
-    __O  uint32_t RLDCNT;                
+    */
+    __O  uint32_t RLDCNT;
 
     /**
      * CTL
@@ -14604,8 +14609,8 @@ typedef struct
      * |        |          |WWDT down counter will be held while CPU is held by ICE.
      * |        |          |1 = ICE debug mode acknowledgement Disabled.
      * |        |          |WWDT down counter will keep going no matter CPU is held by ICE or not.
- */
-    __IO uint32_t CTL;                   
+    */
+    __IO uint32_t CTL;
 
     /**
      * STATUS
@@ -14622,8 +14627,8 @@ typedef struct
      * |[1]     |WWDTRFC   |WWDT Timer-Out Reset Flag Cleared
      * |        |          |When the window watch dog reset happened, the register WWDTRF (WWDT_RSTSTS [1]) will be set to 1.
      * |        |          |Write 1 to this bit and the WWDTRF (WWDT_RSTSTS [1]) will be cleared.
- */
-    __IO uint32_t STATUS;                
+    */
+    __IO uint32_t STATUS;
 
     /**
      * CNT
@@ -14634,9 +14639,9 @@ typedef struct
      * | :----: | :----:   | :---- |
      * |[5:0]   |CNTDAT    |WWDT Counter Value
      * |        |          |This register reflects the current WWDT counter value and is read only.
- */
-    __I  uint32_t CNT;                   
-         uint32_t RESERVE0[2];
+    */
+    __I  uint32_t CNT;
+    uint32_t RESERVE0[2];
 
 
     /**
@@ -14650,9 +14655,9 @@ typedef struct
      * |        |          |This bit indicates the system has been reset by WWDT time-out reset or not.
      * |        |          |0 = WWDT time-out reset did not occur.
      * |        |          |1 = WWDT time-out reset occurred.
-     * |        |          |This bit is cleared by writing 1 to WWDTRFC (WWDT_STATUS [1]) 
- */
-    __I  uint32_t RSTSTS;                
+     * |        |          |This bit is cleared by writing 1 to WWDTRFC (WWDT_STATUS [1])
+    */
+    __I  uint32_t RSTSTS;
 
 } WWDT_T;
 
@@ -14711,36 +14716,36 @@ typedef struct
 #define APBPERIPH_BASE       (PERIPH_BASE + 0x000E0000)  /*!< APB Base Address */
 
 /*!< AHB peripherals */
-#define SYS_BASE	         (AHBPERIPH_BASE + 0x00000)
-#define CLK_BASE	         (AHBPERIPH_BASE + 0x00200)
-#define SPIM_BASE	         (AHBPERIPH_BASE + 0x07000)
-#define UDC_BASE         	 (AHBPERIPH_BASE + 0x09000)
-#define SDH_BASE	         (AHBPERIPH_BASE + 0x0A000)
-#define USBH_BASE	         (AHBPERIPH_BASE + 0x0B000)
+#define SYS_BASE             (AHBPERIPH_BASE + 0x00000)
+#define CLK_BASE             (AHBPERIPH_BASE + 0x00200)
+#define SPIM_BASE            (AHBPERIPH_BASE + 0x07000)
+#define UDC_BASE             (AHBPERIPH_BASE + 0x09000)
+#define SDH_BASE             (AHBPERIPH_BASE + 0x0A000)
+#define USBH_BASE            (AHBPERIPH_BASE + 0x0B000)
 
 /*!< APB peripherals */
-#define SPI1_BASE	         (APBPERIPH_BASE + 0x1000)
-#define ADC_BASE	         (APBPERIPH_BASE + 0x2000)
-#define GPIOA_BASE	       	 (APBPERIPH_BASE + 0x3000)
-#define GPIOB_BASE	       	 (APBPERIPH_BASE + 0x3010)
-#define GPIOC_BASE	       	 (APBPERIPH_BASE + 0x3020)
-#define GPIOD_BASE	       	 (APBPERIPH_BASE + 0x3030)
-#define GPIO_BASE	       	 (APBPERIPH_BASE + 0x3070)
-#define I2C0_BASE	         (APBPERIPH_BASE + 0x4000)
-#define I2C1_BASE	         (APBPERIPH_BASE + 0x5000)
-#define PWM_BASE	         (APBPERIPH_BASE + 0x6000)
-#define RTC_BASE	         (APBPERIPH_BASE + 0x7000)
-#define I2S_BASE	         (APBPERIPH_BASE + 0x8000)
-#define SPI0_BASE	         (APBPERIPH_BASE + 0x9000)
-#define TIMER0_BASE	         (APBPERIPH_BASE + 0xA000)
-#define TIMER1_BASE	         (APBPERIPH_BASE + 0xA020)
-#define TIMER2_BASE	         (APBPERIPH_BASE + 0xB000)
-#define TIMER3_BASE	         (APBPERIPH_BASE + 0xB020)
-#define UART0_BASE	         (APBPERIPH_BASE + 0xC000)
-#define UART1_BASE	         (APBPERIPH_BASE + 0xD000)
-#define UART2_BASE	         (APBPERIPH_BASE + 0xE000)
-#define WDT_BASE	         (APBPERIPH_BASE + 0xF000)
-#define WWDT_BASE	         (APBPERIPH_BASE + 0xF100)
+#define SPI1_BASE            (APBPERIPH_BASE + 0x1000)
+#define ADC_BASE             (APBPERIPH_BASE + 0x2000)
+#define GPIOA_BASE           (APBPERIPH_BASE + 0x3000)
+#define GPIOB_BASE           (APBPERIPH_BASE + 0x3010)
+#define GPIOC_BASE           (APBPERIPH_BASE + 0x3020)
+#define GPIOD_BASE           (APBPERIPH_BASE + 0x3030)
+#define GPIO_BASE            (APBPERIPH_BASE + 0x3070)
+#define I2C0_BASE            (APBPERIPH_BASE + 0x4000)
+#define I2C1_BASE            (APBPERIPH_BASE + 0x5000)
+#define PWM_BASE             (APBPERIPH_BASE + 0x6000)
+#define RTC_BASE             (APBPERIPH_BASE + 0x7000)
+#define I2S_BASE             (APBPERIPH_BASE + 0x8000)
+#define SPI0_BASE            (APBPERIPH_BASE + 0x9000)
+#define TIMER0_BASE          (APBPERIPH_BASE + 0xA000)
+#define TIMER1_BASE          (APBPERIPH_BASE + 0xA020)
+#define TIMER2_BASE          (APBPERIPH_BASE + 0xB000)
+#define TIMER3_BASE          (APBPERIPH_BASE + 0xB020)
+#define UART0_BASE           (APBPERIPH_BASE + 0xC000)
+#define UART1_BASE           (APBPERIPH_BASE + 0xD000)
+#define UART2_BASE           (APBPERIPH_BASE + 0xE000)
+#define WDT_BASE             (APBPERIPH_BASE + 0xF000)
+#define WWDT_BASE            (APBPERIPH_BASE + 0xF100)
 
 
 /*@}*/ /* end of group NUC505_PERIPHERAL_MEM_MAP */
@@ -14753,33 +14758,33 @@ typedef struct
 
 #define SYS                  ((SYS_T *)   SYS_BASE)
 #define CLK                  ((CLK_T *)   CLK_BASE)
-#define SPIM	             ((SPIM_T *)  SPIM_BASE)
+#define SPIM                 ((SPIM_T *)  SPIM_BASE)
 #define APU                  ((APU_T *)   APU_BASE)
 #define USBD                 ((USBD_T *)  UDC_BASE)
 #define SD                   ((SDH_T *)   SDH_BASE)
-#define USBH	             ((USBH_T *)  USBH_BASE)
+#define USBH                 ((USBH_T *)  USBH_BASE)
 
-#define SPI1	             ((SPI_T *)   SPI1_BASE)
+#define SPI1                 ((SPI_T *)   SPI1_BASE)
 #define ADC                  ((ADC_T *)   ADC_BASE)
 #define PA                   ((GPIO_PA_T *)  GPIOA_BASE)
 #define PB                   ((GPIO_PB_T *)  GPIOB_BASE)
 #define PC                   ((GPIO_PC_T *)  GPIOC_BASE)
 #define PD                   ((GPIO_PD_T *)  GPIOD_BASE)
-#define GPIO	             ((GPIO_T *)  GPIO_BASE)
-#define I2C0	             ((I2C_T *)   I2C0_BASE)
-#define I2C1	             ((I2C_T *)   I2C1_BASE)
-#define PWM	                 ((PWM_T *)   PWM_BASE)
+#define GPIO                 ((GPIO_T *)  GPIO_BASE)
+#define I2C0                 ((I2C_T *)   I2C0_BASE)
+#define I2C1                 ((I2C_T *)   I2C1_BASE)
+#define PWM                  ((PWM_T *)   PWM_BASE)
 #define RTC                  ((RTC_T *)   RTC_BASE)
-#define SPI0	             ((SPI_T *)   SPI0_BASE)
-#define I2S	                 ((I2S_T *)   I2S_BASE)
-#define TIMER0	             ((TIMER_T *) TIMER0_BASE)
-#define TIMER1	             ((TIMER_T *) TIMER1_BASE)
+#define SPI0                 ((SPI_T *)   SPI0_BASE)
+#define I2S                  ((I2S_T *)   I2S_BASE)
+#define TIMER0               ((TIMER_T *) TIMER0_BASE)
+#define TIMER1               ((TIMER_T *) TIMER1_BASE)
 #define TIMER2               ((TIMER_T *) TIMER2_BASE)
 #define TIMER3               ((TIMER_T *) TIMER3_BASE)
-#define UART0	             ((UART_T *)  UART0_BASE)
-#define UART1	             ((UART_T *)  UART1_BASE)
-#define UART2	             ((UART_T *)  UART2_BASE)
-#define WDT	                 ((WDT_T *)   WDT_BASE)
+#define UART0                ((UART_T *)  UART0_BASE)
+#define UART1                ((UART_T *)  UART1_BASE)
+#define UART2                ((UART_T *)  UART2_BASE)
+#define WDT                  ((WDT_T *)   WDT_BASE)
 #define WWDT                 ((WWDT_T *)  WWDT_BASE)
 /*@}*/ /* end of group NUC505_PERIPHERAL_DECLARATION */
 

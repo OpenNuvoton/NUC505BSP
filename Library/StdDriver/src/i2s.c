@@ -34,12 +34,13 @@ static uint32_t I2S_GetSourceClockFreq(I2S_T *i2s)
 
     // get I2S selection clock source
     if((uint32_t)i2s == I2S_BASE)
-		{
+    {
         u32ClkSrcSel = CLK->CLKDIV2 & CLK_CLKDIV2_I2SSEL_Msk;
-				u32Freq = (CLK->CLKDIV2 & CLK_CLKDIV2_I2SDIV_Msk)+1;
-		}
-    
-    switch (u32ClkSrcSel) {
+        u32Freq = (CLK->CLKDIV2 & CLK_CLKDIV2_I2SDIV_Msk)+1;
+    }
+
+    switch (u32ClkSrcSel)
+    {
     case CLK_I2S_SRC_EXT:
         u32Freq = __HXT / u32Freq;
         break;
@@ -80,41 +81,42 @@ static uint32_t I2S_GetSourceClockFreq(I2S_T *i2s)
   *                                     - \ref I2S_FORMAT_MSB
   *                                     - \ref I2S_FORMAT_PCMA
   *                                     - \ref I2S_FORMAT_PCMB
-	* @param[in] u32AudioInterface Audio interface. Valid values are listed below.
+    * @param[in] u32AudioInterface Audio interface. Valid values are listed below.
   *                                     - \ref I2S_DISABLE_INTERNAL_CODEC
   *                                     - \ref I2S_ENABLE_INTERNAL_CODEC
   * @return Real sample rate of master mode or peripheral clock rate of slave mode.
   * @details This function will reset I2S controller and configure I2S controller according to the input parameters.
   *          Set Tx and Rx FIFO threshold to middle value. Both the Tx and Rx functions will be enabled.
   *          The actual sample rate may be different from the target sample rate. The real sample rate will be returned for reference.
-	*          The audio interface can be internal CODEC \ref I2S_ENABLE_INTERNAL_CODEC or external CODEC \ref I2S_DISABLE_INTERNAL_CODEC.
+    *          The audio interface can be internal CODEC \ref I2S_ENABLE_INTERNAL_CODEC or external CODEC \ref I2S_DISABLE_INTERNAL_CODEC.
   */
 uint32_t I2S_Open(I2S_T *i2s, uint32_t u32MasterSlave, uint32_t u32SampleRate, uint32_t u32WordWidth, uint32_t u32Channels, uint32_t u32DataFormat, uint32_t u32AudioInterface)
 {
     uint16_t u16Divider;
     uint32_t u32BitRate, u32SrcClk;
 
-    if((uint32_t)i2s == I2S_BASE) {
+    if((uint32_t)i2s == I2S_BASE)
+    {
         SYS->IPRST1 |= SYS_IPRST1_I2SRST_Msk;
         SYS->IPRST1 &= ~SYS_IPRST1_I2SRST_Msk;
     }
 
-		if ( u32AudioInterface == 1 )
-		{
-			i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECRST_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
-			i2s->CTL &= ~I2S_CTL_CODECSEL_Msk;
-			u32WordWidth = I2S_DATABIT_32;
-		}
-		else if ( u32AudioInterface == 0 )
-		{
-			i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECSEL_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
-			i2s->CTL &= ~I2S_CTL_CODECRST_Msk;
-		}
-		else
-		{
-			i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECRST_Msk | I2S_CTL_CODECSEL_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
-			u32WordWidth = I2S_DATABIT_32;
-		}
+    if ( u32AudioInterface == 1 )
+    {
+        i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECRST_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
+        i2s->CTL &= ~I2S_CTL_CODECSEL_Msk;
+        u32WordWidth = I2S_DATABIT_32;
+    }
+    else if ( u32AudioInterface == 0 )
+    {
+        i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECSEL_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
+        i2s->CTL &= ~I2S_CTL_CODECRST_Msk;
+    }
+    else
+    {
+        i2s->CTL = BIT22 | u32MasterSlave | u32WordWidth | u32Channels | u32DataFormat | I2S_CTL_CODECRST_Msk | I2S_CTL_CODECSEL_Msk | I2S_FIFO_TX_LEVEL_WORD_8 | I2S_FIFO_RX_LEVEL_WORD_9;
+        u32WordWidth = I2S_DATABIT_32;
+    }
 
     u32SrcClk = I2S_GetSourceClockFreq(i2s);
 
@@ -248,8 +250,8 @@ void I2S_DisableMCLK(I2S_T *i2s)
 void I2S_SetFIFO(I2S_T *i2s, uint32_t u32TxThreshold, uint32_t u32RxThreshold)
 {
     i2s->CTL = (i2s->CTL & ~(I2S_CTL_TXTH_Msk | I2S_CTL_RXTH_Msk) |
-                    (u32TxThreshold << I2S_CTL_TXTH_Pos) |
-                    (u32RxThreshold << I2S_CTL_RXTH_Pos));
+                (u32TxThreshold << I2S_CTL_TXTH_Pos) |
+                (u32RxThreshold << I2S_CTL_RXTH_Pos));
 }
 /*@}*/ /* end of group NUC505_I2S_EXPORTED_FUNCTIONS */
 

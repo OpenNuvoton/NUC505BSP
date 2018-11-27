@@ -92,14 +92,14 @@
  * I/O
  */
 #define SUPPORT_HUB_CLASS
-#define OHCI_BASE_ADDR			0x4000B000
+#define OHCI_BASE_ADDR          0x4000B000
 
 #define readl(addr)             (*(volatile uint32_t *)(addr))
 #define writel(x,addr)          ((*(volatile uint32_t *)(addr)) = (volatile uint32_t)x)
 
 //#define inpw(addr)            (*(volatile uint32_t *)(addr))
 
-#define USB_JIFFY            	(OHCI->HcFmNumber & 0xffff)
+#define USB_JIFFY               (OHCI->HcFmNumber & 0xffff)
 
 
 /*---  CPU clock speed ---*/

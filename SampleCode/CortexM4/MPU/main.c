@@ -44,7 +44,7 @@ uint32_t ReadMemCore(uint32_t address)
     return val;
 }
 #pragma O2
-#elif defined (__ICCARM__) || defined(__GNUC__) //IAR && GNU environment	
+#elif defined (__ICCARM__) || defined(__GNUC__) //IAR && GNU environment    
 uint32_t ReadMemCore(uint32_t address)
 {
     __IO uint32_t val = 0;
@@ -81,9 +81,9 @@ void SYS_Init(void)
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
-	// Set APB clock as 1/2 HCLK
-	CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
-	
+    // Set APB clock as 1/2 HCLK
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
 
@@ -148,7 +148,7 @@ void MPU_Test(void)
     MPU->RBAR = ((0x20014000 & MPU_RBAR_ADDR_Msk) | (0x3 & MPU_RBAR_REGION_Msk) | MPU_RBAR_VALID_Msk);
     // Attribute = Read Only :OR: SRD = 0 :OR: Size = 16KB :OR: ENABLE
     MPU->RASR = ((AP_No_Access << MPU_RASR_AP_Pos)| ( Region_Size_1K << MPU_RASR_SIZE_Pos) | MPU_RASR_ENABLE_Msk);
-		
+
     // Enable MemFault enable bit
     SCB->SHCSR = SCB->SHCSR | SCB_SHCSR_MEMFAULTENA_Msk;
     // Enable MPU
@@ -161,8 +161,8 @@ void MPU_Test(void)
     printf("\n Please Press '2' to read memory from region 2 (SRAM)");
 
     while(u8TestItem != '2') u8TestItem = getchar();
-		
-		/* MPU_CTRL_PRIVDEFENA_Msk bit enable 0 ~ 4GB accessable default */
+
+    /* MPU_CTRL_PRIVDEFENA_Msk bit enable 0 ~ 4GB accessable default */
     ReadMemCore(0x20010000);
 
     printf("\n Please Press '3' to read memory from region 3 (Test Memory)");

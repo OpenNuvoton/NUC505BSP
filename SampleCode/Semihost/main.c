@@ -26,16 +26,16 @@ void SYS_Init(void)
     //SYS_UnlockReg();
 
     // TODO: Configure system clock
-	
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
-		CLK_SetCoreClock(96000000);
+    CLK_SetCoreClock(96000000);
     /* Update System Core Clock */
     SystemCoreClockUpdate();
-	
+
     // Set APB clock as 1/2 HCLK
     CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
-	
+
     /* Lock protected registers */
     //SYS_LockReg();
 
@@ -49,7 +49,8 @@ int main()
 
     printf("\n Start SEMIHOST test: \n");
 
-    while(1) {
+    while(1)
+    {
         item = getchar();
         printf("%c\n",item);
     }

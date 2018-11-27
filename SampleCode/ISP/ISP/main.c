@@ -30,11 +30,11 @@ const unsigned int gu32TAG[4] __attribute__((at(ISP_TAG_OFFSET))) = {TAG0,ISP_EN
 extern uint8_t g_u8UpdateDone;
 #ifdef __ICCARM__
 #pragma data_alignment=4
-extern  uint8_t u8RootDirData[]; 
+extern  uint8_t u8RootDirData[];
 #else
 extern uint8_t u8RootDirData[] __attribute__((aligned(4)));
 #endif
- 
+
 uint32_t g_au32Buf[8];
 uint32_t *g_pu32Buf;
 uint32_t EndTagAddr = 0;
@@ -98,36 +98,36 @@ int main(void)
 
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
-    
+
     /* Init UART to 115200-8n1 for print message */
-    UART_Open(UART0, 115200);  
-    
+    UART_Open(UART0, 115200);
+
     printf("ISP - %08X\n",gu32TAG[VER_INDEX]);
-    
-    SPIM_Open(SPIM, 0, SPI_BUS_CLK);	
+
+    SPIM_Open(SPIM, 0, SPI_BUS_CLK);
 
     memset((char *)g_au32Buf, 0, TAG_LEN);
 
     /* Check Update Firmware Header */
     SPIFlash_ReadData(FIRMWARE_CODE_ADDR + FIRMWARE_TAG_OFFSET, TAG_LEN, (uint8_t *)g_au32Buf);
 
-#ifdef DISABLE_CIPHER	
+#ifdef DISABLE_CIPHER
     /* Disable Cipher */
     SPIM->CTL0 = SPIM->CTL0 | SPIM_CTL0_CIPHOFF_Msk;
 #endif
     /* Check App Firmware Header Tag */
     if ((g_au32Buf[TAG0_INDEX] == TAG0) && (g_au32Buf[TAG1_INDEX] == TAG1))
     {
-        u32Version =  g_au32Buf[VER_INDEX];	
+        u32Version =  g_au32Buf[VER_INDEX];
 
         EndTagAddr = FIRMWARE_CODE_ADDR + g_au32Buf[END_TAG_OFFSET_INDEX];
 
-        SPIFlash_ReadData(EndTagAddr, 4, (uint8_t *)&EndTag);	/* Read End Tag */
-       
-        if(EndTag == END_TAG)    
+        SPIFlash_ReadData(EndTagAddr, 4, (uint8_t *)&EndTag);   /* Read End Tag */
+
+        if(EndTag == END_TAG)
         {
             /* Set MSC Label Name */
-            for(i=0;i<8;i++)
+            for(i=0; i<8; i++)
             {
                 i8tmp = (u32Version >> ((7-i) * 4) & 0x0F);
 
@@ -162,14 +162,17 @@ int main(void)
     NVIC_EnableIRQ(USBD_IRQn);
 
     /* Start transaction */
-    while(1) {
-        if (USBD_IS_ATTACHED()) {
+    while(1)
+    {
+        if (USBD_IS_ATTACHED())
+        {
             USBD_Start();
             break;
         }
     }
 
-    while(1) {
+    while(1)
+    {
         if (g_usbd_Configured)
         {
             MSC_ProcessCmd();

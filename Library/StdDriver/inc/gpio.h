@@ -266,7 +266,7 @@ extern "C"
  */
 #define GPIO_CLR_INT_FLAG(gpio, u32PinMask)     GPIO_ClrIntFlag(gpio, u32PinMask)
 
-        
+
 /**
  * @brief       Disable Pin De-bounce Function
  *

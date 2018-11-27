@@ -25,4 +25,4 @@ const uint32_t gu32MtpAddr[1] __attribute__((section(".mtpsig"))) = {MTP_SIG};
 const uint32_t gu32MtpAddr[1] __attribute__((at(MTP_OFFSET)))  = {MTP_SIG};
 #endif
 
- 
+

@@ -1,21 +1,21 @@
 /********************************************************************************************
- UAC mode Setting 
+ UAC mode Setting
 ********************************************************************************************/
 #define __UAC10_ONLY__      /* Sample code is for UAC 1.0 Only */
 // #define __UAC20_ONLY__      /* Sample code is for UAC 2.0 Only */
 // #define __UAC10_20__        /* Sample code is for UAC 2.0 & UAC 1.0 (Try UAC 2.0 First) */
 
 /********************************************************************************************
- UAC 1.0 Setting 
+ UAC 1.0 Setting
 ********************************************************************************************/
 //#define __MIC_ONLY__         /* Enable MIC only for UAC 1.0 */
 //#define __SPEAKER_ONLY__     /* Enable SPK only for UAC 1.0*/
 #define __BOTH__             /* Enable MIC and SPK for UAC 1.0 */
-#define __HID__              /* Enable HID for UAC 1.0 */  
+#define __HID__              /* Enable HID for UAC 1.0 */
 
 #ifdef __HID__
-    #define __MEDIAKEY__        /* Select Mediakey for HID */    
-    //#define __KEYBOARD__        /* Select Keyboard for HID */  
+#define __MEDIAKEY__        /* Select Mediakey for HID */
+//#define __KEYBOARD__        /* Select Keyboard for HID */
 #endif
 /********************************************************************************************
  UAC 2.0 Setting
@@ -23,12 +23,12 @@
 // #define __MIC_ONLY20__       /* Enable MIC only for UAC 2.0 */
 // #define __SPEAKER_ONLY20__   /* Enable SPK only for UAC 2.0*/
 #define __BOTH20__           /* Enable MIC and SPK for UAC 2.0 */
-#define __HID20__            /* Enable HID for UAC 2.0 */  
+#define __HID20__            /* Enable HID for UAC 2.0 */
 
 #ifdef __HID20__
-    #define __MEDIAKEY20__      /* Select Mediakey for HID */    
-//     #define __KEYBOARD20__      /* Select Keyboard for HID */  
-#endif 
+#define __MEDIAKEY20__      /* Select Mediakey for HID */
+//     #define __KEYBOARD20__      /* Select Keyboard for HID */
+#endif
 
 extern S_USBD_INFO_T gsInfo_10,gsInfo_20;
 
@@ -86,35 +86,35 @@ void HID_UpdateKbData(void);
 /* Define the vendor id and product id */
 #define USBD_VID                    0x0420
 #ifdef __BOTH__
-    #ifdef __HID__
-        #ifdef __KEYBOARD__
-            #define USBD_PID        0x1421
-        #elif defined __MEDIAKEY__  
-            #define USBD_PID        0x1422
-        #endif
-    #else
-        #define USBD_PID            0x1423
-    #endif  
+#ifdef __HID__
+#ifdef __KEYBOARD__
+#define USBD_PID        0x1421
+#elif defined __MEDIAKEY__
+#define USBD_PID        0x1422
+#endif
+#else
+#define USBD_PID            0x1423
+#endif
 #elif defined __MIC_ONLY__
-    #ifdef __HID__
-        #ifdef __KEYBOARD__
-            #define USBD_PID        0x1424
-        #elif defined __MEDIAKEY__  
-            #define USBD_PID        0x1425
-        #endif
-    #else
-        #define USBD_PID             0x1426
-    #endif  
+#ifdef __HID__
+#ifdef __KEYBOARD__
+#define USBD_PID        0x1424
+#elif defined __MEDIAKEY__
+#define USBD_PID        0x1425
+#endif
+#else
+#define USBD_PID             0x1426
+#endif
 #elif defined __SPEAKER_ONLY__
-    #ifdef __HID__
-        #ifdef __KEYBOARD__
-            #define USBD_PID        0x1427
-        #elif defined __MEDIAKEY__  
-            #define USBD_PID        0x1428
-        #endif
-    #else
-        #define USBD_PID            0x1429
-    #endif  
+#ifdef __HID__
+#ifdef __KEYBOARD__
+#define USBD_PID        0x1427
+#elif defined __MEDIAKEY__
+#define USBD_PID        0x1428
+#endif
+#else
+#define USBD_PID            0x1429
+#endif
 #endif
 
 /********************************************************************************************
@@ -123,33 +123,33 @@ void HID_UpdateKbData(void);
 /* Define the vendor id and product id */
 #define USBD_VID20                    0x042A
 #ifdef __BOTH20__
-    #ifdef __HID20__
-        #ifdef __KEYBOARD20__
-            #define USBD_PID20        0x142B
-        #elif defined __MEDIAKEY20__  
-            #define USBD_PID20        0x142C
-        #endif
-    #else
-        #define USBD_PID20            0x142D
-    #endif    
+#ifdef __HID20__
+#ifdef __KEYBOARD20__
+#define USBD_PID20        0x142B
+#elif defined __MEDIAKEY20__
+#define USBD_PID20        0x142C
+#endif
+#else
+#define USBD_PID20            0x142D
+#endif
 #elif defined __MIC_ONLY20__
-    #ifdef __HID20__          
-        #ifdef __KEYBOARD20__
-            #define USBD_PID20        0x142E
-        #elif defined __MEDIAKEY20__  
-            #define USBD_PID20        0x142F
-        #endif
-    #else
-        #define USBD_PID20            0x1430
-    #endif  
+#ifdef __HID20__
+#ifdef __KEYBOARD20__
+#define USBD_PID20        0x142E
+#elif defined __MEDIAKEY20__
+#define USBD_PID20        0x142F
+#endif
+#else
+#define USBD_PID20            0x1430
+#endif
 #elif defined __SPEAKER_ONLY20__
-    #ifdef __HID20__
-        #ifdef __KEYBOARD20__
-            #define USBD_PID20        0x1431
-        #elif defined __MEDIAKEY20__  
-            #define USBD_PID20        0x1432
-        #endif
-    #else
-        #define USBD_PID20            0x1433
-    #endif  
+#ifdef __HID20__
+#ifdef __KEYBOARD20__
+#define USBD_PID20        0x1431
+#elif defined __MEDIAKEY20__
+#define USBD_PID20        0x1432
+#endif
+#else
+#define USBD_PID20            0x1433
+#endif
 #endif

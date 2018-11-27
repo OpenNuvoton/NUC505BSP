@@ -3,14 +3,14 @@
  * @version     V1.00
  * $Revision:   1$
  * $Date:       17/06/16 5:00p$
- * @brief       Loader (MTP), ISP, Firmware definition 
+ * @brief       Loader (MTP), ISP, Firmware definition
  *
  * @note
  * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
- 
+
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Tag Definition */
@@ -22,37 +22,38 @@
 #define TAG0                   0xAA554257
 #define TAG1                   0x63594257
 #define END_TAG                0x4257AA55
-   
-/* Tag Setting */   
+
+/* Tag Setting */
 #define ISP_TAG_OFFSET         0x00100          /*  256B */
 #define ISP_ENDTAG_OFFSET      0x0F800          /*  62KB - The End Tag is added when Post-Build*/
 #define FIRMWARE_TAG_OFFSET    0x00100          /*  256B */
 #define FIRMWARE_ENDTAG_OFFSET 0x80000          /* 512KB - The End Tag is added when Post-Build*/
 
-/* Execute Address */   
+/* Execute Address */
 #define FIRMWARE_CODE_ADDR     0x20000          /* SPI Flash Offset 128KB ; Must be tha sam as the App execute address */
 #define ISP_CODE_ADDRESS    0x20000000          /* SRAM */
-   
-/* ISP Code address at SPI Flash */   
+
+/* ISP Code address at SPI Flash */
 #define ISP_CODE_OFFSET        0x10000          /* SPI Flash Offset 64KB */
-    
-/* Version Number */  
+
+/* Version Number */
 #define ISP_VERSION         0x20170613
 #define FIRMWARE_VERSION01  0x20170614
-#define FIRMWARE_VERSION02  0x20170615 
+#define FIRMWARE_VERSION02  0x20170615
 
 /* Update File Name Length (include Filename Extension) */
 #define FILE_NAME_LENGTH    39
 
 /* Update File Name (0:ignore) - Windows Only */
-static uint8_t u8FileName[FILE_NAME_LENGTH] = {
- 'U', 'p', 'd', 'a', 't', 'e',  0,   0,    0,   0,
-   0,   0,   0,   0,   0,   0,  0,   0,    0,   0,
-   0,   0,   0,   0,   0,   0,  0,   0,    0,   0,
-   0,   0,   0,   0,   0,   0,  0,   0,    0
+static uint8_t u8FileName[FILE_NAME_LENGTH] =
+{
+    'U', 'p', 'd', 'a', 't', 'e',  0,   0,    0,   0,
+    0,   0,   0,   0,   0,   0,  0,   0,    0,   0,
+    0,   0,   0,   0,   0,   0,  0,   0,    0,   0,
+    0,   0,   0,   0,   0,   0,  0,   0,    0
 };
 
-/* SPI Flash Size */   
+/* SPI Flash Size */
 #define SPIFLAHS_SIZE       0x200000        /* 2MB */
 
 #ifdef __GNUC__
@@ -60,12 +61,12 @@ static uint8_t u8FileName[FILE_NAME_LENGTH] = {
 #else
 #define ISP_CODE_SIZE       0x4800
 #endif
-   
-/* MTP Setting */   
-   /* If you want to encrypt binary firmware, you can enable
-   the session code and assign signature and offset here */
-#define MTP_SIG	    (0x5A5AA5A5)
-#define MTP_OFFSET  (0x130)                 /* Less than 16KB */       
+
+/* MTP Setting */
+/* If you want to encrypt binary firmware, you can enable
+the session code and assign signature and offset here */
+#define MTP_SIG     (0x5A5AA5A5)
+#define MTP_OFFSET  (0x130)                 /* Less than 16KB */
 
 /* Cipher function for ISP mode */
 #define DISABLE_CIPHER

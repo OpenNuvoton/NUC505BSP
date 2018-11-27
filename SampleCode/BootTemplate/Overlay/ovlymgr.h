@@ -8,7 +8,7 @@
  * @note
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,10 +24,10 @@ struct ovly
 {
     struct ovly_reg *   ovly_reg_containing;
     void *              load_ro_base;
-	void *              exec_ro_base;
+    void *              exec_ro_base;
 #if defined ( __CC_ARM )
     void *              ro_length;  // Declare as pointer type instead of integer type to match type of linker-generated symbol.
-                                    // Its actual meaning is still integer.
+    // Its actual meaning is still integer.
 #elif defined (__ICCARM__)
     unsigned            ro_length;
 #endif

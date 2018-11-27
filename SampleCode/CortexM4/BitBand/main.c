@@ -33,9 +33,9 @@ void SYS_Init(void)
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
-	// Set APB clock as 1/2 HCLK
-	CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
-	
+    // Set APB clock as 1/2 HCLK
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
 
@@ -48,7 +48,7 @@ void SYS_Init(void)
     /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-		
+
 }
 
 void UART0_Init()

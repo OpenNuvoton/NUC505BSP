@@ -104,11 +104,11 @@ extern "C"
 #define FEATURE_ENDPOINT_HALT           0x00
 
 /*!<USB Test Mode Selectors */
-#define TEST_J					0x01
-#define TEST_K					0x02
-#define TEST_SE0_NAK			0x03
-#define TEST_PACKET				0x04
-#define TEST_FORCE_ENABLE		0x05
+#define TEST_J                  0x01
+#define TEST_K                  0x02
+#define TEST_SE0_NAK            0x03
+#define TEST_PACKET             0x04
+#define TEST_FORCE_ENABLE       0x05
 
 /// @endcond HIDDEN_SYMBOLS
 /********************* Bit definition of CEPCTL register **********************/
@@ -151,7 +151,8 @@ typedef void (*CLASS_REQ)(void); /*!<USB Class request callback function */
 typedef void (*SET_INTERFACE_REQ)(uint32_t u32AltInterface); /*!<USB Standard request "Set Interface" callback function */
 
 /*!<USB Setup Packet Structure */
-typedef struct USBD_CMD_STRUCT {
+typedef struct USBD_CMD_STRUCT
+{
     uint8_t  bmRequestType;
     uint8_t  bRequest;
     uint16_t wValue;
@@ -163,12 +164,13 @@ typedef struct USBD_CMD_STRUCT {
 
 
 /*!<USB Information Structure */
-typedef struct s_usbd_info {
+typedef struct s_usbd_info
+{
     uint8_t *gu8DevDesc;            /*!< Device descriptor */
     uint8_t *gu8ConfigDesc;         /*!< Config descriptor */
     uint8_t **gu8StringDesc;        /*!< Pointer for USB String Descriptor pointers */
     uint8_t *gu8QualDesc;           /*!< Qualifier descriptor */
-		uint8_t *gu8FullConfigDesc;    	/*!< Full Speed Config descriptor */
+    uint8_t *gu8FullConfigDesc;     /*!< Full Speed Config descriptor */
     uint8_t *gu8HSOtherConfigDesc;  /*!< Other Speed Config descriptor for High Speed */
     uint8_t *gu8FSOtherConfigDesc;  /*!< Other Speed Config descriptor for Full Speed */
     uint8_t *gu8HidCompositeDesc;   /*!< Pointer for HID CompositeDesc descriptor */
@@ -262,11 +264,11 @@ extern S_USBD_CMD_T gUsbCmd;
   @{
 */
 /**
-  * @brief  	USBD_memcpy, Copy bytes hardware limitation
-  *	@param[out]	u8Dst   Destination pointer.
-  *	@param[in]	u8Src   Source pointer.
-  *	@param[in] 	i32Size Copy size.
-  * @return 	None.
+  * @brief      USBD_memcpy, Copy bytes hardware limitation
+  * @param[out] u8Dst   Destination pointer.
+  * @param[in]  u8Src   Source pointer.
+  * @param[in]  i32Size Copy size.
+  * @return     None.
   */
 static __INLINE void USBD_MemCopy(uint8_t *u8Dst, uint8_t *u8Src, int32_t i32Size)
 {
@@ -284,30 +286,33 @@ static __INLINE void USBD_ResetDMA(void)
     USBD->DMACTL = 0x00;
 }
 /**
-  * @brief 		USBD_SetEpBufAddr, Set Endpoint buffer address
-  *	@param[in]  u32Ep      Endpoint Number
-  *	@param[in]	u32Base    Buffer Start Address
-  *	@param[in]	u32Len     Buffer length
-  * @return 	None.
+  * @brief      USBD_SetEpBufAddr, Set Endpoint buffer address
+  * @param[in]  u32Ep      Endpoint Number
+  * @param[in]  u32Base    Buffer Start Address
+  * @param[in]  u32Len     Buffer length
+  * @return     None.
   */
 static __INLINE void USBD_SetEpBufAddr(uint32_t u32Ep, uint32_t u32Base, uint32_t u32Len)
 {
-    if (u32Ep == CEP) {
+    if (u32Ep == CEP)
+    {
         USBD->CEPBUFSTART = u32Base;
         USBD->CEPBUFEND   = u32Base + u32Len - 1;
-    } else {
+    }
+    else
+    {
         USBD->EP[u32Ep].EPBUFSTART = u32Base;
         USBD->EP[u32Ep].EPBUFEND = u32Base + u32Len - 1;
     }
 }
 
 /**
-  * @brief  	USBD_ConfigEp, Config Endpoint
-  *	@param[in]	u32Ep      USB endpoint
-  *	@param[in]	u32EpNum   Endpoint number
-  *	@param[in]	u32EpType  Endpoint type
-  *	@param[in]	u32EpDir   Endpoint direction
-  * @return 	None.
+  * @brief      USBD_ConfigEp, Config Endpoint
+  * @param[in]  u32Ep      USB endpoint
+  * @param[in]  u32EpNum   Endpoint number
+  * @param[in]  u32EpType  Endpoint type
+  * @param[in]  u32EpDir   Endpoint direction
+  * @return     None.
   */
 static __INLINE void USBD_ConfigEp(uint32_t u32Ep, uint32_t u32EpNum, uint32_t u32EpType, uint32_t u32EpDir)
 {
@@ -323,7 +328,7 @@ static __INLINE void USBD_ConfigEp(uint32_t u32Ep, uint32_t u32EpNum, uint32_t u
 
 /**
   * @brief       Set USB endpoint stall state
-  * @param[in]   u32Ep  The USB endpoint ID. 
+  * @param[in]   u32Ep  The USB endpoint ID.
   * @return      None
   * @details     Set USB endpoint stall state for the specified endpoint ID. Endpoint will respond STALL token automatically.
   */
@@ -331,7 +336,8 @@ static __INLINE void USBD_SetEpStall(uint32_t u32Ep)
 {
     if (u32Ep == CEP)
         USBD_SET_CEP_STATE(USB_CEPCTL_STALL);
-    else {
+    else
+    {
         USBD->EP[u32Ep].EPRSPCTL = USBD->EP[u32Ep].EPRSPCTL & 0xf7 | USB_EP_RSPCTL_HALT;
     }
 }
@@ -350,8 +356,10 @@ static __INLINE void USBD_SetStall(uint32_t u32EpNum)
 
     if (u32EpNum == 0)
         USBD_SET_CEP_STATE(USB_CEPCTL_STALL);
-    else {
-        for (i=0; i<USBD_MAX_EP; i++) {
+    else
+    {
+        for (i=0; i<USBD_MAX_EP; i++)
+        {
             if (((USBD->EP[i].EPCFG & 0xf0) >> 4) == u32EpNum)
             {
                 USBD->EP[i].EPRSPCTL = USBD->EP[i].EPRSPCTL & 0xf7 | USB_EP_RSPCTL_HALT;
@@ -362,7 +370,7 @@ static __INLINE void USBD_SetStall(uint32_t u32EpNum)
 
 /**
   * @brief       Clear USB endpoint stall state
-  * @param[in]   u32Ep  The USB endpoint ID. 
+  * @param[in]   u32Ep  The USB endpoint ID.
   * @return      None
   * @details     Clear USB endpoint stall state for the specified endpoint ID. Endpoint will respond ACK/NAK token.
   */
@@ -383,7 +391,8 @@ static __INLINE void USBD_ClearStall(uint32_t u32EpNum)
 {
     int i;
 
-    for (i=0; i<USBD_MAX_EP; i++) {
+    for (i=0; i<USBD_MAX_EP; i++)
+    {
         if (((USBD->EP[i].EPCFG & 0xf0) >> 4) == u32EpNum)
         {
             USBD->EP[i].EPRSPCTL = USB_EP_RSPCTL_TOGGLE;
@@ -418,7 +427,8 @@ static __INLINE uint32_t USBD_GetStall(uint32_t u32EpNum)
 {
     int i;
 
-    for (i=0; i<USBD_MAX_EP; i++) {
+    for (i=0; i<USBD_MAX_EP; i++)
+    {
         if (((USBD->EP[i].EPCFG & 0xf0) >> 4) == u32EpNum)
         {
             return (USBD->EP[i].EPRSPCTL & USB_EP_RSPCTL_HALT);

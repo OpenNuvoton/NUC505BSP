@@ -31,13 +31,13 @@ int main(void)
 
     /* Init System, IP clock and multi-function I/O. */
     SYS_Init();
-    
-		/* Init UART0 to 115200-8n1 for print message */
+
+    /* Init UART0 to 115200-8n1 for print message */
     UART0_Init();
-		
-		/* Init SPI0, IP clock and multi-function I/O */
-		SPI0_Init();
-		
+
+    /* Init SPI0, IP clock and multi-function I/O */
+    SPI0_Init();
+
     printf("\n\n");
     printf("+------------------------------------------------------------------+\n");
     printf("|                   NUC505 SPI Driver Sample Code                  |\n");
@@ -74,9 +74,9 @@ int main(void)
         {
             putchar('.');
         }
-				
-				SPI_ENABLE(SPI0);
-				
+
+        SPI_ENABLE(SPI0);
+
         while(1)
         {
             /* Write to TX register */
@@ -115,62 +115,62 @@ int main(void)
 void SYS_Init(void)
 {
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
     //SYS_UnlockReg();
-     
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
     CLK_SetCoreClock(FREQ_96MHZ);
-    
-	/* PCLK divider */
-	CLK_SetModuleClock(PCLK_MODULE,(uint32_t) NULL, 1);
-		
+
+    /* PCLK divider */
+    CLK_SetModuleClock(PCLK_MODULE,(uint32_t) NULL, 1);
+
     /* Lock protected registers */
     //SYS_LockReg();
-        
+
 }
 
 void UART0_Init(void)
 {
-		/* Enable UART0 Module clock */
+    /* Enable UART0 Module clock */
     CLK_EnableModuleClock(UART0_MODULE);
-		/* UART0 module clock from EXT */
-		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
+    /* UART0 module clock from EXT */
+    CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     /* Reset IP */
-    SYS_ResetModule(UART0_RST);    
+    SYS_ResetModule(UART0_RST);
     /* Configure UART0 and set UART0 Baud-rate */
-		UART_Open(UART0, 115200);
-		/*---------------------------------------------------------------------------------------------------------*/
+    UART_Open(UART0, 115200);
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for UART0 RXD and TXD */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;	
-	
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
+
 }
 
 void SPI0_Init(void)
 {
-		/* Enable SPI0 Module clock */
+    /* Enable SPI0 Module clock */
     CLK_EnableModuleClock(SPI0_MODULE);
-		/* SPI0 module clock from EXT */
-		CLK_SetModuleClock(SPI0_MODULE, CLK_SPI0_SRC_PLL, 0);
+    /* SPI0 module clock from EXT */
+    CLK_SetModuleClock(SPI0_MODULE, CLK_SPI0_SRC_PLL, 0);
     /* Reset IP */
-    SYS_ResetModule(SPI0_RST);    
+    SYS_ResetModule(SPI0_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for SPI0 */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB2MFP_Msk) ) | SYS_GPB_MFPL_PB2MFP_SPI0_SS;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB3MFP_Msk) ) | SYS_GPB_MFPL_PB3MFP_SPI0_CLK;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB4MFP_Msk) ) | SYS_GPB_MFPL_PB4MFP_SPI0_MOSI;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB5MFP_Msk) ) | SYS_GPB_MFPL_PB5MFP_SPI0_MISO;	
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB2MFP_Msk) ) | SYS_GPB_MFPL_PB2MFP_SPI0_SS;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB3MFP_Msk) ) | SYS_GPB_MFPL_PB3MFP_SPI0_CLK;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB4MFP_Msk) ) | SYS_GPB_MFPL_PB4MFP_SPI0_MOSI;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB5MFP_Msk) ) | SYS_GPB_MFPL_PB5MFP_SPI0_MISO;
 
-		/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Init SPI                                                                                                */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure as a master, clock idle low, 32-bit transaction, drive output on falling clock edge and latch input on rising edge. */

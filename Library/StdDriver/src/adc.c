@@ -26,8 +26,8 @@
 /**
   * @brief                      Enable ADC module
   * @param[in]  adc             Base address of ADC module
-  * @param[in]  u32InputMode    Useless in NUC505 series               
-  * @param[in]  u32OpMode       Useless in NUC505 series   
+  * @param[in]  u32InputMode    Useless in NUC505 series
+  * @param[in]  u32OpMode       Useless in NUC505 series
   * @param[in]  u32ChMask       Channel enable bit. Valid values are:
   *                             - \ref ADC_CH_0_MASK
   *                             - \ref ADC_CH_1_MASK
@@ -36,7 +36,7 @@
   *                             - \ref ADC_CH_4_MASK
   *                             - \ref ADC_CH_5_MASK
   *                             - \ref ADC_CH_6_MASK
-  *                             - \ref ADC_CH_7_MASK	
+  *                             - \ref ADC_CH_7_MASK
   * @return  None
   */
 void ADC_Open(ADC_T *adc,
@@ -45,7 +45,7 @@ void ADC_Open(ADC_T *adc,
               uint32_t u32ChMask)
 {
     ADC->CTL  = (ADC->CTL & ~(ADC_CTL_PD_Msk | ADC_CTL_PDKEY_Msk |ADC_CTL_CHSEL_Msk))\
-		| (u32ChMask<<ADC_CTL_CHSEL_Pos);
+                | (u32ChMask<<ADC_CTL_CHSEL_Pos);
 }
 
 /**
@@ -55,8 +55,8 @@ void ADC_Open(ADC_T *adc,
   */
 void ADC_Close(ADC_T *adc)
 {
-		ADC->CTL  = ADC->CTL | ADC_CTL_CHSEL_Msk; 			/* Switching to channel 7 to save power */
-		ADC->CTL  = ADC->CTL | (ADC_CTL_PD_Msk | ADC_CTL_PDKEY_Msk);
+    ADC->CTL  = ADC->CTL | ADC_CTL_CHSEL_Msk;           /* Switching to channel 7 to save power */
+    ADC->CTL  = ADC->CTL | (ADC_CTL_PD_Msk | ADC_CTL_PDKEY_Msk);
 }
 
 /**
@@ -70,21 +70,21 @@ void ADC_Close(ADC_T *adc)
   *                             - \ref ADC_CH_4_MASK
   *                             - \ref ADC_CH_5_MASK
   *                             - \ref ADC_CH_6_MASK
-  *                             - \ref ADC_CH_7_MASK	
-  * @param[in]  u32SampleTime   When A/D converting at high conversion rate, 
-	*                             the sampling time of analog input voltage may not enough if input channel loading is heavy. 
-	*											        Programmer can extend A/D sampling time after trigger source is coming to get enough sampling time.
-	*											        The range is from 0 ~ 255 ADC clock. The unit is SAR-ADC clock.
+  *                             - \ref ADC_CH_7_MASK
+  * @param[in]  u32SampleTime   When A/D converting at high conversion rate,
+    *                             the sampling time of analog input voltage may not enough if input channel loading is heavy.
+    *                                                   Programmer can extend A/D sampling time after trigger source is coming to get enough sampling time.
+    *                                                   The range is from 0 ~ 255 ADC clock. The unit is SAR-ADC clock.
   * @return     None
   */
 void ADC_EnableHWTrigger(ADC_T *adc,
                          uint32_t u32ChMask,
                          uint32_t u32SampleTime)
-{    
-  ADC->CTL  = (ADC->CTL & ~(ADC_CTL_CHSEL_Msk|ADC_CTL_EXTSMPT_Msk)) |\
-								((u32ChMask<<ADC_CTL_CHSEL_Pos) | (u32SampleTime<<ADC_CTL_EXTSMPT_Pos));
-  ADC->CTL |= ADC_CTL_SWTRG_Msk;
-  return;
+{
+    ADC->CTL  = (ADC->CTL & ~(ADC_CTL_CHSEL_Msk|ADC_CTL_EXTSMPT_Msk)) |\
+                ((u32ChMask<<ADC_CTL_CHSEL_Pos) | (u32SampleTime<<ADC_CTL_EXTSMPT_Pos));
+    ADC->CTL |= ADC_CTL_SWTRG_Msk;
+    return;
 }
 
 /**

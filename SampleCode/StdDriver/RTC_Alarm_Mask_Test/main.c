@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 12 $
  * $Date: 14/05/30 6:01p $
- * @brief    Demonstrate the RTC alarm mask function. This sample code sets a minute alarm mask 
+ * @brief    Demonstrate the RTC alarm mask function. This sample code sets a minute alarm mask
  *           after execution
  *
  * @note
@@ -36,7 +36,8 @@ void RTC_AlarmHandle(void)
   */
 void RTC_IRQHandler(void)
 {
-    if ( (RTC->INTEN & RTC_INTEN_ALMIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_ALMIF_Msk) ) {      /* alarm interrupt occurred */
+    if ( (RTC->INTEN & RTC_INTEN_ALMIEN_Msk) && (RTC->INTSTS & RTC_INTSTS_ALMIF_Msk) )        /* alarm interrupt occurred */
+    {
         RTC->INTSTS = 0x1;
         RTC_SyncReg();
         RTC_AlarmHandle();
@@ -153,7 +154,7 @@ int32_t main(void)
 
     while(!g_bAlarm);
 
-   /* Get the current time */
+    /* Get the current time */
     RTC_GetDateAndTime(&sCurTime);
 
     printf("     Current Time:%d/%02d/%02d %02d:%02d:%02d\n",sCurTime.u32Year,sCurTime.u32Month,

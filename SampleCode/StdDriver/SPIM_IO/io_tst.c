@@ -8,7 +8,7 @@
  * @note
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,21 +41,24 @@ static __no_init uint8_t g_au8TstBuf2[TSTBUF_SIZE];
 static uint8_t g_au8TstBuf[TSTBUF_SIZE] __attribute__ ((aligned(4096)));
 static uint8_t g_au8TstBuf2[TSTBUF_SIZE]__attribute__ ((aligned(4096)));;
 #endif
-static const uint32_t s_au32Patterns[] = {
+static const uint32_t s_au32Patterns[] =
+{
     0x00000000, 0xFFFFFFFF, 0x55aa55aa, 0xaa55aa55, 0x33cc33cc, 0xcc33cc33
     //0x11111111, 0x22222222, 0x33333333, 0x44444444, 0x55555555, 0x66666666
     //0x11111111, 0x22222222, 0x33333333, 0x44444444
     //0x00112233, 0x44556677, 0x8899AABB, 0xCCDDEEFF
 };
-    
+
 static void PopData(uint8_t *pu8Buf, uint32_t u32BufSize)
 {
     uint8_t *bufInd = pu8Buf;
     uint32_t u32BufRmn = u32BufSize;
 
-    while (u32BufRmn) {
+    while (u32BufRmn)
+    {
         uint32_t u32NTx = sizeof (s_au32Patterns);
-        if (u32NTx > u32BufRmn) {
+        if (u32NTx > u32BufRmn)
+        {
             u32NTx = u32BufRmn;
         }
         memcpy(bufInd, (uint8_t *) s_au32Patterns, u32NTx);
@@ -66,37 +69,41 @@ static void PopData(uint8_t *pu8Buf, uint32_t u32BufSize)
 
 static void DoIOTest()
 {
-    do {
+    do
+    {
         uint32_t u32JedecID;
-        
+
         u32JedecID = SPIFlash_ReadJedecID();
         printf("[%s][%s]Jedec ID\t\t0x%08x\n", TEST_IP, TEST_ITEM, u32JedecID);
         {
             uint8_t u8MID = u32JedecID & 0x000000FF;
-        
+
             if (u8MID != MFGID_WINBOND &&
-                u8MID != MFGID_MXIC &&
-                u8MID != MFGID_EON &&
-                u8MID != MFGID_ISSI) {
+                    u8MID != MFGID_MXIC &&
+                    u8MID != MFGID_EON &&
+                    u8MID != MFGID_ISSI)
+            {
                 g_i32HasErr = 1;
                 break;
             }
         }
-        
+
         // Erase and check if erased data are all 0xFF.
         SPIFlash_EraseAddrRange(0, TSTBUF_SIZE);
         memset(g_au8TstBuf, 0xFF, TSTBUF_SIZE);
         SPIFlash_ReadData(0, TSTBUF_SIZE, g_au8TstBuf2);
-        if (memcmp(g_au8TstBuf, g_au8TstBuf2, TSTBUF_SIZE)) {
+        if (memcmp(g_au8TstBuf, g_au8TstBuf2, TSTBUF_SIZE))
+        {
             printf("[%s][%s]Erase\t\tFAILED\n", TEST_IP, TEST_ITEM);
             g_i32HasErr = 1;
             break;
         }
-        
+
         PopData(g_au8TstBuf, TSTBUF_SIZE);         // Populate data.
         SPIFlash_WriteData(0, TSTBUF_SIZE, g_au8TstBuf);
         SPIFlash_ReadData(0, TSTBUF_SIZE, g_au8TstBuf2);
-        if (memcmp(g_au8TstBuf, g_au8TstBuf2, TSTBUF_SIZE)) {
+        if (memcmp(g_au8TstBuf, g_au8TstBuf2, TSTBUF_SIZE))
+        {
             printf("[%s][%s]Compare data\t\tFAILED\n", TEST_IP, TEST_ITEM);
             g_i32HasErr = 1;
             break;
@@ -106,14 +113,14 @@ static void DoIOTest()
 }
 
 void TestIOMode(void)
-{   
+{
     printf("[%s][%s]\t\t\tSTART\n", TEST_IP, TEST_ITEM);
-    
+
     SPIM_Open(SPIM, 0, SPI_BUS_CLK);
 
 #if (SPIM_IF == SPIM_CTL1_IFSEL_EXTERN)
     SPIM_SetIF(SPIM, SPIM_IF);
-    
+
     /* Configure multi-function pins for SPIM, GPIO slave I/F. */
     SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk | (1 << SYS_GPA_MFPH_PA8MFP_Pos);    // SPIM_SS
     SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk | (1 << SYS_GPA_MFPH_PA9MFP_Pos);    // SPIM_SCLK
@@ -125,22 +132,23 @@ void TestIOMode(void)
 
     /* Actual SPI bus clock */
     printf("[%s][%s]SPI bus clock\t\t%dHz\n", TEST_IP, TEST_ITEM, SPIM_GetBusClock(SPIM));
-    
+
     /* Vendor specific setting */
     {
         uint32_t u32JedecID = SPIFlash_ReadJedecID();
         uint8_t u8MID = u32JedecID & 0x000000FF;
-        
-        if (u8MID == MFGID_ISSI) {
+
+        if (u8MID == MFGID_ISSI)
+        {
             // Configure dummy cycles for ISSI Fast Read commands. Set P[6:3] to 0 to stand for default.
-            uint8_t params = SPIFlash_ISSI_ReadReadParams();        
+            uint8_t params = SPIFlash_ISSI_ReadReadParams();
             params &= ~(BIT3 | BIT4 | BIT5 | BIT6);
             SPIFlash_ISSI_SetReadParamsV(params);
         }
     }
-    
+
     DoIOTest();
-    
+
 #if (SPIM_IF == SPIM_CTL1_IFSEL_EXTERN)
     /* Configure multi-function pins back for GPIO. */
     SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk | (0 << SYS_GPA_MFPH_PA8MFP_Pos);    // GPIOA[8]
@@ -152,15 +160,17 @@ void TestIOMode(void)
 #endif  // #if (SPIM_IF == SPIM_CTL1_IFSEL_EXTERN)
 
     SPIM_Close(SPIM);
-    
-    if (g_i32HasErr) {
+
+    if (g_i32HasErr)
+    {
         printf("[%s][%s]\t\t\tFAILED\n", TEST_IP, TEST_ITEM);
         //exit(1);
     }
-    else {
+    else
+    {
         printf("[%s][%s]\t\t\tPASSED\n", TEST_IP, TEST_ITEM);
     }
-}   
+}
 
 
 

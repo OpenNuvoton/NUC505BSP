@@ -15,9 +15,9 @@
 
 //#define DEBUG
 #ifdef DEBUG
-    #define DBG_PRINTF  printf
+#define DBG_PRINTF  printf
 #else
-    #define DBG_PRINTF(...)
+#define DBG_PRINTF(...)
 #endif
 
 #define SD_DATE_CODE    "20160602"
@@ -50,12 +50,12 @@ uint8_t *_sd_pSDHCBuffer;
 uint32_t _sd_ReferenceClock;
 
 #if defined ( __CC_ARM )        /*!< Keil Compiler */
-    __align(4096) uint8_t _sd_ucSDHCBuffer[512];
+__align(4096) uint8_t _sd_ucSDHCBuffer[512];
 #elif defined ( __ICCARM__ )    /*!< IAR Compiler */
-    #pragma data_alignment = 4096
-    uint8_t _sd_ucSDHCBuffer[512];
+#pragma data_alignment = 4096
+uint8_t _sd_ucSDHCBuffer[512];
 #elif defined ( __GNUC__ )      /*!< GCC Compiler */
-    uint8_t _sd_ucSDHCBuffer[512];
+uint8_t _sd_ucSDHCBuffer[512];
 #endif
 
 int sd0_ok = 0;
@@ -66,7 +66,8 @@ SD_INFO_T SD0;
 
 void SD_CheckRB()
 {
-    while(1) {
+    while(1)
+    {
         SD->CTL |= SDH_CTL_CLK8OEN_Msk;
         while(SD->CTL & SDH_CTL_CLK8OEN_Msk);
         if (SD->INTSTS & SDH_INTSTS_DAT0STS_Msk)
@@ -84,8 +85,10 @@ int SD_SDCommand(SD_INFO_T *pSD, uint8_t ucCmd, uint32_t uArg)
     SD->CTL = buf;
 
     DBG_PRINTF("--> Send CMD%d (Arg=0x%x) ... ", ucCmd, uArg);
-    while(SD->CTL & SDH_CTL_COEN_Msk) {
-        if (pSD->IsCardInsert == FALSE) {
+    while(SD->CTL & SDH_CTL_COEN_Msk)
+    {
+        if (pSD->IsCardInsert == FALSE)
+        {
             DBG_PRINTF("NO SD CARD !\n");
             return SD_NO_SD_CARD;
         }
@@ -104,46 +107,61 @@ int SD_SDCmdAndRsp(SD_INFO_T *pSD, uint8_t ucCmd, uint32_t uArg, int ntickCount)
     SD->CTL = buf;
 
     DBG_PRINTF("--> Send CMD%d (Arg=0x%x) ... ", ucCmd, uArg);
-    if (ntickCount > 0) {
-        while(SD->CTL & SDH_CTL_RIEN_Msk) {
-            if(ntickCount-- == 0) {
+    if (ntickCount > 0)
+    {
+        while(SD->CTL & SDH_CTL_RIEN_Msk)
+        {
+            if(ntickCount-- == 0)
+            {
                 SD->CTL |= SDH_CTL_CTLRST_Msk; // reset SD engine
                 DBG_PRINTF("timeout !\n");
                 return SD_INIT_TIMEOUT;
             }
-            if (pSD->IsCardInsert == FALSE) {
+            if (pSD->IsCardInsert == FALSE)
+            {
                 DBG_PRINTF("NO SD CARD !\n");
                 return SD_NO_SD_CARD;
             }
         }
-    } else {
-        while(SD->CTL & SDH_CTL_RIEN_Msk) {
-            if (pSD->IsCardInsert == FALSE) {
+    }
+    else
+    {
+        while(SD->CTL & SDH_CTL_RIEN_Msk)
+        {
+            if (pSD->IsCardInsert == FALSE)
+            {
                 DBG_PRINTF("NO SD CARD !\n");
                 return SD_NO_SD_CARD;
             }
         }
     }
 
-    if (_sd_uR7_CMD) {
-        if (((SD->RESP1 & 0xff) != 0x55) && ((SD->RESP0 & 0xf) != 0x01)) {
+    if (_sd_uR7_CMD)
+    {
+        if (((SD->RESP1 & 0xff) != 0x55) && ((SD->RESP0 & 0xf) != 0x01))
+        {
             _sd_uR7_CMD = 0;
             DBG_PRINTF("CMD8/R7 ERROR ! RESP0=0x%08X, RESP1=0x%08X\n", SD->RESP0, SD->RESP1);
             return SD_CMD8_ERROR;
         }
     }
 
-    if (!_sd_uR3_CMD) {
-        if (SD->INTSTS & SDH_INTSTS_CRC7_Msk) {     // check CRC7
+    if (!_sd_uR3_CMD)
+    {
+        if (SD->INTSTS & SDH_INTSTS_CRC7_Msk)       // check CRC7
+        {
             DBG_PRINTF("done !! RESP0=0x%08X, RESP1=0x%08X\n", SD->RESP0, SD->RESP1);
             return Successful;
         }
-        else {
+        else
+        {
             printf("response error [%d]!\n", ucCmd);
             DBG_PRINTF("CRC7 ERROR !\n");
             return SD_CRC7_ERROR;
         }
-    } else { // ignore CRC error for R3 case
+    }
+    else     // ignore CRC error for R3 case
+    {
         _sd_uR3_CMD = 0;
         SD->INTSTS = SDH_INTSTS_CRCIF_Msk;
         DBG_PRINTF("done !! RESP0=0x%08X, RESP1=0x%08X\n", SD->RESP0, SD->RESP1);
@@ -180,22 +198,28 @@ int SD_SDCmdAndRsp2(SD_INFO_T *pSD, uint8_t ucCmd, uint32_t uArg, uint32_t *puR2
     SD->CTL = buf;
 
     DBG_PRINTF("--> Send CMD%d (Arg=0x%x) ... ", ucCmd, uArg);
-    while(SD->CTL & SDH_CTL_R2EN_Msk) {
-        if (pSD->IsCardInsert == FALSE) {
+    while(SD->CTL & SDH_CTL_R2EN_Msk)
+    {
+        if (pSD->IsCardInsert == FALSE)
+        {
             DBG_PRINTF("NO SD CARD !\n");
             return SD_NO_SD_CARD;
         }
     }
 
-    if (SD->INTSTS & SDH_INTSTS_CRC7_Msk) {
-        for (i=0; i<5; i++) {
+    if (SD->INTSTS & SDH_INTSTS_CRC7_Msk)
+    {
+        for (i=0; i<5; i++)
+        {
             tmpBuf[i] = SD_Swap32(*(int*)(SDH_BASE+i*4));
         }
         for (i=0; i<4; i++)
             *puR2ptr++ = ((tmpBuf[i] & 0x00ffffff)<<8) | ((tmpBuf[i+1] & 0xff000000)>>24);
         DBG_PRINTF("done !!\n");
         return Successful;
-    } else {
+    }
+    else
+    {
         DBG_PRINTF("CRC7 ERROR !\n");
         return SD_CRC7_ERROR;
     }
@@ -213,26 +237,32 @@ int SD_SDCmdAndRspDataIn(SD_INFO_T *pSD, uint8_t ucCmd, uint32_t uArg)
     SD->CTL = buf;
 
     DBG_PRINTF("--> Send CMD%d (Arg=0x%x) ... ", ucCmd, uArg);
-    while (SD->CTL & SDH_CTL_RIEN_Msk) {
-        if (pSD->IsCardInsert == FALSE) {
+    while (SD->CTL & SDH_CTL_RIEN_Msk)
+    {
+        if (pSD->IsCardInsert == FALSE)
+        {
             DBG_PRINTF("NO SD CARD !\n");
             return SD_NO_SD_CARD;
         }
     }
 
-    while (SD->CTL & SDH_CTL_DIEN_Msk) {
-        if (pSD->IsCardInsert == FALSE) {
+    while (SD->CTL & SDH_CTL_DIEN_Msk)
+    {
+        if (pSD->IsCardInsert == FALSE)
+        {
             DBG_PRINTF("NO SD CARD !\n");
             return SD_NO_SD_CARD;
         }
     }
 
-    if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk)) {    // check CRC7
+    if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk))      // check CRC7
+    {
         printf("SD_SDCmdAndRspDataIn: response error [%d]!\n", ucCmd);
         return SD_CRC7_ERROR;
     }
 
-    if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk)) {   // check CRC16
+    if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk))     // check CRC16
+    {
         printf("SD_SDCmdAndRspDataIn: read data CRC16 error!\n");
         return SD_CRC16_ERROR;
     }
@@ -261,7 +291,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
     if (sd_clock_khz > _sd_ReferenceClock)
     {
         printf("ERROR: wrong SD clock %dKHz since it is faster than SD clock source %dKHz !\n",
-            sd_clock_khz, _sd_ReferenceClock);
+               sd_clock_khz, _sd_ReferenceClock);
         return;
     }
 
@@ -271,18 +301,20 @@ void SD_Set_clock(uint32_t sd_clock_khz)
     if (_sd_ReferenceClock % sd_clock_khz != 0)
         rate++;
 
-    if(rate >= SD_CLK_DIV1_MAX) {
+    if(rate >= SD_CLK_DIV1_MAX)
+    {
 #if 0   // solution 1: auto choose the maximum and valid divider value.
         rate = SD_CLK_DIV1_MAX;
 #else   // solution 2: reject it and warning user.
         printf("ERROR: wrong SD clock %dKHz since it is slower than SD clock source %dKHz/%d !\n",
-            sd_clock_khz, _sd_ReferenceClock, SD_CLK_DIV1_MAX);
+               sd_clock_khz, _sd_ReferenceClock, SD_CLK_DIV1_MAX);
 #endif
         return;
     }
 
     //--- Ignore the request to set SD clock to same frequency in order to improve SD card access performance.
-    if (sd_clock_khz == current_sd_clock_khz) {
+    if (sd_clock_khz == current_sd_clock_khz)
+    {
         DBG_PRINTF("SD_Set_clock(): ignore SD clock %dKHz setting since it is same frequency.\n", sd_clock_khz);
         return;
     }
@@ -311,20 +343,27 @@ uint32_t SD_CardDetection(uint32_t u32CardNum)
 {
     uint32_t i;
 
-    if (u32CardNum == SD_PORT0) {
-        if(SD->INTEN & SDH_INTEN_CDSRC0_Msk) { // Card detect pin from GPIO
-            if(SD->INTSTS & SDH_INTSTS_CDSTS0_Msk) { // Card remove
+    if (u32CardNum == SD_PORT0)
+    {
+        if(SD->INTEN & SDH_INTEN_CDSRC0_Msk)   // Card detect pin from GPIO
+        {
+            if(SD->INTSTS & SDH_INTSTS_CDSTS0_Msk)   // Card remove
+            {
                 SD0.IsCardInsert = FALSE;
                 return FALSE;
-            } else
+            }
+            else
                 SD0.IsCardInsert = TRUE;
-        } else if(!(SD->INTEN & SDH_INTEN_CDSRC0_Msk)) {    // Card detect pin from DAT3
+        }
+        else if(!(SD->INTEN & SDH_INTEN_CDSRC0_Msk))        // Card detect pin from DAT3
+        {
             SD->CTL |= SDH_CTL_CLKKEEP0_Msk;
             for(i= 0; i < 5000; i++);
 
             if(SD->INTSTS & SDH_INTSTS_CDSTS0_Msk) // Card insert
                 SD0.IsCardInsert = TRUE;
-            else {
+            else
+            {
                 SD0.IsCardInsert = FALSE;
                 return FALSE;
             }
@@ -349,7 +388,8 @@ int SD_Init(SD_INFO_T *pSD)
     // power ON 74 clock
     SD->CTL |= SDH_CTL_CLK74OEN_Msk;
 
-    while(SD->CTL & SDH_CTL_CLK74OEN_Msk) {
+    while(SD->CTL & SDH_CTL_CLK74OEN_Msk)
+    {
         if (pSD->IsCardInsert == FALSE)
             return SD_NO_SD_CARD;
     }
@@ -364,14 +404,16 @@ int SD_Init(SD_INFO_T *pSD)
 
     i = SD_SDCmdAndRsp(pSD, 8, 0x00000155, u32CmdTimeOut);
     _sd_uR7_CMD = 0;
-    if (i == Successful) {
+    if (i == Successful)
+    {
         // SD 2.0
         SD_SDCmdAndRsp(pSD, 55, 0x00, u32CmdTimeOut);
         _sd_uR3_CMD = 1;
         SD_SDCmdAndRsp(pSD, 41, 0x40ff8000, u32CmdTimeOut); // 2.7v-3.6v
         resp = SD->RESP0;
 
-        while (!(resp & 0x00800000)) {      // check if card is ready
+        while (!(resp & 0x00800000))        // check if card is ready
+        {
             SD_SDCmdAndRsp(pSD, 55, 0x00, u32CmdTimeOut);
             _sd_uR3_CMD = 1;
             SD_SDCmdAndRsp(pSD, 41, 0x40ff8000, u32CmdTimeOut); // 3.0v-3.4v
@@ -381,22 +423,27 @@ int SD_Init(SD_INFO_T *pSD)
             pSD->CardType = SD_TYPE_SD_HIGH;
         else
             pSD->CardType = SD_TYPE_SD_LOW;
-    } else {
+    }
+    else
+    {
         // SD 1.1
         SD_SDCommand(pSD, 0, 0);        // reset all cards
         for (i=0x100; i>0; i--);
 
         i = SD_SDCmdAndRsp(pSD, 55, 0x00, u32CmdTimeOut);
-        if (i == SD_INIT_TIMEOUT) {   // MMC memory
+        if (i == SD_INIT_TIMEOUT)     // MMC memory
+        {
 
             SD_SDCommand(pSD, 0, 0);        // reset
             for (i=0x100; i>0; i--);
 
             _sd_uR3_CMD = 1;
             // 2014/8/6, to support eMMC v4.4, the argument of CMD1 should be 0x40ff8000 to support both MMC plus and eMMC cards.
-            if (SD_SDCmdAndRsp(pSD, 1, 0x40ff8000, u32CmdTimeOut) != SD_INIT_TIMEOUT) { // MMC memory
+            if (SD_SDCmdAndRsp(pSD, 1, 0x40ff8000, u32CmdTimeOut) != SD_INIT_TIMEOUT)   // MMC memory
+            {
                 resp = SD->RESP0;
-                while (!(resp & 0x00800000)) {      // check if card is ready
+                while (!(resp & 0x00800000))        // check if card is ready
+                {
                     _sd_uR3_CMD = 1;
                     SD_SDCmdAndRsp(pSD, 1, 0x40ff8000, u32CmdTimeOut);      // high voltage
                     resp = SD->RESP0;
@@ -412,32 +459,41 @@ int SD_Init(SD_INFO_T *pSD)
                     pSD->CardType = SD_TYPE_MMC;
                     DBG_PRINTF("--> MMC card report Ready and Byte Mode (<=2GB) !\n");
                 }
-            } else {
+            }
+            else
+            {
                 pSD->CardType = SD_TYPE_UNKNOWN;
                 printf("ERROR: Unknown card type !!\n");
                 return SD_ERR_DEVICE;
             }
-        } else if (i == 0) { // SD Memory
+        }
+        else if (i == 0)     // SD Memory
+        {
             _sd_uR3_CMD = 1;
             SD_SDCmdAndRsp(pSD, 41, 0x00ff8000, u32CmdTimeOut); // 3.0v-3.4v
             resp = SD->RESP0;
-            while (!(resp & 0x00800000)) {      // check if card is ready
+            while (!(resp & 0x00800000))        // check if card is ready
+            {
                 SD_SDCmdAndRsp(pSD, 55, 0x00,u32CmdTimeOut);
                 _sd_uR3_CMD = 1;
                 SD_SDCmdAndRsp(pSD, 41, 0x00ff8000, u32CmdTimeOut); // 3.0v-3.4v
                 resp = SD->RESP0;
             }
             pSD->CardType = SD_TYPE_SD_LOW;
-        } else {
+        }
+        else
+        {
             pSD->CardType = SD_TYPE_UNKNOWN;
             return SD_INIT_ERROR;
         }
     }
 
     // CMD2, CMD3
-    if (pSD->CardType != SD_TYPE_UNKNOWN) {
+    if (pSD->CardType != SD_TYPE_UNKNOWN)
+    {
         SD_SDCmdAndRsp2(pSD, 2, 0x00, (uint32_t *)CIDBuffer);
-        if ((pSD->CardType == SD_TYPE_MMC) || (pSD->CardType == SD_TYPE_MMC_SECTOR_MODE)) {
+        if ((pSD->CardType == SD_TYPE_MMC) || (pSD->CardType == SD_TYPE_MMC_SECTOR_MODE))
+        {
             // Increase RCA for next MMC card.
             // The RCA value 0 is reserved to set all cards with CMD7.
             // The default value is 1.
@@ -447,7 +503,9 @@ int SD_Init(SD_INFO_T *pSD)
 
             if ((status = SD_SDCmdAndRsp(pSD, 3, pSD->RCA, 0)) != Successful)  // set RCA for MMC
                 return status;
-        } else {
+        }
+        else
+        {
             if ((status = SD_SDCmdAndRsp(pSD, 3, 0x00, 0)) != Successful)       // get RCA
                 return status;
             else
@@ -457,16 +515,21 @@ int SD_Init(SD_INFO_T *pSD)
 
     switch (pSD->CardType)
     {
-        case SD_TYPE_SD_HIGH:
-            DBG_PRINTF("This is high capacity SD memory card\n");       break;
-        case SD_TYPE_SD_LOW:
-            DBG_PRINTF("This is standard capacity SD memory card\n");   break;
-        case SD_TYPE_MMC:
-            DBG_PRINTF("This is standard capacity MMC memory card\n");  break;
-        case SD_TYPE_MMC_SECTOR_MODE:
-            DBG_PRINTF("This is high capacity MMC memory card\n");      break;
-        default:
-            printf("ERROR: Unknown card type !!\n");                    break;
+    case SD_TYPE_SD_HIGH:
+        DBG_PRINTF("This is high capacity SD memory card\n");
+        break;
+    case SD_TYPE_SD_LOW:
+        DBG_PRINTF("This is standard capacity SD memory card\n");
+        break;
+    case SD_TYPE_MMC:
+        DBG_PRINTF("This is standard capacity MMC memory card\n");
+        break;
+    case SD_TYPE_MMC_SECTOR_MODE:
+        DBG_PRINTF("This is high capacity MMC memory card\n");
+        break;
+    default:
+        printf("ERROR: Unknown card type !!\n");
+        break;
     }
 
     return Successful;
@@ -492,7 +555,8 @@ int SD_SwitchToHighSpeed(SD_INFO_T *pSD)
 
     busy_status0 = _sd_pSDHCBuffer[28]<<8 | _sd_pSDHCBuffer[29];
 
-    if (!busy_status0) { // function ready
+    if (!busy_status0)   // function ready
+    {
         // NUC505 DMA only can access SRAM that address range between 0x2000-0000 ~ 0x2001-FFFF
         SD->DMASA = (uint32_t)_sd_pSDHCBuffer;  // set DMA transfer starting address
         SD->BLEN = 63;    // 512 bit
@@ -512,7 +576,8 @@ int SD_SwitchToHighSpeed(SD_INFO_T *pSD)
         if (!busy_status1)
             DBG_PRINTF("switch into high speed mode !!!\n");
         return Successful;
-    } else
+    }
+    else
         return Fail;
 }
 
@@ -521,14 +586,15 @@ int SD_SelectCardType(SD_INFO_T *pSD)
 {
     int volatile status=0;
     uint32_t arg;
-    
+
     if ((status = SD_SDCmdAndRsp(pSD, 7, pSD->RCA, 0)) != Successful)
         return status;
 
     SD_CheckRB();
 
     // if SD card set 4bit
-    if (pSD->CardType == SD_TYPE_SD_HIGH) {
+    if (pSD->CardType == SD_TYPE_SD_HIGH)
+    {
         _sd_pSDHCBuffer = (uint8_t *)((uint32_t)_sd_ucSDHCBuffer);
         // NUC505 DMA only can access SRAM that address range between 0x2000-0000 ~ 0x2001-FFFF
         SD->DMASA = (uint32_t)_sd_pSDHCBuffer;  // set DMA transfer starting address
@@ -539,9 +605,11 @@ int SD_SelectCardType(SD_INFO_T *pSD)
         if ((status = SD_SDCmdAndRspDataIn(pSD, 51, 0x00)) != Successful)
             return status;
 
-        if ((_sd_ucSDHCBuffer[0] & 0xf) == 0x2) {
+        if ((_sd_ucSDHCBuffer[0] & 0xf) == 0x2)
+        {
             status = SD_SwitchToHighSpeed(pSD);
-            if (status == Successful) {
+            if (status == Successful)
+            {
                 /* divider */
                 SD_Set_clock(SDHC_FREQ);
             }
@@ -553,7 +621,9 @@ int SD_SelectCardType(SD_INFO_T *pSD)
             return status;
 
         SD->CTL |= SDH_CTL_DBW_Msk;     // SD 4-bit data bus
-    } else if (pSD->CardType == SD_TYPE_SD_LOW) {
+    }
+    else if (pSD->CardType == SD_TYPE_SD_LOW)
+    {
         _sd_pSDHCBuffer = (uint8_t *)((uint32_t)_sd_ucSDHCBuffer);
         // NUC505 DMA only can access SRAM that address range between 0x2000-0000 ~ 0x2001-FFFF
         SD->DMASA = (uint32_t)_sd_pSDHCBuffer;     // set DMA transfer starting address
@@ -572,7 +642,9 @@ int SD_SelectCardType(SD_INFO_T *pSD)
             return status;
 
         SD->CTL |= SDH_CTL_DBW_Msk;     // SD 4-bit data bus
-    } else if ((pSD->CardType == SD_TYPE_MMC) || (pSD->CardType == SD_TYPE_MMC_SECTOR_MODE)) {
+    }
+    else if ((pSD->CardType == SD_TYPE_MMC) || (pSD->CardType == SD_TYPE_MMC_SECTOR_MODE))
+    {
         if (pSD->CardType == SD_TYPE_MMC)
             SD_Set_clock(MMC_FREQ);
         else
@@ -658,7 +730,7 @@ void SD_Get_SD_info(SD_INFO_T *pSD, DISK_DATA_T *_info)
             _info->totalSectorN = (*(uint32_t *)(_sd_pSDHCBuffer+212));
             _info->diskSize = _info->totalSectorN / 2;
             DBG_PRINTF("--> EXT_CSD v1.%d revision 1.%d, Card size = (SEC_COUNT*512) = (%d*512)\n",
-                _sd_ucSDHCBuffer[194], _sd_ucSDHCBuffer[192], *(uint32_t *)(_sd_pSDHCBuffer+212));
+                       _sd_ucSDHCBuffer[194], _sd_ucSDHCBuffer[192], *(uint32_t *)(_sd_pSDHCBuffer+212));
         }
         else
         {
@@ -724,15 +796,18 @@ int SD_ChipErase(SD_INFO_T *pSD, DISK_DATA_T *_info)
     int status=0;
 
     status = SD_SDCmdAndRsp(pSD, 32, 512, 6000);
-    if (status < 0) {
+    if (status < 0)
+    {
         return status;
     }
     status = SD_SDCmdAndRsp(pSD, 33, _info->totalSectorN*512, 6000);
-    if (status < 0) {
+    if (status < 0)
+    {
         return status;
     }
     status = SD_SDCmdAndRsp(pSD, 38, 0, 6000);
-    if (status < 0) {
+    if (status < 0)
+    {
         return status;
     }
     SD_CheckRB();
@@ -797,10 +872,14 @@ void SD_Open(uint32_t u32CardDetSrc)
     // enable SD
     SD->GCTL = SDH_GCTL_SDEN_Msk;
 
-    if(u32CardDetSrc & SD_PORT0) {
-        if(u32CardDetSrc & CardDetect_From_DAT3) {
+    if(u32CardDetSrc & SD_PORT0)
+    {
+        if(u32CardDetSrc & CardDetect_From_DAT3)
+        {
             SD->INTEN &= ~SDH_INTEN_CDSRC0_Msk;
-        } else {
+        }
+        else
+        {
             SD->INTEN |= SDH_INTEN_CDSRC0_Msk;
         }
     }
@@ -810,7 +889,8 @@ void SD_Open(uint32_t u32CardDetSrc)
 
     SD->CTL &= ~(0xFF);    // disable SD clock output
 
-    if(u32CardDetSrc & SD_PORT0) {
+    if(u32CardDetSrc & SD_PORT0)
+    {
         memset(&SD0, 0, sizeof(SD_INFO_T));
     }
 }
@@ -841,7 +921,8 @@ void SD_Close(uint32_t u32CardNum)
     // disable SD
     SD->GCTL &= (~SDH_GCTL_SDEN_Msk);
 
-    if(u32CardNum == SD_PORT0) {
+    if(u32CardNum == SD_PORT0)
+    {
         memset(&SD0, 0, sizeof(SD_INFO_T));
     }
 }
@@ -871,7 +952,8 @@ void SD_Probe(uint32_t u32CardNum)
     if(!(SD_CardDetection(u32CardNum)))
         return;
 
-    if (u32CardNum == SD_PORT0) {
+    if (u32CardNum == SD_PORT0)
+    {
         if (SD_Init(&SD0) < 0)
             return;
 
@@ -942,17 +1024,20 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
     SD->DMASA = (uint32_t)pu8BufAddr;
 
     loop = u32SecCount / 255;
-    for (i=0; i<loop; i++) {
+    for (i=0; i<loop; i++)
+    {
 #ifdef _SD_USE_INT_
         _sd_SDDataReady = FALSE;
 #endif  //_SD_USE_INT_
 
         reg = SD->CTL & ~SDH_CTL_CMDCODE_Msk;
         reg = reg | 0xff0000;   // set BLK_CNT to 255
-        if (bIsSendCmd == FALSE) {
+        if (bIsSendCmd == FALSE)
+        {
             SD->CTL = reg|(18<<SDH_CTL_CMDCODE_Pos)|(SDH_CTL_COEN_Msk | SDH_CTL_RIEN_Msk | SDH_CTL_DIEN_Msk);
             bIsSendCmd = TRUE;
-        } else
+        }
+        else
             SD->CTL = reg | SDH_CTL_DIEN_Msk;
 
 #ifdef _SD_USE_INT_
@@ -964,7 +1049,8 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
             if(_sd_SDDataReady) break;
 
 #ifndef _SD_USE_INT_
-            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DIEN_Msk))) {
+            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DIEN_Msk)))
+            {
                 SD->INTSTS = SDH_INTSTS_BLKDIF_Msk;
                 break;
             }
@@ -973,19 +1059,22 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
                 return SD_NO_SD_CARD;
         }
 
-        if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk)) {    // check CRC7
+        if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk))      // check CRC7
+        {
             printf("ERROR: SD_Read(): CRC-7 error for response !\n");
             return SD_CRC7_ERROR;
         }
 
-        if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk)) {   // check CRC16
+        if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk))     // check CRC16
+        {
             printf("ERROR: SD_Read(): CRC-16 error for read data !\n");
             return SD_CRC16_ERROR;
         }
     }
 
     loop = u32SecCount % 255;
-    if (loop != 0) {
+    if (loop != 0)
+    {
 #ifdef _SD_USE_INT_
         _sd_SDDataReady = FALSE;
 #endif  //_SD_USE_INT_
@@ -994,10 +1083,12 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
         reg = reg & (~SDH_CTL_BLKCNT_Msk);
         reg |= (loop << SDH_CTL_BLKCNT_Pos);    // setup SDH_CTL_BLKCNT
 
-        if (bIsSendCmd == FALSE) {
+        if (bIsSendCmd == FALSE)
+        {
             SD->CTL = reg|(18<<SDH_CTL_CMDCODE_Pos)|(SDH_CTL_COEN_Msk | SDH_CTL_RIEN_Msk | SDH_CTL_DIEN_Msk);
             bIsSendCmd = TRUE;
-        } else
+        }
+        else
             SD->CTL = reg | SDH_CTL_DIEN_Msk;
 
 #ifdef _SD_USE_INT_
@@ -1008,7 +1099,8 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
         {
 
 #ifndef _SD_USE_INT_
-            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DIEN_Msk))) {
+            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DIEN_Msk)))
+            {
                 SD->INTSTS = SDH_INTSTS_BLKDIF_Msk;
                 break;
             }
@@ -1018,18 +1110,21 @@ uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec,
                 return SD_NO_SD_CARD;
         }
 
-        if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk)) {    // check CRC7
+        if (!(SD->INTSTS & SDH_INTSTS_CRC7_Msk))      // check CRC7
+        {
             printf("ERROR: SD_Read(): CRC-7 error for response !\n");
             return SD_CRC7_ERROR;
         }
 
-        if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk)) {   // check CRC16
+        if (!(SD->INTSTS & SDH_INTSTS_CRC16_Msk))     // check CRC16
+        {
             printf("ERROR: SD_Read(): CRC-16 error for read data !\n");
             return SD_CRC16_ERROR;
         }
     }
 
-    if (SD_SDCmdAndRsp(pSD, 12, 0, 0)) {    // stop command
+    if (SD_SDCmdAndRsp(pSD, 12, 0, 0))      // stop command
+    {
         printf("ERROR: SD_Read(): STOP command fail !\n");
         return SD_CRC7_ERROR;
     }
@@ -1098,17 +1193,20 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
     // NUC505 DMA only can access SRAM that address range between 0x2000-0000 ~ 0x2001-FFFF
     SD->DMASA = (uint32_t)pu8BufAddr;
     loop = u32SecCount / 255;   // the maximum block count is 0xFF=255 for register SDH_CTL_BLKCNT
-    for (i=0; i<loop; i++) {
+    for (i=0; i<loop; i++)
+    {
 #ifdef _SD_USE_INT_
         _sd_SDDataReady = FALSE;
 #endif  //_SD_USE_INT_
 
         reg = SD->CTL & 0xff00c080;
         reg = reg | 0xff0000;   // set BLK_CNT to 0xFF=255
-        if (!bIsSendCmd) {
+        if (!bIsSendCmd)
+        {
             SD->CTL = reg|(25<<SDH_CTL_CMDCODE_Pos)|(SDH_CTL_COEN_Msk | SDH_CTL_RIEN_Msk | SDH_CTL_DOEN_Msk);
             bIsSendCmd = TRUE;
-        } else
+        }
+        else
             SD->CTL = reg | SDH_CTL_DOEN_Msk;
 
 #ifdef _SD_USE_INT_
@@ -1118,7 +1216,8 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
 #endif  //_SD_USE_INT_
         {
 #ifndef _SD_USE_INT_
-            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DOEN_Msk))) {
+            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DOEN_Msk)))
+            {
                 SD->INTSTS = SDH_INTSTS_BLKDIF_Msk;
                 break;
             }
@@ -1127,7 +1226,8 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
                 return SD_NO_SD_CARD;
         }
 
-        if ((SD->INTSTS & SDH_INTSTS_CRCIF_Msk) != 0) {   // check CRC
+        if ((SD->INTSTS & SDH_INTSTS_CRCIF_Msk) != 0)     // check CRC
+        {
             SD->INTSTS = SDH_INTSTS_CRCIF_Msk;
             printf("ERROR: SD_Write(): CRC error for write data !\n");
             return SD_CRC_ERROR;
@@ -1135,16 +1235,19 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
     }
 
     loop = u32SecCount % 255;
-    if (loop != 0) {
+    if (loop != 0)
+    {
 #ifdef _SD_USE_INT_
         _sd_SDDataReady = FALSE;
 #endif  //_SD_USE_INT_
 
         reg = (SD->CTL & 0xff00c080) | (loop << SDH_CTL_BLKCNT_Pos);
-        if (!bIsSendCmd) {
+        if (!bIsSendCmd)
+        {
             SD->CTL = reg|(25<<SDH_CTL_CMDCODE_Pos)|(SDH_CTL_COEN_Msk | SDH_CTL_RIEN_Msk | SDH_CTL_DOEN_Msk);
             bIsSendCmd = TRUE;
-        } else
+        }
+        else
             SD->CTL = reg | SDH_CTL_DOEN_Msk;
 
 #ifdef _SD_USE_INT_
@@ -1154,7 +1257,8 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
 #endif  //_SD_USE_INT_
         {
 #ifndef _SD_USE_INT_
-            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DOEN_Msk))) {
+            if ((SD->INTSTS & SDH_INTSTS_BLKDIF_Msk) && (!(SD->CTL & SDH_CTL_DOEN_Msk)))
+            {
                 SD->INTSTS = SDH_INTSTS_BLKDIF_Msk;
                 break;
             }
@@ -1163,7 +1267,8 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
                 return SD_NO_SD_CARD;
         }
 
-        if ((SD->INTSTS & SDH_INTSTS_CRCIF_Msk) != 0) {   // check CRC
+        if ((SD->INTSTS & SDH_INTSTS_CRCIF_Msk) != 0)     // check CRC
+        {
             SD->INTSTS = SDH_INTSTS_CRCIF_Msk;
             printf("ERROR: SD_Write(): CRC error for write data !\n");
             return SD_CRC_ERROR;
@@ -1171,7 +1276,8 @@ uint32_t SD_Write(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec
     }
     SD->INTSTS = SDH_INTSTS_CRCIF_Msk;
 
-    if (SD_SDCmdAndRsp(pSD, 12, 0, 0)) {    // stop command
+    if (SD_SDCmdAndRsp(pSD, 12, 0, 0))      // stop command
+    {
         printf("ERROR: SD_Write(): STOP command fail !\n");
         return SD_CRC7_ERROR;
     }

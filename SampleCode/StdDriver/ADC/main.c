@@ -5,8 +5,8 @@
  * $Date: 14/07/24 4:08p $
  * @brief    NUC505 Series Global Control and Clock Control Driver Sample Code
  *
- * 1.	Demonstrate ADC conversion from channel 0.
- * 2.	Demonstrate analog keypad detection from channel 2
+ * 1.   Demonstrate ADC conversion from channel 0.
+ * 2.   Demonstrate analog keypad detection from channel 2
  *
  * @note
  * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
@@ -55,11 +55,11 @@ void SYS_Init(void)
     CLK->CLKDIV3 &= ~(CLK_CLKDIV3_UART1DIV_Msk | CLK_CLKDIV3_UART1SEL_Msk);
 
     /* Set PCLK Divider */
-    CLK_SetModuleClock(PCLK_MODULE, 0, 1);		/* PCLK divider = 1 */
+    CLK_SetModuleClock(PCLK_MODULE, 0, 1);      /* PCLK divider = 1 */
 
-#if 0	/* if running code in SRAM, the system clock can up to 100MHz */
+#if 0   /* if running code in SRAM, the system clock can up to 100MHz */
     CLK_SetCoreClock(96000000);
-#else	/* if running code in SPIM, programmer needs to take care of SPIM clock. Please reference the SPIM_SPIROM example code */
+#else   /* if running code in SPIM, programmer needs to take care of SPIM clock. Please reference the SPIM_SPIROM example code */
     CLK_SetCoreClock(48000000);
 #endif
     /* Update System Core Clock */
@@ -91,7 +91,7 @@ void ADC_Init(void)
     /* Enable ADC Module clock */
     CLK_EnableModuleClock(ADC_MODULE);
     /* ADC module clock from EXT */
-    CLK_SetModuleClock(ADC_MODULE, CLK_ADC_SRC_EXT, 4);		/* ADC clock = 12M/(4+1). Conversion rate = ADC clock/16 */
+    CLK_SetModuleClock(ADC_MODULE, CLK_ADC_SRC_EXT, 4);     /* ADC clock = 12M/(4+1). Conversion rate = ADC clock/16 */
     /* Reset IP */
     SYS_ResetModule(ADC_RST);
     /* Configure UART0 and set UART0 Baudrate */
@@ -109,8 +109,8 @@ void ADC_Init(void)
     SYS->GPA_MFPL  = (SYS->GPA_MFPL & (~SYS_GPA_MFPL_PA1MFP_Msk) ) | SYS_GPA_MFPL_PA1MFP_ADC_CH1;
 }
 
-uint16_t u16ScanCodeTbl[]= {1522/*SW1*/, 1741/*SW2*/, 2442/*SW3*/, 2820/*SW4*/, 3056/*SW5*/, 3220/*SW6*/,		/* Single key*/
-                            1012/*SW1+SW2*/, 1216/*SW1+SW3*/, 1303/*SW1+SW4*/, 1352/*SW1+SW5*/, 1385/*SW1+SW5*/	/* Compound key*/
+uint16_t u16ScanCodeTbl[]= {1522/*SW1*/, 1741/*SW2*/, 2442/*SW3*/, 2820/*SW4*/, 3056/*SW5*/, 3220/*SW6*/,       /* Single key*/
+                            1012/*SW1+SW2*/, 1216/*SW1+SW3*/, 1303/*SW1+SW4*/, 1352/*SW1+SW5*/, 1385/*SW1+SW5*/ /* Compound key*/
                            };
 uint16_t u16MapTbl[] = {1, (1<<1), (1<<2), (1<<3), (1<<4), (1<<5),
                         (1|(1<<1)), (1|(1<<2)), (1|(1<<3)), (1|(1<<4)), (1|(1<<5))
@@ -121,12 +121,12 @@ uint16_t keymap(uint16_t u16ScanCode)
     uint16_t u16Max, u16Min;
     uint16_t i;
     if(u16ScanCode<(u16ScanCodeTbl[0]-50))
-        u16Max=u16ScanCode+16, u16Min=u16ScanCode-16;	/* compound key */
+        u16Max=u16ScanCode+16, u16Min=u16ScanCode-16;   /* compound key */
     else
-        u16Max=u16ScanCode+30, u16Min=u16ScanCode-30;	/* single key */
+        u16Max=u16ScanCode+30, u16Min=u16ScanCode-30;   /* single key */
     for(i=0; i<sizeof(u16ScanCodeTbl)/sizeof(u16ScanCodeTbl[0]); i=i+1)
     {
-        if((u16ScanCodeTbl[i]>u16Min) &&	(u16ScanCodeTbl[i]<u16Max))
+        if((u16ScanCodeTbl[i]>u16Min) &&    (u16ScanCodeTbl[i]<u16Max))
             return u16MapTbl[i];
     }
     return 0;

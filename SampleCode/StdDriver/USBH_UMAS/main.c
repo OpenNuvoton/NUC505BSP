@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 13 $
  * $Date: 14/06/11 6:55p $
- * @brief    Use USB Host core driver, USB mass storage driver, and FATFS 
+ * @brief    Use USB Host core driver, USB mass storage driver, and FATFS
  *           file system to show a disk access shell interface
  *
  * @note
@@ -38,7 +38,8 @@ BYTE Buff[1024] __attribute__((aligned(32)));       /* Working buffer */
 
 void Delay(uint32_t delayCnt)
 {
-    while(delayCnt--) {
+    while(delayCnt--)
+    {
         __NOP();
         __NOP();
     }
@@ -73,14 +74,17 @@ int xatoi (         /* 0:Failed, 1:Successful */
     *res = 0;
     while ((c = **str) == ' ') (*str)++;    /* Skip leading spaces */
 
-    if (c == '-') {     /* negative? */
+    if (c == '-')       /* negative? */
+    {
         s = 1;
         c = *(++(*str));
     }
 
-    if (c == '0') {
+    if (c == '0')
+    {
         c = *(++(*str));
-        switch (c) {
+        switch (c)
+        {
         case 'x':       /* hexadecimal */
             r = 16;
             c = *(++(*str));
@@ -94,16 +98,20 @@ int xatoi (         /* 0:Failed, 1:Successful */
             if (c < '0' || c > '9') return 0;   /* invalid char */
             r = 8;      /* octal */
         }
-    } else {
+    }
+    else
+    {
         if (c < '0' || c > '9') return 0;   /* EOL or invalid char */
         r = 10;         /* decimal */
     }
 
     val = 0;
-    while (c > ' ') {
+    while (c > ' ')
+    {
         if (c >= 'a') c -= 0x20;
         c -= '0';
-        if (c >= 17) {
+        if (c >= 17)
+        {
             c -= 7;
             if (c <= 9) return 0;   /* invalid char */
         }
@@ -158,23 +166,28 @@ FRESULT scan_files (
     char *fn;
 
 
-    if ((res = f_opendir(&dirs, path)) == FR_OK) {
+    if ((res = f_opendir(&dirs, path)) == FR_OK)
+    {
         i = strlen(path);
-        while (((res = f_readdir(&dirs, &Finfo)) == FR_OK) && Finfo.fname[0]) {
+        while (((res = f_readdir(&dirs, &Finfo)) == FR_OK) && Finfo.fname[0])
+        {
             if (_FS_RPATH && Finfo.fname[0] == '.') continue;
 #if _USE_LFN
             fn = *Finfo.lfname ? Finfo.lfname : Finfo.fname;
 #else
             fn = Finfo.fname;
 #endif
-            if (Finfo.fattrib & AM_DIR) {
+            if (Finfo.fattrib & AM_DIR)
+            {
                 acc_dirs++;
                 *(path+i) = '/';
                 strcpy(path+i+1, fn);
                 res = scan_files(path);
                 *(path+i) = '\0';
                 if (res != FR_OK) break;
-            } else {
+            }
+            else
+            {
                 /*              printf("%s/%s\n", path, fn); */
                 acc_files++;
                 acc_size += Finfo.fsize;
@@ -196,7 +209,8 @@ void put_rc (FRESULT rc)
         _T("NOT_ENOUGH_CORE\0TOO_MANY_OPEN_FILES\0");
     //FRESULT i;
     uint32_t i;
-    for (i = 0; (i != (UINT)rc) && *p; i++) {
+    for (i = 0; (i != (UINT)rc) && *p; i++)
+    {
         while(*p++) ;
     }
     printf(_T("rc=%u FR_%s\n"), (UINT)rc, p);
@@ -213,7 +227,8 @@ void get_line (char *buff, int len)
 //  DWORD dw;
 
 
-    for (;;) {
+    for (;;)
+    {
         c = getchar();
         putchar(c);
         if (c == '\r') break;
@@ -243,40 +258,42 @@ unsigned long get_fattime (void)
     return tmr;
 }
 
-#define HOST_LIKE_PORT1_0						0x10
-#define HOST_LIKE_PORT1_1						0x20	
-#define HOST_LIKE_PORT2_0						0x00
-#define HOST_LIKE_PORT1_DISABLE			0xFF
-#define HOST_LIKE_PORT2_DISABLE			0xFF
+#define HOST_LIKE_PORT1_0                       0x10
+#define HOST_LIKE_PORT1_1                       0x20
+#define HOST_LIKE_PORT2_0                       0x00
+#define HOST_LIKE_PORT1_DISABLE         0xFF
+#define HOST_LIKE_PORT2_DISABLE         0xFF
 
 void USB_PortInit(uint32_t u32Port1, uint32_t u32Port2)
 {
-		SYS->WAKEUP = SYS->WAKEUP | SYS_WAKEUP_USBHWF_Msk;
-		switch(u32Port1) 
-		{//port 1
-				case HOST_LIKE_PORT1_DISABLE:
-						printf("USB host like port 1 Disable\n");
-						break;
-				case HOST_LIKE_PORT1_0:		
-						SYS->GPB_MFPH = (SYS->GPB_MFPH & ~(SYS_GPB_MFPH_PB12MFP_Msk|SYS_GPB_MFPH_PB13MFP_Msk)) | (0x2 << SYS_GPB_MFPH_PB12MFP_Pos) | (0x2 << SYS_GPB_MFPH_PB13MFP_Pos);														
-						printf("USB host like port 1 from GPB12 & GPB13\n");
-						break;				
-				case HOST_LIKE_PORT1_1:								
-						SYS->GPB_MFPH = (SYS->GPB_MFPH & ~(SYS_GPB_MFPH_PB14MFP_Msk|SYS_GPB_MFPH_PB15MFP_Msk)) | (0x1 << SYS_GPB_MFPH_PB14MFP_Pos) | (0x1 << SYS_GPB_MFPH_PB15MFP_Pos);																
-						printf("USB host like port 1 from GPB14 & GPB15\n");
-						break;	
-		}	
-		switch(u32Port2)	
-		{//port 2						
-				case HOST_LIKE_PORT2_DISABLE:
-						printf("USB host like port 2 Disable\n");
-						break;		
-				case HOST_LIKE_PORT2_0:			
-						SYS->GPC_MFPH = (SYS->GPC_MFPH & ~(SYS_GPC_MFPH_PC13MFP_Msk|SYS_GPC_MFPH_PC14MFP_Msk)) | (0x1 << SYS_GPC_MFPH_PC13MFP_Pos) | (0x1 << SYS_GPC_MFPH_PC14MFP_Pos);				
-						printf("USB host like port 2 from GPC13 & GPC14\n");
-						break;
-		}		
-		USBH->HcMiscControl = (USBH->HcMiscControl & ~(USBH_HcMiscControl_DPRT1_Msk | USBH_HcMiscControl_DPRT2_Msk)) | ((u32Port1 & 0x01) << USBH_HcMiscControl_DPRT1_Pos) | ((u32Port2 & 0x01) << USBH_HcMiscControl_DPRT2_Pos);
+    SYS->WAKEUP = SYS->WAKEUP | SYS_WAKEUP_USBHWF_Msk;
+    switch(u32Port1)
+    {
+    //port 1
+    case HOST_LIKE_PORT1_DISABLE:
+        printf("USB host like port 1 Disable\n");
+        break;
+    case HOST_LIKE_PORT1_0:
+        SYS->GPB_MFPH = (SYS->GPB_MFPH & ~(SYS_GPB_MFPH_PB12MFP_Msk|SYS_GPB_MFPH_PB13MFP_Msk)) | (0x2 << SYS_GPB_MFPH_PB12MFP_Pos) | (0x2 << SYS_GPB_MFPH_PB13MFP_Pos);
+        printf("USB host like port 1 from GPB12 & GPB13\n");
+        break;
+    case HOST_LIKE_PORT1_1:
+        SYS->GPB_MFPH = (SYS->GPB_MFPH & ~(SYS_GPB_MFPH_PB14MFP_Msk|SYS_GPB_MFPH_PB15MFP_Msk)) | (0x1 << SYS_GPB_MFPH_PB14MFP_Pos) | (0x1 << SYS_GPB_MFPH_PB15MFP_Pos);
+        printf("USB host like port 1 from GPB14 & GPB15\n");
+        break;
+    }
+    switch(u32Port2)
+    {
+    //port 2
+    case HOST_LIKE_PORT2_DISABLE:
+        printf("USB host like port 2 Disable\n");
+        break;
+    case HOST_LIKE_PORT2_0:
+        SYS->GPC_MFPH = (SYS->GPC_MFPH & ~(SYS_GPC_MFPH_PC13MFP_Msk|SYS_GPC_MFPH_PC14MFP_Msk)) | (0x1 << SYS_GPC_MFPH_PC13MFP_Pos) | (0x1 << SYS_GPC_MFPH_PC14MFP_Pos);
+        printf("USB host like port 2 from GPC13 & GPC14\n");
+        break;
+    }
+    USBH->HcMiscControl = (USBH->HcMiscControl & ~(USBH_HcMiscControl_DPRT1_Msk | USBH_HcMiscControl_DPRT2_Msk)) | ((u32Port1 & 0x01) << USBH_HcMiscControl_DPRT1_Pos) | ((u32Port2 & 0x01) << USBH_HcMiscControl_DPRT2_Pos);
 
 }
 
@@ -379,19 +396,20 @@ int32_t main(void)
         scanf("%c",&Item);
         switch(Item)
         {
-            case 'A':
-            case 'a': 
-                u32UsbhPort1 = HOST_LIKE_PORT1_0;	
-                goto next;
-            case 'B':
-            case 'b': 
-                u32UsbhPort1 = HOST_LIKE_PORT1_1;	
-                goto next;
-            case 'C': 
-            case 'c': 
-                goto next;
+        case 'A':
+        case 'a':
+            u32UsbhPort1 = HOST_LIKE_PORT1_0;
+            goto next;
+        case 'B':
+        case 'b':
+            u32UsbhPort1 = HOST_LIKE_PORT1_1;
+            goto next;
+        case 'C':
+        case 'c':
+            goto next;
         }
-    }while(1);
+    }
+    while(1);
 next:
     do
     {
@@ -403,16 +421,17 @@ next:
         scanf("%c",&Item);
         switch(Item)
         {
-            case 'A':
-            case 'a':
-                USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_0);
-                goto start;
-            case 'B':
-            case 'b':   
-                USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_DISABLE);
-                goto start;
+        case 'A':
+        case 'a':
+            USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_0);
+            goto start;
+        case 'B':
+        case 'b':
+            USB_PortInit(u32UsbhPort1, HOST_LIKE_PORT2_DISABLE);
+            goto start;
         }
-    }while(1);
+    }
+    while(1);
 
 start:
 
@@ -429,7 +448,8 @@ start:
     //Register work area to the default drive
     f_mount(&FatFs[0], "", 0);  // for FATFS v0.11
 
-    for (;;) {
+    for (;;)
+    {
         if (USBH_ProcessHubEvents())
         {
             //put_rc(f_mount(0, &FatFs[0]));  // for FATFS v0.09
@@ -439,7 +459,8 @@ start:
         printf(_T(">"));
         ptr = Line;
         get_line(ptr, sizeof(Line));
-        switch (*ptr++) {
+        switch (*ptr++)
+        {
 
         case 'q' :  /* Exit program */
             return 0;
@@ -466,11 +487,13 @@ start:
             break;
 
         case 'd' :
-            switch (*ptr++) {
+            switch (*ptr++)
+            {
             case 'd' :  /* dd [<lba>] - Dump sector */
                 if (!xatoi(&ptr, &p2)) p2 = sect;
                 res = (FRESULT)disk_read(0, Buff, p2, 1);
-                if (res) {
+                if (res)
+                {
                     printf("rc=%d\n", (WORD)res);
                     break;
                 }
@@ -489,7 +512,8 @@ start:
             break;
 
         case 'b' :
-            switch (*ptr++) {
+            switch (*ptr++)
+            {
             case 'd' :  /* bd <addr> - Dump R/W buffer */
                 if (!xatoi(&ptr, &p1)) break;
                 for (ptr=(char*)&Buff[p1], ofs = p1, cnt = 32; cnt; cnt--, ptr+=16, ofs+=16)
@@ -498,18 +522,23 @@ start:
 
             case 'e' :  /* be <addr> [<data>] ... - Edit R/W buffer */
                 if (!xatoi(&ptr, &p1)) break;
-                if (xatoi(&ptr, &p2)) {
-                    do {
+                if (xatoi(&ptr, &p2))
+                {
+                    do
+                    {
                         Buff[p1++] = (BYTE)p2;
-                    } while (xatoi(&ptr, &p2));
+                    }
+                    while (xatoi(&ptr, &p2));
                     break;
                 }
-                for (;;) {
+                for (;;)
+                {
                     printf("%04X %02X-", (WORD)p1, Buff[p1]);
                     get_line(Line, sizeof(Line));
                     ptr = Line;
                     if (*ptr == '.') break;
-                    if (*ptr < ' ') {
+                    if (*ptr < ' ')
+                    {
                         p1++;
                         continue;
                     }
@@ -543,7 +572,8 @@ start:
 
 
         case 'f' :
-            switch (*ptr++) {
+            switch (*ptr++)
+            {
             case 'i' :  /* fi - Force initialized the logical drive */
                 //put_rc(f_mount(0, &FatFs[0]));  // for FATFS v0.09
                 put_rc(f_mount(&FatFs[0], "", 0));  // for FATFS v0.11
@@ -551,7 +581,8 @@ start:
 
             case 's' :  /* fs - Show logical drive status */
                 res = f_getfree("", (DWORD*)&p2, &fs);
-                if (res) {
+                if (res)
+                {
                     put_rc(res);
                     break;
                 }
@@ -568,7 +599,8 @@ start:
                 Finfo.lfsize = sizeof(Lfname);
 #endif
                 res = scan_files(ptr);
-                if (res) {
+                if (res)
+                {
                     put_rc(res);
                     break;
                 }
@@ -581,17 +613,22 @@ start:
             case 'l' :  /* fl [<path>] - Directory listing */
                 while (*ptr == ' ') ptr++;
                 res = f_opendir(&dir, ptr);
-                if (res) {
+                if (res)
+                {
                     put_rc(res);
                     break;
                 }
                 p1 = s1 = s2 = 0;
-                for(;;) {
+                for(;;)
+                {
                     res = f_readdir(&dir, &Finfo);
                     if ((res != FR_OK) || !Finfo.fname[0]) break;
-                    if (Finfo.fattrib & AM_DIR) {
+                    if (Finfo.fattrib & AM_DIR)
+                    {
                         s2++;
-                    } else {
+                    }
+                    else
+                    {
                         s1++;
                         p1 += Finfo.fsize;
                     }
@@ -638,16 +675,21 @@ start:
             case 'd' :  /* fd <len> - read and dump file from current fp */
                 if (!xatoi(&ptr, &p1)) break;
                 ofs = file1.fptr;
-                while (p1) {
-                    if ((UINT)p1 >= 16) {
+                while (p1)
+                {
+                    if ((UINT)p1 >= 16)
+                    {
                         cnt = 16;
                         p1 -= 16;
-                    } else                {
+                    }
+                    else
+                    {
                         cnt = p1;
                         p1 = 0;
                     }
                     res = f_read(&file1, Buff, cnt, &cnt);
-                    if (res != FR_OK) {
+                    if (res != FR_OK)
+                    {
                         put_rc(res);
                         break;
                     }
@@ -661,16 +703,21 @@ start:
                 if (!xatoi(&ptr, &p1)) break;
                 p2 = 0;
                 Timer = 0;
-                while (p1) {
-                    if ((UINT)p1 >= blen) {
+                while (p1)
+                {
+                    if ((UINT)p1 >= blen)
+                    {
                         cnt = blen;
                         p1 -= blen;
-                    } else {
+                    }
+                    else
+                    {
                         cnt = p1;
                         p1 = 0;
                     }
                     res = f_read(&file1, Buff, cnt, &s2);
-                    if (res != FR_OK) {
+                    if (res != FR_OK)
+                    {
                         put_rc(res);
                         break;
                     }
@@ -685,16 +732,21 @@ start:
                 memset(Buff, (BYTE)p2, blen);
                 p2 = 0;
                 Timer = 0;
-                while (p1) {
-                    if ((UINT)p1 >= blen) {
+                while (p1)
+                {
+                    if ((UINT)p1 >= blen)
+                    {
                         cnt = blen;
                         p1 -= blen;
-                    } else {
+                    }
+                    else
+                    {
                         cnt = p1;
                         p1 = 0;
                     }
                     res = f_write(&file1, Buff, cnt, &s2);
-                    if (res != FR_OK) {
+                    if (res != FR_OK)
+                    {
                         put_rc(res);
                         break;
                     }
@@ -750,21 +802,24 @@ start:
                 printf("Opening \"%s\"", ptr);
                 res = f_open(&file1, ptr, FA_OPEN_EXISTING | FA_READ);
                 putchar('\n');
-                if (res) {
+                if (res)
+                {
                     put_rc(res);
                     break;
                 }
                 printf("Creating \"%s\"", ptr2);
                 res = f_open(&file2, ptr2, FA_CREATE_ALWAYS | FA_WRITE);
                 putchar('\n');
-                if (res) {
+                if (res)
+                {
                     put_rc(res);
                     f_close(&file1);
                     break;
                 }
                 printf("Copying...");
                 p1 = 0;
-                for (;;) {
+                for (;;)
+                {
                     res = f_read(&file1, Buff, sizeof(Buff), &s1);
                     if (res || s1 == 0) break;   /* error or eof */
                     res = f_write(&file2, Buff, s1, &s2);
@@ -782,7 +837,8 @@ start:
                 break;
 
             case 'j' :  /* fj <drive#> - Change current drive */
-                if (xatoi(&ptr, &p1)) {
+                if (xatoi(&ptr, &p1))
+                {
                     put_rc(f_chdrive((BYTE)p1));
                 }
                 break;

@@ -43,23 +43,23 @@ typedef struct S_AUDIO_LIB
 {
     uint32_t m_u32I2sSampleRate;    //I2S outputs clocks by sampling rate
     uint32_t m_u32I2sBitRate;       //I2S outputs clocks by bits resolution
-    
+
     uint32_t m_u32I2sApllUp;        //I2S output clcoks speed control, increase APLL
     uint32_t m_u32I2sApll;          //Default I2S engine clock comes from APLL
     uint32_t m_u32I2sApllDn;        //I2S output clocks speed control, decrease APLL
     uint32_t m_u32I2sRefApll;       //Reference APLL for speed control
-    
+
     uint16_t m_u16I2sMclkFactor;    //I2S MCLK divider
     uint8_t  m_u8I2sBclkFactor;     //I2S BCLK divider
     uint8_t  m_u8I2sShiftFlag;      //1=divide 2; 2=divide 4 for bits resolution to bytes unit
-    
+
     //#if CONFIG_AUDIO_REC
     uint16_t m_u16I2sSmplCntRecTooFastStop; //Threshold to stop recording
     uint16_t m_u16I2sSmplCntRecTooFast;     //Threshold to decrease APLL
     uint16_t m_u16I2sSmplCntRecStart;       //Threshold to start recording
     uint16_t m_u16I2sSmplCntRecTooSlow;     //Threshold to increase APLL
     uint16_t m_u16I2sSmplCntRecTooSlowStop; //Threshold to stop recording
-    
+
     uint16_t m_u16RecSmplCnt1;      //Sample count per 1-millisecond
     uint16_t m_u16RecSmplCnt2;      //Sample count per 1-millisecond for 44.1k series
     uint16_t m_u16RecSmplCnt1_;     //Reference sample count per 1-millisecond UAC 1.0 or per 125-microsecond UAC 2.0
@@ -72,7 +72,7 @@ typedef struct S_AUDIO_LIB
     uint16_t m_u16RecMaxPayload2_;  //Reference max packet size per 1-millisecond UAC 2.0 or per 125-microsecond UAC 2.0 for 44.1k series
     uint8_t  m_u8RecSmplSize;       //Bit resolution in byte size
     uint8_t  m_au8RecReserve1[1];
-    
+
     uint32_t m_u32RecSampleRate;    //Sampling rate for recording
     uint8_t  m_u8RecBitRate;        //Bit resolution for recording
     uint8_t  m_u8RecChannels;       //Channel count for recording
@@ -100,7 +100,7 @@ typedef struct S_AUDIO_LIB
     uint8_t* m_pu8RecPacketSequence;    //algorithm for sending packet
     uint16_t m_u16RecPacketSequenceIdx; //Reference index
     uint16_t m_u16RecPacketSequenceCnt; //Reference packet byte size
-    
+
     //#if CONFIG_AUDIO_PLAY
     uint32_t m_u32RecLPcmWorkBufIdx;    //Reference index, left channel
     uint32_t m_u32RecRPcmWorkBufIdx;    //Reference index, right channel
@@ -113,7 +113,7 @@ typedef struct S_AUDIO_LIB
     int32_t  m_i32RecPcmWorkResSmplCnt; //Tuning interpolation factor by hard-coded threshold
     //uint32_t m_u32RecResAdjustSpeedEnable;
     //#endif  // CONFIG_AUDIO_PLAY
-    
+
     void     (*m_pfnRecSpeed)(struct S_AUDIO_LIB* psAudioLib);  //Speed control
     void     (*m_pfnRecStop)(struct S_AUDIO_LIB* psAudioLib);   //Stop recording
     void     (*m_pfnRecMode1)(struct S_AUDIO_LIB* psAudioLib);  //Send packet to host
@@ -121,14 +121,14 @@ typedef struct S_AUDIO_LIB
     void     (*m_pfnRecConfigMaxPayload10)(struct S_AUDIO_LIB* psAudioLib); //Calculate UAC 1.0 max packet size
     void     (*m_pfnRecConfigMaxPayload20)(struct S_AUDIO_LIB* psAudioLib); //Calculate UAC 2.0 max packet size
     //#endif  // CONFIG_AUDIO_REC
-    
+
     //#if CONFIG_AUDIO_PLAY
     uint16_t m_u16I2sSmplCntPlayTooFastStop;    //Threshold to stop playing
     uint16_t m_u16I2sSmplCntPlayTooFast;        //Threshold to decrease APLL
     uint16_t m_u16I2sSmplCntPlayStart;          //Threshold to start playing
     uint16_t m_u16I2sSmplCntPlayTooSlow;        //Threshold to increase APLL
     uint16_t m_u16I2sSmplCntPlayTooSlowStop;    //Threshold to stop playing
-    
+
     uint16_t m_u16PlaySmplCnt1;     //Sample count per 1-millisecond
     uint16_t m_u16PlaySmplCnt2;     //Sample count per 1-millisecond for 44.1k series
     uint16_t m_u16PlaySmplCnt1_;    //Reference sample count per 1-millisecond UAC 1.0 or per 125-microsecond UAC 2.0
@@ -141,11 +141,11 @@ typedef struct S_AUDIO_LIB
     uint16_t m_u16PlayMaxPayload2_; //Reference max packet size per 1-millisecond UAC 2.0 or per 125-microsecond UAC 2.0 for 44.1k series
     uint8_t  m_u8PlaySmplSize;      //Bit resolution in byte size
     uint8_t  m_au8PlayReserve1[1];
-    
+
     uint32_t m_u32PlaySampleRate;       //Sampling rate for playing
     uint8_t  m_u8PlayBitRate;           //Bit resolution for playing
     uint8_t  m_u8PlayChannels;          //Channel count for playing
-    uint8_t  m_au8PlayReserve3[1];               
+    uint8_t  m_au8PlayReserve3[1];
     uint8_t  m_u8PlayMute;              //Playing volume control: mute=1 or un-mute=0
     int16_t  m_i16PlayVolumeL;          //Playing volume control left channel
     int16_t  m_i16PlayVolumeR;          //Playing volume control right channel
@@ -162,7 +162,7 @@ typedef struct S_AUDIO_LIB
     int32_t  m_i32PlayPcmWorkSmplCnt;   //Reference working ring buffer in sample count unit
     uint8_t* m_pu8PlayPcmTmpBuf;        //Temp buffer
     int32_t  m_i32PlayPcmTmpBufLen;     //Packet length received from host
-    
+
     //#if CONFIG_AUDIO_REC
     uint32_t m_u32PlayLPcmWorkBufIdx;       //Reference index, left channel
     uint32_t m_u32PlayRPcmWorkBufIdx;       //Reference index, right channel
@@ -174,7 +174,7 @@ typedef struct S_AUDIO_LIB
     uint32_t m_u32PlayInterpoFactor2;       //Interpolation factor
     uint32_t m_u32PlayResAdjustSpeedEnable; //Tuning interpolation factor by threshold
     //#endif  // CONFIG_AUDIO_REC
-    
+
     void     (*m_pfnPlaySpeed)(struct S_AUDIO_LIB* psAudioLib); //Speed control
     void     (*m_pfnPlayStop)(struct S_AUDIO_LIB* psAudioLib);  //Stop playing
     void     (*m_pfnPlayMode1)(struct S_AUDIO_LIB* psAudioLib, int32_t i32Len); //Receive packet from host (to temp buffer)

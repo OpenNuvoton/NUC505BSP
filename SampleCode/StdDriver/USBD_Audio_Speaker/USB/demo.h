@@ -1,28 +1,28 @@
 /********************************************************************************************
- UAC mode Setting 
+ UAC mode Setting
 ********************************************************************************************/
 #define __UAC10_ONLY__      /* Sample code is for UAC 1.0 Only */
 // #define __UAC20_ONLY__      /* Sample code is for UAC 2.0 Only */
 // #define __UAC10_20__        /* Sample code is for UAC 2.0 & UAC 1.0 (Try UAC 2.0 First) */
 
 /********************************************************************************************
- UAC 1.0 Setting 
+ UAC 1.0 Setting
 ********************************************************************************************/
-#define __HID__              /* Enable HID for UAC 1.0 */  
+#define __HID__              /* Enable HID for UAC 1.0 */
 
 #ifdef __HID__
-    #define __MEDIAKEY__        /* Select Mediakey for HID */    
-//     #define __KEYBOARD__        /* Select Keyboard for HID */  
+#define __MEDIAKEY__        /* Select Mediakey for HID */
+//     #define __KEYBOARD__        /* Select Keyboard for HID */
 #endif
 /********************************************************************************************
  UAC 2.0 Setting
 ********************************************************************************************/
-#define __HID20__            /* Enable HID for UAC 2.0 */  
+#define __HID20__            /* Enable HID for UAC 2.0 */
 
 #ifdef __HID20__
-    #define __MEDIAKEY20__      /* Select Mediakey for HID */    
-//     #define __KEYBOARD20__      /* Select Keyboard for HID */  
-#endif 
+#define __MEDIAKEY20__      /* Select Mediakey for HID */
+//     #define __KEYBOARD20__      /* Select Keyboard for HID */
+#endif
 
 extern S_USBD_INFO_T gsInfo_10,gsInfo_20;
 
@@ -80,14 +80,14 @@ void HID_UpdateKbData(void);
 /* Define the vendor id and product id */
 #define USBD_VID                0x0420
 #ifdef __HID__
-    #ifdef __KEYBOARD__
-        #define USBD_PID        0x1427
-    #elif defined __MEDIAKEY__  
-        #define USBD_PID        0x1428
-    #endif
+#ifdef __KEYBOARD__
+#define USBD_PID        0x1427
+#elif defined __MEDIAKEY__
+#define USBD_PID        0x1428
+#endif
 #else
-    #define USBD_PID            0x1429
-    #endif  
+#define USBD_PID            0x1429
+#endif
 
 /********************************************************************************************
  UAC 2.0 define
@@ -95,11 +95,11 @@ void HID_UpdateKbData(void);
 /* Define the vendor id and product id */
 #define USBD_VID20                0x042A
 #ifdef __HID20__
-    #ifdef __KEYBOARD20__
-        #define USBD_PID20        0x1431
-    #elif defined __MEDIAKEY20__  
-        #define USBD_PID20        0x1432
-    #endif
+#ifdef __KEYBOARD20__
+#define USBD_PID20        0x1431
+#elif defined __MEDIAKEY20__
+#define USBD_PID20        0x1432
+#endif
 #else
-    #define USBD_PID20            0x1433
-#endif  
+#define USBD_PID20            0x1433
+#endif

@@ -25,10 +25,11 @@
 void EPB_Handler(S_AUDIO_LIB* psAudioLib)
 {
     uint32_t volatile u32timeout = 0x100000;
-    while(1) {
+    while(1)
+    {
         if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
             break;
-        
+
         if((USBD->CEPINTSTS & USBD->CEPINTEN) & USBD_CEPINTSTS_SETUPPKIF_Msk)
             return;
         if (!USBD_IS_ATTACHED())
@@ -41,30 +42,30 @@ void EPB_Handler(S_AUDIO_LIB* psAudioLib)
             printf("DMACTL\t%X\n", USBD->DMACTL);
             printf("DMACNT\t%X\n", USBD->DMACNT);
             u32timeout = 0x100000;
-        }          
+        }
         else
             u32timeout--;
     }
-    
+
     u32timeout = USBD->EP[EPB].EPDATCNT & 0xffff;
-    
+
     psAudioLib->m_pfnPlayMode1( psAudioLib, u32timeout );
-    
+
     if ( psAudioLib->m_i32PlayPcmTmpBufLen == 0 )
     {
         //printf("psAudioLib->m_i32PlayPcmTmpBufLen = %d, USBD->EP[EPB].EPDATCNT = %d for DMA\n", psAudioLib->m_i32PlayPcmTmpBufLen, u32timeout);
         return;
     }
-    
+
     /* USB DMA */
     USBD_SET_DMA_WRITE(ISO_OUT_EP_NUM);
     USBD_ENABLE_BUS_INT(USBD_BUSINTEN_SUSPENDIEN_Msk|USBD_BUSINTEN_RSTIEN_Msk|USBD_BUSINTEN_VBUSDETIEN_Msk);
     USBD_SET_DMA_ADDR((uint32_t)psAudioLib->m_pu8PlayPcmTmpBuf);
     USBD_SET_DMA_LEN(psAudioLib->m_i32PlayPcmTmpBufLen);
-    
+
     if ( psAudioLib->m_i32PlayPcmTmpBufLen > u32timeout )
         printf("Larger than EPB Buffer %d %d\n", psAudioLib->m_i32PlayPcmTmpBufLen, u32timeout);
-    
+
     USBD_ENABLE_DMA();
 }
 
@@ -85,7 +86,7 @@ volatile uint32_t g_hid_count __attribute__((aligned(4))) = 0;
 void HID_UpdateKbData(void)
 {
     /* executed in main loop */
-    
+
     int32_t n;
     int32_t volatile i;
     uint32_t key = 0xF;
@@ -105,14 +106,14 @@ void HID_UpdateKbData(void)
             }
             return;
         }
-        
+
         key = !PC0_PIN | (!PC1_PIN << 1) | (!PC2_PIN << 1) | (!PC3_PIN << 1) | (!PC4_PIN << 1);
-        
+
         if(key == 0)
         {
             for(i = 0; i < n; i++)
                 buf[i] = 0;
-            
+
             if(key != preKey)
             {
                 preKey = key;
@@ -126,7 +127,7 @@ void HID_UpdateKbData(void)
             {
                 if(preKey == key)
                     return;
-                
+
                 preKey = key;
                 buf[0] = 0;
                 buf[1] = 0;
@@ -145,7 +146,7 @@ void HID_UpdateKbData(void)
             {
                 if(preKey == key)
                     return;
-                
+
                 preKey = key;
                 if(!PC0_PIN)
                     buf[2] = 0x04;/* Key A */
@@ -161,14 +162,14 @@ void HID_UpdateKbData(void)
                     buf[2] = 0x09;/* Key F */
             }
         }
-    
+
         NVIC_DisableIRQ(USBD_IRQn);
         /* Set transfer length and trigger IN transfer */
         while (1)
         {
             if (!(USBD->DMACTL & USBD_DMACTL_DMAEN_Msk))
                 break;
-            
+
             if (!USBD_IS_ATTACHED())
                 break;
         }
@@ -186,7 +187,7 @@ void HID_UpdateKbData(void)
             if (!USBD_IS_ATTACHED())
                 break;
         }
-        
+
         if ((USBD->EP[EPC].EPDATCNT & 0xFFFF)>=8)
             USBD->EP[EPC].EPTXCNT = 8;
         g_u8EPCReady = 0;

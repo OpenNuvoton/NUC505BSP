@@ -34,7 +34,8 @@ DSTATUS disk_initialize (
     BYTE pdrv       /* Physical drive number (0..) */
 )
 {
-    switch (pdrv) {
+    switch (pdrv)
+    {
 #ifdef SUPPORT_SD
     case DRV_SD0 :
         SD_Open_(SD_PORT0 | CardDetect_From_GPIO);
@@ -53,7 +54,8 @@ DSTATUS disk_status (
     BYTE pdrv       /* Physical drive number (0..) */
 )
 {
-    switch (pdrv) {
+    switch (pdrv)
+    {
 #ifdef SUPPORT_SD
     case DRV_SD0 :
         return RES_OK;
@@ -89,7 +91,8 @@ DRESULT disk_read (
         shift_buf_flag = 1;
     }
 
-    switch (pdrv) {
+    switch (pdrv)
+    {
 #ifdef SUPPORT_SD
     case DRV_SD0 :
 
@@ -147,7 +150,8 @@ DRESULT disk_write (
         shift_buf_flag = 1;
     }
 
-    switch (pdrv) {
+    switch (pdrv)
+    {
 #ifdef SUPPORT_SD
     case DRV_SD0 :
 
@@ -202,10 +206,12 @@ DRESULT disk_ioctl (
 {
     DRESULT res = RES_OK;
 
-    switch (pdrv) {
+    switch (pdrv)
+    {
 #ifdef SUPPORT_SD
     case DRV_SD0 :
-        switch(cmd) {
+        switch(cmd)
+        {
         case CTRL_SYNC:
             break;
         case GET_SECTOR_COUNT:

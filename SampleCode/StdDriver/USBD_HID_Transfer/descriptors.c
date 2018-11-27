@@ -17,7 +17,7 @@
 /*!<USB HID Report Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t HID_ReportDescriptor[] = 
+uint8_t HID_ReportDescriptor[] =
 #else
 uint8_t HID_ReportDescriptor[] __attribute__((aligned(4))) =
 #endif
@@ -28,12 +28,12 @@ uint8_t HID_ReportDescriptor[] __attribute__((aligned(4))) =
     0x15, 0x00,                                 /* LOGICAL_MINIMUM (0)*/
     0x26, 0xFF, 0x00,                           /* LOGICAL_MAXIMUM (255)*/
     0x75, 0x08,                                 /* REPORT_SIZE (8)*/
-    0x96, 
+    0x96,
     HID_MAX_PACKET_SIZE_INT_IN & 0x00FF,        /* REPORT_COUNT*/
     (HID_MAX_PACKET_SIZE_INT_IN & 0xFF00) >> 8,
     0x09, 0x01,
     0x81, 0x02,                                 /* INPUT (Data,Var,Abs)*/
-    0x96,    
+    0x96,
     HID_MAX_PACKET_SIZE_INT_OUT & 0x00FF,       /* REPORT_COUNT*/
     (HID_MAX_PACKET_SIZE_INT_OUT & 0xFF00) >> 8,
     0x09, 0x01,
@@ -46,7 +46,7 @@ uint8_t HID_ReportDescriptor[] __attribute__((aligned(4))) =
 
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t HID_ReportDescriptorFS[] = 
+uint8_t HID_ReportDescriptorFS[] =
 #else
 uint8_t HID_ReportDescriptorFS[] __attribute__((aligned(4))) =
 #endif
@@ -57,12 +57,12 @@ uint8_t HID_ReportDescriptorFS[] __attribute__((aligned(4))) =
     0x15, 0x00,                                    /* LOGICAL_MINIMUM (0)*/
     0x26, 0xFF, 0x00,                              /* LOGICAL_MAXIMUM (255)*/
     0x75, 0x08,                                    /* REPORT_SIZE (8)*/
-    0x96, 
+    0x96,
     HID_MAX_PACKET_SIZE_INT_IN_FS & 0x00FF,        /* REPORT_COUNT*/
     (HID_MAX_PACKET_SIZE_INT_IN_FS & 0xFF00) >> 8,
     0x09, 0x01,
     0x81, 0x02,                                    /* INPUT (Data,Var,Abs)*/
-    0x96,    
+    0x96,
     HID_MAX_PACKET_SIZE_INT_OUT_FS & 0x00FF,       /* REPORT_COUNT*/
     (HID_MAX_PACKET_SIZE_INT_OUT_FS & 0xFF00) >> 8,
     0x09, 0x01,
@@ -77,7 +77,7 @@ uint8_t HID_ReportDescriptorFS[] __attribute__((aligned(4))) =
 /*!<USB Device Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8DeviceDescriptor[] = 
+uint8_t gu8DeviceDescriptor[] =
 #else
 uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) =
 #endif
@@ -90,9 +90,9 @@ uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) =
     0x00,                      /* bDeviceProtocol */
     HID_MAX_PACKET_SIZE_CTRL,  /* bMaxPacketSize0 */
     USBD_VID & 0x00FF,         /* Vendor ID */
-    (USBD_VID & 0xFF00) >> 8, 
+    (USBD_VID & 0xFF00) >> 8,
     USBD_PID & 0x00FF,         /* Product ID */
-    (USBD_PID & 0xFF00) >> 8, 
+    (USBD_PID & 0xFF00) >> 8,
     0x00, 0x00,                /* bcdDevice */
     0x01,                      /* iManufacture */
     0x02,                      /* iProduct */
@@ -103,7 +103,7 @@ uint8_t gu8DeviceDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Qualifier Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8QualifierDescriptor[] = 
+uint8_t gu8QualifierDescriptor[] =
 #else
 uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) =
 #endif
@@ -122,9 +122,9 @@ uint8_t gu8QualifierDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ConfigDescriptor[] = 
+uint8_t gu8ConfigDescriptor[] =
 #else
-uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) = 
+uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
 #endif
 {
     LEN_CONFIG,          /* bLength */
@@ -156,13 +156,13 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
     DESC_HID_RPT,   /* bDescriptorType */
     sizeof(HID_ReportDescriptor) & 0x00FF,          /* wDescriptorLen */
     (sizeof(HID_ReportDescriptor) & 0xFF00) >> 8,
-    
+
     LEN_ENDPOINT,                                   /* bLength */
     DESC_ENDPOINT,                                  /* bDescriptorType */
     HID_IN_EP_NUM | EP_INPUT,                       /* bEndpointAddress */
     EP_INT,                                         /* bmAttributes */
     HID_MAX_PACKET_SIZE_INT_IN & 0x00FF,            /* wMaxPacketSize */
-    (HID_MAX_PACKET_SIZE_INT_IN & 0xFF00) >> 8,         
+    (HID_MAX_PACKET_SIZE_INT_IN & 0xFF00) >> 8,
     HID_DEFAULT_INT_IN_INTERVAL,                    /* bInterval */
 
     LEN_ENDPOINT,                                   /* bLength */
@@ -178,7 +178,7 @@ uint8_t gu8ConfigDescriptor[] __attribute__((aligned(4))) =
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8OtherConfigDescriptorHS[] = 
+uint8_t gu8OtherConfigDescriptorHS[] =
 #else
 uint8_t gu8OtherConfigDescriptorHS[] __attribute__((aligned(4))) =
 #endif
@@ -212,13 +212,13 @@ uint8_t gu8OtherConfigDescriptorHS[] __attribute__((aligned(4))) =
     DESC_HID_RPT,   /* bDescriptorType */
     sizeof(HID_ReportDescriptor) & 0x00FF,          /* wDescriptorLen */
     (sizeof(HID_ReportDescriptor) & 0xFF00) >> 8,
-    
+
     LEN_ENDPOINT,                                   /* bLength */
     DESC_ENDPOINT,                                  /* bDescriptorType */
     HID_IN_EP_NUM | EP_INPUT,                       /* bEndpointAddress */
     EP_INT,                                         /* bmAttributes */
     HID_MAX_PACKET_SIZE_INT_IN_FS & 0x00FF,         /* wMaxPacketSize */
-    (HID_MAX_PACKET_SIZE_INT_IN_FS & 0xFF00) >> 8,         
+    (HID_MAX_PACKET_SIZE_INT_IN_FS & 0xFF00) >> 8,
     HID_DEFAULT_INT_IN_INTERVAL,                    /* bInterval */
 
     LEN_ENDPOINT,                                   /* bLength */
@@ -268,13 +268,13 @@ uint8_t gu8ConfigDescriptorFS[]  __attribute__((aligned(4))) =
     DESC_HID_RPT,   /* bDescriptorType */
     sizeof(HID_ReportDescriptor) & 0x00FF,          /* wDescriptorLen */
     (sizeof(HID_ReportDescriptor) & 0xFF00) >> 8,
-    
+
     LEN_ENDPOINT,                                   /* bLength */
     DESC_ENDPOINT,                                  /* bDescriptorType */
     HID_IN_EP_NUM | EP_INPUT,                       /* bEndpointAddress */
     EP_INT,                                         /* bmAttributes */
     HID_MAX_PACKET_SIZE_INT_IN_FS & 0x00FF,         /* wMaxPacketSize */
-    (HID_MAX_PACKET_SIZE_INT_IN_FS & 0xFF00) >> 8,         
+    (HID_MAX_PACKET_SIZE_INT_IN_FS & 0xFF00) >> 8,
     HID_DEFAULT_INT_IN_INTERVAL,                    /* bInterval */
 
     LEN_ENDPOINT,                                   /* bLength */
@@ -290,7 +290,7 @@ uint8_t gu8ConfigDescriptorFS[]  __attribute__((aligned(4))) =
 /*!<USB Other Speed Configure Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8OtherConfigDescriptorFS[] = 
+uint8_t gu8OtherConfigDescriptorFS[] =
 #else
 uint8_t gu8OtherConfigDescriptorFS[]  __attribute__((aligned(4))) =
 #endif
@@ -324,13 +324,13 @@ uint8_t gu8OtherConfigDescriptorFS[]  __attribute__((aligned(4))) =
     DESC_HID_RPT,   /* bDescriptorType */
     sizeof(HID_ReportDescriptor) & 0x00FF,          /* wDescriptorLen */
     (sizeof(HID_ReportDescriptor) & 0xFF00) >> 8,
-    
+
     LEN_ENDPOINT,                                   /* bLength */
     DESC_ENDPOINT,                                  /* bDescriptorType */
     HID_IN_EP_NUM | EP_INPUT,                       /* bEndpointAddress */
     EP_INT,                                         /* bmAttributes */
     HID_MAX_PACKET_SIZE_INT_IN & 0x00FF,            /* wMaxPacketSize */
-    (HID_MAX_PACKET_SIZE_INT_IN & 0xFF00) >> 8,         
+    (HID_MAX_PACKET_SIZE_INT_IN & 0xFF00) >> 8,
     HID_DEFAULT_INT_IN_INTERVAL,                    /* bInterval */
 
     LEN_ENDPOINT,                                   /* bLength */
@@ -346,9 +346,9 @@ uint8_t gu8OtherConfigDescriptorFS[]  __attribute__((aligned(4))) =
 /*!<USB Language String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8StringLang[4] = 
+uint8_t gu8StringLang[4] =
 #else
-uint8_t gu8StringLang[4] __attribute__((aligned(4))) = 
+uint8_t gu8StringLang[4] __attribute__((aligned(4))) =
 #endif
 {
     4,              /* bLength */
@@ -359,7 +359,7 @@ uint8_t gu8StringLang[4] __attribute__((aligned(4))) =
 /*!<USB Vendor String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8VendorStringDesc[] = 
+uint8_t gu8VendorStringDesc[] =
 #else
 uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) =
 #endif
@@ -372,7 +372,7 @@ uint8_t gu8VendorStringDesc[] __attribute__((aligned(4))) =
 /*!<USB Product String Descriptor */
 #ifdef __ICCARM__
 #pragma data_alignment=4
-uint8_t gu8ProductStringDesc[] = 
+uint8_t gu8ProductStringDesc[] =
 #else
 uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) =
 #endif
@@ -382,26 +382,30 @@ uint8_t gu8ProductStringDesc[] __attribute__((aligned(4))) =
     'H', 0, 'I', 0, 'D', 0, ' ', 0, 'T', 0, 'r', 0, 'a', 0, 'n', 0, 's', 0, 'f', 0, 'e', 0, 'r', 0
 };
 
-uint8_t *gpu8UsbString[4] = {
+uint8_t *gpu8UsbString[4] =
+{
     gu8StringLang,
     gu8VendorStringDesc,
     gu8ProductStringDesc,
     NULL,
 };
 
-uint8_t *gu8UsbHidReport[3] = {
+uint8_t *gu8UsbHidReport[3] =
+{
     HID_ReportDescriptor,
     NULL,
     NULL,
 };
 
-uint32_t gu32UsbHidReportLen[3] = {
+uint32_t gu32UsbHidReportLen[3] =
+{
     sizeof(HID_ReportDescriptor),
     0,
     0,
 };
 
-S_USBD_INFO_T gsInfo = {
+S_USBD_INFO_T gsInfo =
+{
     gu8DeviceDescriptor,
     gu8ConfigDescriptor,
     gpu8UsbString,

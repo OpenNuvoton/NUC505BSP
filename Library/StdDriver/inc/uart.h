@@ -36,7 +36,7 @@ extern "C"
 
 #define UART0_FIFO_SIZE 16 /*!< UART0 supports separated receive/transmit 16/16 bytes entry FIFO */
 #define UART1_FIFO_SIZE 64 /*!< UART1 supports separated receive/transmit 64/64 bytes entry FIFO */
-#define UART2_FIFO_SIZE 64 /*!< UART2 supports separated receive/transmit 64/64 bytes entry FIFO */    
+#define UART2_FIFO_SIZE 64 /*!< UART2 supports separated receive/transmit 64/64 bytes entry FIFO */
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* UART_FIFO constants definitions                                                                            */

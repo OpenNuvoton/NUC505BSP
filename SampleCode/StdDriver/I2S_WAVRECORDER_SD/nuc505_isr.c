@@ -21,45 +21,49 @@ extern struct RingBuff audio_rb;
 
 void I2S_IRQHandler(void)
 {
-	uint32_t u32I2SIntFlag;
+    uint32_t u32I2SIntFlag;
 
-	u32I2SIntFlag = I2S_GET_INT_FLAG(I2S, (I2S_STATUS_RDMATIF_Msk | I2S_STATUS_RDMAEIF_Msk));
+    u32I2SIntFlag = I2S_GET_INT_FLAG(I2S, (I2S_STATUS_RDMATIF_Msk | I2S_STATUS_RDMAEIF_Msk));
 
-	/* Copy RX data to TX buffer */
-	if (u32I2SIntFlag & I2S_STATUS_RDMATIF_Msk)
-	{
-		I2S_CLR_INT_FLAG(I2S, I2S_STATUS_RDMATIF_Msk);
+    /* Copy RX data to TX buffer */
+    if (u32I2SIntFlag & I2S_STATUS_RDMATIF_Msk)
+    {
+        I2S_CLR_INT_FLAG(I2S, I2S_STATUS_RDMATIF_Msk);
 
         {
             void *next_wrt_p;
             unsigned next_wrt_cap;
             rb_next_write(&audio_rb, &next_wrt_p, &next_wrt_cap);
-            if (next_wrt_cap < sizeof (PcmRxBuff[0])) {
+            if (next_wrt_cap < sizeof (PcmRxBuff[0]))
+            {
                 nBuffOverRun ++;
             }
-            else {
+            else
+            {
                 memcpy(next_wrt_p, &PcmRxBuff[0][0], sizeof (PcmRxBuff[0]));
                 rb_write_done(&audio_rb, sizeof (PcmRxBuff[0]));
             }
         }
-	}
-	else if (u32I2SIntFlag & I2S_STATUS_RDMAEIF_Msk)
-	{
-		I2S_CLR_INT_FLAG(I2S, I2S_STATUS_RDMAEIF_Msk);
-		
-		{
+    }
+    else if (u32I2SIntFlag & I2S_STATUS_RDMAEIF_Msk)
+    {
+        I2S_CLR_INT_FLAG(I2S, I2S_STATUS_RDMAEIF_Msk);
+
+        {
             void *next_wrt_p;
             unsigned next_wrt_cap;
             rb_next_write(&audio_rb, &next_wrt_p, &next_wrt_cap);
-            if (next_wrt_cap < sizeof (PcmRxBuff[1])) {
+            if (next_wrt_cap < sizeof (PcmRxBuff[1]))
+            {
                 nBuffOverRun ++;
             }
-            else {
+            else
+            {
                 memcpy(next_wrt_p, &PcmRxBuff[1][0], sizeof (PcmRxBuff[1]));
                 rb_write_done(&audio_rb, sizeof (PcmRxBuff[1]));
             }
         }
-	}
+    }
 }
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/

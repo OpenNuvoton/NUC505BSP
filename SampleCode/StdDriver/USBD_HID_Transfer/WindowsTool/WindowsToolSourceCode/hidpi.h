@@ -68,14 +68,17 @@ typedef struct _HIDP_BUTTON_CAPS
     BOOLEAN  IsAbsolute;
 
     ULONG    Reserved[10];
-    union {
-        struct {
+    union
+    {
+        struct
+        {
             USAGE    UsageMin,         UsageMax;
             USHORT   StringMin,        StringMax;
             USHORT   DesignatorMin,    DesignatorMax;
             USHORT   DataIndexMin,     DataIndexMax;
         } Range;
-        struct  {
+        struct
+        {
             USAGE    Usage,            Reserved1;
             USHORT   StringIndex,      Reserved2;
             USHORT   DesignatorIndex,  Reserved3;
@@ -116,15 +119,18 @@ typedef struct _HIDP_VALUE_CAPS
     LONG     LogicalMin,       LogicalMax;
     LONG     PhysicalMin,      PhysicalMax;
 
-    union {
-        struct {
+    union
+    {
+        struct
+        {
             USAGE    UsageMin,         UsageMax;
             USHORT   StringMin,        StringMax;
             USHORT   DesignatorMin,    DesignatorMax;
             USHORT   DataIndexMin,     DataIndexMax;
         } Range;
 
-        struct {
+        struct
+        {
             USAGE    Usage,            Reserved1;
             USHORT   StringIndex,      Reserved2;
             USHORT   DesignatorIndex,  Reserved3;
@@ -251,7 +257,8 @@ typedef struct _HIDP_DATA
 {
     USHORT  DataIndex;
     USHORT  Reserved;
-    union {
+    union
+    {
         ULONG   RawValue; // for values
         BOOLEAN On; // for buttons MUST BE TRUE for buttons.
     };
@@ -293,9 +300,9 @@ typedef struct _HIDP_EXTENDED_ATTRIBUTES
 
 NTSTATUS __stdcall
 HidP_GetCaps (
-   IN      PHIDP_PREPARSED_DATA      PreparsedData,
-   OUT     PHIDP_CAPS                Capabilities
-   );
+    IN      PHIDP_PREPARSED_DATA      PreparsedData,
+    OUT     PHIDP_CAPS                Capabilities
+);
 /*++
 Routine Description:
    Returns a list of capabilities of a given hid device as described by its
@@ -312,10 +319,10 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_GetLinkCollectionNodes (
-   OUT      PHIDP_LINK_COLLECTION_NODE LinkCollectionNodes,
-   IN OUT   PULONG                     LinkCollectionNodesLength,
-   IN       PHIDP_PREPARSED_DATA       PreparsedData
-   );
+    OUT      PHIDP_LINK_COLLECTION_NODE LinkCollectionNodes,
+    IN OUT   PULONG                     LinkCollectionNodesLength,
+    IN       PHIDP_PREPARSED_DATA       PreparsedData
+);
 /*++
 Routine Description:
    Return a list of PHIDP_LINK_COLLECTION_NODEs used to describe the link
@@ -337,23 +344,23 @@ Arguments:
 
 NTSTATUS __stdcall
 HidP_GetButtonCaps (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
-   IN OUT   PUSHORT              ButtonCapsLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData
+    IN       HIDP_REPORT_TYPE     ReportType,
+    OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
+    IN OUT   PUSHORT              ButtonCapsLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData
 );
 #define HidP_GetButtonCaps(_Type_, _Caps_, _Len_, _Data_) \
         HidP_GetSpecificButtonCaps (_Type_, 0, 0, 0, _Caps_, _Len_, _Data_)
 NTSTATUS __stdcall
 HidP_GetSpecificButtonCaps (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,      // Optional (0 => ignore)
-   IN       USHORT               LinkCollection, // Optional (0 => ignore)
-   IN       USAGE                Usage,          // Optional (0 => ignore)
-   OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
-   IN OUT   PUSHORT              ButtonCapsLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USAGE                UsagePage,      // Optional (0 => ignore)
+    IN       USHORT               LinkCollection, // Optional (0 => ignore)
+    IN       USAGE                Usage,          // Optional (0 => ignore)
+    OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
+    IN OUT   PUSHORT              ButtonCapsLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData
+);
 /*++
 Description:
    HidP_GetButtonCaps returns all the buttons (binary values) that are a part
@@ -408,23 +415,23 @@ HidP_GetSpecificButtonCaps returns the following error codes:
 
 NTSTATUS __stdcall
 HidP_GetValueCaps (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   OUT      PHIDP_VALUE_CAPS     ValueCaps,
-   IN OUT   PUSHORT              ValueCapsLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData
+    IN       HIDP_REPORT_TYPE     ReportType,
+    OUT      PHIDP_VALUE_CAPS     ValueCaps,
+    IN OUT   PUSHORT              ValueCapsLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData
 );
 #define HidP_GetValueCaps(_Type_, _Caps_, _Len_, _Data_) \
         HidP_GetSpecificValueCaps (_Type_, 0, 0, 0, _Caps_, _Len_, _Data_)
 NTSTATUS __stdcall
 HidP_GetSpecificValueCaps (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,      // Optional (0 => ignore)
-   IN       USHORT               LinkCollection, // Optional (0 => ignore)
-   IN       USAGE                Usage,          // Optional (0 => ignore)
-   OUT      PHIDP_VALUE_CAPS     ValueCaps,
-   IN OUT   PUSHORT              ValueCapsLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USAGE                UsagePage,      // Optional (0 => ignore)
+    IN       USHORT               LinkCollection, // Optional (0 => ignore)
+    IN       USAGE                Usage,          // Optional (0 => ignore)
+    OUT      PHIDP_VALUE_CAPS     ValueCaps,
+    IN OUT   PUSHORT              ValueCapsLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData
+);
 /*++
 Description:
    HidP_GetValueCaps returns all the values (non-binary) that are a part
@@ -485,7 +492,7 @@ HidP_GetExtendedAttributes (
     IN      PHIDP_PREPARSED_DATA        PreparsedData,
     OUT     PHIDP_EXTENDED_ATTRIBUTES   Attributes,
     IN OUT  PULONG                      LengthAttributes
-    );
+);
 /*++
 Description:
     Given a data index from the value or button capabilities of a given control
@@ -511,12 +518,12 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_InitializeReportForID (
-   IN       HIDP_REPORT_TYPE      ReportType,
-   IN       UCHAR                 ReportID,
-   IN       PHIDP_PREPARSED_DATA  PreparsedData,
-   IN OUT   PCHAR                 Report,
-   IN       ULONG                 ReportLength
-   );
+    IN       HIDP_REPORT_TYPE      ReportType,
+    IN       UCHAR                 ReportID,
+    IN       PHIDP_PREPARSED_DATA  PreparsedData,
+    IN OUT   PCHAR                 Report,
+    IN       ULONG                 ReportLength
+);
 /*++
 
 Routine Description:
@@ -549,13 +556,13 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_SetData (
-   IN       HIDP_REPORT_TYPE      ReportType,
-   IN       PHIDP_DATA            DataList,
-   IN OUT   PULONG                DataLength,
-   IN       PHIDP_PREPARSED_DATA  PreparsedData,
-   IN OUT   PCHAR                 Report,
-   IN       ULONG                 ReportLength
-   );
+    IN       HIDP_REPORT_TYPE      ReportType,
+    IN       PHIDP_DATA            DataList,
+    IN OUT   PULONG                DataLength,
+    IN       PHIDP_PREPARSED_DATA  PreparsedData,
+    IN OUT   PCHAR                 Report,
+    IN       ULONG                 ReportLength
+);
 /*++
 
 Routine Description:
@@ -621,13 +628,13 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_GetData (
-   IN       HIDP_REPORT_TYPE      ReportType,
-   OUT      PHIDP_DATA            DataList,
-   IN OUT   PULONG                DataLength,
-   IN       PHIDP_PREPARSED_DATA  PreparsedData,
-   IN       PCHAR                 Report,
-   IN       ULONG                 ReportLength
-   );
+    IN       HIDP_REPORT_TYPE      ReportType,
+    OUT      PHIDP_DATA            DataList,
+    IN OUT   PULONG                DataLength,
+    IN       PHIDP_PREPARSED_DATA  PreparsedData,
+    IN       PCHAR                 Report,
+    IN       ULONG                 ReportLength
+);
 /*++
 
 Routine Description:
@@ -675,9 +682,9 @@ Return Value
 
 ULONG __stdcall
 HidP_MaxDataListLength (
-   IN HIDP_REPORT_TYPE      ReportType,
-   IN PHIDP_PREPARSED_DATA  PreparsedData
-   );
+    IN HIDP_REPORT_TYPE      ReportType,
+    IN PHIDP_PREPARSED_DATA  PreparsedData
+);
 /*++
 Routine Description:
 
@@ -703,15 +710,15 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_SetUsages (
-   IN       HIDP_REPORT_TYPE      ReportType,
-   IN       USAGE                 UsagePage,
-   IN       USHORT                LinkCollection, // Optional
-   IN       PUSAGE                UsageList,
-   IN OUT   PULONG                UsageLength,
-   IN       PHIDP_PREPARSED_DATA  PreparsedData,
-   IN OUT   PCHAR                 Report,
-   IN       ULONG                 ReportLength
-   );
+    IN       HIDP_REPORT_TYPE      ReportType,
+    IN       USAGE                 UsagePage,
+    IN       USHORT                LinkCollection, // Optional
+    IN       PUSAGE                UsageList,
+    IN OUT   PULONG                UsageLength,
+    IN       PHIDP_PREPARSED_DATA  PreparsedData,
+    IN OUT   PCHAR                 Report,
+    IN       ULONG                 ReportLength
+);
 /*++
 
 Routine Description:
@@ -796,15 +803,15 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_UnsetUsages (
-   IN       HIDP_REPORT_TYPE      ReportType,
-   IN       USAGE                 UsagePage,
-   IN       USHORT                LinkCollection, // Optional
-   IN       PUSAGE                UsageList,
-   IN OUT   PULONG                UsageLength,
-   IN       PHIDP_PREPARSED_DATA  PreparsedData,
-   IN OUT   PCHAR                 Report,
-   IN       ULONG                 ReportLength
-   );
+    IN       HIDP_REPORT_TYPE      ReportType,
+    IN       USAGE                 UsagePage,
+    IN       USHORT                LinkCollection, // Optional
+    IN       PUSAGE                UsageList,
+    IN OUT   PULONG                UsageLength,
+    IN       PHIDP_PREPARSED_DATA  PreparsedData,
+    IN OUT   PCHAR                 Report,
+    IN       ULONG                 ReportLength
+);
 /*++
 
 Routine Description:
@@ -888,15 +895,15 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_GetUsages (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
-   OUT      USAGE *              UsageList,
-   IN OUT   ULONG *              UsageLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData,
-   IN       PCHAR                Report,
-   IN       ULONG                ReportLength
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USAGE                UsagePage,
+    IN       USHORT               LinkCollection, // Optional
+    OUT      USAGE *              UsageList,
+    IN OUT   ULONG *              UsageLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData,
+    IN       PCHAR                Report,
+    IN       ULONG                ReportLength
+);
 /*++
 
 Routine Description:
@@ -973,14 +980,14 @@ Return Value
 
 NTSTATUS __stdcall
 HidP_GetUsagesEx (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USHORT               LinkCollection, // Optional
-   OUT      PUSAGE_AND_PAGE      ButtonList,
-   IN OUT   ULONG *              UsageLength,
-   IN       PHIDP_PREPARSED_DATA PreparsedData,
-   IN       PCHAR                Report,
-   IN       ULONG                ReportLength
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USHORT               LinkCollection, // Optional
+    OUT      PUSAGE_AND_PAGE      ButtonList,
+    IN OUT   ULONG *              UsageLength,
+    IN       PHIDP_PREPARSED_DATA PreparsedData,
+    IN       PCHAR                Report,
+    IN       ULONG                ReportLength
+);
 
 /*++
 
@@ -1050,10 +1057,10 @@ Return Value
 
 ULONG __stdcall
 HidP_MaxUsageListLength (
-   IN HIDP_REPORT_TYPE      ReportType,
-   IN USAGE                 UsagePage, // Optional
-   IN PHIDP_PREPARSED_DATA  PreparsedData
-   );
+    IN HIDP_REPORT_TYPE      ReportType,
+    IN USAGE                 UsagePage, // Optional
+    IN PHIDP_PREPARSED_DATA  PreparsedData
+);
 /*++
 Routine Description:
     This function returns the maximum number of usages that a call to
@@ -1081,15 +1088,15 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_SetUsageValue (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
-   IN       USAGE                Usage,
-   IN       ULONG                UsageValue,
-   IN       PHIDP_PREPARSED_DATA PreparsedData,
-   IN OUT   PCHAR                Report,
-   IN       ULONG                ReportLength
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USAGE                UsagePage,
+    IN       USHORT               LinkCollection, // Optional
+    IN       USAGE                Usage,
+    IN       ULONG                UsageValue,
+    IN       PHIDP_PREPARSED_DATA PreparsedData,
+    IN OUT   PCHAR                Report,
+    IN       ULONG                ReportLength
+);
 /*++
 Description:
     HidP_SetUsageValue inserts a value into the HID Report Packet in the field
@@ -1161,15 +1168,15 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_SetScaledUsageValue (
-   IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
-   IN       USAGE                Usage,
-   IN       LONG                 UsageValue,
-   IN       PHIDP_PREPARSED_DATA PreparsedData,
-   IN OUT   PCHAR                Report,
-   IN       ULONG                ReportLength
-   );
+    IN       HIDP_REPORT_TYPE     ReportType,
+    IN       USAGE                UsagePage,
+    IN       USHORT               LinkCollection, // Optional
+    IN       USAGE                Usage,
+    IN       LONG                 UsageValue,
+    IN       PHIDP_PREPARSED_DATA PreparsedData,
+    IN OUT   PCHAR                Report,
+    IN       ULONG                ReportLength
+);
 
 /*++
 Description:
@@ -1264,7 +1271,7 @@ HidP_SetUsageValueArray (
     IN    PHIDP_PREPARSED_DATA PreparsedData,
     OUT   PCHAR                Report,
     IN    ULONG                ReportLength
-    );
+);
 
 /*++
 Routine Descripton:
@@ -1363,15 +1370,15 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_GetUsageValue (
-   IN    HIDP_REPORT_TYPE     ReportType,
-   IN    USAGE                UsagePage,
-   IN    USHORT               LinkCollection, // Optional
-   IN    USAGE                Usage,
-   OUT   PULONG               UsageValue,
-   IN    PHIDP_PREPARSED_DATA PreparsedData,
-   IN    PCHAR                Report,
-   IN    ULONG                ReportLength
-   );
+    IN    HIDP_REPORT_TYPE     ReportType,
+    IN    USAGE                UsagePage,
+    IN    USHORT               LinkCollection, // Optional
+    IN    USAGE                Usage,
+    OUT   PULONG               UsageValue,
+    IN    PHIDP_PREPARSED_DATA PreparsedData,
+    IN    PCHAR                Report,
+    IN    ULONG                ReportLength
+);
 
 /*
 Description
@@ -1436,15 +1443,15 @@ Return Value:
 
 NTSTATUS __stdcall
 HidP_GetScaledUsageValue (
-   IN    HIDP_REPORT_TYPE     ReportType,
-   IN    USAGE                UsagePage,
-   IN    USHORT               LinkCollection, // Optional
-   IN    USAGE                Usage,
-   OUT   PLONG                UsageValue,
-   IN    PHIDP_PREPARSED_DATA PreparsedData,
-   IN    PCHAR                Report,
-   IN    ULONG                ReportLength
-   );
+    IN    HIDP_REPORT_TYPE     ReportType,
+    IN    USAGE                UsagePage,
+    IN    USHORT               LinkCollection, // Optional
+    IN    USAGE                Usage,
+    OUT   PLONG                UsageValue,
+    IN    PHIDP_PREPARSED_DATA PreparsedData,
+    IN    PCHAR                Report,
+    IN    ULONG                ReportLength
+);
 
 /*++
 Description
@@ -1540,7 +1547,7 @@ HidP_GetUsageValueArray (
     IN    PHIDP_PREPARSED_DATA PreparsedData,
     IN    PCHAR                Report,
     IN    ULONG                ReportLength
-    );
+);
 
 /*++
 Routine Descripton:
@@ -1639,7 +1646,7 @@ HidP_UsageListDifference (
     OUT   PUSAGE   BreakUsageList,
     OUT   PUSAGE   MakeUsageList,
     IN    ULONG    UsageListLength
-    );
+);
 /*++
 Routine Description:
     This function will return the difference between a two lists of usages
@@ -1665,17 +1672,18 @@ Parameters:
 
 NTSTATUS __stdcall
 HidP_UsageAndPageListDifference (
-   IN    PUSAGE_AND_PAGE PreviousUsageList,
-   IN    PUSAGE_AND_PAGE CurrentUsageList,
-   OUT   PUSAGE_AND_PAGE BreakUsageList,
-   OUT   PUSAGE_AND_PAGE MakeUsageList,
-   IN    ULONG           UsageListLength
-   );
+    IN    PUSAGE_AND_PAGE PreviousUsageList,
+    IN    PUSAGE_AND_PAGE CurrentUsageList,
+    OUT   PUSAGE_AND_PAGE BreakUsageList,
+    OUT   PUSAGE_AND_PAGE MakeUsageList,
+    IN    ULONG           UsageListLength
+);
 
 //
 // Produce Make or Break Codes
 //
-typedef enum _HIDP_KEYBOARD_DIRECTION {
+typedef enum _HIDP_KEYBOARD_DIRECTION
+{
     HidP_Keyboard_Break,
     HidP_Keyboard_Make
 } HIDP_KEYBOARD_DIRECTION;
@@ -1684,24 +1692,27 @@ typedef enum _HIDP_KEYBOARD_DIRECTION {
 // A bitmap of the current shift state of the keyboard when using the
 // below keyboard usages to i8042 translation function.
 //
-typedef struct _HIDP_KEYBOARD_MODIFIER_STATE {
-   union {
-      struct {
-         ULONG LeftControl: 1;
-         ULONG LeftShift: 1;
-         ULONG LeftAlt: 1;
-         ULONG LeftGUI: 1;
-         ULONG RightControl: 1;
-         ULONG RightShift: 1;
-         ULONG RightAlt: 1;
-         ULONG RigthGUI: 1;
-         ULONG CapsLock: 1;
-         ULONG ScollLock: 1;
-         ULONG NumLock: 1;
-         ULONG Reserved: 21;
-      };
-      ULONG ul;
-   };
+typedef struct _HIDP_KEYBOARD_MODIFIER_STATE
+{
+    union
+    {
+        struct
+        {
+            ULONG LeftControl: 1;
+            ULONG LeftShift: 1;
+            ULONG LeftAlt: 1;
+            ULONG LeftGUI: 1;
+            ULONG RightControl: 1;
+            ULONG RightShift: 1;
+            ULONG RightAlt: 1;
+            ULONG RigthGUI: 1;
+            ULONG CapsLock: 1;
+            ULONG ScollLock: 1;
+            ULONG NumLock: 1;
+            ULONG Reserved: 21;
+        };
+        ULONG ul;
+    };
 
 } HIDP_KEYBOARD_MODIFIER_STATE, * PHIDP_KEYBOARD_MODIFIER_STATE;
 
@@ -1710,10 +1721,10 @@ typedef struct _HIDP_KEYBOARD_MODIFIER_STATE {
 // the below translation function.
 //
 typedef BOOLEAN (* PHIDP_INSERT_SCANCODES) (
-                  IN PVOID Context,  // Some caller supplied context.
-                  IN PCHAR NewScanCodes, // A list of i8042 scan codes.
-                  IN ULONG Length // the length of the scan codes.
-                  );
+    IN PVOID Context,  // Some caller supplied context.
+    IN PCHAR NewScanCodes, // A list of i8042 scan codes.
+    IN ULONG Length // the length of the scan codes.
+);
 
 NTSTATUS __stdcall
 HidP_TranslateUsageAndPagesToI8042ScanCodes (
@@ -1723,7 +1734,7 @@ HidP_TranslateUsageAndPagesToI8042ScanCodes (
     IN OUT PHIDP_KEYBOARD_MODIFIER_STATE ModifierState,
     IN     PHIDP_INSERT_SCANCODES        InsertCodesProcedure,
     IN     PVOID                         InsertCodesContext
-    );
+);
 /*++
 Routine Description:
 Parameters:
@@ -1737,7 +1748,7 @@ HidP_TranslateUsagesToI8042ScanCodes (
     IN OUT PHIDP_KEYBOARD_MODIFIER_STATE ModifierState,
     IN     PHIDP_INSERT_SCANCODES        InsertCodesProcedure,
     IN     PVOID                         InsertCodesContext
-    );
+);
 /*++
 Routine Description:
 Parameters:

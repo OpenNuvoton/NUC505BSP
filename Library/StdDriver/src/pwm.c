@@ -48,7 +48,8 @@ uint32_t PWM_ConfigOutputChannel (PWM_T *pwm,
     else
         u32PWM_CLock = SystemCoreClock /(((CLK->CLKDIV5 & CLK_CLKDIV5_PWMDIV_Msk) >> CLK_CLKDIV5_PWMDIV_Pos) + 1);
 
-    for(; u8Divider < 17; u8Divider <<= 1) {  // clk divider could only be 1, 2, 4, 8, 16
+    for(; u8Divider < 17; u8Divider <<= 1)    // clk divider could only be 1, 2, 4, 8, 16
+    {
         i = (u32PWM_CLock / u32Frequency) / u8Divider;
         // If target value is larger than CNR * prescale, need to use a larger divider
         if(i > (0x10000 * 0x100))
@@ -63,7 +64,8 @@ uint32_t PWM_ConfigOutputChannel (PWM_T *pwm,
 
         i /= u8Prescale;
 
-        if(i <= 0x10000) {
+        if(i <= 0x10000)
+        {
             if(i == 1)
                 u16CNR = 1;     // Too fast, and PWM cannot generate expected frequency...
             else
@@ -128,7 +130,8 @@ uint32_t PWM_ConfigCaptureChannel (PWM_T *pwm,
     else
         u32PWM_CLock = SystemCoreClock /(((CLK->CLKDIV5 & CLK_CLKDIV5_PWMDIV_Msk) >> CLK_CLKDIV5_PWMDIV_Pos) + 1);
 
-    for(; u8Divider < 17; u8Divider <<= 1) {  // clk divider could only be 1, 2, 4, 8, 16
+    for(; u8Divider < 17; u8Divider <<= 1)    // clk divider could only be 1, 2, 4, 8, 16
+    {
         i = ((u32PWM_CLock / u8Divider) * u32UnitTimeNsec) / 1000000000;
 
         // If target value is larger than 0xFF, need to use a larger divider
@@ -180,8 +183,10 @@ uint32_t PWM_ConfigCaptureChannel (PWM_T *pwm,
 void PWM_Start (PWM_T *pwm, uint32_t u32ChannelMask)
 {
     uint32_t i;
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             pwm->CTL |= (1 << (8*i));
         }
     }
@@ -197,8 +202,10 @@ void PWM_Start (PWM_T *pwm, uint32_t u32ChannelMask)
 void PWM_Stop (PWM_T *pwm, uint32_t u32ChannelMask)
 {
     uint32_t i;
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             *(__IO uint32_t *) (&pwm->PERIOD0 + 3 * i) = 0;
         }
     }
@@ -215,8 +222,10 @@ void PWM_Stop (PWM_T *pwm, uint32_t u32ChannelMask)
 void PWM_ForceStop (PWM_T *pwm, uint32_t u32ChannelMask)
 {
     uint32_t i;
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             pwm->CTL &= ~(1 << (8*i));
         }
     }
@@ -233,8 +242,10 @@ void PWM_EnableCapture (PWM_T *pwm, uint32_t u32ChannelMask)
 {
     uint32_t i;
 
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             if(i & 0x02)
                 pwm->CAPCTL23 |= (1 << (PWM_CAPCTL23_CAPEN2_Pos + ((i & 0x01) << 4)));
             else
@@ -244,8 +255,10 @@ void PWM_EnableCapture (PWM_T *pwm, uint32_t u32ChannelMask)
 
     pwm->CAPINEN |= u32ChannelMask;
 
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             pwm->CTL |= (1 << (PWM_CTL_CNTMODE0_Pos + (8*i)));
         }
     }
@@ -262,8 +275,10 @@ void PWM_DisableCapture (PWM_T *pwm, uint32_t u32ChannelMask)
 {
     uint32_t i;
 
-    for(i = 0; i < PWM_CHANNEL_NUM; i ++) {
-        if(u32ChannelMask & (1 << i)) {
+    for(i = 0; i < PWM_CHANNEL_NUM; i ++)
+    {
+        if(u32ChannelMask & (1 << i))
+        {
             if(i & 0x02)
                 pwm->CAPCTL23 &= ~(1 << (PWM_CAPCTL23_CAPEN2_Pos + ((i & 0x01) << 4)));
             else

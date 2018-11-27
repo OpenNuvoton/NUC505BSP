@@ -25,12 +25,12 @@
 #define CEP_MAX_PKT_SIZE        64
 #define CEP_OTHER_MAX_PKT_SIZE  64
 #define EPA_MAX_PKT_SIZE        512
-#define EPA_FULL_MAX_PKT_SIZE  	64
+#define EPA_FULL_MAX_PKT_SIZE   64
 #define EPA_HS_OTHER_MAX_PKT_SIZE  64
 #define EPA_FS_OTHER_MAX_PKT_SIZE  512
 
 #define EPB_MAX_PKT_SIZE        512
-#define EPB_FULL_MAX_PKT_SIZE  	64
+#define EPB_FULL_MAX_PKT_SIZE   64
 #define EPB_HS_OTHER_MAX_PKT_SIZE  64
 #define EPB_FS_OTHER_MAX_PKT_SIZE  512
 
@@ -96,7 +96,8 @@ static __INLINE uint32_t get_be32(uint8_t *buf)
 /******************************************************************************/
 
 /*!<USB Mass Storage Class - Command Block Wrapper Structure */
-struct CBW {
+struct CBW
+{
     uint32_t  dCBWSignature;
     uint32_t  dCBWTag;
     uint32_t  dCBWDataTransferLength;
@@ -109,7 +110,8 @@ struct CBW {
 };
 
 /*!<USB Mass Storage Class - Command Status Wrapper Structure */
-struct CSW {
+struct CSW
+{
     uint32_t  dCSWSignature;
     uint32_t  dCSWTag;
     uint32_t  dCSWDataResidue;

@@ -40,7 +40,7 @@ void USB_Device_Phy_Disable(void)
 void USB_Host_Disable(void)
 {
     /* USB Host transceiver standby  */
-    CLK_SetModuleClock(USBH_MODULE, CLK_USBH_SRC_PLL, 1);	/* Only for access USBH register */
+    CLK_SetModuleClock(USBH_MODULE, CLK_USBH_SRC_PLL, 1);   /* Only for access USBH register */
     CLK_EnableModuleClock(USBH_MODULE);
     CLK_SysTickDelay(10);
     USBH_Suspend();
@@ -60,23 +60,23 @@ void ADC_Disable(void)
 
 void I2S_Disable(void)
 {
-    CLK->APBCLK = CLK->APBCLK | 0x4000;			/* Enable I2S clock */
+    CLK->APBCLK = CLK->APBCLK | 0x4000;         /* Enable I2S clock */
     CLK_EnableModuleClock(I2S_MODULE);
     CLK_SysTickDelay(10);
     I2S_Open(I2S, I2S_MODE_MASTER, 48000, I2S_DATABIT_32, I2S_STEREO, I2S_FORMAT_I2S, I2S_ENABLE_INTERNAL_CODEC);
-    I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xFF);			// DAC Power Off
-    I2S_SET_INTERNAL_CODEC(I2S, 0x0F, 0xFF);			// ADC Power Off
+    I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xFF);            // DAC Power Off
+    I2S_SET_INTERNAL_CODEC(I2S, 0x0F, 0xFF);            // ADC Power Off
 
-    //I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xF0);			// DAC Power On
-    //I2S_SET_INTERNAL_CODEC(I2S, 0x0F, 0xE0);			// ADC Power On
+    //I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xF0);          // DAC Power On
+    //I2S_SET_INTERNAL_CODEC(I2S, 0x0F, 0xE0);          // ADC Power On
     CLK_SysTickDelay(10);
     //CLK_DisableModuleClock(I2S_MODULE);
 }
 
-#define PA_ALL_MASK	(BIT15|BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
-#define PB_ALL_MASK	(BIT15|BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
-#define PC_ALL_MASK	(BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
-#define PD_ALL_MASK	(BIT4|BIT3|BIT2|BIT1|BIT0)
+#define PA_ALL_MASK (BIT15|BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
+#define PB_ALL_MASK (BIT15|BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
+#define PC_ALL_MASK (BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
+#define PD_ALL_MASK (BIT4|BIT3|BIT2|BIT1|BIT0)
 
 void GPIO_Path(void)
 {
@@ -89,13 +89,13 @@ void GPIO_Path(void)
     pin = GPIO_GET_IN_DATA(PA);
     for(idx=0x1; idx<0x10000; idx=idx<<1)
     {
-        if((pin&idx)==0) //pin is 0	==>
+        if((pin&idx)==0) //pin is 0 ==>
         {
             uint32_t u32Pin;
             GPIO_SetMode(PA, idx, GPIO_MODE_OUTPUT);//Set to output mode
             u32Pin = GPIO_GET_IN_DATA(PA);
             GPIO_SET_OUT_DATA(PA, u32Pin&(~idx));
-            GPIO_SetPullMode(PA, idx, GPIO_PULL_DISABLE);	//Disable pull enabl
+            GPIO_SetPullMode(PA, idx, GPIO_PULL_DISABLE);   //Disable pull enabl
         }
     }
 
@@ -105,13 +105,13 @@ void GPIO_Path(void)
     pin = GPIO_GET_IN_DATA(PB);
     for(idx=0x1; idx<0x10000; idx=idx<<1)
     {
-        if((pin&idx)==0) //pin is 0	==>
+        if((pin&idx)==0) //pin is 0 ==>
         {
             uint32_t u32Pin;
             GPIO_SetMode(PB, idx, GPIO_MODE_OUTPUT);//Set to output mode
             u32Pin = GPIO_GET_IN_DATA(PB);
             GPIO_SET_OUT_DATA(PB, u32Pin&(~idx));
-            GPIO_SetPullMode(PB, idx, GPIO_PULL_DISABLE);	//Disable pull enabl
+            GPIO_SetPullMode(PB, idx, GPIO_PULL_DISABLE);   //Disable pull enabl
         }
     }
 
@@ -125,13 +125,13 @@ void GPIO_Path(void)
     pin = GPIO_GET_IN_DATA(PC);
     for(idx=0x1; idx<0x8000; idx=idx<<1)
     {
-        if((pin&idx)==0) //pin is 0	==>
+        if((pin&idx)==0) //pin is 0 ==>
         {
             uint32_t u32Pin;
             GPIO_SetMode(PC, idx, GPIO_MODE_OUTPUT);//Set to output mode
             u32Pin = GPIO_GET_IN_DATA(PC);
             GPIO_SET_OUT_DATA(PC, u32Pin&(~idx));
-            GPIO_SetPullMode(PC, idx, GPIO_PULL_DISABLE);	//Disable pull enabl
+            GPIO_SetPullMode(PC, idx, GPIO_PULL_DISABLE);   //Disable pull enabl
         }
     }
     GPIO_SetMode(PD, PD_ALL_MASK, GPIO_MODE_INPUT);
@@ -140,13 +140,13 @@ void GPIO_Path(void)
     pin = GPIO_GET_IN_DATA(PD);
     for(idx=0x1; idx<0x20; idx=idx<<1)
     {
-        if((pin&idx)==0) //pin is 0	==>
+        if((pin&idx)==0) //pin is 0 ==>
         {
             uint32_t u32Pin;
             GPIO_SetMode(PD, idx, GPIO_MODE_OUTPUT);//Set to output mode
             u32Pin = GPIO_GET_IN_DATA(PD);
             GPIO_SET_OUT_DATA(PD, u32Pin&(~idx));
-            GPIO_SetPullMode(PD, idx, GPIO_PULL_DISABLE);	//Disable pull enabl
+            GPIO_SetPullMode(PD, idx, GPIO_PULL_DISABLE);   //Disable pull enabl
         }
     }
 }
@@ -201,7 +201,7 @@ void DisableIPs(void)
     SYS_SET_EMBEDDED_SPIFLASH_PULL(0x12);
 
     /* Pre-scalar counter from 0 ~ 0xFFFF */
-    CLK_SET_WAKEUP_PRESCALAR	(0x1000);
+    CLK_SET_WAKEUP_PRESCALAR    (0x1000);
 
     /* Wake up time is about 45ms */
     CLK_ENABLE_WAKEUP_PRESCALAR();

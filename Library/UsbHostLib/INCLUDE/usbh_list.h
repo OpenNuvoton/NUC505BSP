@@ -12,7 +12,8 @@
  * using the generic single-entry routines.
  */
 
-typedef struct list_head {
+typedef struct list_head
+{
     struct list_head *next, *prev;
 } USB_LIST_T;
 
@@ -120,7 +121,8 @@ static __inline void list_splice(USB_LIST_T *list, USB_LIST_T *head)
 {
     USB_LIST_T *first = list->next;
 
-    if (first != list) {
+    if (first != list)
+    {
         USB_LIST_T *last = list->prev;
         USB_LIST_T *at = head->next;
 

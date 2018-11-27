@@ -28,7 +28,7 @@ void SYS_Init(void)
 
     // Set APB clock as 1/2 HCLK
     CLK_SetModuleClock(PCLK_MODULE, (uint32_t)NULL, 1);
-	
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
 

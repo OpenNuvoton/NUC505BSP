@@ -19,7 +19,7 @@
 
 uint32_t g_au32Buf[8];
 uint32_t *g_pu32Buf;
-uint8_t g_u8ISP = 1; 
+uint8_t g_u8ISP = 1;
 
 #ifdef __ICCARM__
 /* IAR */
@@ -33,15 +33,15 @@ extern const uint32_t gu32MtpAddr[1] __attribute__((at(MTP_OFFSET)));
 
 void SYS_Init(void)
 {
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
     //SYS_UnlockReg();
-     
+
     /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
-    
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
 
@@ -51,17 +51,17 @@ void SYS_Init(void)
 
     /* UART0 clock source = XIN */
     CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
-    
+
     /* Update System Core Clock */
     CLK_SetCoreClock(100000000);
-    
+
     SystemCoreClockUpdate();
-    
+
     /* Init I/O multi-function pins */
     /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
-    /* Configure multi-function pins for SPIM, Slave I/F=GPIO. */       
+    /* Configure multi-function pins for SPIM, Slave I/F=GPIO. */
 }
 
 #if defined (__CC_ARM)
@@ -106,13 +106,13 @@ void EnterISP(void)
     SPIM_Open(SPIM, 0, SPI_BUS_CLK);
 
     memset((char *)g_au32Buf, 0, 32);
-    
+
     /* Check Update Firmware Header */
     SPIFlash_ReadData(ISP_CODE_OFFSET + ISP_TAG_OFFSET, TAG_LEN, (uint8_t *)g_au32Buf);
 
     if ((g_au32Buf[TAG0_INDEX] == TAG0) && (g_au32Buf[TAG1_INDEX] == TAG1))  /* Check ISP Firmware Header Tag 0 & 1 */
     {
-        SPIFlash_ReadData(ISP_CODE_OFFSET + g_au32Buf[END_TAG_OFFSET_INDEX], 4, (uint8_t *)g_au32Buf);	/* Read End Tag */
+        SPIFlash_ReadData(ISP_CODE_OFFSET + g_au32Buf[END_TAG_OFFSET_INDEX], 4, (uint8_t *)g_au32Buf);  /* Read End Tag */
 
         if(g_au32Buf[0] != END_TAG)
             printf("Update failed last time!\n");
@@ -134,22 +134,22 @@ void EnterISP(void)
     }
     else
     {
-        printf("No ISP Firmware!!\n");	
+        printf("No ISP Firmware!!\n");
         g_u8ISP = 0;
     }
 }
 
-int main(void) 
+int main(void)
 {
 #ifdef __ICCARM__
     uint32_t volatile u32Data = gu32MtpAddr;
 #else
     uint32_t volatile u32Data = gu32MtpAddr[0];
-#endif    
+#endif
 
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
-    
+
     /* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
 

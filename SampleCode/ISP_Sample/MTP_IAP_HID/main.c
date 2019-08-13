@@ -6,6 +6,10 @@
 
 #define DetectPin PB14_PIN
 
+#if defined (__GNUC__)
+#define VECTOR_SIZE     32
+uint32_t VectorTable[VECTOR_SIZE] __attribute__ ((aligned(256)));
+#endif
 void SYS_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
@@ -17,7 +21,7 @@ void SYS_Init(void)
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
     CLK_SetCoreClock(96000000);
     /* Set PCLK divider */
-    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    CLK_SetModuleClock(PCLK_MODULE, (uint32_t)0, 1);
     /* Update System Core Clock */
     SystemCoreClockUpdate();
     /* Enable IP clock */
@@ -57,12 +61,29 @@ int32_t main(void)
     /* Relocate vector table in SRAM for fast interrupt handling. */
     /* YT modify for MTP */
     {
+#if defined ( __CC_ARM )
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
         //printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", Image$$ER_VECTOR2$$ZI$$Base);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
+#elif defined (__ICCARM__)
+#pragma section = "VECTOR2"
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];
+
+        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
+        memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
+
+#elif defined (__GNUC__)
+        extern uint32_t __Vectors[];
+        extern uint32_t __Vectors_Size[];
+        memcpy(VectorTable, (uint32_t*)0x0, (unsigned int) __Vectors_Size);
+        SCB->VTOR = (uint32_t)VectorTable;
+
+#endif
     }
     /* Init UART to 115200-8n1 for print message */
     UART0_Init();

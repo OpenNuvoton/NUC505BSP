@@ -12,10 +12,16 @@
 #include "ISP_USER.h"
 #include "spiflash_drv.h"
 
-__align(4) uint8_t g_u8RcvBuf[CMDBUFSIZE];
-__align(4) uint8_t g_u8SendBuf[CMDBUFSIZE];
-
-__align(4) static uint8_t aprom_buf[PAGE_SIZE];
+#ifdef __ICCARM__
+#pragma data_alignment=4
+uint8_t g_u8RcvBuf[CMDBUFSIZE];
+uint8_t g_u8SendBuf[CMDBUFSIZE];
+static uint8_t aprom_buf[PAGE_SIZE];
+#else
+uint8_t g_u8RcvBuf[CMDBUFSIZE] __attribute__((aligned(4)));
+uint8_t g_u8SendBuf[CMDBUFSIZE] __attribute__((aligned(4)));
+static uint8_t aprom_buf[PAGE_SIZE] __attribute__((aligned(4)));
+#endif
 BOOL bUpdateApromCmd;
 uint32_t g_apromAddr, g_apromSize, g_dataFlashAddr, g_dataFlashSize;
 
@@ -111,7 +117,9 @@ int ParseCmd(unsigned char *buffer, uint8_t len, uint8_t bUSB)
         __NOP();
 
         while (1);
-
+#if defined (__GNUC__)
+        break;
+#endif
     case CMD_RUN_LDROM:
     case CMD_RESET:
     {
@@ -127,6 +135,9 @@ int ParseCmd(unsigned char *buffer, uint8_t len, uint8_t bUSB)
 
         /* Trap the CPU */
         while (1);
+#if defined (__GNUC__)
+        break;
+#endif
     }
 
     case CMD_CONNECT:

@@ -18,8 +18,8 @@
 uint8_t  usb_sendbuf[EPA_MAX_PKT_SIZE] = {0};
 uint8_t  usb_rcvbuf[EPB_MAX_PKT_SIZE] = {0};
 #else
-__align(4) uint8_t  usb_sendbuf[EPA_MAX_PKT_SIZE] = {0};
-__align(4) uint8_t  usb_rcvbuf[EPB_MAX_PKT_SIZE] = {0};
+uint8_t  usb_sendbuf[EPA_MAX_PKT_SIZE] __attribute__((aligned(4))) = {0};
+uint8_t  usb_rcvbuf[EPB_MAX_PKT_SIZE] __attribute__((aligned(4))) = {0};
 #endif
 
 uint8_t volatile bUsbDataReady = 0;
@@ -94,7 +94,7 @@ void USBD_IRQHandler(void)
             {
                 if (g_usbd_ShortPacket == 1)
                 {
-                    USBD->EP[EPA].EPRSPCTL = USBD->EP[EPA].EPRSPCTL & 0x10 | USB_EP_RSPCTL_SHORTTXEN;    // packet end
+                    USBD->EP[EPA].EPRSPCTL = (USBD->EP[EPA].EPRSPCTL & 0x10) | USB_EP_RSPCTL_SHORTTXEN;    // packet end
                     g_usbd_ShortPacket = 0;
                 }
             }

@@ -55,8 +55,14 @@
 extern int ParseCmd(unsigned char *buffer, uint8_t len, uint8_t bUSB);
 //extern void Reset_AfterREVMP(void);  //YT modify for MTP
 
-extern __align(4) uint8_t g_u8RcvBuf[];
-extern __align(4) uint8_t g_u8SendBuf[];
+#ifdef __ICCARM__
+#pragma data_alignment=4
+extern uint8_t g_u8RcvBuf[];
+extern uint8_t g_u8SendBuf[];
+#else
+extern uint8_t g_u8RcvBuf[] __attribute__((aligned(4)));
+extern uint8_t g_u8SendBuf[] __attribute__((aligned(4)));
+#endif
 
 #define Config0         0x00300000UL
 #define Config1         0x00300004UL

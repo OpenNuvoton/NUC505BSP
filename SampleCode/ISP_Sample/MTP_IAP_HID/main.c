@@ -73,7 +73,7 @@ int32_t main(void)
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
 
-        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
+        //printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", __section_begin("VECTOR2"));
         memcpy((void *) __section_begin("VECTOR2"), (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
 

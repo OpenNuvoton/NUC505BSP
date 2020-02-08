@@ -379,7 +379,8 @@ void USBD_StandardRequest(void)
             if((gUsbCmd.wValue & 0xff) == FEATURE_ENDPOINT_HALT)
             {
 
-                int32_t epNum, i;
+                uint32_t epNum;
+                int32_t i;
 
                 /* EP number stall is not allow to be clear in MSC class "Error Recovery Test".
                    a flag: g_u32EpStallLock is added to support it */
@@ -545,7 +546,7 @@ void USBD_PrepareCtrlIn(uint8_t *pu8Buf, uint32_t u32Size)
  */
 void USBD_CtrlIn(void)
 {
-    int volatile i;
+    uint32_t volatile i;
     // Process remained data
     if(g_usbd_CtrlInSize >= g_usbd_CtrlMaxPktSize)
     {
@@ -582,7 +583,7 @@ void USBD_CtrlIn(void)
  */
 void USBD_CtrlOut(uint8_t *pu8Buf, uint32_t u32Size)
 {
-    int volatile i;
+    uint32_t volatile i;
     uint32_t u32Value;
     while(1)
     {

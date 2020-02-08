@@ -1128,7 +1128,6 @@ uint32_t RTC_GetPowerKeyStatus(void)
  */
 void RTC_SetPowerOff(void)
 {
-    __IO uint32_t u32Reg;
     RTC->INIT = RTC_INIT_KEY;
     RTC_SyncReg();
 
@@ -1160,7 +1159,6 @@ void RTC_SetPowerOff(void)
  */
 void RTC_EnableHardwarePowerOff(uint32_t u32Second)
 {
-    __IO uint32_t u32Reg;
     RTC->INIT = RTC_INIT_KEY;
     RTC_SyncReg();
 
@@ -1183,7 +1181,6 @@ void RTC_EnableHardwarePowerOff(uint32_t u32Second)
  */
 void RTC_DisableHardwarePowerOff(void)
 {
-    __IO uint32_t u32Reg;
     RTC->INIT = RTC_INIT_KEY;
     RTC_SyncReg();
 

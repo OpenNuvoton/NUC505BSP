@@ -36,6 +36,8 @@
   */
 uint32_t SPIM_Open(SPIM_T *spim, uint32_t u32SPIMode, uint32_t u32BusClock)
 {
+    (void)u32SPIMode;
+
 #if 0   // User program will take care.
     CLK->AHBCLK |= CLK_AHBCLK_SPIMCKEN_Msk;     // Enable IP clock.
 #endif
@@ -56,6 +58,8 @@ uint32_t SPIM_Open(SPIM_T *spim, uint32_t u32SPIMode, uint32_t u32BusClock)
   */
 void SPIM_Close(SPIM_T *spim)
 {
+    (void)spim;
+
 #if 0   // User program will take care.
     if ((spim->CTL1 & SPIM_CTL1_IFSEL_Msk) == SPIM_CTL1_IFSEL_GPIO)
     {

@@ -125,6 +125,8 @@ uint32_t PWM_ConfigCaptureChannel (PWM_T *pwm,
     uint8_t  u8Divider = 1, u8Prescale = 0xFF;
     uint16_t u16CNR = 0xFFFF;
 
+    (void)u32CaptureEdge;
+
     if ((CLK->CLKDIV5 & CLK_CLKDIV5_PWMSEL_Msk) == 0)
         u32PWM_CLock = __HXT /(((CLK->CLKDIV5 & CLK_CLKDIV5_PWMDIV_Msk) >> CLK_CLKDIV5_PWMDIV_Pos) + 1);
     else
@@ -431,6 +433,7 @@ uint32_t PWM_GetCaptureIntFlag (PWM_T *pwm, uint32_t u32ChannelNum)
  */
 void PWM_EnablePeriodInt (PWM_T *pwm, uint32_t u32ChannelNum,  uint32_t u32IntPeriodType)
 {
+    (void)u32IntPeriodType;
     pwm->INTEN |= ((1 << PWM_INTEN_PIEN_Pos) << u32ChannelNum);
 }
 

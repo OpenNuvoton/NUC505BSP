@@ -44,6 +44,9 @@ void ADC_Open(ADC_T *adc,
               uint32_t u32OpMode,
               uint32_t u32ChMask)
 {
+    (void)adc;
+    (void)u32InputMode;
+    (void)u32OpMode;
     ADC->CTL  = (ADC->CTL & ~(ADC_CTL_PD_Msk | ADC_CTL_PDKEY_Msk |ADC_CTL_CHSEL_Msk))\
                 | (u32ChMask<<ADC_CTL_CHSEL_Pos);
 }
@@ -55,6 +58,7 @@ void ADC_Open(ADC_T *adc,
   */
 void ADC_Close(ADC_T *adc)
 {
+    (void)adc;
     ADC->CTL  = ADC->CTL | ADC_CTL_CHSEL_Msk;           /* Switching to channel 7 to save power */
     ADC->CTL  = ADC->CTL | (ADC_CTL_PD_Msk | ADC_CTL_PDKEY_Msk);
 }
@@ -81,6 +85,7 @@ void ADC_EnableHWTrigger(ADC_T *adc,
                          uint32_t u32ChMask,
                          uint32_t u32SampleTime)
 {
+    (void)adc;
     ADC->CTL  = (ADC->CTL & ~(ADC_CTL_CHSEL_Msk|ADC_CTL_EXTSMPT_Msk)) |\
                 ((u32ChMask<<ADC_CTL_CHSEL_Pos) | (u32SampleTime<<ADC_CTL_EXTSMPT_Pos));
     ADC->CTL |= ADC_CTL_SWTRG_Msk;
@@ -99,6 +104,7 @@ void ADC_EnableHWTrigger(ADC_T *adc,
   */
 void ADC_EnableInt(ADC_T *adc, uint32_t u32Mask)
 {
+    (void)adc;
     if(u32Mask & ADC_ADF_INT)
         ADC->INTCTL |= ADC_INTCTL_ADCIEN_Msk;
     if(u32Mask & ADC_KEY_INT)
@@ -117,6 +123,7 @@ void ADC_EnableInt(ADC_T *adc, uint32_t u32Mask)
   */
 void ADC_DisableInt(ADC_T *adc, uint32_t u32Mask)
 {
+    (void)adc;
     if(u32Mask & ADC_ADF_INT)
         ADC->INTCTL &= ~ADC_INTCTL_ADCIEN_Msk;
     if(u32Mask & ADC_KEY_INT)

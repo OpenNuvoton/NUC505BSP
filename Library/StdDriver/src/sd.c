@@ -64,7 +64,7 @@ DISK_DATA_T SD_DiskInfo0;
 SD_INFO_T SD0;
 
 
-void SD_CheckRB()
+void SD_CheckRB(void)
 {
     while(1)
     {
@@ -290,7 +290,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
     //--- calculate the rate that divider have to divide
     if (sd_clock_khz > _sd_ReferenceClock)
     {
-        printf("ERROR: wrong SD clock %dKHz since it is faster than SD clock source %dKHz !\n",
+        printf("ERROR: wrong SD clock %luKHz since it is faster than SD clock source %luKHz !\n",
                sd_clock_khz, _sd_ReferenceClock);
         return;
     }
@@ -306,7 +306,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
 #if 0   // solution 1: auto choose the maximum and valid divider value.
         rate = SD_CLK_DIV1_MAX;
 #else   // solution 2: reject it and warning user.
-        printf("ERROR: wrong SD clock %dKHz since it is slower than SD clock source %dKHz/%d !\n",
+        printf("ERROR: wrong SD clock %luKHz since it is slower than SD clock source %luKHz/%d !\n",
                sd_clock_khz, _sd_ReferenceClock, SD_CLK_DIV1_MAX);
 #endif
         return;
@@ -315,7 +315,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
     //--- Ignore the request to set SD clock to same frequency in order to improve SD card access performance.
     if (sd_clock_khz == current_sd_clock_khz)
     {
-        DBG_PRINTF("SD_Set_clock(): ignore SD clock %dKHz setting since it is same frequency.\n", sd_clock_khz);
+        DBG_PRINTF("SD_Set_clock(): ignore SD clock %luKHz setting since it is same frequency.\n", sd_clock_khz);
         return;
     }
     else
@@ -335,6 +335,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
 
 void SD_CardSelect(int cardSel)
 {
+    (void)cardSel;
     // NUC505 only support SD0. Do nothing for SD port selection.
 }
 
@@ -431,7 +432,7 @@ int SD_Init(SD_INFO_T *pSD)
         for (i=0x100; i>0; i--);
 
         i = SD_SDCmdAndRsp(pSD, 55, 0x00, u32CmdTimeOut);
-        if (i == SD_INIT_TIMEOUT)     // MMC memory
+        if (i == (int)SD_INIT_TIMEOUT)     // MMC memory
         {
 
             SD_SDCommand(pSD, 0, 0);        // reset
@@ -439,7 +440,7 @@ int SD_Init(SD_INFO_T *pSD)
 
             _sd_uR3_CMD = 1;
             // 2014/8/6, to support eMMC v4.4, the argument of CMD1 should be 0x40ff8000 to support both MMC plus and eMMC cards.
-            if (SD_SDCmdAndRsp(pSD, 1, 0x40ff8000, u32CmdTimeOut) != SD_INIT_TIMEOUT)   // MMC memory
+            if (SD_SDCmdAndRsp(pSD, 1, 0x40ff8000, u32CmdTimeOut) != (int)SD_INIT_TIMEOUT)   // MMC memory
             {
                 resp = SD->RESP0;
                 while (!(resp & 0x00800000))        // check if card is ready
@@ -574,7 +575,9 @@ int SD_SwitchToHighSpeed(SD_INFO_T *pSD)
 
         busy_status1 = _sd_pSDHCBuffer[28]<<8 | _sd_pSDHCBuffer[29];
         if (!busy_status1)
+        {
             DBG_PRINTF("switch into high speed mode !!!\n");
+        }
         return Successful;
     }
     else
@@ -827,7 +830,7 @@ uint32_t SD_CheckSector(uint32_t u32StartSec, uint32_t u32SecCount)
 
     if ((u32StartSec + u32SecCount - 1) >= SD_DiskInfo0.totalSectorN)
     {
-        printf("ERROR: Fail to access invalid sector number %d from SD card !!\n", u32StartSec+u32SecCount-1);
+        printf("ERROR: Fail to access invalid sector number %lu from SD card !!\n", u32StartSec+u32SecCount-1);
         printf("       The max valid sector number for current SD card is %d.\n", SD_DiskInfo0.totalSectorN-1);
         return SD_SELECT_ERROR; // invalid sector
     }
@@ -992,7 +995,7 @@ void SD_Probe(uint32_t u32CardNum)
  */
 uint32_t SD_Read(uint32_t u32CardNum, uint8_t *pu8BufAddr, uint32_t u32StartSec, uint32_t u32SecCount)
 {
-    char volatile bIsSendCmd = FALSE, buf;
+    char volatile bIsSendCmd = FALSE;
     unsigned int volatile reg;
     int i, loop, status;
     uint32_t blksize = SD_BLOCK_SIZE;

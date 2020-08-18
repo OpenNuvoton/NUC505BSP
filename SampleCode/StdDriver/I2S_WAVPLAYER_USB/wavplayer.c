@@ -1,12 +1,12 @@
 /**************************************************************************//**
  * @file     wavplayer.c
- * @version  V2.0
- * $Revision: 5 $
- * $Date: 16/06/02 01:13p $
+ * @version  V2.1
+ * $Revision: 6 $
+ * $Date: 20/08/18 06:00p $
  * @brief    NUC505 I2S Driver Sample Code
  *
  * @note
- * Copyright (C) 2016 Nuvoton Technology Corp. All rights reserved.
+ * Copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>
@@ -23,8 +23,7 @@ FIL    wavFileObject;
 size_t ReturnSize;
 
 uint32_t aPCMBuffer[2][PCM_BUFFER_SIZE];
-//12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
-uint8_t aPCMBuffer2[12288];
+uint8_t aPCMBuffer2[PCM_BUFFER_SIZE*4];
 volatile uint8_t aPCMBuffer_Full[2]= {0,0};
 uint32_t aWavHeader[11];
 
@@ -169,8 +168,10 @@ void WAVPlayer(void)
         u32WavBit = I2S_DATABIT_32;
     else
     {
-        printf("bits not support!\n");
-        return;
+        //
+        // FIXME to add 128 for unsigned char sample
+        //
+        u32WavBit = I2S_DATABIT_8;
     }
 
     if (u32WavChannel == 2)
@@ -219,6 +220,15 @@ void WAVPlayer(void)
             // 4096=PCM_BUFFER_SIZE/4
             for ( i = 0; i < 4096; i++ )
                 aPCMBuffer[u8PCMBufferTargetIdx][i] = (0 << 24) | (aPCMBuffer2[3*i+2] << 16) | (aPCMBuffer2[3*i+1] << 8) | aPCMBuffer2[3*i];
+        }
+        else if ( u32WavBit == I2S_DATABIT_8 )
+        {
+            //
+            // FIXME to add 128 for unsigned char sample
+            //
+            res = f_read(&wavFileObject, &aPCMBuffer2[0], PCM_BUFFER_SIZE*4, &ReturnSize);
+            for ( i = 0; i < 4096; i++ )
+                aPCMBuffer[u8PCMBufferTargetIdx][i] = ((aPCMBuffer2[4*i+3] + 128) << 24) | ((aPCMBuffer2[4*i+2] + 128) << 16) | ((aPCMBuffer2[4*i+1] + 128) << 8) | (aPCMBuffer2[4*i+0] + 128);
         }
         else
         {

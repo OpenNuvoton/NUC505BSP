@@ -6,7 +6,8 @@
  * @brief    A WAV file player demo using internal audio codec used to playback WAV file stored in USB pen drive.
  *
  * @note
- * Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>

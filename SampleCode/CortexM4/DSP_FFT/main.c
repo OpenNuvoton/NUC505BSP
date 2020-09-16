@@ -5,7 +5,8 @@
  * $Date: 14/06/26 7:49p $
  * @brief    Demonstrate how to call ARM CMSIS DSP library to calculate FFT.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include <stdio.h>
 #include "NUC505Series.h"

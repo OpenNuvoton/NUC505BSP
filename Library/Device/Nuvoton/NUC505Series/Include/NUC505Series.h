@@ -7,7 +7,8 @@
  *           This file contains all the peripheral register's definitions,
  *           bits definitions and memory mapping for NuMicro NUC505 series MCU.
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 /**
    \mainpage NuMicro NUC505 Series MCU Driver Reference Guide

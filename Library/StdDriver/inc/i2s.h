@@ -6,7 +6,8 @@
  * @brief    NUC505 series I2S driver header file
  *
  * @note
- * Copyright (C) 2015 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #ifndef __I2S_H__
 #define __I2S_H__

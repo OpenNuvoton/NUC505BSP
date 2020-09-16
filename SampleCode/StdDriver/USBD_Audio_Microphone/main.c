@@ -8,7 +8,8 @@
  * @note        The main() function cannot be debugged until C startup has completed.
  *              It is because C startup will be responsible for copying main() from ROM to RAM.
  *              So don't check the Run to main debug option or set BP before C startup is completed.
- * Copyright (C) 2017 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include "NUC505Series.h"
 

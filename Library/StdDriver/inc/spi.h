@@ -6,7 +6,8 @@
  * @brief    NUC505 series SPI driver header file
  *
  * @note
- * Copyright (C) 2015 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #ifndef __SPI_H__
 #define __SPI_H__

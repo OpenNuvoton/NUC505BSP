@@ -6,7 +6,8 @@
  * @brief       Demonstrate how to read/write SPI Flash in SPIM DMA mode.
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include "NUC505Series.h"

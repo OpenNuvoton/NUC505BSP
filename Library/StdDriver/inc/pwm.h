@@ -6,7 +6,8 @@
  * @brief    NUC505 PWM driver header file
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #ifndef __PWM_H__
 #define __PWM_H__

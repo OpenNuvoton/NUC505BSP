@@ -6,7 +6,8 @@
  * @brief    A MP3 file player demo using NAU8822 audio codec used to playback MP3 file stored in SD card.
  *
  * @note
- * Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>

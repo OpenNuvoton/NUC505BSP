@@ -6,7 +6,8 @@
  * @brief    NUC505 series system clock definition file
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #ifndef __SYSTEM_NUC505SERIES_H__
 #define __SYSTEM_NUC505SERIES_H__

@@ -6,7 +6,8 @@
  * @brief       NUC505 series SPIM driver header file
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #ifndef __SPIM_H__
 #define __SPIM_H__

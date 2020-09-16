@@ -6,7 +6,8 @@
  * @brief    Demonstrate SPI master loop back transfer. This sample code needs to connect the SPI0_MISO0 pin and the SPI0_MOSI0 pin together. It will compare the received data with transmitted data.
  *
  * @note
- * Copyright (C) 2015 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>

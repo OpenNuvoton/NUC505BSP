@@ -6,7 +6,8 @@
  * @brief    NUC505 GPIO driver header file
  *
  * @note
- * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #ifndef __GPIO_H__
 #define __GPIO_H__

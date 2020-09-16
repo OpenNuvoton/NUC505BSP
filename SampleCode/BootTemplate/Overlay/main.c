@@ -19,7 +19,8 @@
  * @note        Overlaid program cannot be source-level debugged.
  * @note        This sample just demonstrates how to overlay code. Data is not overlaid.
  *
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #include <stdio.h>
 #include <string.h>

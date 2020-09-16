@@ -6,7 +6,8 @@
  * @brief    A WAV file recorder demo using internal audio codec used to record WAV file and stored in SD card.
  *
  * @note
- * Copyright (C) 2018 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  *
  ******************************************************************************/
 #include <stdio.h>

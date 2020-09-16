@@ -6,7 +6,8 @@
  * @brief    NUC505 series SPI driver source file
  *
  * @note
- * Copyright (C) 2015 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include "NUC505Series.h"
 /** @addtogroup NUC505_Device_Driver NUC505 Device Driver

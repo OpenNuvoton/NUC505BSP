@@ -6,7 +6,8 @@
  * $Date: 14/11/17 5:31p $
  *
  * @note
- * Copyright (C) 2014 Nuvoton Technology Corp. All rights reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
  ******************************************************************************/
 #ifndef __USBD_MASS_H__
 #define __USBD_MASS_H__

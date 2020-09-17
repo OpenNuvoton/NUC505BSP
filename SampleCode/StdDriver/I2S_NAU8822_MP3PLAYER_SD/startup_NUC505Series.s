@@ -6,7 +6,8 @@
 ; * @brief    CMSIS Cortex-M4 Core Device Startup File for NUC505 Series MCU
 ; *
 ; * @note
-; * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
+; * SPDX-License-Identifier: Apache-2.0
+; * Copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
 ;*****************************************************************************/
 ;/*
 ;//-------- <<< Use Configuration Wizard in Context Menu >>> ------------------

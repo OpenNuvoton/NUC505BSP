@@ -1,3 +1,10 @@
+/**************************************************************************//**
+ * @file     MP3HeaderParser.c
+ * @brief    MP3 header parser
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+*****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

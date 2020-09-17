@@ -1,8 +1,13 @@
-/*---------------------------------------------------------------------------------------------------------*/
-/*                                                                                                         */
-/* Copyright (c) 2010 Nuvoton Technology Corp. All rights reserved.                                        */
-/*                                                                                                         */
-/*---------------------------------------------------------------------------------------------------------*/
+/**************************************************************************//**
+ * @file     HIDTransferTest.cpp
+ * @version  V1.00
+ * $Date: 14/05/30 6:07p $
+ * @brief    HID Transfer sample code
+ *
+ * @note
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
 
 #include "stdafx.h"
 #include "HIDTransferTest.h"

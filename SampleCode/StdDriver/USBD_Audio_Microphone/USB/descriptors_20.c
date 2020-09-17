@@ -1,5 +1,5 @@
 /******************************************************************************
- * @file     descriptors.c
+ * @file     descriptors_20.c
  * @brief    NuMicro series USBD driver source file
  * @date     2017/04/26 09:30 a.m.
  *

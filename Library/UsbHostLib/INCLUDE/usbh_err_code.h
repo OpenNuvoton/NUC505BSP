@@ -1,3 +1,14 @@
+/**************************************************************************//**
+ * @file     usbh_err_code.h
+ * @version  V1.00
+ * $Revision 2 $
+ * $Date: 14/10/07 5:46p $
+ * @brief    USB Host core driver header file
+ *
+ * @note
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
 #ifndef _USB_ERR_CODE_H_
 #define _USB_ERR_CODE_H_
 

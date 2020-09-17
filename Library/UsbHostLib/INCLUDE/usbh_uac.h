@@ -1,3 +1,14 @@
+/**************************************************************************//**
+ * @file     usbh_uac.h
+ * @version  V1.00
+ * $Revision 2 $
+ * $Date: 14/10/07 5:46p $
+ * @brief    USB Host core driver header file
+ *
+ * @note
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
 #ifndef __INCLUDED_USBHUAC_H__
 #define __INCLUDED_USBHUAC_H__
 

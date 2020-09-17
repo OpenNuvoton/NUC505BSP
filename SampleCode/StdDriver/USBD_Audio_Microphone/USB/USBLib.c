@@ -1,7 +1,16 @@
+/**************************************************************************//**
+ * @file        USBLib.c
+ * @version     V1.00
+ * $Revision:   1$
+ * $Date:       17/05/09 5:00p$
+ * @brief       NUC505 Series USB Audio Class Sample Code source file
+ *
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
 #include "NUC505Series.h"
-
 #include "USBLib.h"
-
 #include "AudioLib.h"
 #include "demo.h"
 

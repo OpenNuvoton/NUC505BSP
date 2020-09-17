@@ -1,3 +1,14 @@
+/**************************************************************************//**
+ * @file        main.c
+ * @version     V1.00
+ * $Revision:   1$
+ * $Date:       14/07/10 5:00p$
+ * @brief       IAP HID source file
+ *
+ * @note
+ * SPDX-License-Identifier: Apache-2.0
+ * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.
+ ******************************************************************************/
 #include <stdio.h>
 #include <string.h>
 #include "NUC505Series.h"

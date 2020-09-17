@@ -1,5 +1,5 @@
 /******************************************************************************
- * @file     usbd_audio.c
+ * @file     usbd_audio_10.c
  * @brief    NuMicro series USBD driver Sample file
  * @date     2017/04/26 09:30 a.m.
  *

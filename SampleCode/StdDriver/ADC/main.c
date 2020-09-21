@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 2 $
  * $Date: 14/07/24 4:08p $
- * @brief    NUC505 Series Global Control and Clock Control Driver Sample Code
+ * @brief    Demonstration how to use ADC APIs for normal ADC conversion and analog keypad detection
  *
  * 1.   Demonstrate ADC conversion from channel 0.
  * 2.   Demonstrate analog keypad detection from channel 2

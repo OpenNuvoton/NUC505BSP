@@ -587,7 +587,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>SYS_PowerDownConsumption.bin</state>
+          <state>SYS_PowerDown_MinCurrent.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -641,7 +641,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>SYS_PowerDownConsumption.out</state>
+          <state>SYS_PowerDown_MinCurrent.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>

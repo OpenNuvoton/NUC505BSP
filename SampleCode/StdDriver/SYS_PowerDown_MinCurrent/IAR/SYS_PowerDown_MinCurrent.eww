@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\SYS_PowerDownConsumption.ewp</path>
+    <path>$WS_DIR$\SYS_PowerDown_MinCurrent.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

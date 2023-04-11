@@ -1,8 +1,8 @@
 /**************************************************************************//**
- * @file     main.c
+ * @file     disable.c
  * @version  V1.00
  * $Date: 14/05/29 1:14p $
- * @brief    NUC505 General Purpose I/O Driver Sample Code
+ * @brief    NUC505 Disable Analog IPs Sequence 
  *           Connect PB.10 to VSS will wake up system form Power-down mode
  *
  * @note
@@ -17,9 +17,11 @@
 #include "i2s.h"
 #include "usbh_core.h"
 
-/*---------------------------------------------------------------------------------------------------------*/
-/*  Function for System Entry to Power Down Mode                                                           */
-/*---------------------------------------------------------------------------------------------------------*/
+
+/**
+  * @brief      Entry to Power Down Mode  
+  * @note       
+  */
 void PowerDownFunction(void)
 {
     /* Check if all the debug messages are finished */
@@ -28,6 +30,11 @@ void PowerDownFunction(void)
     /* Enter to Power-down mode */
     CLK_PowerDown();
 }
+
+/**
+  * @brief      Disable USB Device PHY
+  * @note       
+  */
 void USB_Device_Phy_Disable(void)
 {
     CLK_SetModuleClock(USBD_MODULE, CLK_USBD_SRC_EXT, 0);
@@ -38,6 +45,10 @@ void USB_Device_Phy_Disable(void)
     CLK_DisableModuleClock(USBD_MODULE);
 }
 
+/**
+  * @brief      Disable USB Host Suspend
+  * @note       
+  */
 void USB_Host_Disable(void)
 {
     /* USB Host transceiver standby  */
@@ -48,6 +59,10 @@ void USB_Host_Disable(void)
     CLK_DisableModuleClock(USBH_MODULE);
 }
 
+/**
+  * @brief      Disable ADC
+  * @note       
+  */
 void ADC_Disable(void)
 {
     ADC_T* adc=0;
@@ -59,6 +74,10 @@ void ADC_Disable(void)
     //CLK_DisableModuleClock(ADC_MODULE);
 }
 
+/**
+  * @brief      Disable I2S Codec
+  * @note       
+  */
 void I2S_Disable(void)
 {
     CLK->APBCLK = CLK->APBCLK | 0x4000;         /* Enable I2S clock */
@@ -79,6 +98,13 @@ void I2S_Disable(void)
 #define PC_ALL_MASK (BIT14|BIT13|BIT12|BIT11|BIT10|BIT9|BIT8|BIT7|BIT6|BIT5|BIT4|BIT3|BIT2|BIT1|BIT0)
 #define PD_ALL_MASK (BIT4|BIT3|BIT2|BIT1|BIT0)
 
+/**
+  * @brief      Disable GPIO leakage path 
+  * @note       (1). Set GPIO input high          
+  *             (2). If the pin state keeps low, change the GPIO to output low
+  *                  Otherwise, keep pull high.
+  *             (3). Scan each pin form PA to PD port to meet board's requirement. 
+  */            
 void GPIO_Path(void)
 {
     uint32_t pin;
@@ -152,6 +178,11 @@ void GPIO_Path(void)
     }
 }
 
+/**
+  * @brief      Disable LVR and POR 
+  * @note       None
+  *
+  */
 void LVD_Disable(void)
 {
     //SYS->LVDCTL &= (~0x4);
@@ -159,7 +190,7 @@ void LVD_Disable(void)
     SYS_DISABLE_POR();
 }
 /*---------------------------------------------------------------------------------------------------------*/
-/* Power Conspumtion                                                                                         */
+/* To make every IP under disable state on chip Power Conspumtion                                          */
 /*---------------------------------------------------------------------------------------------------------*/
 void DisableIPs(void)
 {

@@ -2,9 +2,10 @@
  * @file     main.c
  * @version  V1.00
  * $Date: 14/05/29 1:14p $
- * @brief    NUC505 Power Down Consumption Sample Code
+ * @brief    NUC505 Power Down Minimum Current Sample Code
  *           Connect PB.10 to VSS will wake up system form Power-down mode
- *
+ *           Please remove LED and ICE board first if you want to measure power down current  
+ * 
  * @note
  * SPDX-License-Identifier: Apache-2.0
  * @copyright (C) 2020 Nuvoton Technology Corp. All rights reserved.

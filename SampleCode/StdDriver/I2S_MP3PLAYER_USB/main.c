@@ -24,16 +24,14 @@ uint32_t volatile u32BuffPos = 0;
 
 FATFS FatFs[_VOLUMES];               /* File system object for logical drive */
 
-#ifdef __ICCARM__
+#if defined (__ICCARM__)
 #pragma data_alignment=32
 BYTE Buff[1024] ;                   /* Working buffer */
-#endif
 
-#ifdef __ARMCC_VERSION
-__align(32) BYTE Buff[1024] ;       /* Working buffer */
-#endif
+#elif defined (__ARMCC_VERSION)
+__attribute__((aligned(32))) BYTE Buff[1024] ;       /* Working buffer */
 
-#ifdef __GNUC__
+#elif defined (__GNUC__)
 BYTE Buff[1024] __attribute__((aligned(32)));       /* Working buffer */
 #endif
 

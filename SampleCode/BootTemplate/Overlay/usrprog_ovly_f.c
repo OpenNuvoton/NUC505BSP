@@ -11,21 +11,21 @@
  ******************************************************************************/
 #include <stdio.h>
 
-#if defined ( __CC_ARM )
-#pragma arm section code="overlay_f"
+#if defined ( __ARMCC_VERSION )
+#pragma section = "overlay_f"
+__attribute__((section("overlay_f"))) int fran(int a, int b, int c, int d)
+{
+    int retval = a + b + c + d;
+    printf("%s(%d, %d, %d, %d)=%d get called.\n", __func__, a, b, c, d, retval);
+    return retval;
+}
 #elif defined (__ICCARM__)
 #pragma default_function_attributes = @ "overlay_f"
-#endif
-
 int fran(int a, int b, int c, int d)
 {
     int retval = a + b + c + d;
     printf("%s(%d, %d, %d, %d)=%d get called.\n", __func__, a, b, c, d, retval);
     return retval;
 }
-
-#if defined ( __CC_ARM )
-#pragma arm section code
-#elif defined (__ICCARM__)
 #pragma default_function_attributes =
 #endif

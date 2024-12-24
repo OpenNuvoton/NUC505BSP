@@ -33,7 +33,7 @@ BYTE Buff[1024] ;                   /* Working buffer */
 #endif
 
 #ifdef __ARMCC_VERSION
-__align(32) BYTE Buff[1024] ;       /* Working buffer */
+BYTE Buff[1024] __attribute__((aligned(32)));       /* Working buffer */
 #endif
 
 #ifdef __GNUC__

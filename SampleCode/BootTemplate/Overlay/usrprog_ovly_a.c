@@ -11,12 +11,18 @@
  ******************************************************************************/
 #include <stdio.h>
 
-#if defined ( __CC_ARM )
-#pragma arm section code="overlay_a"
+#if defined ( __ARMCC_VERSION )
+__attribute__((section("overlay_a"))) void aaron(void)
+{
+    printf("%s() get called.\n", __func__);
+}
+
+__attribute__((section("overlay_a"))) void andy(void)
+{
+    printf("%s() get called.\n", __func__);
+}
 #elif defined (__ICCARM__)
 #pragma default_function_attributes = @ "overlay_a"
-#endif
-
 void aaron(void)
 {
     printf("%s() get called.\n", __func__);
@@ -26,9 +32,5 @@ void andy(void)
 {
     printf("%s() get called.\n", __func__);
 }
-
-#if defined ( __CC_ARM )
-#pragma arm section code
-#elif defined (__ICCARM__)
 #pragma default_function_attributes =
 #endif

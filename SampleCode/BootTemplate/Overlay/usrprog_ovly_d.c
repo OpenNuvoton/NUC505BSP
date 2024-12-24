@@ -11,12 +11,22 @@
  ******************************************************************************/
 #include <stdio.h>
 
-#if defined ( __CC_ARM )
-#pragma arm section code="overlay_d"
+#if defined ( __ARMCC_VERSION )
+__attribute__((section("overlay_d"))) int dick(int a, int b)
+{
+    int retval = a + b;
+    printf("%s(%d, %d)=%d get called.\n", __func__, a, b, retval);
+    return retval;
+}
+
+__attribute__((section("overlay_d"))) int dot(int a, int b)
+{
+    int retval = a + b;
+    printf("%s(%d, %d)=%d get called.\n", __func__, a, b, retval);
+    return retval;
+}
 #elif defined (__ICCARM__)
 #pragma default_function_attributes = @ "overlay_d"
-#endif
-
 int dick(int a, int b)
 {
     int retval = a + b;
@@ -30,9 +40,5 @@ int dot(int a, int b)
     printf("%s(%d, %d)=%d get called.\n", __func__, a, b, retval);
     return retval;
 }
-
-#if defined ( __CC_ARM )
-#pragma arm section code
-#elif defined (__ICCARM__)
 #pragma default_function_attributes =
 #endif

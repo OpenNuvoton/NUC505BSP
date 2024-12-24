@@ -48,17 +48,16 @@ uint8_t PcmRxBuff_24[(sizeof (PcmRxBuff[0]) / 4 * 3) * NUM_24BIT_BUFF];
 uint8_t ringbuff[SECLVL_BUFF_LEN];
 #endif
 
-#ifdef __ARMCC_VERSION
-__align(32) BYTE Buff[1024] ;       /* Working buffer */
+#if defined (__ARMCC_VERSION)
+__attribute__((aligned(32))) BYTE Buff[1024] ;       /* Working buffer */
 
-__align(32) uint8_t PcmRxBuff[2][FSTLVL_BUFF_LEN] = {0};
+__attribute__((aligned(32))) uint8_t PcmRxBuff[2][FSTLVL_BUFF_LEN] = {0};
 #if SUPPORT_24BIT
-__align(32) uint8_t PcmRxBuff_24[(sizeof (PcmRxBuff[0]) / 4 * 3) * NUM_24BIT_BUFF];
+__attribute__((aligned(32))) uint8_t PcmRxBuff_24[(sizeof (PcmRxBuff[0]) / 4 * 3) * NUM_24BIT_BUFF];
 #endif  // #if SUPPORT_24BIT
-__align(32) uint8_t ringbuff[SECLVL_BUFF_LEN];
-#endif
+__attribute__((aligned(32))) uint8_t ringbuff[SECLVL_BUFF_LEN];
 
-#ifdef __GNUC__
+#elif defined (__GNUC__)
 __attribute__((aligned(32)))BYTE Buff[1024]    ;       /* Working buffer */
 __attribute__((aligned(32))) uint8_t PcmRxBuff[2][FSTLVL_BUFF_LEN] = {0};
 #if SUPPORT_24BIT
@@ -138,21 +137,18 @@ int32_t main(void)
     SCB->VTOR = (uint32_t) __section_begin("VECTOR2");
 #endif
 
-#ifdef __ARMCC_VERSION
+#if defined (__ARMCC_VERSION)
     /* Relocate vector table in SRAM for fast interrupt handling. */
     {
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
 
-        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling, size = 0x%x.\n", Image$$ER_VECTOR2$$ZI$$Base, (unsigned int) __Vectors_Size);
+        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling, size = 0x%x.\n", (uint32_t)Image$$ER_VECTOR2$$ZI$$Base, (unsigned int) __Vectors_Size);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
     }
-#endif
-
-
-#ifdef __GNUC__
+#elif defined (__GNUC__)
     /* Relocate vector table in SRAM for fast interrupt handling. */
     {
         extern uint32_t __Vectors[];

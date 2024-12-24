@@ -72,7 +72,7 @@ int32_t main(void)
     /* Relocate vector table in SRAM for fast interrupt handling. */
     /* YT modify for MTP */
     {
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];

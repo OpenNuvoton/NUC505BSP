@@ -13,9 +13,9 @@
 #include <string.h>
 #include "NUC505Series.h"
 
-#if defined ( __CC_ARM )
-static __align(32) const uint8_t g_au8RamImg[] __attribute__((section("ramimg")));
-static __align(32) const uint8_t g_au8RamImg[] =
+#if defined ( __ARMCC_VERSION )
+static __attribute__((aligned(32))) const uint8_t g_au8RamImg[] __attribute__((section("ramimg")));
+static __attribute__((aligned(32))) const uint8_t g_au8RamImg[] =
 {
 #   include "FullOnSRAM.dat"
 };
@@ -89,12 +89,12 @@ int main(void)
 
     /* Run FullOnSRAM. */
     {
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
         extern uint32_t Load$$ER_RAMIMG$$RO$$Base[];
         extern uint32_t Load$$ER_RAMIMG$$RO$$Length[];
         extern uint32_t Image$$ER_RAMIMG$$RO$$Base[];
 
-        printf("Load image(0x%08x, %d bytes) to 0x%08x.\n", Load$$ER_RAMIMG$$RO$$Base, Load$$ER_RAMIMG$$RO$$Length, Image$$ER_RAMIMG$$RO$$Base);
+        printf("Load image(0x%08x, %d bytes) to 0x%08x.\n", (uint32_t)Load$$ER_RAMIMG$$RO$$Base, (uint32_t)Load$$ER_RAMIMG$$RO$$Length, (uint32_t)Image$$ER_RAMIMG$$RO$$Base);
         memcpy((void *) Image$$ER_RAMIMG$$RO$$Base, Load$$ER_RAMIMG$$RO$$Base, (unsigned long) Load$$ER_RAMIMG$$RO$$Length);
 
 #elif defined (__ICCARM__)
@@ -107,7 +107,7 @@ int main(void)
 #elif defined (__GNUC__)
 #endif
 
-        printf("Remap SRAM(0x%08X, %d KB) to 0x00000000 via VECMAP.\n", g_au8RamImg, 128);
+        printf("Remap SRAM(0x%08X, %d KB) to 0x00000000 via VECMAP.\n", (uint32_t)g_au8RamImg, 128);
         printf("Reset CPU to run loaded image.\n");
         printf("\n\n");
 

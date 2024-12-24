@@ -117,7 +117,7 @@ static uint32_t PLL_calculate(uint32_t u32Target)
                     if(pllfreq_pdf_check(u32N, u32M, u32Fin)<0)
                         continue;
                     u32Fpll_clko = (u32Fin/u32M)*u32N/u32P;
-                    if( (u32Fpll_clko==u32Target) )
+                    if(u32Fpll_clko==u32Target)
                     {
                         u32Register = ((u32P-1)<<13) | ((u32M-1)<<7) | ((u32N-1));
                         return u32Register;

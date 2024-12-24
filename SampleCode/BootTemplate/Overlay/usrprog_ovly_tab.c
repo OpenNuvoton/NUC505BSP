@@ -16,7 +16,7 @@
 /* Define overlay table, which must be consistent with your linker script file. */
 
 /* FIXME: Define your overlays here. */
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
 DEFINE_OVERLAY(ER_OVERLAY_A, ovly_A, ovly_reg_1)
 DEFINE_OVERLAY(ER_OVERLAY_B, ovly_B, ovly_reg_1)
 DEFINE_OVERLAY(ER_OVERLAY_C, ovly_C, ovly_reg_2)

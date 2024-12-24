@@ -11,21 +11,20 @@
  ******************************************************************************/
 #include <stdio.h>
 
-#if defined ( __CC_ARM )
-#pragma arm section code="overlay_c"
+#if defined ( __ARMCC_VERSION )
+__attribute__((section("overlay_c"))) int chris(int a)
+{
+    int retval = a;
+    printf("%s(%d)=%d get called.\n", __func__, a, retval);
+    return retval;
+}
 #elif defined (__ICCARM__)
 #pragma default_function_attributes = @ "overlay_c"
-#endif
-
 int chris(int a)
 {
     int retval = a;
     printf("%s(%d)=%d get called.\n", __func__, a, retval);
     return retval;
 }
-
-#if defined ( __CC_ARM )
-#pragma arm section code
-#elif defined (__ICCARM__)
 #pragma default_function_attributes =
 #endif

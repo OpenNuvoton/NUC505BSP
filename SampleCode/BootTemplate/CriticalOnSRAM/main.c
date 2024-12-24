@@ -107,8 +107,8 @@ int Fibonacci1(int n)
 #pragma GCC pop_options
 #endif
 
-#if defined ( __CC_ARM )
-#pragma arm section code="fastcode"
+#if defined ( __ARMCC_VERSION )
+__attribute__((section("fastcode")))
 int Fibonacci2(int n)
 #elif defined ( __ICCARM__ )
 int Fibonacci2(int n)   @ "fastcode"
@@ -126,9 +126,7 @@ int Fibonacci2(int n)
     return fn;
 }
 
-#if defined ( __CC_ARM )
-#pragma arm section
-#elif defined ( __GNUC__ )
+#if defined ( __GNUC__ )
 #pragma GCC pop_options
 #endif
 
@@ -147,12 +145,12 @@ int main(void)
 
     /* Relocate vector table in SRAM for fast interrupt handling. */
     {
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
 
-        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", Image$$ER_VECTOR2$$ZI$$Base);
+        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", (uint32_t)Image$$ER_VECTOR2$$ZI$$Base);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
 
@@ -174,12 +172,12 @@ int main(void)
 
     /* Load code in SRAM dynamically by user for fast execution. */
     {
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
         extern uint32_t Load$$ER_FASTCODE_UNINIT$$RO$$Base[];
         extern uint32_t Load$$ER_FASTCODE_UNINIT$$RO$$Length[];
         extern uint32_t Image$$ER_FASTCODE_UNINIT$$RO$$Base[];
 
-        printf("Load Fibonacci2() in SRAM (0x%08X) for fast execution.\n", Fibonacci2);
+        printf("Load Fibonacci2() in SRAM (0x%08X) for fast execution.\n", (uint32_t)Fibonacci2);
         memcpy((void *) Image$$ER_FASTCODE_UNINIT$$RO$$Base, Load$$ER_FASTCODE_UNINIT$$RO$$Base, (unsigned long) Load$$ER_FASTCODE_UNINIT$$RO$$Length);
 
 #elif defined (__ICCARM__)

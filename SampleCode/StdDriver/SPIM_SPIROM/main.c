@@ -62,7 +62,7 @@ void SYS_Init(void)
 
 /* Code that will impact SPIM DMM is placed in the spimcode section,
    which will be located at RAM instead of SPIROM at execution time. */
-#if defined ( __CC_ARM )
+#if defined (__ARMCC_VERSION)
 //#pragma arm section code="spimcode"
 //#pragma arm section
 void SPIMCode_DelayMicroSec(uint32_t u32Delay) __attribute__((section("spimcode")));
@@ -74,8 +74,7 @@ void SPIMCode_DelayMicroSec(uint32_t u32Delay) @ "spimcode";
 void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk) @ "spimcode";
 uint32_t SPIMCode_GetBusClock(void) @ "spimcode";
 void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32RdCmdCode) @ "spimcode";
-#endif
-#ifdef __GNUC__
+#elif defined (__GNUC__)
 __attribute__ ((used, long_call, section(".spimcode"))) void SPIMCode_DelayMicroSec(uint32_t u32Delay);
 __attribute__ ((used, long_call, section(".spimcode"))) void SPIMCode_SetBusClock(uint32_t u32SysClk, uint32_t u32SClk);
 __attribute__ ((used, long_call, section(".spimcode"))) uint32_t SPIMCode_GetBusClock(void);
@@ -206,7 +205,7 @@ void SPIMCode_ConfigDMMMode(uint32_t u32SysClk, uint32_t u32SClk, uint32_t u32Rd
 //#pragma arm section
 
 /* Declaration of MTP signature. Location of it is specified in scatter file. */
-#if defined ( __CC_ARM )
+#if defined (__ARMCC_VERSION)
 const uint32_t MTPSIG __attribute__((section("mtpsig"), used));
 #elif defined (__ICCARM__)
 const uint32_t MTPSIG @ "mtpsig";
@@ -228,7 +227,7 @@ int main(void)
     printf("+------------------------------------------------+\n");
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
-    printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
+    printf("SPI Flash read command\t\t\t0x%02X\n", (uint32_t)SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
 
     /* Note: Refer to SPI Flash spec for clock limit of different read commands. */
@@ -236,25 +235,25 @@ int main(void)
     SPIMCode_ConfigDMMMode(90000000, 45000000, SPIM_CTL0_CMDCODE_READ_DATA);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
-    printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
+    printf("SPI Flash read command\t\t\t0x%02X\n", (uint32_t)SPIM_CTL0_CMDCODE_READ_DATA >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
 
     SPIMCode_ConfigDMMMode(75000000, 75000000, SPIM_CTL0_CMDCODE_FAST_READ);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
-    printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ >> SPIM_CTL0_CMDCODE_Pos);
+    printf("SPI Flash read command\t\t\t0x%02X\n", (uint32_t)SPIM_CTL0_CMDCODE_FAST_READ >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
 
     SPIMCode_ConfigDMMMode(60000000, 60000000, SPIM_CTL0_CMDCODE_FAST_READ_DUAL_OUT);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
-    printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ_DUAL_OUT >> SPIM_CTL0_CMDCODE_Pos);
+    printf("SPI Flash read command\t\t\t0x%02X\n", (uint32_t)SPIM_CTL0_CMDCODE_FAST_READ_DUAL_OUT >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
 
     SPIMCode_ConfigDMMMode(60000000, 60000000, SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO);
     printf("System core clock\t\t\t%dHz\n", SystemCoreClock);
     printf("SPI bus clock\t\t\t\t%dHz\n", SPIM_GetBusClock(SPIM));
-    printf("SPI Flash read command\t\t\t0x%02X\n", SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO >> SPIM_CTL0_CMDCODE_Pos);
+    printf("SPI Flash read command\t\t\t0x%02X\n", (uint32_t)SPIM_CTL0_CMDCODE_FAST_READ_QUAD_IO >> SPIM_CTL0_CMDCODE_Pos);
     printf("\n");
 
     printf("[SPIM][SPIROM]\t\t\t\tPASSED\n");

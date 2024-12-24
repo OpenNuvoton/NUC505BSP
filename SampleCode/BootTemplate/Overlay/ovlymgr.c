@@ -54,7 +54,7 @@ void load_overlay(struct ovly *ovly_new)
         return;
     }
 
-    printf("Loading overlay: EXEC=0x%08x, LOAD=0x%08x, LENGTH=%d ...\n", ovly_new->exec_ro_base, ovly_new->load_ro_base, (unsigned) ovly_new->ro_length);
+    printf("Loading overlay: EXEC=0x%08x, LOAD=0x%08x, LENGTH=%d ...\n", (uint32_t)ovly_new->exec_ro_base, (uint32_t)ovly_new->load_ro_base, (unsigned) ovly_new->ro_length);
 
 #ifdef LOAD_OVERLAY_BY_SPIM_DMA_READ
     WaitSPIMDMMIdle_Begin();    // NOTE: Don't call out to routine located in SPI Flash until WaitSPIMDMMIdle_End() get called.
@@ -84,6 +84,6 @@ void load_overlay(struct ovly *ovly_new)
     // FlushCache();
 
     ovly_new->ovly_reg_containing->ovly_loaded = ovly_new;
-    printf("Loading overlay: EXEC=0x%08x, LOAD=0x%08x, LENGTH=%d DONE\n", ovly_new->exec_ro_base, ovly_new->load_ro_base, (unsigned) ovly_new->ro_length);
+    printf("Loading overlay: EXEC=0x%08x, LOAD=0x%08x, LENGTH=%d DONE\n", (uint32_t)ovly_new->exec_ro_base, (uint32_t)ovly_new->load_ro_base, (unsigned) ovly_new->ro_length);
 
 }

@@ -18,7 +18,7 @@
         SECTION .intvec:CODE:NOROOT(2)
 
         EXTERN  __iar_program_start
-        EXTERN  HardFault_Handler
+        EXTERN  ProcessHardFault
         EXTERN  SystemInit
         PUBLIC  __vector_table
         PUBLIC  __vector_table_0x1c
@@ -110,6 +110,16 @@ Reset_Handler
         
         LDR     R0, =__iar_program_start
         BX      R0
+        
+    PUBWEAK HardFault_Handler
+    SECTION .text:CODE:REORDER:NOROOT(2)
+HardFault_Handler
+        MOV     R0, LR
+        MRS     R1, MSP
+        MRS     R2, PSP
+        LDR     R3, =ProcessHardFault
+        BLX     R3
+        BX      R0        
 
         PUBWEAK NMI_Handler
         SECTION .text:CODE:REORDER:NOROOT(1)

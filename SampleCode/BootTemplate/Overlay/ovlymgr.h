@@ -26,7 +26,7 @@ struct ovly
     struct ovly_reg *   ovly_reg_containing;
     void *              load_ro_base;
     void *              exec_ro_base;
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
     void *              ro_length;  // Declare as pointer type instead of integer type to match type of linker-generated symbol.
     // Its actual meaning is still integer.
 #elif defined (__ICCARM__)
@@ -41,7 +41,7 @@ struct ovly_reg
     struct ovly *       ovly_loaded;
 };
 
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
 /**
   * @brief                  Define C-struct overlay which is consistent with linker script file.
   * @param[in]  OVERLAY     Overlay execution region defined in linker file.
@@ -51,8 +51,8 @@ struct ovly_reg
   * \hideinitializer
   */
 #define DEFINE_OVERLAY(ER_OVERLAY, OVLY, OVLY_REG) \
-static struct ovly _##OVLY; \
-static struct ovly_reg _##OVLY_REG; \
+struct ovly _##OVLY; \
+struct ovly_reg _##OVLY_REG; \
 extern unsigned Load$$##ER_OVERLAY##$$Base[]; \
 extern unsigned Image$$##ER_OVERLAY##$$Base[]; \
 extern unsigned Image$$##ER_OVERLAY##$$Length[]; \

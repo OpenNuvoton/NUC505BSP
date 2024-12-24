@@ -982,8 +982,8 @@ int32_t main(void)
                 }
                 Timer2 = system_Tick;
                 p3 = Timer;
-                printf("%lu bytes read with %d KB/s by buffer size %d KB.\n",
-                       p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
+                printf("%u bytes read with %ld KB/s by buffer size %u KB.\n",
+                       (uint32_t)p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
                 f_close(&file1);
 
                 // test for different buffer size from 10KB
@@ -1000,8 +1000,8 @@ int32_t main(void)
                     }
                     Timer2 = system_Tick;
                     p3 = Timer;
-                    printf("%lu bytes read with %d KB/s by buffer size %d KB.\n",
-                           p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
+                    printf("%u bytes read with %ld KB/s by buffer size %u KB.\n",
+                           (uint32_t)p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
                     f_close(&file1);
                 }
                 break;
@@ -1030,8 +1030,8 @@ int32_t main(void)
                 }
                 Timer2 = system_Tick;
                 p3 = Timer;
-                printf("%lu bytes write with %d KB/s by buffer size %d KB.\n",
-                       p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
+                printf("%u bytes write with %ld KB/s by buffer size %u KB.\n",
+                       (uint32_t)p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
                 f_close(&file1);
 
                 // test for different buffer size from 10KB
@@ -1049,8 +1049,8 @@ int32_t main(void)
                     //f_close(&file1);
                     Timer2 = system_Tick;
                     p3 = Timer;
-                    printf("%lu bytes write with %d KB/s by buffer size %d KB.\n",
-                           p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
+                    printf("%u bytes write with %ld KB/s by buffer size %u KB.\n",
+                           (uint32_t)p1, p1 / (Timer2 - p3) / 10, buf_size/1024);
                     f_close(&file1);
                 }
                 break;

@@ -291,7 +291,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
     //--- calculate the rate that divider have to divide
     if (sd_clock_khz > _sd_ReferenceClock)
     {
-        printf("ERROR: wrong SD clock %luKHz since it is faster than SD clock source %luKHz !\n",
+        printf("ERROR: wrong SD clock %uKHz since it is faster than SD clock source %uKHz !\n",
                sd_clock_khz, _sd_ReferenceClock);
         return;
     }
@@ -307,7 +307,7 @@ void SD_Set_clock(uint32_t sd_clock_khz)
 #if 0   // solution 1: auto choose the maximum and valid divider value.
         rate = SD_CLK_DIV1_MAX;
 #else   // solution 2: reject it and warning user.
-        printf("ERROR: wrong SD clock %luKHz since it is slower than SD clock source %luKHz/%d !\n",
+        printf("ERROR: wrong SD clock %uKHz since it is slower than SD clock source %uKHz/%d !\n",
                sd_clock_khz, _sd_ReferenceClock, SD_CLK_DIV1_MAX);
 #endif
         return;
@@ -831,7 +831,7 @@ uint32_t SD_CheckSector(uint32_t u32StartSec, uint32_t u32SecCount)
 
     if ((u32StartSec + u32SecCount - 1) >= SD_DiskInfo0.totalSectorN)
     {
-        printf("ERROR: Fail to access invalid sector number %lu from SD card !!\n", u32StartSec+u32SecCount-1);
+        printf("ERROR: Fail to access invalid sector number %u from SD card !!\n", u32StartSec+u32SecCount-1);
         printf("       The max valid sector number for current SD card is %d.\n", SD_DiskInfo0.totalSectorN-1);
         return SD_SELECT_ERROR; // invalid sector
     }

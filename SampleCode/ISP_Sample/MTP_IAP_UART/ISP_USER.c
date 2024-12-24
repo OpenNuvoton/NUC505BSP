@@ -13,10 +13,10 @@
 #include "ISP_USER.h"
 #include "spiflash_drv.h"
 
-__align(4) uint8_t g_u8RcvBuf[CMDBUFSIZE];
-__align(4) uint8_t g_u8SendBuf[CMDBUFSIZE];
+uint8_t g_u8RcvBuf[CMDBUFSIZE] __attribute__((aligned(4)));
+uint8_t g_u8SendBuf[CMDBUFSIZE] __attribute__((aligned(4)));
 
-__align(4) static uint8_t aprom_buf[PAGE_SIZE];
+static uint8_t aprom_buf[PAGE_SIZE] __attribute__((aligned(4)));
 BOOL bUpdateApromCmd;
 uint32_t g_apromAddr, g_apromSize, g_dataFlashAddr, g_dataFlashSize;
 

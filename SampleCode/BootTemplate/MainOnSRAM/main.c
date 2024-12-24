@@ -74,12 +74,12 @@ int main(void)
 
     /* Relocate vector table in SRAM for fast interrupt handling. */
     {
-#if defined ( __CC_ARM )
+#if defined ( __ARMCC_VERSION )
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
 
-        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", Image$$ER_VECTOR2$$ZI$$Base);
+        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling.\n", (uint32_t)Image$$ER_VECTOR2$$ZI$$Base);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
 

@@ -52,12 +52,12 @@ void TestSPIIF(void)
             if (spiif_ind->id == SPIM_CTL1_IFSEL_GPIO)
             {
                 /* Configure multi-function pins for SPIM, Slave I/F=GPIO. */
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk | (1 << SYS_GPA_MFPH_PA8MFP_Pos);    // SPIM_SS
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk | (1 << SYS_GPA_MFPH_PA9MFP_Pos);    // SPIM_SCLK
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA10MFP_Msk | (1 << SYS_GPA_MFPH_PA10MFP_Pos);  // SPIM_D0
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA11MFP_Msk | (1 << SYS_GPA_MFPH_PA11MFP_Pos);  // SPIM_D1
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA12MFP_Msk | (1 << SYS_GPA_MFPH_PA12MFP_Pos);  // SPIM_D2
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA13MFP_Msk | (1 << SYS_GPA_MFPH_PA13MFP_Pos);  // SPIM_D3
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk) | (1 << SYS_GPA_MFPH_PA8MFP_Pos);    // SPIM_SS
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk) | (1 << SYS_GPA_MFPH_PA9MFP_Pos);    // SPIM_SCLK
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA10MFP_Msk) | (1 << SYS_GPA_MFPH_PA10MFP_Pos);  // SPIM_D0
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA11MFP_Msk) | (1 << SYS_GPA_MFPH_PA11MFP_Pos);  // SPIM_D1
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA12MFP_Msk) | (1 << SYS_GPA_MFPH_PA12MFP_Pos);  // SPIM_D2
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA13MFP_Msk) | (1 << SYS_GPA_MFPH_PA13MFP_Pos);  // SPIM_D3
             }
 
             {
@@ -70,12 +70,12 @@ void TestSPIIF(void)
             if (spiif_ind->id == SPIM_CTL1_IFSEL_GPIO)
             {
                 /* Configure multi-function pins for GPIO. */
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk | (0 << SYS_GPA_MFPH_PA8MFP_Pos);    // GPIOA[8]
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk | (0 << SYS_GPA_MFPH_PA9MFP_Pos);    // GPIOA[9]
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA10MFP_Msk | (0 << SYS_GPA_MFPH_PA10MFP_Pos);  // GPIOA[10]
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA11MFP_Msk | (0 << SYS_GPA_MFPH_PA11MFP_Pos);  // GPIOA[11]
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA12MFP_Msk | (0 << SYS_GPA_MFPH_PA12MFP_Pos);  // GPIOA[12]
-                SYS->GPA_MFPH = SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA13MFP_Msk | (0 << SYS_GPA_MFPH_PA13MFP_Pos);  // GPIOA[13]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA8MFP_Msk) | (0 << SYS_GPA_MFPH_PA8MFP_Pos);    // GPIOA[8]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA9MFP_Msk) | (0 << SYS_GPA_MFPH_PA9MFP_Pos);    // GPIOA[9]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA10MFP_Msk) | (0 << SYS_GPA_MFPH_PA10MFP_Pos);  // GPIOA[10]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA11MFP_Msk) | (0 << SYS_GPA_MFPH_PA11MFP_Pos);  // GPIOA[11]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA12MFP_Msk) | (0 << SYS_GPA_MFPH_PA12MFP_Pos);  // GPIOA[12]
+                SYS->GPA_MFPH = (SYS->GPA_MFPH & ~SYS_GPA_MFPH_PA13MFP_Msk) | (0 << SYS_GPA_MFPH_PA13MFP_Pos);  // GPIOA[13]
             }
 
             SPIM_Close(SPIM);

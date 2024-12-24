@@ -51,18 +51,16 @@ size_t          ReadSize;
 size_t          Remaining;
 size_t          ReturnSize;
 
-#ifdef __ICCARM__
+#if defined __ICCARM__
 #pragma data_alignment=32
 // I2S PCM buffer x2
 signed int aPCMBuffer[2][PCM_BUFFER_SIZE];
-#endif
 
-#ifdef __ARMCC_VERSION
+#elif defined (__ARMCC_VERSION)
 // I2S PCM buffer x2
-__align(32) signed int aPCMBuffer[2][PCM_BUFFER_SIZE];
-#endif
+signed int aPCMBuffer[2][PCM_BUFFER_SIZE] __attribute__ ((aligned(32)));
 
-#ifdef __GNUC__
+#elif defined (__GNUC__)
 // I2S PCM buffer x2
 signed int aPCMBuffer[2][PCM_BUFFER_SIZE] __attribute__ ((aligned(32)));
 #endif
@@ -207,7 +205,7 @@ void MP3Player(void)
     memset((void *)&audioInfo, 0, sizeof(audioInfo));
 
     /* Parse MP3 header */
-    i32Offset = MP3_ParseHeaderInfo(MP3_FILE);
+    i32Offset = MP3_ParseHeaderInfo((uint8_t *)MP3_FILE);
 
     if ( i32Offset < 0 )
         return;

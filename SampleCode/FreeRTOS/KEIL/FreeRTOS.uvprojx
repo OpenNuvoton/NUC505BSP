@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>RVDS_ARMCM4_NUC505</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Library\CMSIS\Include;..\..\..\Library\StdDriver\inc;..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\ThirdParty\FreeRTOS\Source\include;..\..\..\ThirdParty\FreeRTOS\Demo\COMMON\include;..\..\..\ThirdParty\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\FreeRTOS</IncludePath>
+              <IncludePath>..\..\..\Library\CMSIS\Core\Include;..\..\..\Library\StdDriver\inc;..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\ThirdParty\FreeRTOS\Source\include;..\..\..\ThirdParty\FreeRTOS\Demo\COMMON\include;..\..\..\ThirdParty\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\FreeRTOS</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

@@ -10,6 +10,7 @@
       <TargetName>DSP_FFT</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>6120000::V6.12::.\ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -184,8 +185,6 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
-            <nBranchProt>0</nBranchProt>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>0</StupSel>
@@ -328,7 +327,7 @@
             <uC99>0</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
-            <v6Lang>1</v6Lang>
+            <v6Lang>3</v6Lang>
             <v6LangP>1</v6LangP>
             <vShortEn>1</vShortEn>
             <vShortWch>1</vShortWch>
@@ -339,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>ARM_MATH_CM4=1, __FPU_PRESENT=1</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\..\Library\CMSIS\Include;..\..\..\..\Library\StdDriver\inc</IncludePath>
+              <IncludePath>..\..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\..\Library\CMSIS\Core\Include;..\..\..\..\Library\StdDriver\inc;..\..\..\..\Library\CMSIS\DSP\Include;..\..\..\..\Library\CMSIS\DSP\PrivateInclude;..\..\..\..\Library\CMSIS\DSP\Source\SupportFunctions;..\..\..\..\Library\CMSIS\DSP\Source\TransformFunctions;..\..\..\..\Library\CMSIS\DSP\Source\StatisticsFunctions;..\..\..\..\Library\CMSIS\DSP\Source\ComplexMathFunctions;..\..\..\..\Library\CMSIS\DSP\Source\CommonTables</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +351,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>1</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -418,11 +417,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Library\StdDriver\src\sys.c</FilePath>
             </File>
-            <File>
-              <FileName>arm_cortexM4lf_math.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Library\CMSIS\Lib\ARM\arm_cortexM4lf_math.lib</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -436,7 +430,12 @@
             <File>
               <FileName>arm_fft_bin_data.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Library\CMSIS\DSP_Lib\Examples\arm_fft_bin_example\ARM\arm_fft_bin_data.c</FilePath>
+              <FilePath>..\arm_fft_bin_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>DSP_Functions.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DSP_Functions.c</FilePath>
             </File>
           </Files>
         </Group>
